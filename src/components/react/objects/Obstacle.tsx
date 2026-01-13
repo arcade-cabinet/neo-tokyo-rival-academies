@@ -7,6 +7,16 @@ interface ObstacleProps {
   position: [number, number, number];
 }
 
+/**
+ * Render a pulsing obstacle mesh positioned in 3D space.
+ *
+ * The rendered mesh is a box whose vertical size and vertical offset depend on `type`,
+ * and which has a subtle pulsing scale animation and a small point light for glow.
+ *
+ * @param type - 'low' for a shorter obstacle (height 1, y offset 0.5) or 'high' for a taller obstacle (height 3, y offset 1.5)
+ * @param position - Base `[x, y, z]` position; the component applies the type-specific vertical offset to `y`
+ * @returns A React element containing the obstacle mesh (box geometry, emissive material, and a child point light)
+ */
 export function Obstacle({ type, position }: ObstacleProps) {
   const meshRef = useRef<THREE.Mesh>(null);
 

@@ -10,6 +10,15 @@ interface PlatformProps {
   slope: number; // 0=flat, 1=up, -1=down
 }
 
+/**
+ * Render a rotated 3D platform with an asphalt surface, animated neon edge lights, and an underside glow.
+ *
+ * @param x - World X coordinate of the platform origin
+ * @param y - World Y coordinate of the platform origin
+ * @param length - Platform length along its forward axis
+ * @param slope - Tilt multiplier where 0 = flat, 1 = upward tilt, -1 = downward tilt
+ * @returns A React-Three-Fiber group containing the platform meshes, edge lights, and glow effects
+ */
 export function Platform({ x, y, length, slope }: PlatformProps) {
   const edgeLight1Ref = useRef<THREE.PointLight>(null);
   const edgeLight2Ref = useRef<THREE.PointLight>(null);

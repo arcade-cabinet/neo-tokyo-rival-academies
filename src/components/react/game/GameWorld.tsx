@@ -24,6 +24,16 @@ interface PlatformData {
   slope: number;
 }
 
+/**
+ * Renders and manages the in-game world: player character, procedural platforms, enemies, obstacles, physics, camera following, scoring, and combat interactions.
+ *
+ * @param gameState - Current game lifecycle and activity flags used to start/stop the simulation
+ * @param inputState - Player input state (run, jump, slide) that drives movement and actions
+ * @param onGameOver - Callback invoked when the player falls out of the world or the game ends
+ * @param onScoreUpdate - Callback invoked with the player's horizontal score as it advances
+ * @param onCombatText - Optional callback for displaying combat messages with a color (message, color)
+ * @returns A React element group that composes the game scene (hero, platforms, entities, and ground)
+ */
 export function GameWorld({
   gameState,
   inputState,
