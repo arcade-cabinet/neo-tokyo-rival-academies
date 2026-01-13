@@ -1,6 +1,5 @@
 import { asphalt } from '@utils/procedural/AssetGen';
 import { useMemo } from 'react';
-import * as THREE from 'three';
 
 interface PlatformProps {
   x: number;

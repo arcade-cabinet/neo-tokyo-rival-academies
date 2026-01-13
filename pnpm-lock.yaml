@@ -42,6 +42,9 @@ importers:
       '@biomejs/biome':
         specifier: ^1.9.4
         version: 1.9.4
+      '@types/three':
+        specifier: ^0.182.0
+        version: 0.182.0
       typescript:
         specifier: ^5.7.2
         version: 5.9.3

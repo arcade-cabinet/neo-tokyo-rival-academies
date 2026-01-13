@@ -30,6 +30,7 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.6",
     "@biomejs/biome": "^1.9.4",
+    "@types/three": "^0.182.0",
     "typescript": "^5.7.2"
   },
   "engines": {

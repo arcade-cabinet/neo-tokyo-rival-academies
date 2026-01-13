@@ -5,7 +5,6 @@ import { StartScreen } from '@components/react/ui/StartScreen';
 import {
   ContactShadows,
   Environment,
-  OrbitControls,
   PerspectiveCamera,
   Sparkles,
 } from '@react-three/drei';
@@ -13,7 +12,7 @@ import { Canvas } from '@react-three/fiber';
 import { musicSynth } from '@utils/audio/MusicSynth';
 import { initialGameState, initialInputState } from '@utils/gameConfig';
 import type { FC } from 'react';
-import { Suspense, useEffect, useRef, useState } from 'react';
+import { Suspense, useState } from 'react';
 
 export const NeoTokyoGame: FC = () => {
   const [gameState, setGameState] = useState<GameState>(initialGameState);

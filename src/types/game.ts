@@ -1,4 +1,5 @@
 import type { Mesh } from 'three';
+import * as THREE from 'three';
 
 export interface GameConfig {
   gravity: number;
