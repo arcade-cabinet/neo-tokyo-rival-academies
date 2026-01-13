@@ -13,7 +13,10 @@ export class MusicSynth {
 
   init(): void {
     if (!this.ctx) {
-      this.ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+      const AudioContextClass =
+        window.AudioContext ||
+        (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+      this.ctx = new AudioContextClass();
     }
     // Resume logic for browser policy
     if (this.ctx.state === 'suspended') {
@@ -145,7 +148,7 @@ export class MusicSynth {
 
     g2.gain.value = 500; // Modulation depth
     o2.connect(g2);
-    g2.connect(o.frequency as any);
+    g2.connect(o.frequency as AudioParam);
 
     g.gain.setValueAtTime(0.1, t);
     g.gain.exponentialRampToValueAtTime(0.001, t + 1.0);

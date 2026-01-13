@@ -108,7 +108,7 @@ export function Character({ color, position = [0, 0, 0], state = 'run' }: Charac
     y: number;
     w: number;
     h: number;
-    limbRef: React.RefObject<THREE.Group>;
+    limbRef: React.RefObject<THREE.Group | null>;
   }) => (
     <group position={[x, y, 0]} ref={limbRef}>
       <mesh position={[0, -h / 2, 0]} castShadow>
