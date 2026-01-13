@@ -18,7 +18,16 @@ interface CharacterProps {
  * @param state - Animation/pose state: 'run', 'sprint', 'jump', 'slide', or 'stun'
  * @returns The top-level group containing the character's meshes and runtime animation logic
  */
-export function Character({ color, position = [0, 0, 0], state = 'run' }: CharacterProps) {
+interface CharacterPropsWithSpeed extends CharacterProps {
+  speed?: number;
+}
+
+export function Character({
+  color,
+  position = [0, 0, 0],
+  state = 'run',
+  speed = 15,
+}: CharacterPropsWithSpeed) {
   const pivotRef = useRef<THREE.Group>(null);
   const coatSeg1Ref = useRef<THREE.Group>(null);
   const coatSeg2Ref = useRef<THREE.Group>(null);
@@ -39,7 +48,7 @@ export function Character({ color, position = [0, 0, 0], state = 'run' }: Charac
     if (!pivotRef.current) return;
 
     const t = frameState.clock.elapsedTime;
-    const speed = 15; // Will be controlled externally later
+    // speed is now passed in props
     const run = t * speed * 1.5;
 
     // Coat Physics - Simulate billowing based on speed
@@ -67,9 +76,45 @@ export function Character({ color, position = [0, 0, 0], state = 'run' }: Charac
     }
 
     // Animation based on state
-    if (state === 'run' || state === 'sprint') {
+    if (state === 'stand') {
+      pivotRef.current.rotation.x = 0;
+      pivotRef.current.position.y = 0;
+
+      // Reset rotations
+      if (limbsRef.current.legL.current) limbsRef.current.legL.current.rotation.x = 0;
+      if (limbsRef.current.legR.current) limbsRef.current.legR.current.rotation.x = 0;
+      if (limbsRef.current.armL.current) limbsRef.current.armL.current.rotation.x = 0;
+      if (limbsRef.current.armR.current) limbsRef.current.armR.current.rotation.x = 0;
+
+      // Subtle breathing
+      const breath = Math.sin(t * 2) * 0.02;
+      pivotRef.current.scale.y = 1 + breath;
+      pivotRef.current.position.y = breath * 0.2;
+    } else if (state === 'block') {
+      pivotRef.current.rotation.x = 0;
+      pivotRef.current.position.y = 0;
+      pivotRef.current.scale.y = 1;
+
+      if (limbsRef.current.legL.current) limbsRef.current.legL.current.rotation.x = 0.2;
+      if (limbsRef.current.legR.current) limbsRef.current.legR.current.rotation.x = -0.2;
+
+      // Guard up
+      if (limbsRef.current.armL.current) {
+        limbsRef.current.armL.current.rotation.x = -2;
+        limbsRef.current.armL.current.rotation.z = -0.5;
+      }
+      if (limbsRef.current.armR.current) {
+        limbsRef.current.armR.current.rotation.x = -2;
+        limbsRef.current.armR.current.rotation.z = 0.5;
+      }
+    } else if (state === 'run' || state === 'sprint') {
       pivotRef.current.rotation.x = 0.2;
       pivotRef.current.position.y = 0;
+      pivotRef.current.scale.y = 1;
+
+      // Reset Z rotation from block
+      if (limbsRef.current.armL.current) limbsRef.current.armL.current.rotation.z = 0;
+      if (limbsRef.current.armR.current) limbsRef.current.armR.current.rotation.z = 0;
 
       if (limbsRef.current.legL.current) limbsRef.current.legL.current.rotation.x = Math.sin(run);
       if (limbsRef.current.legR.current)

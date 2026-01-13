@@ -98,14 +98,45 @@ export function GameWorld({
     newPos.x += newVel.x * dt;
     newPos.y += newVel.y * dt;
 
-    // Simple ground check (will be enhanced with raycasting)
-    if (newPos.y <= 0 && newVel.y <= 0) {
-      newPos.y = 0;
-      newVel.y = 0;
-      setGrounded(true);
-    } else {
-      setGrounded(false);
+    // Physics & Collision Logic
+    let groundHeight = -999;
+    let onPlatform = false;
+
+    // Check collision with all platforms
+    for (const p of platforms) {
+      const angle = p.slope * 0.26;
+      // Calculate projected length on X axis
+      const projLen = p.length * Math.cos(angle);
+      const dx = newPos.x - p.x;
+
+      // Check if we are within the horizontal bounds of this platform
+      if (dx >= -0.5 && dx <= projLen + 0.5) {
+        // Calculate the height of the platform at this X position
+        const gy = p.y + dx * Math.tan(angle);
+        // We want the highest ground below us (or close to us)
+        if (gy > groundHeight) {
+          groundHeight = gy;
+        }
+      }
     }
+
+    // Ground snapping and collision response
+    // Snap distance allows running down slopes without entering falling state
+    const snapDist = 1.0;
+
+    if (newVel.y <= 0 && newPos.y <= groundHeight + 0.1) {
+      // Landing or staying on ground
+      newPos.y = groundHeight;
+      newVel.y = 0;
+      onPlatform = true;
+    } else if (grounded && newPos.y <= groundHeight + snapDist && newVel.y <= 0) {
+      // Snapping to slope
+      newPos.y = groundHeight;
+      newVel.y = 0;
+      onPlatform = true;
+    }
+
+    setGrounded(onPlatform);
 
     setHeroPos(newPos);
     setHeroVel(newVel);

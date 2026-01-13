@@ -5,10 +5,12 @@ import { GameHUD } from '@components/react/ui/GameHUD';
 import { StartScreen } from '@components/react/ui/StartScreen';
 import { ContactShadows, Environment, PerspectiveCamera, Sparkles } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
+import { Bloom, ChromaticAberration, EffectComposer } from '@react-three/postprocessing';
 import { musicSynth } from '@utils/audio/MusicSynth';
 import { initialGameState, initialInputState } from '@utils/gameConfig';
 import type { FC } from 'react';
 import { Suspense, useState } from 'react';
+import * as THREE from 'three';
 import type { GameState, InputState } from '@/types/game';
 
 export const NeoTokyoGame: FC = () => {
@@ -79,6 +81,16 @@ export const NeoTokyoGame: FC = () => {
             onScoreUpdate={(score) => setGameState((prev) => ({ ...prev, score }))}
             onCombatText={handleCombatText}
           />
+
+          {/* Post Processing */}
+          <EffectComposer>
+            <Bloom luminanceThreshold={1} mipmapBlur intensity={1.5} />
+            <ChromaticAberration
+              offset={new THREE.Vector2(0.002, 0.002)}
+              radialModulation={false}
+              modulationOffset={0}
+            />
+          </EffectComposer>
 
           {/* Enhanced Environment Effects */}
           <Environment preset="night" />
