@@ -7,14 +7,7 @@
   },
   "files": {
     "ignoreUnknown": false,
-    "ignore": [
-      "node_modules",
-      "dist",
-      ".astro",
-      "pnpm-lock.yaml",
-      "package-lock.json",
-      "yarn.lock"
-    ]
+    "ignore": ["node_modules", "dist", ".astro", "pnpm-lock.yaml", "package-lock.json", "yarn.lock"]
   },
   "formatter": {
     "enabled": true,
@@ -91,6 +84,9 @@
         "rules": {
           "style": {
             "useImportType": "off"
+          },
+          "correctness": {
+            "noUnusedVariables": "off"
           }
         }
       }

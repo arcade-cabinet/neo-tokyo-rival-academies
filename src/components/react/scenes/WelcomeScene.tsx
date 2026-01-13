@@ -1,6 +1,6 @@
-import type { FC } from 'react';
+import { ContactShadows, Environment, OrbitControls, Text3D } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Environment, ContactShadows, Text3D } from '@react-three/drei';
+import type { FC } from 'react';
 
 export const WelcomeScene: FC = () => {
   return (
@@ -37,13 +37,7 @@ export const WelcomeScene: FC = () => {
 
       {/* Environment and Controls */}
       <Environment preset="night" />
-      <ContactShadows
-        position={[0, -0.99, 0]}
-        opacity={0.5}
-        scale={10}
-        blur={2}
-        far={4}
-      />
+      <ContactShadows position={[0, -0.99, 0]} opacity={0.5} scale={10} blur={2} far={4} />
       <OrbitControls makeDefault />
     </Canvas>
   );
