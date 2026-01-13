@@ -1,5 +1,5 @@
-import type { InputState } from '@/types/game';
 import type { FC } from 'react';
+import type { InputState } from '@/types/game';
 
 interface GameHUDProps {
   score: number;

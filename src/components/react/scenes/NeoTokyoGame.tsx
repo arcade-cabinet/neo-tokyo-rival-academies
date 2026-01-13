@@ -1,4 +1,3 @@
-import type { GameState, InputState } from '@/types/game';
 import { GameWorld } from '@components/react/game/GameWorld';
 import { CityBackground } from '@components/react/objects/CityBackground';
 import { CombatText } from '@components/react/ui/CombatText';
@@ -10,6 +9,7 @@ import { musicSynth } from '@utils/audio/MusicSynth';
 import { initialGameState, initialInputState } from '@utils/gameConfig';
 import type { FC } from 'react';
 import { Suspense, useState } from 'react';
+import type { GameState, InputState } from '@/types/game';
 
 export const NeoTokyoGame: FC = () => {
   const [gameState, setGameState] = useState<GameState>(initialGameState);

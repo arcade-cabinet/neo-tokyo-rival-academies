@@ -1,5 +1,5 @@
-import type { CharacterState } from '@/types/game';
 import type { FC } from 'react';
+import type { CharacterState } from '@/types/game';
 import { Character } from './Character';
 
 interface EnemyProps {

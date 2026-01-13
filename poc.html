@@ -306,7 +306,7 @@
             { name: "ROPPONGI", fog: 0x150500, light: 0xff0055, bldgMat: matWindowsEvil }
         ];
 
-        let state = {
+        const state = {
             active: false,
             biome: 0,
             score: 0,
@@ -578,7 +578,7 @@
                     hero.state = 'stun'; state.stunned = 0.5;
                     entity.active = false;
                 } else if (entity.type === 'enemy') {
-                    let win = (hero.state === 'sprint' || hero.state === 'slide');
+                    const win = (hero.state === 'sprint' || hero.state === 'slide');
                     if (win) {
                         popText("K.O.", "#0f0");
                         entity.obj.vel.set(20, 15, 0); entity.obj.state = 'stun';
@@ -613,7 +613,7 @@
                     state.stunned -= dt;
                     hero.vel.x += (0 - hero.vel.x) * CONFIG.knockbackDrag * dt;
                 } else {
-                    let tgt = INPUT.run ? CONFIG.sprintSpeed : CONFIG.baseSpeed;
+                    const tgt = INPUT.run ? CONFIG.sprintSpeed : CONFIG.baseSpeed;
                     hero.vel.x += (tgt - hero.vel.x) * 5 * dt;
                     
                     if (hero.grounded) {

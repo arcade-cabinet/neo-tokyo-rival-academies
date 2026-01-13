@@ -1,4 +1,3 @@
-import type { Entity, GameState, InputState } from '@/types/game';
 import { Character } from '@components/react/objects/Character';
 import { Enemy } from '@components/react/objects/Enemy';
 import { Obstacle } from '@components/react/objects/Obstacle';
@@ -7,6 +6,7 @@ import { useFrame, useThree } from '@react-three/fiber';
 import { CONFIG } from '@utils/gameConfig';
 import { useRef, useState } from 'react';
 import * as THREE from 'three';
+import type { Entity, GameState, InputState } from '@/types/game';
 
 interface GameWorldProps {
   gameState: GameState;
