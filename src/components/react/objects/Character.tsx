@@ -15,11 +15,16 @@ export function Character({ color, position = [0, 0, 0], state = 'run' }: Charac
   const coatSeg1Ref = useRef<THREE.Group>(null);
   const coatSeg2Ref = useRef<THREE.Group>(null);
   const coatSeg3Ref = useRef<THREE.Group>(null);
+  const armLRef = useRef<THREE.Group>(null);
+  const armRRef = useRef<THREE.Group>(null);
+  const legLRef = useRef<THREE.Group>(null);
+  const legRRef = useRef<THREE.Group>(null);
+  
   const limbsRef = useRef({
-    armL: null as THREE.Group | null,
-    armR: null as THREE.Group | null,
-    legL: null as THREE.Group | null,
-    legR: null as THREE.Group | null,
+    armL: armLRef,
+    armR: armRRef,
+    legL: legLRef,
+    legR: legRRef,
   });
 
   useFrame((frameState, delta) => {
@@ -58,26 +63,26 @@ export function Character({ color, position = [0, 0, 0], state = 'run' }: Charac
       pivotRef.current.rotation.x = 0.2;
       pivotRef.current.position.y = 0;
 
-      if (limbsRef.current.legL) limbsRef.current.legL.rotation.x = Math.sin(run);
-      if (limbsRef.current.legR) limbsRef.current.legR.rotation.x = Math.sin(run + Math.PI);
-      if (limbsRef.current.armL) limbsRef.current.armL.rotation.x = Math.sin(run + Math.PI);
-      if (limbsRef.current.armR) limbsRef.current.armR.rotation.x = Math.sin(run);
+      if (limbsRef.current.legL.current) limbsRef.current.legL.current.rotation.x = Math.sin(run);
+      if (limbsRef.current.legR.current) limbsRef.current.legR.current.rotation.x = Math.sin(run + Math.PI);
+      if (limbsRef.current.armL.current) limbsRef.current.armL.current.rotation.x = Math.sin(run + Math.PI);
+      if (limbsRef.current.armR.current) limbsRef.current.armR.current.rotation.x = Math.sin(run);
     } else if (state === 'jump') {
       pivotRef.current.rotation.x = 0;
-      if (limbsRef.current.legL) limbsRef.current.legL.rotation.x = 0.5;
-      if (limbsRef.current.legR) limbsRef.current.legR.rotation.x = -0.2;
-      if (limbsRef.current.armL) limbsRef.current.armL.rotation.x = -2.5;
-      if (limbsRef.current.armR) limbsRef.current.armR.rotation.x = -2;
+      if (limbsRef.current.legL.current) limbsRef.current.legL.current.rotation.x = 0.5;
+      if (limbsRef.current.legR.current) limbsRef.current.legR.current.rotation.x = -0.2;
+      if (limbsRef.current.armL.current) limbsRef.current.armL.current.rotation.x = -2.5;
+      if (limbsRef.current.armR.current) limbsRef.current.armR.current.rotation.x = -2;
     } else if (state === 'slide') {
       pivotRef.current.rotation.x = -1.3;
       pivotRef.current.position.y = -0.5;
-      if (limbsRef.current.legL) limbsRef.current.legL.rotation.x = 1.5;
-      if (limbsRef.current.legR) limbsRef.current.legR.rotation.x = 1.3;
-      if (limbsRef.current.armL) limbsRef.current.armL.rotation.x = 0.5;
-      if (limbsRef.current.armR) limbsRef.current.armR.rotation.x = 0.5;
+      if (limbsRef.current.legL.current) limbsRef.current.legL.current.rotation.x = 1.5;
+      if (limbsRef.current.legR.current) limbsRef.current.legR.current.rotation.x = 1.3;
+      if (limbsRef.current.armL.current) limbsRef.current.armL.current.rotation.x = 0.5;
+      if (limbsRef.current.armR.current) limbsRef.current.armR.current.rotation.x = 0.5;
     } else if (state === 'stun') {
       pivotRef.current.rotation.x = -0.5;
-      if (limbsRef.current.armL) limbsRef.current.armL.rotation.x = -1;
+      if (limbsRef.current.armL.current) limbsRef.current.armL.current.rotation.x = -1;
       if (coatSeg1Ref.current) coatSeg1Ref.current.rotation.x = -2;
     }
   });
@@ -93,14 +98,9 @@ export function Character({ color, position = [0, 0, 0], state = 'run' }: Charac
     y: number;
     w: number;
     h: number;
-    limbRef: React.MutableRefObject<THREE.Group | null>;
+    limbRef: React.RefObject<THREE.Group>;
   }) => (
-    <group
-      position={[x, y, 0]}
-      ref={(ref) => {
-        limbRef.current = ref;
-      }}
-    >
+    <group position={[x, y, 0]} ref={limbRef}>
       <mesh position={[0, -h / 2, 0]} castShadow>
         <boxGeometry args={[w, h, w]} />
         <meshStandardMaterial color={0x111111} roughness={0.7} />
@@ -153,10 +153,10 @@ export function Character({ color, position = [0, 0, 0], state = 'run' }: Charac
         </group>
 
         {/* Limbs */}
-        <Limb x={0.35} y={1.1} w={0.12} h={0.6} limbRef={{ current: null } as any} />
-        <Limb x={-0.35} y={1.1} w={0.12} h={0.6} limbRef={{ current: null } as any} />
-        <Limb x={0.15} y={0.5} w={0.18} h={0.7} limbRef={{ current: null } as any} />
-        <Limb x={-0.15} y={0.5} w={0.18} h={0.7} limbRef={{ current: null } as any} />
+        <Limb x={0.35} y={1.1} w={0.12} h={0.6} limbRef={limbsRef.current.armR} />
+        <Limb x={-0.35} y={1.1} w={0.12} h={0.6} limbRef={limbsRef.current.armL} />
+        <Limb x={0.15} y={0.5} w={0.18} h={0.7} limbRef={limbsRef.current.legR} />
+        <Limb x={-0.15} y={0.5} w={0.18} h={0.7} limbRef={limbsRef.current.legL} />
       </group>
     </group>
   );

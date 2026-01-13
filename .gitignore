@@ -154,7 +154,6 @@ vite.config.ts.timestamp-*
 .DS_Store
 
 # Build artifacts
-dist/
 build/
 
 # Temporary files

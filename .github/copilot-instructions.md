@@ -5,14 +5,14 @@ This file provides context for GitHub Copilot when suggesting code for the Neo-T
 ## Project Overview
 
 Neo-Tokyo: Rival Academies is a 3D platformer game built with:
-- **Astro 4.x**: Static site generation with Islands Architecture
+- **Astro 5.x (5.16.9)**: Static site generation with Islands Architecture
 - **React 18.3**: For interactive 3D components only
 - **Three.js 0.170**: 3D graphics engine
 - **React Three Fiber 8.x**: Declarative 3D with React
 - **React Three Drei 9.x**: R3F helper components
 - **PNPM 10**: Package manager (NOT npm or yarn)
 - **Biome 1.9.4**: Linter and formatter (NOT ESLint or Prettier)
-- **TypeScript 5.7**: Strict mode enabled
+- **TypeScript 5.9 (5.9.3)**: Strict mode enabled
 
 ## Code Style & Conventions
 

@@ -5,7 +5,6 @@
     "slevink.shader",
     "github.copilot",
     "github.copilot-chat",
-    "dbaeumer.vscode-eslint",
     "bradlc.vscode-tailwindcss"
   ]
 }
