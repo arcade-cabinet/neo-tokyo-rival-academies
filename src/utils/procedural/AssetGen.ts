@@ -7,6 +7,15 @@ import * as THREE from 'three';
 
 type DrawFunction = (ctx: CanvasRenderingContext2D, w: number, h: number) => void;
 
+/**
+ * Create a THREE.CanvasTexture by rendering to an offscreen canvas with a provided draw callback.
+ *
+ * @param w - Canvas width in pixels
+ * @param h - Canvas height in pixels
+ * @param drawFn - Function invoked with the 2D rendering context and the canvas width/height to draw the texture contents
+ * @returns A THREE.CanvasTexture whose wrapS and wrapT are set to `THREE.RepeatWrapping`
+ * @throws Error if a 2D rendering context cannot be obtained from the created canvas
+ */
 export function createTexture(w: number, h: number, drawFn: DrawFunction): THREE.CanvasTexture {
   const canvas = document.createElement('canvas');
   canvas.width = w;
@@ -21,6 +30,11 @@ export function createTexture(w: number, h: number, drawFn: DrawFunction): THREE
   return texture;
 }
 
+/**
+ * Create a 512×512 procedural asphalt texture with subtle speckling and a puddle accent.
+ *
+ * @returns A THREE.CanvasTexture containing an asphalt-like procedural image
+ */
 export function asphalt(): THREE.CanvasTexture {
   return createTexture(512, 512, (ctx, w, h) => {
     ctx.fillStyle = '#151515';
@@ -40,6 +54,12 @@ export function asphalt(): THREE.CanvasTexture {
   });
 }
 
+/**
+ * Create a procedural building facade texture tinted by the given HSL hue.
+ *
+ * @param hue - The HSL hue angle (0–360) used to color the building blocks
+ * @returns A THREE.CanvasTexture (256×512) showing a dark facade with randomly placed, hue-tinted rectangular blocks
+ */
 export function building(hue: number): THREE.CanvasTexture {
   return createTexture(256, 512, (ctx, w, h) => {
     ctx.fillStyle = '#050508';
@@ -56,6 +76,12 @@ export function building(hue: number): THREE.CanvasTexture {
   });
 }
 
+/**
+ * Create a 256×256 neon-style grid texture rendered on a black background.
+ *
+ * @param color - CSS color used for the grid lines and glow
+ * @returns A THREE.CanvasTexture containing a 256×256 black canvas with a glowing grid drawn in `color`
+ */
 export function neonGrid(color: string): THREE.CanvasTexture {
   return createTexture(256, 256, (ctx, w, h) => {
     ctx.fillStyle = '#000000';
@@ -81,6 +107,14 @@ export function neonGrid(color: string): THREE.CanvasTexture {
   });
 }
 
+/**
+ * Create a holographic-style procedural texture with gradient, scanlines, and glitch streaks.
+ *
+ * The resulting image blends translucent cyan, magenta, and yellow tones, overlays faint horizontal
+ * scanlines, and adds random semi-transparent colored streaks to simulate digital glitches.
+ *
+ * @returns A 512×512 THREE.CanvasTexture containing the holographic pattern
+ */
 export function holographicPattern(): THREE.CanvasTexture {
   return createTexture(512, 512, (ctx, w, h) => {
     // Gradient background

@@ -10,6 +10,14 @@ interface CharacterProps {
   state?: CharacterState;
 }
 
+/**
+ * Renders a stylized humanoid character as a Three.js group with animated coat segments and pose-driven limb motion.
+ *
+ * @param color - Hex color used for the character's hair
+ * @param position - Root group position as [x, y, z]
+ * @param state - Animation/pose state: 'run', 'sprint', 'jump', 'slide', or 'stun'
+ * @returns The top-level group containing the character's meshes and runtime animation logic
+ */
 export function Character({ color, position = [0, 0, 0], state = 'run' }: CharacterProps) {
   const pivotRef = useRef<THREE.Group>(null);
   const coatSeg1Ref = useRef<THREE.Group>(null);

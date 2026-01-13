@@ -43,6 +43,11 @@ export const WelcomeScene: FC = () => {
   );
 };
 
+/**
+ * Renders a magenta, shadow-casting cube positioned slightly above the ground.
+ *
+ * @returns A JSX element containing a box mesh with standard material configured for metalness and roughness
+ */
 function RotatingCube() {
   return (
     <mesh position={[0, 0.5, 0]} castShadow>

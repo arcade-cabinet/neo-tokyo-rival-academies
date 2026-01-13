@@ -3,6 +3,13 @@ import { building } from '@utils/procedural/AssetGen';
 import { useRef } from 'react';
 import type * as THREE from 'three';
 
+/**
+ * Render a procedurally generated city skyline used as a background.
+ *
+ * The component creates 20 building groups with randomized position, size, color, and window textures. Each building includes a textured body, a top glow with a point light, and an antenna. The root group's x position is tied to the camera to produce a parallax effect.
+ *
+ * @returns A React group containing the generated building groups; the group's x position is driven by the camera to create parallax.
+ */
 export function CityBackground() {
   const buildingsRef = useRef<THREE.Group>(null);
 
