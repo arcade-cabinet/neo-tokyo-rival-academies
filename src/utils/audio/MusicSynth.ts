@@ -55,8 +55,8 @@ export class MusicSynth {
     // TAIKO KICK (Deep, Resonant) - Polyrhythmic feel
     // Pattern: X... X.X. X... X... (Tribal)
     const kickPat = [
-      1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1,
-      1, 0, 0,
+      1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 1, 0,
+      0,
     ];
     if (kickPat[b]) this.taiko(t, 0.8);
 
