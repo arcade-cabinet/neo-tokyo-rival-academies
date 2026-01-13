@@ -1,0 +1,10 @@
+{
+  "recommendations": [
+    "astro-build.astro-vscode",
+    "biomejs.biome",
+    "slevink.shader",
+    "github.copilot",
+    "github.copilot-chat",
+    "bradlc.vscode-tailwindcss"
+  ]
+}

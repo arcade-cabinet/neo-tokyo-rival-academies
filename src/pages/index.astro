@@ -1,0 +1,143 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Neo-Tokyo: Rival Academies">
+  <main>
+    <div class="container">
+      <h1>
+        <span class="neon">Neo-Tokyo:</span>
+        <span class="subtitle">Rival Academies</span>
+      </h1>
+      <p class="tagline">A 3D Platformer Experience</p>
+      <div class="info">
+        <p>🎮 Built with Astro, React Three Fiber, and Three.js</p>
+        <p>⚡ Powered by PNPM 10 and Biome</p>
+        <p>🚀 Ready for development</p>
+      </div>
+      <div class="cta">
+        <a href="https://github.com/arcade-cabinet/neo-tokyo-rival-academies" class="button"
+          >View on GitHub</a
+        >
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  main {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(ellipse at center, rgba(255, 0, 255, 0.1) 0%, transparent 70%),
+      radial-gradient(ellipse at 80% 50%, rgba(0, 255, 255, 0.1) 0%, transparent 50%);
+  }
+
+  .container {
+    text-align: center;
+    padding: 2rem;
+    max-width: 800px;
+  }
+
+  h1 {
+    font-size: 4rem;
+    font-weight: 900;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+  }
+
+  .neon {
+    display: block;
+    background: linear-gradient(45deg, #00ffff, #ff00ff, #ffff00);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: glow 2s ease-in-out infinite alternate;
+  }
+
+  .subtitle {
+    display: block;
+    font-size: 3rem;
+    color: #ffffff;
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+  }
+
+  .tagline {
+    font-size: 1.5rem;
+    color: #00ffff;
+    margin-bottom: 2rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+  }
+
+  .info {
+    margin: 2rem 0;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    border: 1px solid rgba(0, 255, 255, 0.2);
+  }
+
+  .info p {
+    margin: 0.5rem 0;
+    font-size: 1.1rem;
+    color: #e0e0e0;
+  }
+
+  .cta {
+    margin-top: 2rem;
+  }
+
+  .button {
+    display: inline-block;
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-decoration: none;
+    color: #000000;
+    background: linear-gradient(45deg, #00ffff, #ff00ff);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 255, 255, 0.4);
+  }
+
+  .button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 0, 255, 0.6);
+  }
+
+  @keyframes glow {
+    from {
+      text-shadow:
+        0 0 10px #00ffff,
+        0 0 20px #00ffff,
+        0 0 30px #ff00ff;
+    }
+    to {
+      text-shadow:
+        0 0 20px #ff00ff,
+        0 0 30px #ff00ff,
+        0 0 40px #00ffff;
+    }
+  }
+
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 2.5rem;
+    }
+
+    .subtitle {
+      font-size: 2rem;
+    }
+
+    .tagline {
+      font-size: 1rem;
+    }
+
+    .info p {
+      font-size: 0.9rem;
+    }
+  }
+</style>
