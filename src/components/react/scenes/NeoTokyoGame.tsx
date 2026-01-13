@@ -3,7 +3,13 @@ import { CityBackground } from '@components/react/objects/CityBackground';
 import { CombatText } from '@components/react/ui/CombatText';
 import { GameHUD } from '@components/react/ui/GameHUD';
 import { StartScreen } from '@components/react/ui/StartScreen';
-import { ContactShadows, Environment, PerspectiveCamera, Sparkles } from '@react-three/drei';
+import {
+  CameraShake,
+  ContactShadows,
+  Environment,
+  PerspectiveCamera,
+  Sparkles,
+} from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import { Bloom, ChromaticAberration, EffectComposer } from '@react-three/postprocessing';
 import { musicSynth } from '@utils/audio/MusicSynth';
@@ -18,6 +24,7 @@ export const NeoTokyoGame: FC = () => {
   const [inputState, setInputState] = useState<InputState>(initialInputState);
   const [showStart, setShowStart] = useState(true);
   const [combatText, setCombatText] = useState<{ message: string; color: string } | null>(null);
+  const [shakeIntensity, setShakeIntensity] = useState(0);
 
   const handleStart = () => {
     setShowStart(false);
@@ -37,6 +44,11 @@ export const NeoTokyoGame: FC = () => {
 
   const handleCombatText = (message: string, color: string) => {
     setCombatText({ message, color });
+  };
+
+  const triggerCameraShake = () => {
+    setShakeIntensity(1);
+    setTimeout(() => setShakeIntensity(0), 500);
   };
 
   return (
@@ -80,6 +92,18 @@ export const NeoTokyoGame: FC = () => {
             onGameOver={handleGameOver}
             onScoreUpdate={(score) => setGameState((prev) => ({ ...prev, score }))}
             onCombatText={handleCombatText}
+            onCameraShake={triggerCameraShake}
+          />
+
+          <CameraShake
+            maxYaw={0.05}
+            maxPitch={0.05}
+            maxRoll={0.05}
+            yawFrequency={10 * shakeIntensity}
+            pitchFrequency={10 * shakeIntensity}
+            rollFrequency={10 * shakeIntensity}
+            intensity={shakeIntensity}
+            decayRate={0.65}
           />
 
           {/* Post Processing */}

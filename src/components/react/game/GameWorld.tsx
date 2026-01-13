@@ -3,6 +3,7 @@ import { Enemy } from '@components/react/objects/Enemy';
 import { Obstacle } from '@components/react/objects/Obstacle';
 import { Platform } from '@components/react/objects/Platform';
 import { useFrame, useThree } from '@react-three/fiber';
+import { musicSynth } from '@utils/audio/MusicSynth';
 import { CONFIG } from '@utils/gameConfig';
 import { useRef, useState } from 'react';
 import * as THREE from 'three';
@@ -14,6 +15,7 @@ interface GameWorldProps {
   onGameOver: () => void;
   onScoreUpdate: (score: number) => void;
   onCombatText?: (message: string, color: string) => void;
+  onCameraShake?: () => void;
 }
 
 interface PlatformData {
@@ -40,6 +42,7 @@ export function GameWorld({
   onGameOver,
   onScoreUpdate,
   onCombatText,
+  onCameraShake,
 }: GameWorldProps) {
   const { camera } = useThree();
   const [heroPos, setHeroPos] = useState(new THREE.Vector3(0, 5, 0));
@@ -70,15 +73,22 @@ export function GameWorld({
       setHeroVel(newVel);
     } else {
       // Normal controls
-      const targetSpeed = inputState.run ? CONFIG.sprintSpeed : CONFIG.baseSpeed;
+      // Ramping difficulty: increase base speed slightly with distance (capped)
+      const distBonus = Math.min(heroPos.x * 0.002, 5); // +5 speed max
+      const targetSpeed = (inputState.run ? CONFIG.sprintSpeed : CONFIG.baseSpeed) + distBonus;
+
       const newVel = heroVel.clone();
       newVel.x += (targetSpeed - newVel.x) * 5 * dt;
 
       if (grounded) {
+        // Audio triggers for inputs
+        if (inputState.slide && heroState !== 'slide') musicSynth.playSlide();
+
         const newState = inputState.slide ? 'slide' : inputState.run ? 'sprint' : 'run';
         setHeroState(newState);
 
         if (inputState.jump) {
+          musicSynth.playJump();
           newVel.y = CONFIG.jumpForce;
           setGrounded(false);
           setHeroState('jump');
@@ -170,6 +180,8 @@ export function GameWorld({
       if (dx < 1.5 && dx > -1.0 && dy < 2) {
         if (entity.type === 'obstacle') {
           // Hit obstacle
+          musicSynth.playImpact();
+          if (onCameraShake) onCameraShake();
           if (onCombatText) onCombatText('IMPACT!', '#ff0');
           setHeroVel(new THREE.Vector3(-15, 10, 0));
           setHeroState('stun');
@@ -181,11 +193,14 @@ export function GameWorld({
           // Combat check: Sprint or Slide beats enemy
           const win = heroState === 'sprint' || heroState === 'slide';
           if (win) {
+            musicSynth.playImpact(); // maybe a different sound for win? using same for now
             if (onCombatText) onCombatText('K.O.', '#0f0');
             setEntities((prev) =>
               prev.map((e) => (e.id === entity.id ? { ...e, active: false } : e))
             );
           } else {
+            musicSynth.playImpact();
+            if (onCameraShake) onCameraShake();
             if (onCombatText) onCombatText('COUNTERED!', '#f00');
             setHeroVel(new THREE.Vector3(-25, 15, 0));
             setHeroState('stun');
