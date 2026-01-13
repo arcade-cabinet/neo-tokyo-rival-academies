@@ -1,7 +1,7 @@
-import type { CharacterState } from '@/types/game';
 import { useFrame } from '@react-three/fiber';
 import { useRef } from 'react';
 import * as THREE from 'three';
+import type { CharacterState } from '@/types/game';
 
 interface CharacterProps {
   color: THREE.ColorRepresentation;
@@ -27,7 +27,7 @@ export function Character({ color, position = [0, 0, 0], state = 'run' }: Charac
   const armRRef = useRef<THREE.Group>(null);
   const legLRef = useRef<THREE.Group>(null);
   const legRRef = useRef<THREE.Group>(null);
-  
+
   const limbsRef = useRef({
     armL: armLRef,
     armR: armRRef,
@@ -72,8 +72,10 @@ export function Character({ color, position = [0, 0, 0], state = 'run' }: Charac
       pivotRef.current.position.y = 0;
 
       if (limbsRef.current.legL.current) limbsRef.current.legL.current.rotation.x = Math.sin(run);
-      if (limbsRef.current.legR.current) limbsRef.current.legR.current.rotation.x = Math.sin(run + Math.PI);
-      if (limbsRef.current.armL.current) limbsRef.current.armL.current.rotation.x = Math.sin(run + Math.PI);
+      if (limbsRef.current.legR.current)
+        limbsRef.current.legR.current.rotation.x = Math.sin(run + Math.PI);
+      if (limbsRef.current.armL.current)
+        limbsRef.current.armL.current.rotation.x = Math.sin(run + Math.PI);
       if (limbsRef.current.armR.current) limbsRef.current.armR.current.rotation.x = Math.sin(run);
     } else if (state === 'jump') {
       pivotRef.current.rotation.x = 0;
@@ -106,7 +108,7 @@ export function Character({ color, position = [0, 0, 0], state = 'run' }: Charac
     y: number;
     w: number;
     h: number;
-    limbRef: React.RefObject<THREE.Group>;
+    limbRef: React.RefObject<THREE.Group | null>;
   }) => (
     <group position={[x, y, 0]} ref={limbRef}>
       <mesh position={[0, -h / 2, 0]} castShadow>

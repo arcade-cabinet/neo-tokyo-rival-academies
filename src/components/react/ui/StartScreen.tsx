@@ -89,7 +89,15 @@ export const StartScreen: FC<StartScreenProps> = ({ onStart }) => {
           e.currentTarget.style.transform = 'skewX(-20deg) scale(1.1)';
           e.currentTarget.style.boxShadow = '8px 8px 0px #f00';
         }}
+        onFocus={(e) => {
+          e.currentTarget.style.transform = 'skewX(-20deg) scale(1.1)';
+          e.currentTarget.style.boxShadow = '8px 8px 0px #f00';
+        }}
         onMouseOut={(e) => {
+          e.currentTarget.style.transform = 'skewX(-20deg) scale(1)';
+          e.currentTarget.style.boxShadow = '5px 5px 0px #fff';
+        }}
+        onBlur={(e) => {
           e.currentTarget.style.transform = 'skewX(-20deg) scale(1)';
           e.currentTarget.style.boxShadow = '5px 5px 0px #fff';
         }}

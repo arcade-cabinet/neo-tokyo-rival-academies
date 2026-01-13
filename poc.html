@@ -301,12 +301,12 @@
             knockbackDrag: 4
         };
 
-        const BIOMES = [
+        const _BIOMES = [
             { name: "SHIBUYA", fog: 0x050510, light: 0x00ffff, bldgMat: matWindows },
             { name: "ROPPONGI", fog: 0x150500, light: 0xff0055, bldgMat: matWindowsEvil }
         ];
 
-        let state = {
+        const state = {
             active: false,
             biome: 0,
             score: 0,
@@ -353,7 +353,7 @@
                 const matCloth = new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.7 });
                 const matSkin = new THREE.MeshStandardMaterial({ color: 0xffccaa });
                 const matHair = new THREE.MeshStandardMaterial({ color: color, roughness: 0.2 });
-                const matGlow = new THREE.MeshBasicMaterial({ color: color });
+                const _matGlow = new THREE.MeshBasicMaterial({ color: color });
 
                 // Torso
                 const torso = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.7, 0.3), matCloth);
@@ -578,7 +578,7 @@
                     hero.state = 'stun'; state.stunned = 0.5;
                     entity.active = false;
                 } else if (entity.type === 'enemy') {
-                    let win = (hero.state === 'sprint' || hero.state === 'slide');
+                    const win = (hero.state === 'sprint' || hero.state === 'slide');
                     if (win) {
                         popText("K.O.", "#0f0");
                         entity.obj.vel.set(20, 15, 0); entity.obj.state = 'stun';
@@ -613,7 +613,7 @@
                     state.stunned -= dt;
                     hero.vel.x += (0 - hero.vel.x) * CONFIG.knockbackDrag * dt;
                 } else {
-                    let tgt = INPUT.run ? CONFIG.sprintSpeed : CONFIG.baseSpeed;
+                    const tgt = INPUT.run ? CONFIG.sprintSpeed : CONFIG.baseSpeed;
                     hero.vel.x += (tgt - hero.vel.x) * 5 * dt;
                     
                     if (hero.grounded) {
@@ -670,7 +670,7 @@
                 camera.position.x = hero.pos.x - 6;
                 camera.position.y += (hero.pos.y + 4 - camera.position.y) * 2 * dt;
                 state.score = Math.floor(hero.pos.x);
-                document.getElementById('score').innerText = state.score + "m";
+                document.getElementById('score').innerText = `${state.score}m`;
             } else {
                 hero.update(dt, t, 5);
             }
@@ -680,7 +680,7 @@
         function reset() {
             state.active = true; state.stunned = 0; state.score = 0;
             hero.pos.set(0, 5, 0); hero.vel.set(0, 0, 0);
-            platforms.forEach(p => scene.remove(p.mesh)); platforms.length = 0;
+            platforms.forEach(p => { scene.remove(p.mesh); }); platforms.length = 0;
             entities.forEach(e => { if(e.type==='enemy')scene.remove(e.obj.mesh); else scene.remove(e.mesh); });
             entities.length = 0;
             genState = { nextX: -10, nextY: 0 };

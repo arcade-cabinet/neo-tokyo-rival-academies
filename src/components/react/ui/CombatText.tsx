@@ -18,8 +18,7 @@ export const CombatText: FC<CombatTextProps> = ({ message, color, onComplete }) 
     }, 600);
 
     return () => clearTimeout(timer);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [message]);
+  }, [onComplete]);
 
   return (
     <div
