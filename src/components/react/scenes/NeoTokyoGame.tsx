@@ -1,13 +1,10 @@
 import type { GameState, InputState } from '@/types/game';
 import { GameWorld } from '@components/react/game/GameWorld';
+import { CityBackground } from '@components/react/objects/CityBackground';
+import { CombatText } from '@components/react/ui/CombatText';
 import { GameHUD } from '@components/react/ui/GameHUD';
 import { StartScreen } from '@components/react/ui/StartScreen';
-import {
-  ContactShadows,
-  Environment,
-  PerspectiveCamera,
-  Sparkles,
-} from '@react-three/drei';
+import { ContactShadows, Environment, PerspectiveCamera, Sparkles } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import { musicSynth } from '@utils/audio/MusicSynth';
 import { initialGameState, initialInputState } from '@utils/gameConfig';
@@ -18,6 +15,7 @@ export const NeoTokyoGame: FC = () => {
   const [gameState, setGameState] = useState<GameState>(initialGameState);
   const [inputState, setInputState] = useState<InputState>(initialInputState);
   const [showStart, setShowStart] = useState(true);
+  const [combatText, setCombatText] = useState<{ message: string; color: string } | null>(null);
 
   const handleStart = () => {
     setShowStart(false);
@@ -35,6 +33,10 @@ export const NeoTokyoGame: FC = () => {
     setInputState((prev) => ({ ...prev, [key]: value }));
   };
 
+  const handleCombatText = (message: string, color: string) => {
+    setCombatText({ message, color });
+  };
+
   return (
     <div style={{ width: '100vw', height: '100vh', position: 'relative' }}>
       {/* 3D Canvas */}
@@ -42,21 +44,32 @@ export const NeoTokyoGame: FC = () => {
         <Suspense fallback={null}>
           <PerspectiveCamera makeDefault position={[-8, 6, 15]} fov={50} />
 
-          {/* Lighting Setup - Cyberpunk Style */}
-          <ambientLight intensity={0.3} />
+          {/* Lighting Setup - Enhanced Cyberpunk Style */}
+          <ambientLight intensity={0.2} color={0x4040ff} />
           <directionalLight
             position={[20, 50, 20]}
-            intensity={1.5}
+            intensity={2}
             color="#00ffff"
             castShadow
             shadow-mapSize-width={2048}
             shadow-mapSize-height={2048}
+            shadow-camera-far={150}
+            shadow-camera-left={-50}
+            shadow-camera-right={50}
+            shadow-camera-top={50}
+            shadow-camera-bottom={-50}
           />
-          <pointLight position={[-10, 5, -10]} intensity={0.8} color="#ff00ff" distance={30} />
-          <pointLight position={[10, 5, -10]} intensity={0.8} color="#00ffff" distance={30} />
 
-          {/* Fog for depth */}
-          <fog attach="fog" args={['#050510', 10, 100]} />
+          {/* Multiple colored point lights for atmosphere */}
+          <pointLight position={[-20, 10, -20]} intensity={2} color="#ff00ff" distance={50} />
+          <pointLight position={[20, 10, -20]} intensity={2} color="#00ffff" distance={50} />
+          <pointLight position={[0, 5, 20]} intensity={1.5} color="#ffff00" distance={40} />
+
+          {/* Fog for depth - darker */}
+          <fog attach="fog" args={['#020208', 15, 120]} />
+
+          {/* City Background with parallax */}
+          <CityBackground />
 
           {/* Game World */}
           <GameWorld
@@ -64,14 +77,31 @@ export const NeoTokyoGame: FC = () => {
             inputState={inputState}
             onGameOver={handleGameOver}
             onScoreUpdate={(score) => setGameState((prev) => ({ ...prev, score }))}
+            onCombatText={handleCombatText}
           />
 
-          {/* Environment Effects */}
+          {/* Enhanced Environment Effects */}
           <Environment preset="night" />
-          <ContactShadows position={[0, -0.99, 0]} opacity={0.5} scale={10} blur={2} far={4} />
+          <ContactShadows
+            position={[0, -0.5, 0]}
+            opacity={0.6}
+            scale={20}
+            blur={2.5}
+            far={10}
+            color="#00ffff"
+          />
 
-          {/* Atmospheric particles */}
-          <Sparkles count={100} scale={50} size={2} speed={0.3} opacity={0.3} color="#00ffff" />
+          {/* Enhanced atmospheric particles */}
+          <Sparkles count={200} scale={80} size={2.5} speed={0.2} opacity={0.4} color="#00ffff" />
+          <Sparkles
+            count={150}
+            scale={60}
+            size={1.5}
+            speed={0.15}
+            opacity={0.3}
+            color="#ff00ff"
+            position={[0, 10, -20]}
+          />
 
           {/* Debug controls (remove in production) */}
           {/* <OrbitControls makeDefault /> */}
@@ -80,12 +110,21 @@ export const NeoTokyoGame: FC = () => {
 
       {/* UI Overlay */}
       {gameState.active && (
-        <GameHUD
-          score={gameState.score}
-          biome={gameState.biome}
-          inputState={inputState}
-          onInput={handleInput}
-        />
+        <>
+          <GameHUD
+            score={gameState.score}
+            biome={gameState.biome}
+            inputState={inputState}
+            onInput={handleInput}
+          />
+          {combatText && (
+            <CombatText
+              message={combatText.message}
+              color={combatText.color}
+              onComplete={() => setCombatText(null)}
+            />
+          )}
+        </>
       )}
 
       {/* Start Screen */}

@@ -1,5 +1,5 @@
 import type { Mesh } from 'three';
-import * as THREE from 'three';
+import type * as THREE from 'three';
 
 export interface GameConfig {
   gravity: number;
@@ -39,8 +39,9 @@ export interface Entity {
   active: boolean;
   x: number;
   y: number;
-  obj?: Character;
-  mesh?: Mesh;
+  id: string;
+  enemyType?: 'stand' | 'block';
+  obstacleType?: 'low' | 'high';
 }
 
 export interface Character {

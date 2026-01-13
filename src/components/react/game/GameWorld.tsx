@@ -1,5 +1,7 @@
-import type { GameState, InputState } from '@/types/game';
+import type { Entity, GameState, InputState } from '@/types/game';
 import { Character } from '@components/react/objects/Character';
+import { Enemy } from '@components/react/objects/Enemy';
+import { Obstacle } from '@components/react/objects/Obstacle';
 import { Platform } from '@components/react/objects/Platform';
 import { useFrame, useThree } from '@react-three/fiber';
 import { CONFIG } from '@utils/gameConfig';
@@ -11,6 +13,7 @@ interface GameWorldProps {
   inputState: InputState;
   onGameOver: () => void;
   onScoreUpdate: (score: number) => void;
+  onCombatText?: (message: string, color: string) => void;
 }
 
 interface PlatformData {
@@ -21,13 +24,20 @@ interface PlatformData {
   slope: number;
 }
 
-export function GameWorld({ gameState, inputState, onGameOver, onScoreUpdate }: GameWorldProps) {
+export function GameWorld({
+  gameState,
+  inputState,
+  onGameOver,
+  onScoreUpdate,
+  onCombatText,
+}: GameWorldProps) {
   const { camera } = useThree();
   const [heroPos, setHeroPos] = useState(new THREE.Vector3(0, 5, 0));
   const [heroVel, setHeroVel] = useState(new THREE.Vector3(0, 0, 0));
   const [heroState, setHeroState] = useState<'run' | 'sprint' | 'jump' | 'slide' | 'stun'>('run');
   const [grounded, setGrounded] = useState(false);
   const [platforms, setPlatforms] = useState<PlatformData[]>([]);
+  const [entities, setEntities] = useState<Entity[]>([]);
   const [stunTimer, setStunTimer] = useState(0);
 
   // Generation state
@@ -108,8 +118,48 @@ export function GameWorld({ gameState, inputState, onGameOver, onScoreUpdate }: 
       generatePlatform();
     }
 
-    // Cleanup old platforms
+    // Check combat interactions
+    entities.forEach((entity) => {
+      if (!entity.active) return;
+
+      const dx = entity.x - newPos.x;
+      const dy = Math.abs(newPos.y - entity.y);
+
+      // Collision check
+      if (dx < 1.5 && dx > -1.0 && dy < 2) {
+        if (entity.type === 'obstacle') {
+          // Hit obstacle
+          if (onCombatText) onCombatText('IMPACT!', '#ff0');
+          setHeroVel(new THREE.Vector3(-15, 10, 0));
+          setHeroState('stun');
+          setStunTimer(0.5);
+          setEntities((prev) =>
+            prev.map((e) => (e.id === entity.id ? { ...e, active: false } : e))
+          );
+        } else if (entity.type === 'enemy') {
+          // Combat check: Sprint or Slide beats enemy
+          const win = heroState === 'sprint' || heroState === 'slide';
+          if (win) {
+            if (onCombatText) onCombatText('K.O.', '#0f0');
+            setEntities((prev) =>
+              prev.map((e) => (e.id === entity.id ? { ...e, active: false } : e))
+            );
+          } else {
+            if (onCombatText) onCombatText('COUNTERED!', '#f00');
+            setHeroVel(new THREE.Vector3(-25, 15, 0));
+            setHeroState('stun');
+            setStunTimer(0.8);
+            setEntities((prev) =>
+              prev.map((e) => (e.id === entity.id ? { ...e, active: false } : e))
+            );
+          }
+        }
+      }
+    });
+
+    // Cleanup old platforms and entities
     setPlatforms((prev) => prev.filter((p) => p.x + p.length > newPos.x - 50));
+    setEntities((prev) => prev.filter((e) => e.x > newPos.x - 50));
   });
 
   const generatePlatform = () => {
@@ -145,6 +195,41 @@ export function GameWorld({ gameState, inputState, onGameOver, onScoreUpdate }: 
     };
 
     setPlatforms((prev) => [...prev, newPlatform]);
+
+    // Spawn entities on flat platforms
+    if (length > 15 && Math.abs(slope) < 0.1) {
+      if (Math.random() > 0.6) {
+        // Spawn enemy
+        const ex = genStateRef.current.nextX + 5 + Math.random() * (length - 10);
+        const enemyType = Math.random() > 0.5 ? 'stand' : 'block';
+        setEntities((prev) => [
+          ...prev,
+          {
+            id: `enemy-${Date.now()}-${Math.random()}`,
+            type: 'enemy',
+            x: ex,
+            y: genStateRef.current.nextY,
+            active: true,
+            enemyType,
+          },
+        ]);
+      } else if (Math.random() > 0.5) {
+        // Spawn obstacle
+        const ox = genStateRef.current.nextX + 5 + Math.random() * (length - 10);
+        const obstacleType = Math.random() > 0.5 ? 'low' : 'high';
+        setEntities((prev) => [
+          ...prev,
+          {
+            id: `obstacle-${Date.now()}-${Math.random()}`,
+            type: 'obstacle',
+            x: ox,
+            y: genStateRef.current.nextY,
+            active: true,
+            obstacleType,
+          },
+        ]);
+      }
+    }
 
     // Update generation state
     const angle = slope * 0.26;
@@ -186,6 +271,33 @@ export function GameWorld({ gameState, inputState, onGameOver, onScoreUpdate }: 
           slope={platform.slope}
         />
       ))}
+
+      {/* Entities - Enemies and Obstacles */}
+      {entities.map((entity) => {
+        if (!entity.active) return null;
+
+        if (entity.type === 'enemy' && entity.enemyType) {
+          return (
+            <Enemy
+              key={entity.id}
+              position={[entity.x, entity.y, 0]}
+              enemyType={entity.enemyType}
+            />
+          );
+        }
+
+        if (entity.type === 'obstacle' && entity.obstacleType) {
+          return (
+            <Obstacle
+              key={entity.id}
+              type={entity.obstacleType}
+              position={[entity.x, entity.y, 0]}
+            />
+          );
+        }
+
+        return null;
+      })}
 
       {/* Ground Plane (for shadows) */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.01, 0]} receiveShadow>
