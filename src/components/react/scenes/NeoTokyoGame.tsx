@@ -60,7 +60,7 @@ export const NeoTokyoGame: FC = () => {
   const [inputState, setInputState] = useState<InputState>(initialInputState);
   const [viewState, setViewState] = useState<ViewState>('menu');
   const [combatText, setCombatText] = useState<{ message: string; color: string } | null>(null);
-  const [dialogue, setDialogue] = useState<{ speaker: string; text: string } | null>(null);
+  const [, setDialogue] = useState<{ speaker: string; text: string } | null>(null);
   const [shakeIntensity, setShakeIntensity] = useState(0);
 
   const handleStartStory = () => {
