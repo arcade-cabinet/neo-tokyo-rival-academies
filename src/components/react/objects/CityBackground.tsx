@@ -1,62 +1,131 @@
-import { useFrame } from '@react-three/fiber';
+import { Motion } from '@capacitor/motion';
+import { useFrame, useThree } from '@react-three/fiber';
 import { building } from '@utils/procedural/AssetGen';
-import { useRef } from 'react';
-import type * as THREE from 'three';
+import { useEffect, useMemo, useRef } from 'react';
+import * as THREE from 'three';
 
-/**
- * Render a procedurally generated city skyline used as a background.
- *
- * The component creates 20 building groups with randomized position, size, color, and window textures. Each building includes a textured body, a top glow with a point light, and an antenna. The root group's x position is tied to the camera to produce a parallax effect.
- *
- * @returns A React group containing the generated building groups; the group's x position is driven by the camera to create parallax.
- */
-export function CityBackground() {
-  const buildingsRef = useRef<THREE.Group>(null);
+function ParallaxLayer({
+  speed,
+  zOffset,
+  count,
+  scale,
+  colorVariant,
+}: {
+  speed: number;
+  zOffset: number;
+  count: number;
+  scale: number;
+  colorVariant: 'neon' | 'dark';
+}) {
+  const groupRef = useRef<THREE.Group>(null);
+  const itemsRef = useRef<(THREE.Group | null)[]>([]);
+  const { camera } = useThree();
 
-  // Create building materials
-  const cyanBuildingTexture = building(190); // Cyan windows
-  const magentaBuildingTexture = building(320); // Magenta windows
+  const materials = useMemo(
+    () => ({
+      cyan: building(190),
+      magenta: building(320),
+      dark: new THREE.MeshStandardMaterial({ color: 0x111122, roughness: 0.1 }),
+    }),
+    []
+  );
 
-  useFrame((state) => {
-    if (buildingsRef.current) {
-      // Parallax effect - buildings move slower than camera
-      buildingsRef.current.position.x = state.camera.position.x * 0.3;
-    }
+  const data = useMemo(() => {
+    return Array.from({ length: count }, (_, i) => {
+      const x = (i - count / 2) * (40 * scale);
+      const z = zOffset - Math.random() * 50;
+      const height = (50 + Math.random() * 100) * scale;
+      const width = (10 + Math.random() * 20) * scale;
+      const depth = (10 + Math.random() * 20) * scale;
+      const isCyan = Math.random() > 0.5;
+      return { id: i, x, z, height, width, depth, isCyan };
+    });
+  }, [count, scale, zOffset]);
+
+  const tiltRef = useRef(0);
+
+  useEffect(() => {
+    // Listen for device tilt
+    const listener = Motion.addListener('accel', (event) => {
+      // Use Y-axis tilt for subtle parallax
+      const y = event.accelerationIncludingGravity.y || 0;
+      tiltRef.current = y * 0.5; // Scale factor
+    });
+    return () => {
+      listener.then((l) => l.remove());
+    };
+  }, []);
+
+  useFrame(() => {
+    if (!groupRef.current) return;
+    const camX = camera.position.x;
+
+    // Combine Scroll Parallax + Gyro Tilt
+    groupRef.current.position.x = camX * speed;
+    groupRef.current.rotation.z = THREE.MathUtils.lerp(
+      groupRef.current.rotation.z,
+      tiltRef.current * 0.05,
+      0.1
+    );
+
+    const distFactor = 1 - speed;
+    const totalWidth = count * (40 * scale);
+    const viewOffset = camX * distFactor;
+
+    itemsRef.current.forEach((b, _i) => {
+      if (!b) return;
+      let localX = b.position.x;
+      if (localX < viewOffset - totalWidth / 2) {
+        localX += totalWidth;
+        b.position.x = localX;
+      } else if (localX > viewOffset + totalWidth / 2) {
+        localX -= totalWidth;
+        b.position.x = localX;
+      }
+    });
   });
 
-  const buildings = [];
-  for (let i = 0; i < 20; i++) {
-    const x = (i - 10) * 30 + (Math.random() - 0.5) * 10;
-    const z = -50 - Math.random() * 100;
-    const height = 20 + Math.random() * 60;
-    const width = 8 + Math.random() * 12;
-    const depth = 8 + Math.random() * 12;
-    const texture = Math.random() > 0.5 ? cyanBuildingTexture : magentaBuildingTexture;
-    const color = Math.random() > 0.5 ? 0x00ffff : 0xff00ff;
+  return (
+    <group ref={groupRef}>
+      {data.map((d, i) => (
+        <group
+          key={d.id}
+          position={[d.x, d.height / 2 - 20, d.z]}
+          ref={(el) => {
+            itemsRef.current[i] = el;
+          }}
+        >
+          <mesh castShadow receiveShadow>
+            <boxGeometry args={[d.width, d.height, d.depth]} />
+            {colorVariant === 'neon' ? (
+              <meshStandardMaterial
+                map={d.isCyan ? materials.cyan : materials.magenta}
+                roughness={0.2}
+                metalness={0.8}
+              />
+            ) : (
+              <primitive object={materials.dark} />
+            )}
+          </mesh>
+          {colorVariant === 'neon' && (
+            <mesh position={[0, d.height / 2 + 0.5, 0]}>
+              <boxGeometry args={[d.width * 1.1, 1, d.depth * 1.1]} />
+              <meshBasicMaterial color={d.isCyan ? 0x00ffff : 0xff00ff} />
+            </mesh>
+          )}
+        </group>
+      ))}
+    </group>
+  );
+}
 
-    buildings.push(
-      <group key={i} position={[x, height / 2, z]}>
-        {/* Building body */}
-        <mesh castShadow receiveShadow>
-          <boxGeometry args={[width, height, depth]} />
-          <meshStandardMaterial map={texture} roughness={0.8} metalness={0.2} />
-        </mesh>
-
-        {/* Top glow */}
-        <mesh position={[0, height / 2 + 0.5, 0]}>
-          <boxGeometry args={[width * 1.1, 1, depth * 1.1]} />
-          <meshBasicMaterial color={color} />
-          <pointLight position={[0, 2, 0]} color={color} intensity={2} distance={30} />
-        </mesh>
-
-        {/* Antenna */}
-        <mesh position={[0, height / 2 + 5, 0]}>
-          <cylinderGeometry args={[0.2, 0.2, 10, 8]} />
-          <meshBasicMaterial color={color} />
-        </mesh>
-      </group>
-    );
-  }
-
-  return <group ref={buildingsRef}>{buildings}</group>;
+export function CityBackground() {
+  return (
+    <>
+      {/* Far Background (Slow, Dark) */}
+      <ParallaxLayer speed={0.95} zOffset={-150} count={30} scale={2.5} colorVariant="dark" />
+      {/* Mid Background (Normal, Neon) */}
+      <ParallaxLayer speed={0.8} zOffset={-60} count={40} scale={1.2} colorVariant="neon" />
+    </>
+  );
 }

@@ -13,6 +13,7 @@ export interface GameState {
   active: boolean;
   biome: number;
   score: number;
+  rep: number; // Reputation/XP
   speed: number;
   stunned: number;
   lastBiomeSwitch: number;
@@ -22,7 +23,9 @@ export interface InputState {
   run: boolean;
   slide: boolean;
   jump: boolean;
-  grab: boolean;
+  attack: boolean;
+  left: boolean;
+  right: boolean;
 }
 
 export interface Platform {
@@ -62,7 +65,15 @@ export interface Character {
   update: (dt: number, t: number, speed: number) => void;
 }
 
-export type CharacterState = 'run' | 'sprint' | 'jump' | 'slide' | 'stun' | 'stand' | 'block';
+export type CharacterState =
+  | 'run'
+  | 'sprint'
+  | 'jump'
+  | 'slide'
+  | 'stun'
+  | 'stand'
+  | 'block'
+  | 'attack';
 
 export interface Biome {
   name: string;

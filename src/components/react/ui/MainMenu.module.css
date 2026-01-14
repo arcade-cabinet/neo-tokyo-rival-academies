@@ -1,0 +1,73 @@
+@keyframes glitch {
+  0% {
+    transform: skewX(-10deg);
+    text-shadow:
+      3px 3px 0px #f00,
+      -3px -3px 0px #500;
+  }
+  20% {
+    transform: skewX(-10deg) translate(-2px, 2px);
+    text-shadow:
+      -3px 3px 0px #f00,
+      3px -3px 0px #500;
+  }
+  40% {
+    transform: skewX(-10deg) translate(-2px, -2px);
+    text-shadow:
+      3px -3px 0px #f00,
+      -3px 3px 0px #500;
+  }
+  60% {
+    transform: skewX(-10deg) translate(2px, 2px);
+    text-shadow:
+      -3px -3px 0px #f00,
+      3px 3px 0px #500;
+  }
+  80% {
+    transform: skewX(-10deg) translate(2px, -2px);
+    text-shadow:
+      3px 3px 0px #f00,
+      -3px -3px 0px #500;
+  }
+  100% {
+    transform: skewX(-10deg);
+    text-shadow:
+      3px 3px 0px #f00,
+      -3px -3px 0px #500;
+  }
+}
+
+.title-glitch {
+  animation: glitch 2.5s infinite steps(2);
+}
+
+.menu-btn {
+  background: rgba(0, 0, 0, 0.5);
+  border: 2px solid #fff;
+  color: #fff;
+  padding: 15px 40px;
+  margin: 10px;
+  font-family: monospace;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  transform: skewX(-10deg);
+}
+
+.menu-btn:hover {
+  background: #f00;
+  border-color: #f00;
+  box-shadow: 5px 5px 0px #fff;
+  transform: skewX(-10deg) scale(1.1);
+}
+
+.story-text {
+  background: rgba(0, 0, 0, 0.8);
+  border-left: 4px solid #f00;
+  padding: 20px;
+  max-width: 600px;
+  margin-bottom: 30px;
+  font-family: monospace;
+  color: #0ff;
+  text-shadow: 0 0 5px #0ff;
+}

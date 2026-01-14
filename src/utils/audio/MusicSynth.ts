@@ -160,6 +160,88 @@ export class MusicSynth {
     o2.start(t);
     o2.stop(t + 1);
   }
+
+  // --- ONE-SHOT EFFECTS ---
+
+  playJump(): void {
+    this.init();
+    if (!this.ctx) return;
+    const t = this.ctx.currentTime;
+    const o = this.ctx.createOscillator();
+    const g = this.ctx.createGain();
+
+    o.frequency.setValueAtTime(200, t);
+    o.frequency.linearRampToValueAtTime(600, t + 0.1);
+    g.gain.setValueAtTime(0.3, t);
+    g.gain.linearRampToValueAtTime(0, t + 0.1);
+
+    o.connect(g);
+    g.connect(this.ctx.destination);
+    o.start(t);
+    o.stop(t + 0.1);
+  }
+
+  playSlide(): void {
+    this.init();
+    if (!this.ctx) return;
+    const t = this.ctx.currentTime;
+    // Filtered noise sweep
+    const bSize = this.ctx.sampleRate * 0.3;
+    const b = this.ctx.createBuffer(1, bSize, this.ctx.sampleRate);
+    const d = b.getChannelData(0);
+    for (let i = 0; i < bSize; i++) d[i] = Math.random() * 2 - 1;
+
+    const src = this.ctx.createBufferSource();
+    src.buffer = b;
+    const f = this.ctx.createBiquadFilter();
+    f.type = 'lowpass';
+    f.frequency.setValueAtTime(800, t);
+    f.frequency.linearRampToValueAtTime(100, t + 0.3);
+
+    const g = this.ctx.createGain();
+    g.gain.setValueAtTime(0.5, t);
+    g.gain.linearRampToValueAtTime(0, t + 0.3);
+
+    src.connect(f);
+    f.connect(g);
+    g.connect(this.ctx.destination);
+    src.start(t);
+  }
+
+  playImpact(): void {
+    this.init();
+    if (!this.ctx) return;
+    const t = this.ctx.currentTime;
+
+    // Sub drop
+    const o = this.ctx.createOscillator();
+    const g = this.ctx.createGain();
+    o.frequency.setValueAtTime(150, t);
+    o.frequency.exponentialRampToValueAtTime(10, t + 0.5);
+    g.gain.setValueAtTime(0.8, t);
+    g.gain.exponentialRampToValueAtTime(0.01, t + 0.5);
+
+    o.connect(g);
+    g.connect(this.ctx.destination);
+    o.start(t);
+    o.stop(t + 0.5);
+
+    // Noise crash
+    const bSize = this.ctx.sampleRate * 0.2;
+    const b = this.ctx.createBuffer(1, bSize, this.ctx.sampleRate);
+    const d = b.getChannelData(0);
+    for (let i = 0; i < bSize; i++) d[i] = Math.random() * 2 - 1;
+
+    const src = this.ctx.createBufferSource();
+    src.buffer = b;
+    const g2 = this.ctx.createGain();
+    g2.gain.setValueAtTime(0.5, t);
+    g2.gain.exponentialRampToValueAtTime(0.01, t + 0.2);
+
+    src.connect(g2);
+    g2.connect(this.ctx.destination);
+    src.start(t);
+  }
 }
 
 // Singleton instance

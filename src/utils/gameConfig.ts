@@ -12,6 +12,7 @@ export const initialGameState: GameState = {
   active: false,
   biome: 0,
   score: 0,
+  rep: 0,
   speed: 0,
   stunned: 0,
   lastBiomeSwitch: 0,
@@ -21,5 +22,7 @@ export const initialInputState: InputState = {
   run: false,
   slide: false,
   jump: false,
-  grab: false,
+  attack: false,
+  left: false,
+  right: false,
 };
