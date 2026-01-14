@@ -2,6 +2,19 @@ import { useFrame, useThree } from '@react-three/fiber';
 import { useMemo, useRef } from 'react';
 import * as THREE from 'three';
 
+/**
+ * Renders an instanced parallax layer of stars.
+ *
+ * Each star is placed with a random position and scale, and its world position is updated each frame
+ * to create a parallax effect relative to the camera. Stars wrap horizontally and vertically to
+ * maintain a continuous field as the camera moves.
+ *
+ * @param count - Number of star instances to generate
+ * @param depth - Z position at which the layer is rendered (distance from the camera)
+ * @param speedFactor - Parallax intensity in [0, 1]; lower values make stars appear farther (less movement),
+ *                      higher values make them follow the camera more closely
+ * @returns A React element containing an instanced mesh of spherical star sprites
+ */
 function StarLayer({
   count,
   depth,

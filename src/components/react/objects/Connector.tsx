@@ -1,6 +1,13 @@
 import { useRef } from 'react';
 import * as THREE from 'three';
 
+/**
+ * Renders a 3D connector (bridge or gate) positioned in world space.
+ *
+ * @param position - World [x, y, z] coordinates for the connector group.
+ * @param type - Selects visual composition: `"bridge"` renders a back-extending floor, railings, and neon arches; `"gate"` renders a gate and a holographic door. Defaults to `"bridge"`.
+ * @returns The React element containing the connector's 3D scene graph.
+ */
 export function Connector({
   position,
   type = 'bridge',

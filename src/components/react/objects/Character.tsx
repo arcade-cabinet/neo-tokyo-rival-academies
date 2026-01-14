@@ -23,6 +23,20 @@ interface CharacterPropsWithSpeed extends CharacterProps {
   isPlayer?: boolean;
 }
 
+/**
+ * Renders an animated, toon-shaded 3D character as a React Three Fiber scene graph.
+ *
+ * The component produces a pivoted group containing torso, hierarchical coat segments (with speed-driven billow),
+ * head, and four animated limbs. Animation is driven by the `state` prop and the `speed` prop (speed affects run
+ * motion and coat dynamics). When `isPlayer` is true the right arm may render a player-specific weapon.
+ *
+ * @param color - Base color used for hair and certain materials
+ * @param position - World position of the character root (default: [0, 0, 0])
+ * @param state - Animation state; one of 'stand', 'block', 'run', 'sprint', 'jump', 'slide', 'stun', 'attack' (default: 'run')
+ * @param speed - Motion speed multiplier affecting run animation and coat physics (default: 15)
+ * @param isPlayer - If true, renders player-specific styling and weapon on the right arm (default: false)
+ * @returns A JSX element containing the animated character scene graph (torso, coat segments, head, limbs, optional weapon)
+ */
 export function Character({
   color,
   position = [0, 0, 0],

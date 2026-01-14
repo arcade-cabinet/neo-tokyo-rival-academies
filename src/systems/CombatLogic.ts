@@ -1,5 +1,16 @@
 import type { ECSEntity } from '../state/ecs';
 
+/**
+ * Resolve combat between an attacker and a defender, producing final damage and whether it was critical.
+ *
+ * Uses the attacker's `stats?.ignition` (defaults to 10) as attack power and the defender's `stats?.structure`
+ * (defaults to 10) to derive defense as `structure * 0.1`. Damage is computed as `max(1, atk - def)`.
+ * A critical hit occurs with probability `atk * 0.01`; on critical the damage is multiplied by 1.5.
+ *
+ * @param attacker - Entity performing the attack; its `stats.ignition` determines attack power (defaults to 10)
+ * @param defender - Entity receiving the attack; its `stats.structure` determines defense (defaults to 10)
+ * @returns The final damage (floored to an integer) and `isCritical` indicating if a critical hit occurred
+ */
 export function resolveCombat(
   attacker: ECSEntity,
   defender: ECSEntity
