@@ -1,0 +1,17 @@
+{
+  "intro_01": {
+    "description": "Generated Description for The Start Line: A rain-slicked rooftop in Neo-Tokyo Sector 0. Thunder roars.",
+    "prompt": "Anime style, cel shaded, A rain-slicked rooftop in Neo-Tokyo Sector 0. Thunder roars. Kai slams his weapon down, cracking the concrete. Vera hovers calmly. --ar 16:9 --style raw",
+    "imagePath": "/assets/story/intro_01_placeholder.png"
+  },
+  "intro_02": {
+    "description": "Generated Description for The Rivalry: Close up on faces.",
+    "prompt": "Anime style, cel shaded, Close up on faces. Kai shouts excitedly. Vera looks disdainful. --ar 16:9 --style raw",
+    "imagePath": "/assets/story/intro_02_placeholder.png"
+  },
+  "boss_intro": {
+    "description": "Generated Description for The Ambush: Mid-air above a shattered bridge.",
+    "prompt": "Anime style, cel shaded, Mid-air above a shattered bridge. Vera drops from the sky, her weapon glowing with azure energy. --ar 16:9 --style raw",
+    "imagePath": "/assets/story/boss_intro_placeholder.png"
+  }
+}

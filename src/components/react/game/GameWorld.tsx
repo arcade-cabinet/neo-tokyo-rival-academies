@@ -10,6 +10,7 @@ import { CombatSystem } from '@/systems/CombatSystem';
 import { InputSystem } from '@/systems/InputSystem';
 import { MovementSystem } from '@/systems/MovementSystem';
 import { PhysicsSystem } from '@/systems/PhysicsSystem';
+import { stageSystem } from '@/systems/StageSystem';
 import type { GameState, InputState } from '@/types/game';
 
 interface GameWorldProps {
@@ -52,6 +53,9 @@ export function GameWorld({
     if (initialized.current) return;
     initialized.current = true;
 
+    // Load initial stage
+    stageSystem.loadStage('sector7_streets');
+
     // Spawn Player
     world.add({
       id: 'player',
@@ -92,7 +96,17 @@ export function GameWorld({
       camera.position.z = 25; // Fixed distance for 2.5D view
       camera.lookAt(player.position.x, player.position.y + 2, 0);
 
-      onScoreUpdate(Math.floor(player.position.x));
+      const score = Math.floor(player.position.x);
+      onScoreUpdate(score);
+      stageSystem.update(player.position.x);
+
+      // Check stage completion
+      if (stageSystem.state === 'complete') {
+        // Here we would trigger cutscene or loading
+        // For now, reset to next stage loop
+        console.log('Stage Complete! looping...');
+        // genStateRef.current.nextX = player.position.x + 20; // Keep going for infinite runner feel
+      }
 
       // Game Over check
       if (player.position.y < -20) {
@@ -104,9 +118,11 @@ export function GameWorld({
         onCameraShake();
       }
 
-      // Generate ahead
-      if (genStateRef.current.nextX < player.position.x + 80) {
-        generatePlatform();
+      // Generate ahead based on Stage Type
+      if (stageSystem.currentStage.platforms === 'procedural') {
+        if (genStateRef.current.nextX < player.position.x + 80) {
+          generatePlatform();
+        }
       }
     }
   });

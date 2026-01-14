@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 interface DialogueLine {
   speaker: string;
   text: string;
+  image?: string; // Add image support
 }
 
 interface NarrativeOverlayProps {
@@ -79,6 +80,24 @@ export const NarrativeOverlay: FC<NarrativeOverlayProps> = ({ script, onComplete
         cursor: 'pointer',
       }}
     >
+      {/* Background Image (Anime Panel) */}
+      {currentLine.image && (
+        <div
+          style={{
+            position: 'absolute',
+            top: '10%',
+            left: 0,
+            width: '100%',
+            height: '80%',
+            backgroundImage: `url(${currentLine.image})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            zIndex: -1,
+            animation: 'pan-zoom 20s linear infinite alternate',
+          }}
+        />
+      )}
+
       {/* Letterbox Bars */}
       <div
         style={{
@@ -88,6 +107,7 @@ export const NarrativeOverlay: FC<NarrativeOverlayProps> = ({ script, onComplete
           width: '100%',
           height: '10%',
           background: 'black',
+          zIndex: 1,
         }}
       />
       <div
@@ -98,6 +118,7 @@ export const NarrativeOverlay: FC<NarrativeOverlayProps> = ({ script, onComplete
           width: '100%',
           height: '10%',
           background: 'black',
+          zIndex: 1,
         }}
       />
 
@@ -157,6 +178,10 @@ export const NarrativeOverlay: FC<NarrativeOverlayProps> = ({ script, onComplete
       <style>{`
            .blink { animation: blink 1s infinite; }
            @keyframes blink { 0% { opacity: 0; } 50% { opacity: 1; } 100% { opacity: 0; } }
+           @keyframes pan-zoom {
+             0% { transform: scale(1) translate(0, 0); }
+             100% { transform: scale(1.1) translate(-2%, -2%); }
+           }
        `}</style>
     </button>
   );
