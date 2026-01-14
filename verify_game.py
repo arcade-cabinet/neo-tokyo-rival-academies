@@ -17,13 +17,12 @@ async def verify_game():
             print("Canvas element found")
 
             # Check for Main Menu text (after Splash)
-            # Splash takes ~3s.
-            await asyncio.sleep(4)
-            content = await page.content()
-            if "NEO-TOKYO" in content:
+            # Wait for main menu text to appear after splash
+            try:
+                await page.wait_for_selector("text=NEO-TOKYO", timeout=10000)
                 print("Main Menu text found")
-            else:
-                print("WARNING: Main Menu text NOT found")
+            except Exception:
+                print("WARNING: Main Menu text NOT found within timeout")
 
             # Take screenshot
             os.makedirs("screenshots", exist_ok=True)
