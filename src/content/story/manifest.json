@@ -1,17 +1,42 @@
 {
   "intro_01": {
-    "description": "Generated Description for The Start Line: A rain-slicked rooftop in Neo-Tokyo Sector 0. Thunder roars.",
-    "prompt": "Anime style, cel shaded, A rain-slicked rooftop in Neo-Tokyo Sector 0. Thunder roars. Kai slams his weapon down, cracking the concrete. Vera hovers calmly. --ar 16:9 --style raw",
+    "description": "Generated Description for The Start Line: A rain-slicked rooftop in Neo-Tokyo Sector 0. Thunder roars. Neon signs reflect in puddles.",
+    "prompt": "Anime style, cel shaded, A rain-slicked rooftop in Neo-Tokyo Sector 0. Thunder roars. Neon signs reflect in puddles. Kai slams his weapon down, cracking the concrete with sparks flying. Vera hovers calmly, looking at a holographic display. --ar 16:9 --style raw",
     "imagePath": "/assets/story/intro_01_placeholder.png"
   },
   "intro_02": {
-    "description": "Generated Description for The Rivalry: Close up on faces.",
-    "prompt": "Anime style, cel shaded, Close up on faces. Kai shouts excitedly. Vera looks disdainful. --ar 16:9 --style raw",
+    "description": "Generated Description for The Rivalry: Cinematic close-up, split screen effect.",
+    "prompt": "Anime style, cel shaded, Cinematic close-up, split screen effect. Kai shouts excitedly with a fiery aura. Vera adjusts her glasses with a disdainful icy glare. --ar 16:9 --style raw",
     "imagePath": "/assets/story/intro_02_placeholder.png"
   },
   "boss_intro": {
-    "description": "Generated Description for The Ambush: Mid-air above a shattered bridge.",
-    "prompt": "Anime style, cel shaded, Mid-air above a shattered bridge. Vera drops from the sky, her weapon glowing with azure energy. --ar 16:9 --style raw",
+    "description": "Generated Description for The Ambush: Mid-air above a shattered bridge. Debris falling.",
+    "prompt": "Anime style, cel shaded, Mid-air above a shattered bridge. Debris falling. Vera drops from the sky, her weapon glowing with azure energy, surrounded by drone swarms. --ar 16:9 --style raw",
     "imagePath": "/assets/story/boss_intro_placeholder.png"
+  },
+  "boss_mid": {
+    "description": "Generated Description for Calculated Destruction: The bridge is collapsing. Digital grids overlay the vision.",
+    "prompt": "Anime style, cel shaded, The bridge is collapsing. Digital grids overlay the vision. Vera unleashes a barrage of geometric lasers. Kai dodges narrowly. --ar 16:9 --style raw",
+    "imagePath": "/assets/story/boss_mid_placeholder.png"
+  },
+  "rooftop_chase": {
+    "description": "Generated Description for High Velocity: Running vertically up a skyscraper side. Motion blur.",
+    "prompt": "Anime style, cel shaded, Running vertically up a skyscraper side. Motion blur. Kai sprints up the side of a building, smashing a window to enter a shortcut. --ar 16:9 --style raw",
+    "imagePath": "/assets/story/rooftop_chase_placeholder.png"
+  },
+  "summit_view": {
+    "description": "Generated Description for The Orbital Elevator: Above the clouds. The massive space elevator structure pierces the sky.",
+    "prompt": "Anime style, cel shaded, Above the clouds. The massive space elevator structure pierces the sky. Both racers are side-by-side, exhausted but pushing limits. The \"Data Core\" glows at the top. --ar 16:9 --style raw",
+    "imagePath": "/assets/story/summit_view_placeholder.png"
+  },
+  "final_clash": {
+    "description": "Generated Description for Ignition vs Calculation: The peak of the tower. Storm clouds swirling below.",
+    "prompt": "Anime style, cel shaded, The peak of the tower. Storm clouds swirling below. Kai swings his hammer with maximum force. Vera parries with a focused energy shield. Shockwave ripples. --ar 16:9 --style raw",
+    "imagePath": "/assets/story/final_clash_placeholder.png"
+  },
+  "victory_kai": {
+    "description": "Generated Description for Ignition Victory: Kai holding the glowing Data Core triumphantly.",
+    "prompt": "Anime style, cel shaded, Kai holding the glowing Data Core triumphantly. Kai grins, thumbs up. Vera floats in the background, analyzing data on a screen, looking annoyed but impressed. --ar 16:9 --style raw",
+    "imagePath": "/assets/story/victory_kai_placeholder.png"
   }
 }

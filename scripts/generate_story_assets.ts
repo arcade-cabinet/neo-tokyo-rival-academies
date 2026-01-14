@@ -6,31 +6,82 @@ import path from 'node:path';
 // Mock config if env var is missing
 const API_KEY = process.env.GOOGLE_GENAI_API_KEY;
 
-// Defined scenes from STORY.md
+// Defined scenes from STORY.md - Expanded for Full Narrative
 const SCENES = [
+  // --- ACT 1: SECTOR 7 ---
   {
     id: 'intro_01',
     title: 'The Start Line',
-    context: 'A rain-slicked rooftop in Neo-Tokyo Sector 0. Thunder roars.',
+    context:
+      'A rain-slicked rooftop in Neo-Tokyo Sector 0. Thunder roars. Neon signs reflect in puddles.',
     characters: [
-      'Kai (Red/Gold, holding massive piston hammer)',
-      'Vera (Blue/Silver, floating geometric lance)',
+      'Kai (Red/Gold, holding massive piston hammer, energetic)',
+      'Vera (Blue/Silver, floating geometric lance, cold)',
     ],
-    action: 'Kai slams his weapon down, cracking the concrete. Vera hovers calmly.',
+    action:
+      'Kai slams his weapon down, cracking the concrete with sparks flying. Vera hovers calmly, looking at a holographic display.',
   },
   {
     id: 'intro_02',
     title: 'The Rivalry',
-    context: 'Close up on faces.',
+    context: 'Cinematic close-up, split screen effect.',
     characters: ['Kai', 'Vera'],
-    action: 'Kai shouts excitedly. Vera looks disdainful.',
+    action:
+      'Kai shouts excitedly with a fiery aura. Vera adjusts her glasses with a disdainful icy glare.',
   },
+
+  // --- ACT 2: THE AMBUSH ---
   {
     id: 'boss_intro',
     title: 'The Ambush',
-    context: 'Mid-air above a shattered bridge.',
+    context: 'Mid-air above a shattered bridge. Debris falling.',
     characters: ['Vera'],
-    action: 'Vera drops from the sky, her weapon glowing with azure energy.',
+    action:
+      'Vera drops from the sky, her weapon glowing with azure energy, surrounded by drone swarms.',
+  },
+  {
+    id: 'boss_mid',
+    title: 'Calculated Destruction',
+    context: 'The bridge is collapsing. Digital grids overlay the vision.',
+    characters: ['Vera'],
+    action: 'Vera unleashes a barrage of geometric lasers. Kai dodges narrowly.',
+  },
+
+  // --- ACT 3: THE ROOFTOPS ---
+  {
+    id: 'rooftop_chase',
+    title: 'High Velocity',
+    context: 'Running vertically up a skyscraper side. Motion blur.',
+    characters: ['Kai'],
+    action: 'Kai sprints up the side of a building, smashing a window to enter a shortcut.',
+  },
+
+  // --- ACT 4: THE SUMMIT ---
+  {
+    id: 'summit_view',
+    title: 'The Orbital Elevator',
+    context: 'Above the clouds. The massive space elevator structure pierces the sky.',
+    characters: ['Kai', 'Vera'],
+    action:
+      'Both racers are side-by-side, exhausted but pushing limits. The "Data Core" glows at the top.',
+  },
+  {
+    id: 'final_clash',
+    title: 'Ignition vs Calculation',
+    context: 'The peak of the tower. Storm clouds swirling below.',
+    characters: ['Kai', 'Vera'],
+    action:
+      'Kai swings his hammer with maximum force. Vera parries with a focused energy shield. Shockwave ripples.',
+  },
+
+  // --- ACT 5: VICTORY ---
+  {
+    id: 'victory_kai',
+    title: 'Ignition Victory',
+    context: 'Kai holding the glowing Data Core triumphantly.',
+    characters: ['Kai'],
+    action:
+      'Kai grins, thumbs up. Vera floats in the background, analyzing data on a screen, looking annoyed but impressed.',
   },
 ];
 

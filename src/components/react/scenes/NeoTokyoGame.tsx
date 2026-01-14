@@ -20,16 +20,39 @@ import { initialGameState, initialInputState } from '@utils/gameConfig';
 import type { FC } from 'react';
 import { Suspense, useCallback, useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
+import { SaveSystem } from '@/systems/SaveSystem';
 import type { GameState, InputState } from '@/types/game';
 
 type ViewState = 'splash' | 'menu' | 'intro' | 'game' | 'gameover';
 
+import introManifest from '@/content/story/manifest.json';
+
 const INTRO_SCRIPT = [
-  { speaker: 'Kai', text: 'Hey Vector! Try not to overheat keeping up with me!' },
-  { speaker: 'Vera', text: 'Your noise pollution is inefficient, Takeda.' },
-  { speaker: 'Vera', text: 'I have already calculated the optimal path.' },
-  { speaker: 'Kai', text: 'Calculated? Hah! Watch this!' },
-  { speaker: 'SYSTEM', text: 'MIDNIGHT EXAM INITIATED. GO!' },
+  {
+    speaker: 'Kai',
+    text: 'Hey Vector! Try not to overheat keeping up with me!',
+    image: introManifest.intro_01.imagePath,
+  },
+  {
+    speaker: 'Vera',
+    text: 'Your noise pollution is inefficient, Takeda.',
+    image: introManifest.intro_02.imagePath,
+  },
+  {
+    speaker: 'Vera',
+    text: 'I have already calculated the optimal path.',
+    image: introManifest.intro_02.imagePath,
+  },
+  {
+    speaker: 'Kai',
+    text: 'Calculated? Hah! Watch this!',
+    image: introManifest.intro_02.imagePath,
+  },
+  {
+    speaker: 'SYSTEM',
+    text: 'MIDNIGHT EXAM INITIATED. GO!',
+    image: introManifest.intro_01.imagePath,
+  },
 ];
 
 export const NeoTokyoGame: FC = () => {
@@ -40,6 +63,16 @@ export const NeoTokyoGame: FC = () => {
   const [shakeIntensity, setShakeIntensity] = useState(0);
 
   const handleStartStory = () => {
+    // Attempt load
+    const save = SaveSystem.load();
+    if (save?.stageId) {
+      // If we have a save, we could jump there.
+      // But for narrative flow, we might want to ask.
+      // For this MVP "Production" loop, let's just log it and start fresh or intro.
+      // Ideally: setViewState('game'); stageSystem.loadStage(save.stageId);
+      console.log('Save found:', save);
+    }
+
     setViewState('intro');
     // Lock orientation to landscape for gameplay
     ScreenOrientation.lock({ orientation: 'landscape' }).catch(() => {
