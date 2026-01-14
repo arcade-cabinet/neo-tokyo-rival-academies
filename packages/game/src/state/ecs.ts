@@ -43,6 +43,14 @@ export type ECSEntity = {
     flow: number; // Speed/Evasion
   };
 
+  // Base stats (before equipment modifiers)
+  baseStats?: {
+    structure: number;
+    ignition: number;
+    logic: number;
+    flow: number;
+  };
+
   // Progression
   level?: {
     current: number;
@@ -53,16 +61,32 @@ export type ECSEntity = {
 
   // Equipment
   equipment?: {
-    weapon: string; // Item ID
-    armor: string; // Item ID
-    accessory: string; // Item ID
+    weapon: string | null; // Item ID
+    armor: string | null; // Item ID
+    accessory: string | null; // Item ID
   };
+
+  // Collectible data
+  collectibleType?: 'data_shard' | 'weapon' | 'item';
+  weaponId?: string; // For weapon pickups
 
   // Dialogue
   dialogueState?: {
     isInteracting: boolean;
     currentDialogueId: string;
     nodeId: string;
+  };
+
+  // Tentacle AI data (for alien ship stage)
+  tentacleData?: {
+    anchorPoint: any; // THREE.Vector3
+    patrolRadius: number;
+    attackRange: number;
+    attackSpeed: number;
+    state: 'patrol' | 'tracking' | 'attacking' | 'retracting';
+    patrolAngle: number;
+    attackCooldown: number;
+    target: any | null; // THREE.Vector3 | null
   };
 };
 
