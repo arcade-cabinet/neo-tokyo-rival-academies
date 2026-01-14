@@ -1,5 +1,9 @@
 from playwright.sync_api import Page, expect, sync_playwright
 import time
+import os
+
+# Ensure verification directory exists
+os.makedirs("/home/jules/verification", exist_ok=True)
 
 def verify_rpg_gameplay(page: Page):
     # Debug Console
@@ -10,37 +14,41 @@ def verify_rpg_gameplay(page: Page):
     print("Navigating to game...")
     page.goto("http://localhost:4321/neo-tokyo-rival-academies/")
 
-    # 2. Wait for Menu
+    # 2. Wait for Menu & Capture
     print("Waiting for Menu...")
     page.wait_for_selector("canvas")
     time.sleep(5) # Wait for 3D load
+    page.screenshot(path="/home/jules/verification/1_menu.png")
+    print("Captured: 1_menu.png")
 
     # 3. Click Start
     print("Clicking Start...")
     try:
         start_btn = page.get_by_text("INITIATE STORY MODE")
         start_btn.click()
-    except Exception:
-        print("Could not find start button, checking screenshot")
-        page.screenshot(path="/home/jules/verification/debug_menu.png")
+    except:
+        print("Could not find start button")
         return
 
 
-    # 4. Wait for Intro (Narrative Overlay)
-    print("Waiting for Intro...")
+    # 4. Wait for Intro (Narrative Overlay) & Capture
+    print("Waiting for Intro Dialogue...")
     time.sleep(2)
+    page.screenshot(path="/home/jules/verification/2_dialogue_intro.png")
+    print("Captured: 2_dialogue_intro.png")
 
-    # 5. Skip Intro (Click through)
-    print("Skipping intro...")
-    for i in range(20):
+    # 5. Advance Dialogue (Click through)
+    print("Advancing dialogue...")
+    # Click center to advance dialogue nodes
+    for i in range(5):
         page.mouse.click(640, 360) # Center of 1280x720
-        time.sleep(0.3)
+        time.sleep(1.0) # Wait for potential transition
 
-    # 6. Gameplay with HUD
+    # 6. Gameplay with HUD & Capture
     print("Waiting for Gameplay...")
     time.sleep(3)
     page.screenshot(path="/home/jules/verification/3_gameplay_hud.png")
-    print("Gameplay screenshot taken.")
+    print("Captured: 3_gameplay_hud.png")
 
 if __name__ == "__main__":
     with sync_playwright() as p:
