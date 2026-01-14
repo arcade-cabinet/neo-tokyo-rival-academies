@@ -1,4 +1,5 @@
 import { useFrame } from '@react-three/fiber';
+import type { ECSEntity } from '../state/ecs';
 import { ECS, world } from '../state/ecs';
 
 interface CombatSystemProps {
@@ -6,17 +7,20 @@ interface CombatSystemProps {
   onScoreUpdate: (score: number) => void;
 }
 
+const playersQuery = ECS.world.with('isPlayer', 'position', 'characterState');
+const enemiesQuery = ECS.world.with('isEnemy', 'position');
+const obstaclesQuery = ECS.world.with('isObstacle', 'position', 'obstacleType');
+
 export const CombatSystem = ({ onGameOver, onScoreUpdate }: CombatSystemProps) => {
   useFrame(() => {
-    const players = ECS.world.with('isPlayer', 'position', 'characterState');
-    const enemies = ECS.world.with('isEnemy', 'position');
-    const obstacles = ECS.world.with('isObstacle', 'position', 'obstacleType');
-
-    for (const player of players) {
+    for (const player of playersQuery) {
       if (!player.position) continue;
+      let isGameOver = false;
 
       // --- ENEMY COLLISION ---
-      for (const enemy of enemies) {
+      const toRemove: ECSEntity[] = [];
+
+      for (const enemy of enemiesQuery) {
         if (!enemy.position) continue;
 
         const dx = Math.abs(player.position.x - enemy.position.x);
@@ -27,17 +31,26 @@ export const CombatSystem = ({ onGameOver, onScoreUpdate }: CombatSystemProps) =
         if (dx < 1.5 && dy < 2.0 && dz < 1.0) {
           if (player.characterState === 'attack' || player.characterState === 'sprint') {
             // Player destroys enemy
-            world.remove(enemy);
+            toRemove.push(enemy);
             onScoreUpdate(100); // More points for Yakuza
           } else {
             // Enemy kills player
             onGameOver();
+            isGameOver = true;
+            break;
           }
         }
       }
 
+      if (isGameOver) break;
+
+      // Process removals
+      for (const enemy of toRemove) {
+        world.remove(enemy);
+      }
+
       // --- OBSTACLE COLLISION ---
-      for (const obstacle of obstacles) {
+      for (const obstacle of obstaclesQuery) {
         if (!obstacle.position) continue;
 
         const dx = Math.abs(player.position.x - obstacle.position.x);
@@ -66,9 +79,13 @@ export const CombatSystem = ({ onGameOver, onScoreUpdate }: CombatSystemProps) =
           // Check Y overlap
           if (effectivePlayerTop > obsBottom && playerBottom < obsTop) {
             onGameOver();
+            isGameOver = true;
+            break;
           }
         }
       }
+
+      if (isGameOver) break;
     }
   });
 

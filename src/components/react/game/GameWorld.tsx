@@ -21,7 +21,23 @@ interface GameWorldProps {
   onCameraShake?: () => void;
 }
 
-export function GameWorld({ gameState, inputState, onGameOver, onScoreUpdate, onCameraShake }: GameWorldProps) {
+const pickEnemyColor = () => {
+  // Randomize Yakuza (Black) vs Rival (Cyan) vs Biker (Red)
+  const enemyTypeRand = Math.random();
+  let color = 0x00ffff; // Rival
+  if (enemyTypeRand > 0.7)
+    color = 0x111111; // Yakuza
+  else if (enemyTypeRand > 0.4) color = 0x880000; // Biker
+  return color;
+};
+
+export function GameWorld({
+  gameState,
+  inputState,
+  onGameOver,
+  onScoreUpdate,
+  onCameraShake,
+}: GameWorldProps) {
   const { camera } = useThree();
   const initialized = useRef(false);
 
@@ -83,6 +99,11 @@ export function GameWorld({ gameState, inputState, onGameOver, onScoreUpdate, on
         onGameOver();
       }
 
+      // Camera Shake Trigger (e.g., from external events)
+      if (onCameraShake && Math.random() < 0.0005) {
+        onCameraShake();
+      }
+
       // Generate ahead
       if (genStateRef.current.nextX < player.position.x + 80) {
         generatePlatform();
@@ -127,22 +148,13 @@ export function GameWorld({ gameState, inputState, onGameOver, onScoreUpdate, on
       const rand = Math.random();
       if (rand > 0.7) {
         const ex = x + 5 + Math.random() * (length - 10);
-        // Randomize Yakuza (Black) vs Rival (Cyan) vs Biker (Red)
-        const enemyTypeRand = Math.random();
-        const color =
-          enemyTypeRand > 0.7
-            ? 0x111111  // Yakuza
-            : enemyTypeRand > 0.4
-              ? 0x880000  // Biker
-              : 0x00ffff; // Rival
-
         world.add({
           isEnemy: true,
           position: new THREE.Vector3(ex, y, 0),
           velocity: new THREE.Vector3(0, 0, 0),
           characterState: Math.random() > 0.5 ? 'stand' : 'block',
           faction: 'Azure', // Keep faction for now
-          modelColor: color,
+          modelColor: pickEnemyColor(),
         });
       } else if (rand > 0.4) {
         const ox = x + 5 + Math.random() * (length - 10);

@@ -55,7 +55,6 @@ export const GameHUD: FC<GameHUDProps> = ({ score, biome, inputState, onInput })
               {score}
             </div>
           </div>
-          {/* Use distance as score/time/progress */}
         </div>
       </div>
 

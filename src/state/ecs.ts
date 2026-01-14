@@ -3,7 +3,7 @@ import { createReactAPI } from 'miniplex-react';
 import type * as THREE from 'three';
 
 // Define the components that entities can have
-export type Entity = {
+export type ECSEntity = {
   id?: string;
   // Tags
   isPlayer?: boolean;
@@ -33,7 +33,7 @@ export type Entity = {
 };
 
 // Create the ECS world
-export const world = new World<Entity>();
+export const world = new World<ECSEntity>();
 
 // Create the React bindings
 export const ECS = createReactAPI(world);

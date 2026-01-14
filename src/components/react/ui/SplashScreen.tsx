@@ -34,9 +34,10 @@ export const SplashScreen = ({ onComplete }: SplashScreenProps) => {
   useEffect(() => {
     if (phase === 1) {
       // Phase 1: Logo flash
-      setTimeout(() => {
+      const id = setTimeout(() => {
         onComplete();
       }, 2500);
+      return () => clearTimeout(id);
     }
   }, [phase, onComplete]);
 

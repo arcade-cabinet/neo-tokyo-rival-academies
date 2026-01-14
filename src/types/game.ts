@@ -23,7 +23,6 @@ export interface InputState {
   run: boolean;
   slide: boolean;
   jump: boolean;
-  grab: boolean;
   attack: boolean;
 }
 

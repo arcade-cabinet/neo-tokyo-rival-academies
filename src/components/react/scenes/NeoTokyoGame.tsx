@@ -17,7 +17,7 @@ import { Bloom, ChromaticAberration, EffectComposer } from '@react-three/postpro
 import { musicSynth } from '@utils/audio/MusicSynth';
 import { initialGameState, initialInputState } from '@utils/gameConfig';
 import type { FC } from 'react';
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense, useCallback, useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import type { GameState, InputState } from '@/types/game';
 
@@ -61,9 +61,9 @@ export const NeoTokyoGame: FC = () => {
   //   setViewState('menu');
   // };
 
-  const handleInput = (key: keyof InputState, value: boolean) => {
+  const handleInput = useCallback((key: keyof InputState, value: boolean) => {
     setInputState((prev) => ({ ...prev, [key]: value }));
-  };
+  }, []);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -112,16 +112,30 @@ export const NeoTokyoGame: FC = () => {
       window.removeEventListener('keydown', handleKeyDown);
       window.removeEventListener('keyup', handleKeyUp);
     };
-  }, []);
+  }, [handleInput]);
 
   const handleCombatText = (message: string, color: string) => {
     setCombatText({ message, color });
   };
 
-  const triggerCameraShake = () => {
+  const shakeTimeoutRef = useRef<number>(0);
+
+  const triggerCameraShake = useCallback(() => {
     setShakeIntensity(1);
-    setTimeout(() => setShakeIntensity(0), 500);
-  };
+    if (shakeTimeoutRef.current) {
+      clearTimeout(shakeTimeoutRef.current);
+    }
+    // window.setTimeout returns a number in browser environment
+    shakeTimeoutRef.current = window.setTimeout(() => setShakeIntensity(0), 500);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (shakeTimeoutRef.current) {
+        clearTimeout(shakeTimeoutRef.current);
+      }
+    };
+  }, []);
 
   return (
     <div style={{ width: '100vw', height: '100vh', position: 'relative' }}>

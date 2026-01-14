@@ -16,10 +16,20 @@ export const NarrativeOverlay: FC<NarrativeOverlayProps> = ({ script, onComplete
   const [displayText, setDisplayText] = useState('');
   const [charIndex, setCharIndex] = useState(0);
 
-  const currentLine = script[index];
+  const currentLine =
+    script && script.length > 0 ? script[index] : { speaker: 'ERROR', text: 'Script missing.' };
+
+  // Handle empty script or completion
+  useEffect(() => {
+    if (!script || script.length === 0) {
+      onComplete();
+    }
+  }, [script, onComplete]);
 
   // Typewriter effect
   useEffect(() => {
+    if (!script || script.length === 0) return;
+
     if (charIndex < currentLine.text.length) {
       const timeout = setTimeout(() => {
         setDisplayText((prev) => prev + currentLine.text[charIndex]);
@@ -27,7 +37,7 @@ export const NarrativeOverlay: FC<NarrativeOverlayProps> = ({ script, onComplete
       }, 30); // Typing speed
       return () => clearTimeout(timeout);
     }
-  }, [charIndex, currentLine.text]);
+  }, [charIndex, currentLine.text, script]);
 
   const handleNext = () => {
     if (charIndex < currentLine.text.length) {
@@ -45,11 +55,17 @@ export const NarrativeOverlay: FC<NarrativeOverlayProps> = ({ script, onComplete
     }
   };
 
+  if (!script || script.length === 0) return null;
+
   return (
     <button
       type="button"
       onClick={handleNext}
-      onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && handleNext()}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          handleNext();
+        }
+      }}
       style={{
         position: 'absolute',
         background: 'transparent',

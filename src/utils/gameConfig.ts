@@ -22,6 +22,5 @@ export const initialInputState: InputState = {
   run: false,
   slide: false,
   jump: false,
-  grab: false,
   attack: false,
 };

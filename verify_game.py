@@ -17,28 +17,6 @@ async def verify_game():
             print("Canvas element found")
 
             # Check for Main Menu text (after Splash)
-            # Wait for main menu text to appear after splash
-            try:
-                await page.wait_for_selector("text=NEO-TOKYO", timeout=10000)
-                print("Main Menu text found")
-            except Exception:
-                print("WARNING: Main Menu text NOT found within timeout")
-
-            # Take screenshot
-            os.makedirs("screenshots", exist_ok=True)
-            await page.screenshot(path="screenshots/game_screen.png")
-            print("Screenshot saved to screenshots/game_screen.png")
-
-        os.makedirs("screenshots", exist_ok=True)
-        try:
-            await page.goto("http://localhost:4321/neo-tokyo-rival-academies", timeout=20000)
-            print("Successfully loaded http://localhost:4321/neo-tokyo-rival-academies")
-
-            # Wait for canvas
-            await page.wait_for_selector("canvas", timeout=20000)
-            print("Canvas element found")
-
-            # Check for Main Menu text (after Splash)
             # Splash takes ~3s.
             await asyncio.sleep(4)
             content = await page.content()
@@ -48,12 +26,14 @@ async def verify_game():
                 print("WARNING: Main Menu text NOT found")
 
             # Take screenshot
+            os.makedirs("screenshots", exist_ok=True)
             await page.screenshot(path="screenshots/game_screen.png")
             print("Screenshot saved to screenshots/game_screen.png")
 
-        except (TimeoutError, Exception) as e:
+        except Exception as e:
             print(f"Error: {e}")
             # Take screenshot of error
+            os.makedirs("screenshots", exist_ok=True)
             await page.screenshot(path="screenshots/error_screen.png")
 
         finally:

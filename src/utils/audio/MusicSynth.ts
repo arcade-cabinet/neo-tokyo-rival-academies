@@ -182,6 +182,7 @@ export class MusicSynth {
   }
 
   playSlide(): void {
+    this.init();
     if (!this.ctx) return;
     const t = this.ctx.currentTime;
     // Filtered noise sweep
@@ -208,6 +209,7 @@ export class MusicSynth {
   }
 
   playImpact(): void {
+    this.init();
     if (!this.ctx) return;
     const t = this.ctx.currentTime;
 

@@ -8,12 +8,14 @@ interface InputSystemProps {
   inputState: InputState;
 }
 
+const playersQuery = ECS.world.with('isPlayer', 'velocity', 'characterState', 'position');
+let prevJump = false;
+
 export const InputSystem = ({ inputState }: InputSystemProps) => {
   useFrame((_state, delta) => {
     const dt = Math.min(delta, 0.1);
-    const players = ECS.world.with('isPlayer', 'velocity', 'characterState', 'position');
 
-    for (const player of players) {
+    for (const player of playersQuery) {
       if (player.characterState === 'stun') {
         // Recovery handled in logic system or simple timer
         continue;
@@ -31,7 +33,7 @@ export const InputSystem = ({ inputState }: InputSystemProps) => {
       const isGrounded = Math.abs(player.velocity.y) < 0.01;
 
       if (isGrounded) {
-        if (inputState.jump) {
+        if (inputState.jump && !prevJump) {
           player.velocity.y = CONFIG.jumpForce;
           player.characterState = 'jump';
           musicSynth.playJump();
@@ -51,6 +53,7 @@ export const InputSystem = ({ inputState }: InputSystemProps) => {
         player.characterState = 'jump';
       }
     }
+    prevJump = inputState.jump;
   });
 
   return null;
