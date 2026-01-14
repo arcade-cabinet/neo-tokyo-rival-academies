@@ -20,7 +20,7 @@ def verify_rpg_gameplay(page: Page):
     try:
         start_btn = page.get_by_text("INITIATE STORY MODE")
         start_btn.click()
-    except:
+    except Exception:
         print("Could not find start button, checking screenshot")
         page.screenshot(path="/home/jules/verification/debug_menu.png")
         return
