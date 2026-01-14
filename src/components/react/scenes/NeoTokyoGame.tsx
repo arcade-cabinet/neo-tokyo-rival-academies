@@ -2,7 +2,9 @@ import { GameWorld } from '@components/react/game/GameWorld';
 import { CityBackground } from '@components/react/objects/CityBackground';
 import { CombatText } from '@components/react/ui/CombatText';
 import { GameHUD } from '@components/react/ui/GameHUD';
-import { StartScreen } from '@components/react/ui/StartScreen';
+import { MainMenu } from '@components/react/ui/MainMenu';
+import { NarrativeOverlay } from '@components/react/ui/NarrativeOverlay';
+import { SplashScreen } from '@components/react/ui/SplashScreen';
 import {
   CameraShake,
   ContactShadows,
@@ -15,32 +17,102 @@ import { Bloom, ChromaticAberration, EffectComposer } from '@react-three/postpro
 import { musicSynth } from '@utils/audio/MusicSynth';
 import { initialGameState, initialInputState } from '@utils/gameConfig';
 import type { FC } from 'react';
-import { Suspense, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import * as THREE from 'three';
 import type { GameState, InputState } from '@/types/game';
+
+type ViewState = 'splash' | 'menu' | 'intro' | 'game' | 'gameover';
+
+const INTRO_SCRIPT = [
+  { speaker: 'Kai', text: 'Hey Vector! Try not to overheat keeping up with me!' },
+  { speaker: 'Vera', text: 'Your noise pollution is inefficient, Takeda.' },
+  { speaker: 'Vera', text: 'I have already calculated the optimal path.' },
+  { speaker: 'Kai', text: 'Calculated? Hah! Watch this!' },
+  { speaker: 'SYSTEM', text: 'MIDNIGHT EXAM INITIATED. GO!' },
+];
 
 export const NeoTokyoGame: FC = () => {
   const [gameState, setGameState] = useState<GameState>(initialGameState);
   const [inputState, setInputState] = useState<InputState>(initialInputState);
-  const [showStart, setShowStart] = useState(true);
+  const [viewState, setViewState] = useState<ViewState>('splash');
   const [combatText, setCombatText] = useState<{ message: string; color: string } | null>(null);
   const [shakeIntensity, setShakeIntensity] = useState(0);
 
-  const handleStart = () => {
-    setShowStart(false);
+  const handleStartStory = () => {
+    setViewState('intro');
+    // Start music early? Or wait?
+    // musicSynth.start();
+  };
+
+  const handleIntroComplete = () => {
+    setViewState('game');
     setGameState({ ...initialGameState, active: true });
     musicSynth.start();
   };
 
   const handleGameOver = () => {
-    setShowStart(true);
+    setViewState('gameover');
     setGameState({ ...initialGameState, active: false });
     musicSynth.stop();
   };
 
+  // Keep for future use when "Pause" is implemented
+  // const _handleReturnToMenu = () => {
+  //   setViewState('menu');
+  // };
+
   const handleInput = (key: keyof InputState, value: boolean) => {
     setInputState((prev) => ({ ...prev, [key]: value }));
   };
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      switch (e.code) {
+        case 'Space':
+        case 'ArrowUp':
+          handleInput('jump', true);
+          break;
+        case 'ArrowDown':
+          handleInput('slide', true);
+          break;
+        case 'ShiftLeft':
+        case 'ShiftRight':
+          handleInput('run', true);
+          break;
+        case 'KeyK':
+        case 'KeyZ':
+          handleInput('attack', true);
+          break;
+      }
+    };
+
+    const handleKeyUp = (e: KeyboardEvent) => {
+      switch (e.code) {
+        case 'Space':
+        case 'ArrowUp':
+          handleInput('jump', false);
+          break;
+        case 'ArrowDown':
+          handleInput('slide', false);
+          break;
+        case 'ShiftLeft':
+        case 'ShiftRight':
+          handleInput('run', false);
+          break;
+        case 'KeyK':
+        case 'KeyZ':
+          handleInput('attack', false);
+          break;
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keyup', handleKeyUp);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('keyup', handleKeyUp);
+    };
+  }, []);
 
   const handleCombatText = (message: string, color: string) => {
     setCombatText({ message, color });
@@ -85,7 +157,7 @@ export const NeoTokyoGame: FC = () => {
           {/* City Background with parallax */}
           <CityBackground />
 
-          {/* Game World */}
+          {/* Game World - Only active if in game state */}
           <GameWorld
             gameState={gameState}
             inputState={inputState}
@@ -138,14 +210,22 @@ export const NeoTokyoGame: FC = () => {
             color="#ff00ff"
             position={[0, 10, -20]}
           />
-
-          {/* Debug controls (remove in production) */}
-          {/* <OrbitControls makeDefault /> */}
         </Suspense>
       </Canvas>
 
-      {/* UI Overlay */}
-      {gameState.active && (
+      {/* UI Overlays based on State */}
+
+      {viewState === 'splash' && <SplashScreen onComplete={() => setViewState('menu')} />}
+
+      {(viewState === 'menu' || viewState === 'gameover') && (
+        <MainMenu onStart={handleStartStory} />
+      )}
+
+      {viewState === 'intro' && (
+        <NarrativeOverlay script={INTRO_SCRIPT} onComplete={handleIntroComplete} />
+      )}
+
+      {viewState === 'game' && (
         <>
           <GameHUD
             score={gameState.score}
@@ -163,10 +243,7 @@ export const NeoTokyoGame: FC = () => {
         </>
       )}
 
-      {/* Start Screen */}
-      {showStart && <StartScreen onStart={handleStart} />}
-
-      {/* Scanlines Effect */}
+      {/* Scanlines Effect - Always On */}
       <div
         style={{
           position: 'fixed',

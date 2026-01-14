@@ -48,9 +48,14 @@ export const GameHUD: FC<GameHUDProps> = ({ score, biome, inputState, onInput })
           <div className="hud-label">NEO-TOKYO</div>
           <div className="hud-val">{BIOME_NAMES[biome] || 'SECTOR 0'}</div>
         </div>
-        <div className="hud-box" style={{ textAlign: 'right' }}>
-          <div className="hud-label">DISTANCE</div>
-          <div className="hud-val">{score}m</div>
+        <div style={{ display: 'flex', gap: '20px' }}>
+          <div className="hud-box" style={{ textAlign: 'right' }}>
+            <div className="hud-label">REP</div>
+            <div className="hud-val" style={{ color: '#0ff' }}>
+              {score}
+            </div>
+          </div>
+          {/* Use distance as score/time/progress */}
         </div>
       </div>
 
@@ -137,25 +142,25 @@ export const GameHUD: FC<GameHUDProps> = ({ score, biome, inputState, onInput })
         <div style={{ flex: 1, position: 'relative' }}>
           <button
             type="button"
-            className={`btn ${inputState.grab ? 'pressed' : ''}`}
+            className={`btn ${inputState.attack ? 'pressed' : ''}`}
             style={{
               position: 'absolute',
               top: '20px',
               right: '30px',
-              borderRight: '5px solid #0f0',
+              borderRight: '5px solid #f00',
             }}
-            onMouseDown={() => handleButtonDown('grab')}
-            onMouseUp={() => handleButtonUp('grab')}
+            onMouseDown={() => handleButtonDown('attack')}
+            onMouseUp={() => handleButtonUp('attack')}
             onTouchStart={(e) => {
               e.preventDefault();
-              handleButtonDown('grab');
+              handleButtonDown('attack');
             }}
             onTouchEnd={(e) => {
               e.preventDefault();
-              handleButtonUp('grab');
+              handleButtonUp('attack');
             }}
           >
-            GRAB
+            ATTACK
           </button>
           <button
             type="button"

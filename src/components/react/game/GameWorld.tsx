@@ -3,11 +3,14 @@ import { Enemy } from '@components/react/objects/Enemy';
 import { Obstacle } from '@components/react/objects/Obstacle';
 import { Platform } from '@components/react/objects/Platform';
 import { useFrame, useThree } from '@react-three/fiber';
-import { musicSynth } from '@utils/audio/MusicSynth';
-import { CONFIG } from '@utils/gameConfig';
-import { useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
-import type { Entity, GameState, InputState } from '@/types/game';
+import { ECS, world } from '@/state/ecs';
+import { CombatSystem } from '@/systems/CombatSystem';
+import { InputSystem } from '@/systems/InputSystem';
+import { MovementSystem } from '@/systems/MovementSystem';
+import { PhysicsSystem } from '@/systems/PhysicsSystem';
+import type { GameState, InputState } from '@/types/game';
 
 interface GameWorldProps {
   gameState: GameState;
@@ -18,40 +21,9 @@ interface GameWorldProps {
   onCameraShake?: () => void;
 }
 
-interface PlatformData {
-  id: string;
-  x: number;
-  y: number;
-  length: number;
-  slope: number;
-}
-
-/**
- * Renders and manages the in-game world: player character, procedural platforms, enemies, obstacles, physics, camera following, scoring, and combat interactions.
- *
- * @param gameState - Current game lifecycle and activity flags used to start/stop the simulation
- * @param inputState - Player input state (run, jump, slide) that drives movement and actions
- * @param onGameOver - Callback invoked when the player falls out of the world or the game ends
- * @param onScoreUpdate - Callback invoked with the player's horizontal score as it advances
- * @param onCombatText - Optional callback for displaying combat messages with a color (message, color)
- * @returns A React element group that composes the game scene (hero, platforms, entities, and ground)
- */
-export function GameWorld({
-  gameState,
-  inputState,
-  onGameOver,
-  onScoreUpdate,
-  onCombatText,
-  onCameraShake,
-}: GameWorldProps) {
+export function GameWorld({ gameState, inputState, onGameOver, onScoreUpdate }: GameWorldProps) {
   const { camera } = useThree();
-  const [heroPos, setHeroPos] = useState(new THREE.Vector3(0, 5, 0));
-  const [heroVel, setHeroVel] = useState(new THREE.Vector3(0, 0, 0));
-  const [heroState, setHeroState] = useState<'run' | 'sprint' | 'jump' | 'slide' | 'stun'>('run');
-  const [grounded, setGrounded] = useState(false);
-  const [platforms, setPlatforms] = useState<PlatformData[]>([]);
-  const [entities, setEntities] = useState<Entity[]>([]);
-  const [stunTimer, setStunTimer] = useState(0);
+  const initialized = useRef(false);
 
   // Generation state
   const genStateRef = useRef({
@@ -59,163 +31,63 @@ export function GameWorld({
     nextY: 0,
   });
 
-  // Initialize world
+  // Init World
+  useEffect(() => {
+    if (initialized.current) return;
+    initialized.current = true;
+
+    // Spawn Player
+    world.add({
+      id: 'player',
+      isPlayer: true,
+      position: new THREE.Vector3(0, 5, 0),
+      velocity: new THREE.Vector3(0, 0, 0),
+      characterState: 'run',
+      faction: 'Kurenai',
+      modelColor: 0xff0000,
+    });
+
+    // Spawn Start Platform
+    world.add({
+      id: 'start-platform',
+      isPlatform: true,
+      position: new THREE.Vector3(-10, 0, 0),
+      platformData: { length: 40, slope: 0, width: 8 },
+      modelColor: 0x0a0a0a,
+    });
+    genStateRef.current.nextX = 30;
+
+    return () => {
+      world.clear();
+      initialized.current = false;
+    };
+  }, []);
+
+  // Main Loop for Camera & Procedural Gen
   useFrame((_state, delta) => {
     if (!gameState.active) return;
 
-    const dt = Math.min(delta, 0.1);
+    // Camera follow player (Side View)
+    const player = world.with('isPlayer', 'position').first;
+    if (player) {
+      // Side view camera logic
+      camera.position.x = player.position.x; // Keep player centered horizontally
+      camera.position.y = THREE.MathUtils.lerp(camera.position.y, player.position.y + 3, 3 * delta);
+      camera.position.z = 25; // Fixed distance for 2.5D view
+      camera.lookAt(player.position.x, player.position.y + 2, 0);
 
-    // Update stun timer
-    if (stunTimer > 0) {
-      setStunTimer((prev) => Math.max(0, prev - dt));
-      const newVel = heroVel.clone();
-      newVel.x += (0 - newVel.x) * CONFIG.knockbackDrag * dt;
-      setHeroVel(newVel);
-    } else {
-      // Normal controls
-      // Ramping difficulty: increase base speed slightly with distance (capped)
-      const distBonus = Math.min(heroPos.x * 0.002, 5); // +5 speed max
-      const targetSpeed = (inputState.run ? CONFIG.sprintSpeed : CONFIG.baseSpeed) + distBonus;
+      onScoreUpdate(Math.floor(player.position.x));
 
-      const newVel = heroVel.clone();
-      newVel.x += (targetSpeed - newVel.x) * 5 * dt;
-
-      if (grounded) {
-        // Audio triggers for inputs
-        if (inputState.slide && heroState !== 'slide') musicSynth.playSlide();
-
-        const newState = inputState.slide ? 'slide' : inputState.run ? 'sprint' : 'run';
-        setHeroState(newState);
-
-        if (inputState.jump) {
-          musicSynth.playJump();
-          newVel.y = CONFIG.jumpForce;
-          setGrounded(false);
-          setHeroState('jump');
-        }
-      } else {
-        setHeroState('jump');
+      // Game Over check
+      if (player.position.y < -20) {
+        onGameOver();
       }
 
-      setHeroVel(newVel);
-    }
-
-    // Apply physics
-    const newVel = heroVel.clone();
-    newVel.y += CONFIG.gravity * dt;
-
-    const newPos = heroPos.clone();
-    newPos.x += newVel.x * dt;
-    newPos.y += newVel.y * dt;
-
-    // Physics & Collision Logic
-    let groundHeight = -999;
-    let onPlatform = false;
-
-    // Check collision with all platforms
-    for (const p of platforms) {
-      const angle = p.slope * 0.26;
-      // Calculate projected length on X axis
-      const projLen = p.length * Math.cos(angle);
-      const dx = newPos.x - p.x;
-
-      // Check if we are within the horizontal bounds of this platform
-      if (dx >= -0.5 && dx <= projLen + 0.5) {
-        // Calculate the height of the platform at this X position
-        const gy = p.y + dx * Math.tan(angle);
-        // We want the highest ground below us (or close to us)
-        if (gy > groundHeight) {
-          groundHeight = gy;
-        }
+      // Generate ahead
+      if (genStateRef.current.nextX < player.position.x + 80) {
+        generatePlatform();
       }
     }
-
-    // Ground snapping and collision response
-    // Snap distance allows running down slopes without entering falling state
-    const snapDist = 1.0;
-
-    if (newVel.y <= 0 && newPos.y <= groundHeight + 0.1) {
-      // Landing or staying on ground
-      newPos.y = groundHeight;
-      newVel.y = 0;
-      onPlatform = true;
-    } else if (grounded && newPos.y <= groundHeight + snapDist && newVel.y <= 0) {
-      // Snapping to slope
-      newPos.y = groundHeight;
-      newVel.y = 0;
-      onPlatform = true;
-    }
-
-    setGrounded(onPlatform);
-
-    setHeroPos(newPos);
-    setHeroVel(newVel);
-
-    // Update camera
-    camera.position.x = newPos.x - 6;
-    camera.position.y = THREE.MathUtils.lerp(camera.position.y, newPos.y + 4, 2 * dt);
-    camera.lookAt(newPos.x, newPos.y + 2, 0);
-
-    // Update score
-    onScoreUpdate(Math.floor(newPos.x));
-
-    // Game over check
-    if (newPos.y < -20) {
-      onGameOver();
-    }
-
-    // Generate world ahead
-    if (genStateRef.current.nextX < newPos.x + 80) {
-      generatePlatform();
-    }
-
-    // Check combat interactions
-    entities.forEach((entity) => {
-      if (!entity.active) return;
-
-      const dx = entity.x - newPos.x;
-      const dy = Math.abs(newPos.y - entity.y);
-
-      // Collision check
-      if (dx < 1.5 && dx > -1.0 && dy < 2) {
-        if (entity.type === 'obstacle') {
-          // Hit obstacle
-          musicSynth.playImpact();
-          if (onCameraShake) onCameraShake();
-          if (onCombatText) onCombatText('IMPACT!', '#ff0');
-          setHeroVel(new THREE.Vector3(-15, 10, 0));
-          setHeroState('stun');
-          setStunTimer(0.5);
-          setEntities((prev) =>
-            prev.map((e) => (e.id === entity.id ? { ...e, active: false } : e))
-          );
-        } else if (entity.type === 'enemy') {
-          // Combat check: Sprint or Slide beats enemy
-          const win = heroState === 'sprint' || heroState === 'slide';
-          if (win) {
-            musicSynth.playImpact(); // maybe a different sound for win? using same for now
-            if (onCombatText) onCombatText('K.O.', '#0f0');
-            setEntities((prev) =>
-              prev.map((e) => (e.id === entity.id ? { ...e, active: false } : e))
-            );
-          } else {
-            musicSynth.playImpact();
-            if (onCameraShake) onCameraShake();
-            if (onCombatText) onCombatText('COUNTERED!', '#f00');
-            setHeroVel(new THREE.Vector3(-25, 15, 0));
-            setHeroState('stun');
-            setStunTimer(0.8);
-            setEntities((prev) =>
-              prev.map((e) => (e.id === entity.id ? { ...e, active: false } : e))
-            );
-          }
-        }
-      }
-    });
-
-    // Cleanup old platforms and entities
-    setPlatforms((prev) => prev.filter((p) => p.x + p.length > newPos.x - 50));
-    setEntities((prev) => prev.filter((e) => e.x > newPos.x - 50));
   });
 
   const generatePlatform = () => {
@@ -230,136 +102,116 @@ export function GameWorld({
       const yChange = (Math.random() - 0.6) * 5;
       genStateRef.current.nextY += yChange > 2 ? 2 : yChange;
     } else if (type < 0.6) {
-      // FLAT
       slope = 0;
     } else if (type < 0.8) {
-      // UP
       slope = 1;
       length = 15 + Math.random() * 10;
     } else {
-      // DOWN
       slope = -1;
       length = 15 + Math.random() * 10;
     }
 
-    const newPlatform: PlatformData = {
-      id: `platform-${Date.now()}-${Math.random()}`,
-      x: genStateRef.current.nextX,
-      y: genStateRef.current.nextY,
-      length,
-      slope,
-    };
+    const angle = slope * 0.26;
+    // Current spawn point
+    const x = genStateRef.current.nextX;
+    const y = genStateRef.current.nextY;
 
-    setPlatforms((prev) => [...prev, newPlatform]);
+    world.add({
+      isPlatform: true,
+      position: new THREE.Vector3(x, y, 0),
+      platformData: { length, slope, width: 8 },
+    });
 
-    // Spawn entities on flat platforms
+    // Entities on platform
     if (length > 15 && Math.abs(slope) < 0.1) {
-      if (Math.random() > 0.6) {
-        // Spawn enemy
-        const ex = genStateRef.current.nextX + 5 + Math.random() * (length - 10);
-        const enemyType = Math.random() > 0.5 ? 'stand' : 'block';
-        setEntities((prev) => [
-          ...prev,
-          {
-            id: `enemy-${Date.now()}-${Math.random()}`,
-            type: 'enemy',
-            x: ex,
-            y: genStateRef.current.nextY,
-            active: true,
-            enemyType,
-          },
-        ]);
-      } else if (Math.random() > 0.5) {
-        // Spawn obstacle
-        const ox = genStateRef.current.nextX + 5 + Math.random() * (length - 10);
-        const obstacleType = Math.random() > 0.5 ? 'low' : 'high';
-        setEntities((prev) => [
-          ...prev,
-          {
-            id: `obstacle-${Date.now()}-${Math.random()}`,
-            type: 'obstacle',
-            x: ox,
-            y: genStateRef.current.nextY,
-            active: true,
-            obstacleType,
-          },
-        ]);
+      const rand = Math.random();
+      if (rand > 0.7) {
+        const ex = x + 5 + Math.random() * (length - 10);
+        // Randomize Yakuza (Black) vs Rival (Cyan) vs Biker (Red)
+        const enemyTypeRand = Math.random();
+        let color = 0x00ffff; // Rival
+        if (enemyTypeRand > 0.7)
+          color = 0x111111; // Yakuza
+        else if (enemyTypeRand > 0.4) color = 0x880000; // Biker
+
+        world.add({
+          isEnemy: true,
+          position: new THREE.Vector3(ex, y, 0),
+          velocity: new THREE.Vector3(0, 0, 0),
+          characterState: Math.random() > 0.5 ? 'stand' : 'block',
+          faction: 'Azure', // Keep faction for now
+          modelColor: color,
+        });
+      } else if (rand > 0.4) {
+        const ox = x + 5 + Math.random() * (length - 10);
+        world.add({
+          isObstacle: true,
+          position: new THREE.Vector3(ox, y, 0),
+          obstacleType: Math.random() > 0.5 ? 'low' : 'high',
+        });
       }
     }
 
-    // Update generation state
-    const angle = slope * 0.26;
+    // Update next spawn
     genStateRef.current.nextX += length * Math.cos(angle);
     genStateRef.current.nextY += length * Math.sin(angle);
   };
 
-  // Initial platforms
-  if (platforms.length === 0 && gameState.active) {
-    setPlatforms([
-      {
-        id: 'start-platform',
-        x: -10,
-        y: 0,
-        length: 40,
-        slope: 0,
-      },
-    ]);
-    genStateRef.current.nextX = 30;
-  }
-
   return (
-    <group>
-      {/* Hero Character */}
-      <Character
-        color={0xff0000}
-        isPlayer
-        position={[heroPos.x, heroPos.y, heroPos.z]}
-        state={heroState}
-      />
+    <>
+      {/* Run systems */}
+      <MovementSystem />
+      <PhysicsSystem />
+      <InputSystem inputState={inputState} />
+      <CombatSystem onGameOver={onGameOver} onScoreUpdate={onScoreUpdate} />
 
-      {/* Platforms */}
-      {platforms.map((platform) => (
-        <Platform
-          key={platform.id}
-          x={platform.x}
-          y={platform.y}
-          length={platform.length}
-          slope={platform.slope}
-        />
-      ))}
+      {/* Render Entities */}
+      <ECS.Entities in={world.with('isPlayer', 'position', 'characterState')}>
+        {(entity) => (
+          <Character
+            position={[entity.position.x, entity.position.y, entity.position.z]}
+            state={entity.characterState}
+            color={entity.modelColor || 0xff0000}
+            isPlayer
+          />
+        )}
+      </ECS.Entities>
 
-      {/* Entities - Enemies and Obstacles */}
-      {entities.map((entity) => {
-        if (!entity.active) return null;
+      <ECS.Entities in={world.with('isEnemy', 'position', 'characterState')}>
+        {(entity) => (
+          <Enemy
+            position={[entity.position.x, entity.position.y, entity.position.z]}
+            enemyType={entity.characterState === 'block' ? 'block' : 'stand'}
+            color={entity.modelColor}
+          />
+        )}
+      </ECS.Entities>
 
-        if (entity.type === 'enemy' && entity.enemyType) {
-          return (
-            <Enemy
-              key={entity.id}
-              position={[entity.x, entity.y, 0]}
-              enemyType={entity.enemyType}
-            />
-          );
-        }
+      <ECS.Entities in={world.with('isObstacle', 'position', 'obstacleType')}>
+        {(entity) => (
+          <Obstacle
+            position={[entity.position.x, entity.position.y, entity.position.z]}
+            type={entity.obstacleType || 'low'}
+          />
+        )}
+      </ECS.Entities>
 
-        if (entity.type === 'obstacle' && entity.obstacleType) {
-          return (
-            <Obstacle
-              key={entity.id}
-              type={entity.obstacleType}
-              position={[entity.x, entity.y, 0]}
-            />
-          );
-        }
-
-        return null;
-      })}
+      <ECS.Entities in={world.with('isPlatform', 'position', 'platformData')}>
+        {(entity) => (
+          <Platform
+            x={entity.position.x}
+            y={entity.position.y}
+            length={entity.platformData.length}
+            slope={entity.platformData.slope}
+          />
+        )}
+      </ECS.Entities>
 
       {/* Ground Plane (for shadows) */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.01, 0]} receiveShadow>
         <planeGeometry args={[1000, 1000]} />
         <shadowMaterial opacity={0.3} />
       </mesh>
-    </group>
+    </>
   );
 }
