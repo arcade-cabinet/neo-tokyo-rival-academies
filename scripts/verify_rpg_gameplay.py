@@ -7,6 +7,17 @@ os.makedirs("/home/jules/verification", exist_ok=True)
 
 def verify_rpg_gameplay(page: Page):
     # Debug Console
+    """
+    Perform an automated Playwright verification run of the RPG game's startup, dialogue progression, and initial gameplay HUD.
+    
+    This function navigates to the local game URL, attaches console and page-error handlers to print any runtime messages, waits for the main canvas to load, clicks the "INITIATE STORY MODE" button (returns early if the button cannot be found), advances through several dialogue nodes by clicking the screen center, and captures screenshots of the menu, intro dialogue, and gameplay HUD at the following paths:
+     - /home/jules/verification/1_menu.png
+     - /home/jules/verification/2_dialogue_intro.png
+     - /home/jules/verification/3_gameplay_hud.png
+    
+    Parameters:
+        page (Page): A Playwright Page instance used to drive navigation, interaction, and screenshots.
+    """
     page.on("console", lambda msg: print(f"Console: {msg.text}"))
     page.on("pageerror", lambda err: print(f"Page Error: {err}"))
 

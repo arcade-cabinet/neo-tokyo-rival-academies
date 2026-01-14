@@ -41,6 +41,21 @@ const pickEnemyColor = () => {
   return color;
 };
 
+/**
+ * Render and manage the in-game ECS world, including systems, camera behavior, procedural platform generation, stage transitions, and entity rendering.
+ *
+ * This component initializes the game world, runs core systems (physics, input, combat, AI, progression), updates camera and game state each frame, handles scripted events (abduction, boss transitions, stage completion), and spawns procedural platforms, enemies, obstacles, and collectibles. It also renders ECS-driven entities and the appropriate background for the active stage.
+ *
+ * @param gameState - External game state used to pause/resume and gate the main loop.
+ * @param inputState - Input state object forwarded to the InputSystem to drive player input.
+ * @param onGameOver - Callback invoked when the player meets a game-over condition (e.g., falls below the configured y threshold).
+ * @param onScoreUpdate - Callback called with the current integer score (derived from player x position) whenever it updates.
+ * @param onCameraShake - Optional callback triggered for occasional camera-shake events.
+ * @param onCombatText - Optional callback forwarded combat text messages and their color; used to surface combat-related events (e.g., data acquisition, kills).
+ * @param onDialogue - Callback used to trigger or propagate dialogue events originating from stage or entity interactions.
+ *
+ * @returns The React element tree that runs game systems, spawns and renders ECS entities, and displays the appropriate stage background.
+ */
 export function GameWorld({
   gameState,
   inputState,

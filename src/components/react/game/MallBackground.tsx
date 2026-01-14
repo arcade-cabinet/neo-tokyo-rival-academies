@@ -2,6 +2,14 @@ import { useFrame, useThree } from '@react-three/fiber';
 import { useMemo, useRef } from 'react';
 import * as THREE from 'three';
 
+/**
+ * Render a neon sign mesh with an emissive material.
+ *
+ * @param position - 3D position as [x, y, z] where the sign will be placed
+ * @param color - CSS color or hex string used for the sign's color and emissive glow
+ * @param size - Width and height as [width, height] for the sign's rectangular face
+ * @returns A JSX mesh positioned at `position` with box geometry sized by `size` and a bright emissive material
+ */
 function NeonSign({
   position,
   color,
@@ -24,6 +32,16 @@ function NeonSign({
   );
 }
 
+/**
+ * Renders a layer of neon shop signs positioned at a fixed depth with horizontal parallax.
+ *
+ * Generates `count` neon signs with varied positions, sizes, and colors, and shifts the entire layer horizontally based on the camera X position multiplied by `speedFactor`.
+ *
+ * @param count - Number of shop signs to generate in the layer
+ * @param depth - Z position at which all shop signs are placed
+ * @param speedFactor - Multiplier applied to the camera's X position to produce the layer's parallax offset
+ * @returns A React group containing the generated NeonSign meshes with parallax behavior
+ */
 function ShopLayer({
   count,
   depth,
@@ -67,6 +85,15 @@ function ShopLayer({
   );
 }
 
+/**
+ * Renders the layered neon mall background with parallax shop signs, ambient lighting, and a floor hint.
+ *
+ * @returns A React Three Fiber group containing:
+ * - a dark scene background,
+ * - an ambient light,
+ * - two ShopLayer instances configured for parallax (near and far),
+ * - and a semi-transparent floor plane to suggest reflection.
+ */
 export function MallBackground() {
   return (
     <group>

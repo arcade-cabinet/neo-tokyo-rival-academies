@@ -3,6 +3,16 @@ import { useFrame } from '@react-three/fiber';
 import { useRef } from 'react';
 import * as THREE from 'three';
 
+/**
+ * Render a floating, rotating 3D shard at the specified world position.
+ *
+ * The shard is an octahedron with a bright green emissive wireframe, continuous Y-axis rotation,
+ * and a subtle X-axis oscillation driven by elapsed time. It includes sparkles and is wrapped in
+ * a Float container that controls overall floating motion.
+ *
+ * @param position - The shard's world position as an `[x, y, z]` tuple.
+ * @returns A JSX element that renders the configured 3D shard.
+ */
 export function DataShard({ position }: { position: [number, number, number] }) {
   const meshRef = useRef<THREE.Mesh>(null);
 

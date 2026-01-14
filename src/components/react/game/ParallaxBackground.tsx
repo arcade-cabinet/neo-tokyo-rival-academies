@@ -4,6 +4,15 @@ import * as THREE from 'three';
 
 const CITY_COLORS = [0x00ffff, 0xff00ff, 0x9900ff, 0x0000ff];
 
+/**
+ * Renders an instanced layer of buildings that parallax relative to the camera.
+ *
+ * @param count - Number of building instances to generate.
+ * @param z - Depth (z-axis) position for the entire layer.
+ * @param speedFactor - Fraction of camera movement applied to the layer (0–1); lower values produce stronger parallax.
+ * @param heightRange - Tuple `[min, max]` specifying the range of building heights.
+ * @returns A JSX element containing an InstancedMesh of box geometries used as buildings with parallax positioning and horizontal wrapping.
+ */
 function BuildingLayer({
   count,
   z,
@@ -74,6 +83,14 @@ function BuildingLayer({
   );
 }
 
+/**
+ * Renders an instanced set of neon light planes positioned with parallax and horizontal wrapping around the camera.
+ *
+ * @param count - Number of light instances to create
+ * @param z - Z-axis offset for the layer (higher values render closer to the camera)
+ * @param speedFactor - Parallax multiplier where 0 = fixed to world, 1 = moves with camera
+ * @returns A React element containing an instanced mesh of neon lights
+ */
 function NeonLights({ count, z, speedFactor }: { count: number; z: number; speedFactor: number }) {
   const { camera } = useThree();
   const mesh = useRef<THREE.InstancedMesh>(null);
@@ -114,6 +131,13 @@ function NeonLights({ count, z, speedFactor }: { count: number; z: number; speed
   );
 }
 
+/**
+ * Renders a layered parallax background with distant and mid skyline, neon lights, and scene fog/background color.
+ *
+ * The component composes two BuildingLayer instances (far and mid), a NeonLights layer, and scene fog/background color to create depth via different parallax speed factors.
+ *
+ * @returns A JSX group containing the parallax background elements (building layers, neon lights, fog, and background color).
+ */
 export function ParallaxBackground() {
   return (
     <group>
