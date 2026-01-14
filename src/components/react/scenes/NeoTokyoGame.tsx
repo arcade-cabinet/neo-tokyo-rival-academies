@@ -2,7 +2,7 @@ import { ScreenOrientation } from '@capacitor/screen-orientation';
 import { GameWorld } from '@components/react/game/GameWorld';
 import { CityBackground } from '@components/react/objects/CityBackground';
 import { CombatText } from '@components/react/ui/CombatText';
-import { GameHUD } from '@components/react/ui/GameHUD';
+import { JRPGHUD } from '@components/react/ui/JRPGHUD';
 import { MainMenu } from '@components/react/ui/MainMenu';
 import { NarrativeOverlay } from '@components/react/ui/NarrativeOverlay';
 import { SplashScreen } from '@components/react/ui/SplashScreen';
@@ -240,12 +240,9 @@ export const NeoTokyoGame: FC = () => {
 
       {viewState === 'game' && (
         <>
-          <GameHUD
-            score={gameState.score}
-            biome={gameState.biome}
+          <JRPGHUD
             inputState={inputState}
             onInput={handleInput}
-            dialogue={dialogue}
           />
           {combatText && (
             <CombatText

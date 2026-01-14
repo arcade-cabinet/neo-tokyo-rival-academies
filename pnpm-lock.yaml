@@ -65,6 +65,9 @@ importers:
       yuka:
         specifier: ^0.7.8
         version: 0.7.8
+      zustand:
+        specifier: ^5.0.10
+        version: 5.0.10(@types/react@19.2.8)(react@19.2.3)(use-sync-external-store@1.6.0(react@19.2.3))
     devDependencies:
       '@astrojs/check':
         specifier: ^0.9.6

@@ -21,12 +21,25 @@ export const InputSystem = ({ inputState }: InputSystemProps) => {
         continue;
       }
 
-      // Ramping difficulty
-      const distBonus = Math.min(player.position.x * 0.002, 5);
-      const targetSpeed = (inputState.run ? CONFIG.sprintSpeed : CONFIG.baseSpeed) + distBonus;
+      // Directional Input Logic
+      let targetVelocityX = 0;
+
+      if (inputState.right) {
+          targetVelocityX = inputState.run ? CONFIG.sprintSpeed : CONFIG.baseSpeed;
+      } else if (inputState.left) {
+          targetVelocityX = -(inputState.run ? CONFIG.sprintSpeed : CONFIG.baseSpeed);
+      } else {
+          targetVelocityX = 0;
+      }
 
       // X Acceleration
-      player.velocity.x += (targetSpeed - player.velocity.x) * 5 * dt;
+      // Smooth damp
+      player.velocity.x += (targetVelocityX - player.velocity.x) * 10 * dt;
+
+      // Face Direction (Rotate mesh if needed, but for now we just move)
+      // Ideally we'd rotate the model 180 deg if moving left.
+      // We can use ECS rotation or just scale.x = -1 via a component?
+      // Let's assume Character component handles visuals based on velocity sign if we want.
 
       // State Logic (Simplified)
       // Check if grounded (velocity y is 0 is our simple check from PhysicsSystem)
@@ -44,10 +57,10 @@ export const InputSystem = ({ inputState }: InputSystemProps) => {
         } else if (inputState.slide) {
           if (player.characterState !== 'slide') musicSynth.playSlide();
           player.characterState = 'slide';
-        } else if (inputState.run) {
-          player.characterState = 'sprint';
+        } else if (Math.abs(player.velocity.x) > 1) {
+          player.characterState = inputState.run ? 'sprint' : 'run';
         } else {
-          player.characterState = 'run';
+          player.characterState = 'stand';
         }
       } else {
         player.characterState = 'jump';

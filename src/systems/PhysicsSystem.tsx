@@ -24,6 +24,17 @@ export const PhysicsSystem = () => {
          entity.velocity.y += CONFIG.gravity * dt;
       }
 
+      // Apply Air Drag / Friction to X
+      // If no input (controlled by InputSystem), slow down.
+      // But PhysicsSystem doesn't know about input directly.
+      // InputSystem sets 'run' or 'stand'.
+      // If 'stand' or 'block', damp velocity.
+      if (entity.characterState === 'stand' || entity.characterState === 'block') {
+          // Friction
+          entity.velocity.x *= 0.8;
+          if(Math.abs(entity.velocity.x) < 0.1) entity.velocity.x = 0;
+      }
+
       // Integrate Position (Physics movement)
       entity.position.x += entity.velocity.x * dt;
       entity.position.y += entity.velocity.y * dt;

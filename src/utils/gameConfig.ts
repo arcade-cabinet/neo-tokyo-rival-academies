@@ -23,4 +23,6 @@ export const initialInputState: InputState = {
   slide: false,
   jump: false,
   attack: false,
+  left: false,
+  right: false,
 };

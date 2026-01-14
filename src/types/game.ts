@@ -24,6 +24,8 @@ export interface InputState {
   slide: boolean;
   jump: boolean;
   attack: boolean;
+  left: boolean;
+  right: boolean;
 }
 
 export interface Platform {

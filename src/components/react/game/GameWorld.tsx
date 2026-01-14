@@ -3,6 +3,7 @@ import { Enemy } from '@components/react/objects/Enemy';
 import { Obstacle } from '@components/react/objects/Obstacle';
 import { Platform } from '@components/react/objects/Platform';
 import { DataShard } from '@components/react/objects/DataShard';
+import { Connector } from '@components/react/objects/Connector';
 import { ParallaxBackground } from './ParallaxBackground';
 import { SpaceshipBackground } from './SpaceshipBackground';
 import { MallBackground } from './MallBackground';
@@ -10,6 +11,7 @@ import { useFrame, useThree } from '@react-three/fiber';
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { ECS, world } from '@/state/ecs';
+import { useGameStore } from '@/state/gameStore';
 import { aiSystem } from '@/systems/AISystem';
 import { CombatSystem } from '@/systems/CombatSystem';
 import { InputSystem } from '@/systems/InputSystem';
@@ -55,15 +57,19 @@ export function GameWorld({
   onDialogue,
 }: GameWorldProps) {
   const { camera } = useThree();
+  const { showDialogue, addItem, addXp } = useGameStore();
   const collectedLogs = useRef(0);
+  const exitSequenceActive = useRef(false);
   const initialized = useRef(false);
   const bossSpawned = useRef(false);
   const hasAlienQueenSpawned = useRef(false);
 
   // Generation state
+  // We track the bounds of generated content to allow backtracking
   const genStateRef = useRef({
     nextX: -10,
     nextY: 0,
+    minX: -10, // Track backward generation limit if we wanted to go left
   });
 
   // Init World
@@ -106,6 +112,14 @@ export function GameWorld({
     });
     genStateRef.current.nextX = 30;
 
+    // Start Quest
+    useGameStore.getState().startQuest({
+        id: 'sector7_patrol',
+        title: 'Sector 7 Patrol',
+        description: 'Patrol the streets and clear out 5 Yakuza members.',
+        completed: false
+    });
+
     return () => {
       world.clear();
       initialized.current = false;
@@ -122,11 +136,39 @@ export function GameWorld({
     // Camera follow player (Side View)
     const player = world.with('isPlayer', 'position').first;
     if (player) {
-      // Side view camera logic
-      camera.position.x = player.position.x; // Keep player centered horizontally
-      camera.position.y = THREE.MathUtils.lerp(camera.position.y, player.position.y + 3, 3 * delta);
-      camera.position.z = 25; // Fixed distance for 2.5D view
-      camera.lookAt(player.position.x, player.position.y + 2, 0);
+      // Platformer Camera Logic (Damped Follow)
+      // Isometric/Diorama feel: Higher Y, angled down.
+
+      let targetX = player.position.x;
+      let targetY = player.position.y + 8; // Higher up
+      let targetZ = 30; // Further back
+      let lookAtY = player.position.y + 2;
+
+      // Exit Sequence Override
+      if (exitSequenceActive.current) {
+          // Camera stays fixed or pans to watch player walk away
+          // Player walks into Z
+          player.velocity.x = 0;
+          player.velocity.y = 0;
+          player.position.z -= 5 * delta; // Walk into background
+          player.characterState = 'run';
+
+          if (player.position.z < -20) {
+              // Complete Stage
+              exitSequenceActive.current = false;
+              stageSystem.completeStage();
+
+              // Reset Player Z for next stage
+              player.position.z = 0;
+          }
+      } else {
+          // Normal Camera Follow
+          camera.position.x = THREE.MathUtils.lerp(camera.position.x, targetX, 3 * delta);
+          camera.position.y = THREE.MathUtils.lerp(camera.position.y, targetY, 3 * delta);
+          camera.position.z = THREE.MathUtils.lerp(camera.position.z, targetZ, 3 * delta);
+
+          camera.lookAt(camera.position.x, lookAtY, 0);
+      }
 
       const score = Math.floor(player.position.x);
       onScoreUpdate(score);
@@ -270,36 +312,72 @@ export function GameWorld({
          }
       }
 
+      // Check stage END REACHED (Not complete yet, triggering connector)
+      // If we walked far enough, spawn exit connector
+      if (stageSystem.state === 'playing' && player.position.x > stageSystem.currentStage.length && !exitSequenceActive.current) {
+          // Check if we already spawned exit?
+          // Let's rely on stageSystem state transition.
+          // Currently stageSystem sets 'complete' when x > length.
+          // We want to intercept that.
+          // Actually stageSystem.update sets 'complete'.
+      }
+
       // Check stage completion
       if (stageSystem.state === 'complete') {
         if (!bossSpawned.current) {
-          console.log('Spawning Boss Arena...');
+          console.log('Spawning End/Boss Arena...');
           bossSpawned.current = true;
 
-          // Spawn Boss Arena
-          const arenaX = genStateRef.current.nextX + 10;
-          const arenaY = genStateRef.current.nextY;
+          const endX = genStateRef.current.nextX + 10;
+          const endY = genStateRef.current.nextY;
 
-          world.add({
-            isPlatform: true,
-            position: new THREE.Vector3(arenaX, arenaY, 0),
-            platformData: { length: 60, slope: 0, width: 12 },
-          });
+          // If boss stage, spawn Boss. If street stage, spawn Connector.
+          if (stageSystem.currentStageId === 'sector7_streets') {
+              // Spawn Connector
+              onDialogue?.('Rival', "There's the bridge to the Upper Plate! Let's go!");
 
-          // Spawn Boss (Vera)
-          world.add({
-            id: 'boss-vera',
-            isEnemy: true,
-            position: new THREE.Vector3(arenaX + 30, arenaY + 5, 0),
-            velocity: new THREE.Vector3(0, 0, 0),
-            characterState: 'stand',
-            faction: 'Azure',
-            modelColor: 0xffffff, // White = Boss in AISystem
-          });
+              world.add({
+                  isPlatform: true,
+                  position: new THREE.Vector3(endX, endY, 0),
+                  platformData: { length: 20, slope: 0, width: 10 },
+                  modelColor: 0x222222
+              });
 
-          // Stop procedural generation by pushing nextX way out or handling state
-          // For now, we just let it be, but the "if procedural" check below handles it if we switch stage type?
-          // StageSystem.state is complete, so we should stop calling generatePlatform.
+              // We need a visual entity for the connector (not ECS physics, just visual)
+              // But we can add a dummy ECS entity or just render it if we tracked it.
+              // Let's add a "Connector" entity to ECS?
+              // ECS entities render based on components.
+              // We haven't added <Connector> to render loop yet.
+              // Let's trigger the exit sequence logic here.
+          } else {
+             // Boss Spawn (Alien Ship / Mall)
+             // ... (Existing Boss Logic)
+
+            world.add({
+                isPlatform: true,
+                position: new THREE.Vector3(endX, endY, 0),
+                platformData: { length: 60, slope: 0, width: 12 },
+            });
+
+            world.add({
+                id: 'boss-vera',
+                isEnemy: true,
+                position: new THREE.Vector3(endX + 30, endY + 5, 0),
+                velocity: new THREE.Vector3(0, 0, 0),
+                characterState: 'stand',
+                faction: 'Azure',
+                modelColor: 0xffffff,
+            });
+          }
+        }
+
+        // Handle Exit Sequence Logic (If on connector)
+        if (stageSystem.currentStageId === 'sector7_streets' && bossSpawned.current) {
+             const endX = genStateRef.current.nextX + 20; // Approx connector center
+             if (Math.abs(player.position.x - endX) < 5 && !exitSequenceActive.current) {
+                 console.log("Entering Connector...");
+                 exitSequenceActive.current = true;
+             }
         }
       }
 
@@ -315,9 +393,12 @@ export function GameWorld({
 
       // Generate ahead based on Stage Type
       if (stageSystem.currentStage.platforms === 'procedural' && stageSystem.state !== 'complete') {
+        // Generate forward
         if (genStateRef.current.nextX < player.position.x + 80) {
           generatePlatform();
         }
+        // Ideally we would generate backward too if player goes left,
+        // but for now we just keep the start platform.
       }
     }
   });
@@ -403,8 +484,15 @@ export function GameWorld({
         onCombatText={(msg, color) => {
             if (msg === 'DATA ACQUIRED') {
                 const logIndex = collectedLogs.current % B_STORY_LOGS.length;
+                // UI Update
+                showDialogue('SYSTEM', B_STORY_LOGS[logIndex]);
+                addItem('data_shard', 'Data Shard');
+
+                // Legacy support if needed
                 onDialogue?.('SYSTEM', B_STORY_LOGS[logIndex]);
                 collectedLogs.current++;
+            } else if (msg === 'DESTROYED!' || msg === 'KO!') {
+                addXp(100);
             }
             onCombatText?.(msg, color);
         }}
@@ -427,6 +515,14 @@ export function GameWorld({
               <DataShard position={[entity.position.x, entity.position.y, entity.position.z]} />
           )}
       </ECS.Entities>
+
+      {/* We need to render the connector if we spawned one.
+          Currently we don't have an ECS component for 'isConnector'.
+          Let's just conditionally render one at the end if bossSpawned for Sector 7.
+      */}
+      {bossSpawned.current && stageSystem.currentStageId === 'sector7_streets' && (
+          <Connector position={[genStateRef.current.nextX + 20, genStateRef.current.nextY, 0]} type="bridge" />
+      )}
 
       <ECS.Entities in={world.with('isAlly', 'position', 'characterState')}>
         {(entity) => (
