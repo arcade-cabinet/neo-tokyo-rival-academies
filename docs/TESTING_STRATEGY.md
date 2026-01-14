@@ -20,4 +20,4 @@ We employ a rigorous testing strategy to ensure the stability of the JRPG transf
 
 ## 4. Manual Verification
 - Developers must run `pnpm dev` and verify gameplay feel.
-- Use `scripts/verify_rpg_gameplay.py` to automate smoke tests.
+- Use `scripts/verify_game.py` (if available) to automate smoke tests.

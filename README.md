@@ -6,7 +6,7 @@ A futuristic 3D Action JRPG set in the neon-lit streets of Neo-Tokyo, where riva
 
 Neo-Tokyo: Rival Academies combines high-speed runner mechanics with deep RPG progression.
 - **Action JRPG Combat**: Real-time combat driven by character stats (Structure, Ignition, Logic, Flow).
-- **Narrative Depth**: Visual-novel-style storytelling with rival factions.
+- **Narrative Depth**: Visual novel style storytelling with rival factions.
 - **Immersive 3D**: Powered by Three.js and React Three Fiber.
 - **Modern Tech**: Astro, Miniplex ECS, and TypeScript.
 
