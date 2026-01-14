@@ -174,7 +174,7 @@ export const CombatSystem = ({
           const obsTop = obstacle.position.y + obsHeight;
 
           if (effectivePlayerTop > obsBottom && playerBottom < obsTop) {
-            // Obstacles deal damage now too
+            // Obstacles deal damage
             if (player.health !== undefined) {
               const obsDmg = 20;
               player.health -= obsDmg;
@@ -185,13 +185,9 @@ export const CombatSystem = ({
                 isGameOver = true;
                 break;
               }
-              // Remove obstacle to prevent multi-hit
-              // world.remove(obstacle); // Maybe don't remove walls?
-              // For now, instant game over on walls usually, but let's be generous
-              // Actually, original code was instant Game Over.
-              // Let's keep it instant Game Over for obstacles unless we have "Structure" to tank it?
-              // Let's say: High obstacles = Death, Low obstacles = Trip/Damage?
-              // Sticking to Game Over for obstacles ensures "Runner" skill is still needed.
+              // Player survived - continue playing
+            } else {
+              // No health system - instant game over (legacy behavior)
               onGameOver();
               isGameOver = true;
               break;

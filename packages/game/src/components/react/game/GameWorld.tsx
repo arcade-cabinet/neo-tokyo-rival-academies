@@ -254,6 +254,13 @@ export function GameWorld({
               characterState: 'attack',
               faction: 'Azure',
               modelColor: 0x00aa00,
+              health: 75,
+              stats: {
+                structure: 75,
+                ignition: 8,
+                logic: 5,
+                flow: 10,
+              },
             });
           }
 
@@ -316,6 +323,13 @@ export function GameWorld({
               characterState: 'stand',
               faction: 'Azure',
               modelColor: 0x0000ff, // Blue Cop
+              health: 100,
+              stats: {
+                structure: 100,
+                ignition: 12,
+                logic: 8,
+                flow: 6,
+              },
             });
           }
 

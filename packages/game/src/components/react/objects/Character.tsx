@@ -11,6 +11,30 @@ interface CharacterProps {
 }
 
 /**
+ * Toon Material for Cel Shading
+ * Extracted to module scope to prevent remounting on every render
+ */
+const ToonMat = ({
+  color,
+  wireframe = false,
+  transparent = false,
+  opacity = 1,
+}: {
+  color: THREE.ColorRepresentation;
+  wireframe?: boolean;
+  transparent?: boolean;
+  opacity?: number;
+}) => (
+  <meshToonMaterial
+    color={color}
+    wireframe={wireframe}
+    transparent={transparent}
+    opacity={opacity}
+    gradientMap={null}
+  />
+);
+
+/**
  * Renders a stylized humanoid character as a Three.js group with animated coat segments and pose-driven limb motion.
  *
  * @param color - Hex color used for the character's hair
@@ -152,17 +176,6 @@ export function Character({
       if (limbsRef.current.legR.current) limbsRef.current.legR.current.rotation.x = -0.5;
     }
   });
-
-  // Toon Material for Cel Shading
-  const ToonMat = ({ color, wireframe = false, transparent = false, opacity = 1 }: { color: THREE.ColorRepresentation, wireframe?: boolean, transparent?: boolean, opacity?: number }) => (
-      <meshToonMaterial
-          color={color}
-          wireframe={wireframe}
-          transparent={transparent}
-          opacity={opacity}
-          gradientMap={null} // Default gradient
-      />
-  );
 
   const Limb = ({
     x,

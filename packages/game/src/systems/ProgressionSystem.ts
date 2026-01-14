@@ -8,8 +8,8 @@ export const updateProgression = () => {
   const entities = world.with('level', 'stats');
 
   for (const entity of entities) {
-    // Check if XP threshold is met
-    if (entity.level.xp >= entity.level.nextLevelXp) {
+    // Process all pending level-ups (handles multi-level XP overflow)
+    while (entity.level.xp >= entity.level.nextLevelXp) {
       // Level Up Logic
       const overflowXp = entity.level.xp - entity.level.nextLevelXp;
 

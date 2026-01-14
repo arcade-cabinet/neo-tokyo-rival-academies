@@ -28,6 +28,8 @@ function BuildingLayer({
         y: -20, // Base
         z: 0,
         scaleY: h,
+        scaleX: 3 + Math.random() * 2,
+        scaleZ: 3 + Math.random() * 2,
         color: CITY_COLORS[Math.floor(Math.random() * CITY_COLORS.length)],
       });
     }
@@ -57,7 +59,7 @@ function BuildingLayer({
       while (worldX > camX + wrapRange) worldX -= wrapRange * 2;
 
       dummy.position.set(worldX, b.y + b.scaleY / 2, z);
-      dummy.scale.set(3 + Math.random() * 2, b.scaleY, 3 + Math.random() * 2);
+      dummy.scale.set(b.scaleX, b.scaleY, b.scaleZ);
       dummy.updateMatrix();
       mesh.current!.setMatrixAt(i, dummy.matrix);
       // We can't easily change color per frame without attribute buffer magic,
@@ -82,6 +84,7 @@ function NeonLights({ count, z, speedFactor }: { count: number; z: number; speed
     return new Array(count).fill(0).map(() => ({
       x: (Math.random() - 0.5) * 200,
       y: Math.random() * 40 - 10,
+      scaleY: 2 + Math.random() * 5,
       color: new THREE.Color().setHex(CITY_COLORS[Math.floor(Math.random() * CITY_COLORS.length)]),
     }));
   }, [count]);
@@ -97,7 +100,7 @@ function NeonLights({ count, z, speedFactor }: { count: number; z: number; speed
       while (worldX > camX + wrapRange) worldX -= wrapRange * 2;
 
       dummy.position.set(worldX, l.y, z + 0.6); // Slightly in front of buildings
-      dummy.scale.set(0.5, 2 + Math.random() * 5, 0.1);
+      dummy.scale.set(0.5, l.scaleY, 0.1);
       dummy.updateMatrix();
       mesh.current!.setMatrixAt(i, dummy.matrix);
       mesh.current!.setColorAt(i, l.color);
