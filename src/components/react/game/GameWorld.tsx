@@ -6,6 +6,7 @@ import { useFrame, useThree } from '@react-three/fiber';
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { ECS, world } from '@/state/ecs';
+import { aiSystem } from '@/systems/AISystem';
 import { CombatSystem } from '@/systems/CombatSystem';
 import { InputSystem } from '@/systems/InputSystem';
 import { MovementSystem } from '@/systems/MovementSystem';
@@ -87,6 +88,9 @@ export function GameWorld({
   useFrame((_state, delta) => {
     if (!gameState.active) return;
 
+    // AI Update
+    aiSystem.update();
+
     // Camera follow player (Side View)
     const player = world.with('isPlayer', 'position').first;
     if (player) {
@@ -165,6 +169,7 @@ export function GameWorld({
       if (rand > 0.7) {
         const ex = x + 5 + Math.random() * (length - 10);
         world.add({
+          id: `enemy-${Math.random().toString(36).substr(2, 9)}`, // Ensure ID for Yuka
           isEnemy: true,
           position: new THREE.Vector3(ex, y, 0),
           velocity: new THREE.Vector3(0, 0, 0),

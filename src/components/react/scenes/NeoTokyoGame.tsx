@@ -1,3 +1,4 @@
+import { ScreenOrientation } from '@capacitor/screen-orientation';
 import { GameWorld } from '@components/react/game/GameWorld';
 import { CityBackground } from '@components/react/objects/CityBackground';
 import { CombatText } from '@components/react/ui/CombatText';
@@ -40,8 +41,11 @@ export const NeoTokyoGame: FC = () => {
 
   const handleStartStory = () => {
     setViewState('intro');
-    // Start music early? Or wait?
-    // musicSynth.start();
+    // Lock orientation to landscape for gameplay
+    ScreenOrientation.lock({ orientation: 'landscape' }).catch(() => {
+      // Fallback for browsers/platforms where lock is not supported
+      console.warn('Orientation lock not supported');
+    });
   };
 
   const handleIntroComplete = () => {
@@ -66,7 +70,7 @@ export const NeoTokyoGame: FC = () => {
   }, []);
 
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
+    const _handleKeyDown = (e: KeyboardEvent) => {
       switch (e.code) {
         case 'Space':
         case 'ArrowUp':
@@ -86,7 +90,7 @@ export const NeoTokyoGame: FC = () => {
       }
     };
 
-    const handleKeyUp = (e: KeyboardEvent) => {
+    const _handleKeyUp = (e: KeyboardEvent) => {
       switch (e.code) {
         case 'Space':
         case 'ArrowUp':
@@ -106,12 +110,13 @@ export const NeoTokyoGame: FC = () => {
       }
     };
 
-    window.addEventListener('keydown', handleKeyDown);
-    window.addEventListener('keyup', handleKeyUp);
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-      window.removeEventListener('keyup', handleKeyUp);
-    };
+    // Keyboard listeners REMOVED - Touch Only
+    // window.addEventListener('keydown', handleKeyDown);
+    // window.addEventListener('keyup', handleKeyUp);
+    // return () => {
+    //   window.removeEventListener('keydown', handleKeyDown);
+    //   window.removeEventListener('keyup', handleKeyUp);
+    // };
   }, [handleInput]);
 
   const handleCombatText = (message: string, color: string) => {

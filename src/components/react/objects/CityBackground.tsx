@@ -1,6 +1,7 @@
+import { Motion } from '@capacitor/motion';
 import { useFrame, useThree } from '@react-three/fiber';
 import { building } from '@utils/procedural/AssetGen';
-import { useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import * as THREE from 'three';
 
 function ParallaxLayer({
@@ -41,10 +42,31 @@ function ParallaxLayer({
     });
   }, [count, scale, zOffset]);
 
+  const tiltRef = useRef(0);
+
+  useEffect(() => {
+    // Listen for device tilt
+    const listener = Motion.addListener('accel', (event) => {
+      // Use Y-axis tilt for subtle parallax
+      const y = event.accelerationIncludingGravity.y || 0;
+      tiltRef.current = y * 0.5; // Scale factor
+    });
+    return () => {
+      listener.then((l) => l.remove());
+    };
+  }, []);
+
   useFrame(() => {
     if (!groupRef.current) return;
     const camX = camera.position.x;
+
+    // Combine Scroll Parallax + Gyro Tilt
     groupRef.current.position.x = camX * speed;
+    groupRef.current.rotation.z = THREE.MathUtils.lerp(
+      groupRef.current.rotation.z,
+      tiltRef.current * 0.05,
+      0.1
+    );
 
     const distFactor = 1 - speed;
     const totalWidth = count * (40 * scale);

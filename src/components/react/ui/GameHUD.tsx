@@ -1,5 +1,7 @@
+import { Haptics, ImpactStyle } from '@capacitor/haptics';
 import type { FC } from 'react';
 import type { InputState } from '@/types/game';
+import styles from './GameHUD.module.css';
 
 interface GameHUDProps {
   score: number;
@@ -11,47 +13,27 @@ interface GameHUDProps {
 const BIOME_NAMES = ['SHIBUYA', 'ROPPONGI', 'AKIHABARA', 'SHINJUKU'];
 
 export const GameHUD: FC<GameHUDProps> = ({ score, biome, inputState, onInput }) => {
-  const handleButtonDown = (key: keyof InputState) => {
+  const handleTouchStart = (key: keyof InputState) => {
     onInput(key, true);
+    Haptics.impact({ style: ImpactStyle.Light }).catch(() => {});
   };
 
-  const handleButtonUp = (key: keyof InputState) => {
+  const handleTouchEnd = (key: keyof InputState) => {
     onInput(key, false);
   };
 
   return (
-    <div
-      style={{
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        zIndex: 10,
-        pointerEvents: 'none',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-      }}
-    >
+    <div className={styles.hudContainer}>
       {/* Top HUD */}
-      <div
-        style={{
-          padding: '20px',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'flex-start',
-          background: 'linear-gradient(to bottom, rgba(0,0,0,0.8), transparent)',
-        }}
-      >
-        <div className="hud-box">
-          <div className="hud-label">NEO-TOKYO</div>
-          <div className="hud-val">{BIOME_NAMES[biome] || 'SECTOR 0'}</div>
+      <div className={styles.topBar}>
+        <div className={styles.hudBox}>
+          <div className={styles.hudLabel}>NEO-TOKYO</div>
+          <div className={styles.hudVal}>{BIOME_NAMES[biome] || 'SECTOR 0'}</div>
         </div>
-        <div style={{ display: 'flex', gap: '20px' }}>
-          <div className="hud-box" style={{ textAlign: 'right' }}>
-            <div className="hud-label">REP</div>
-            <div className="hud-val" style={{ color: '#0ff' }}>
+        <div style={{ display: 'flex', gap: '2vmin' }}>
+          <div className={styles.hudBox} style={{ textAlign: 'right' }}>
+            <div className={styles.hudLabel}>REP</div>
+            <div className={styles.hudVal} style={{ color: '#0ff' }}>
               {score}
             </div>
           </div>
@@ -66,10 +48,10 @@ export const GameHUD: FC<GameHUDProps> = ({ score, biome, inputState, onInput })
           top: '30%',
           width: '100%',
           textAlign: 'center',
-          fontSize: '4rem',
+          fontSize: '8vmin',
           fontWeight: 900,
           color: '#fff',
-          textShadow: '4px 4px 0 #f00',
+          textShadow: '0.5vmin 0.5vmin 0 #f00',
           fontStyle: 'italic',
           opacity: 0,
           transform: 'scale(0.5) skewX(-20deg)',
@@ -80,162 +62,88 @@ export const GameHUD: FC<GameHUDProps> = ({ score, biome, inputState, onInput })
         KNOCKOUT!
       </div>
 
-      {/* Controls */}
-      <div
-        style={{
-          height: '40%',
-          width: '100%',
-          display: 'flex',
-          pointerEvents: 'auto',
-        }}
-      >
-        {/* Left controls */}
-        <div style={{ flex: 1, position: 'relative' }}>
+      {/* Touch Controls */}
+      <div className={styles.touchControls}>
+        {/* Left Control Zone */}
+        <div
+          className={styles.controlZone}
+          style={{ alignItems: 'flex-end', paddingLeft: '4vmin' }}
+        >
           <button
             type="button"
-            className={`btn ${inputState.run ? 'pressed' : ''}`}
-            style={{
-              position: 'absolute',
-              top: '20px',
-              left: '30px',
-              borderLeft: '5px solid #f0f',
-            }}
-            onMouseDown={() => handleButtonDown('run')}
-            onMouseUp={() => handleButtonUp('run')}
+            className={`${styles.touchBtn} ${styles.btnSlide} ${
+              inputState.slide ? styles.touchBtnPressed : ''
+            }`}
             onTouchStart={(e) => {
               e.preventDefault();
-              handleButtonDown('run');
+              handleTouchStart('slide');
             }}
             onTouchEnd={(e) => {
               e.preventDefault();
-              handleButtonUp('run');
+              handleTouchEnd('slide');
             }}
           >
-            BASH
+            SLIDE
           </button>
           <button
             type="button"
-            className={`btn ${inputState.slide ? 'pressed' : ''}`}
-            style={{
-              position: 'absolute',
-              bottom: '30px',
-              left: '30px',
-              borderLeft: '5px solid #ff0',
-            }}
-            onMouseDown={() => handleButtonDown('slide')}
-            onMouseUp={() => handleButtonUp('slide')}
+            className={`${styles.touchBtn} ${styles.btnRun} ${
+              inputState.run ? styles.touchBtnPressed : ''
+            }`}
+            style={{ marginBottom: '8vmin' }}
             onTouchStart={(e) => {
               e.preventDefault();
-              handleButtonDown('slide');
+              handleTouchStart('run');
             }}
             onTouchEnd={(e) => {
               e.preventDefault();
-              handleButtonUp('slide');
+              handleTouchEnd('run');
             }}
           >
-            TRIP
+            DASH
           </button>
         </div>
 
-        {/* Right controls */}
-        <div style={{ flex: 1, position: 'relative' }}>
+        {/* Right Control Zone */}
+        <div
+          className={styles.controlZone}
+          style={{ alignItems: 'flex-end', paddingRight: '4vmin' }}
+        >
           <button
             type="button"
-            className={`btn ${inputState.attack ? 'pressed' : ''}`}
-            style={{
-              position: 'absolute',
-              top: '20px',
-              right: '30px',
-              borderRight: '5px solid #f00',
-            }}
-            onMouseDown={() => handleButtonDown('attack')}
-            onMouseUp={() => handleButtonUp('attack')}
+            className={`${styles.touchBtn} ${styles.btnAttack} ${
+              inputState.attack ? styles.touchBtnPressed : ''
+            }`}
+            style={{ marginBottom: '8vmin' }}
             onTouchStart={(e) => {
               e.preventDefault();
-              handleButtonDown('attack');
+              handleTouchStart('attack');
             }}
             onTouchEnd={(e) => {
               e.preventDefault();
-              handleButtonUp('attack');
+              handleTouchEnd('attack');
             }}
           >
-            ATTACK
+            ATK
           </button>
           <button
             type="button"
-            className={`btn ${inputState.jump ? 'pressed' : ''}`}
-            style={{
-              position: 'absolute',
-              bottom: '30px',
-              right: '30px',
-              borderRight: '5px solid #0ff',
-            }}
-            onMouseDown={() => handleButtonDown('jump')}
-            onMouseUp={() => handleButtonUp('jump')}
+            className={`${styles.touchBtn} ${styles.btnJump} ${
+              inputState.jump ? styles.touchBtnPressed : ''
+            }`}
             onTouchStart={(e) => {
               e.preventDefault();
-              handleButtonDown('jump');
+              handleTouchStart('jump');
             }}
             onTouchEnd={(e) => {
               e.preventDefault();
-              handleButtonUp('jump');
+              handleTouchEnd('jump');
             }}
           >
             JUMP
           </button>
         </div>
       </div>
-
-      <style>{`
-        .hud-box {
-          background: rgba(180, 0, 0, 0.7);
-          border: 1px solid rgba(255, 255, 255, 0.2);
-          padding: 10px 20px;
-          color: #fff;
-          transform: skewX(-15deg);
-          backdrop-filter: blur(5px);
-          box-shadow: 0 0 15px rgba(255, 0, 0, 0.2);
-        }
-        .hud-label {
-          font-size: 0.7rem;
-          color: #ffba00;
-          text-transform: uppercase;
-          letter-spacing: 2px;
-          margin-bottom: 2px;
-        }
-        .hud-val {
-          font-size: 2rem;
-          font-weight: 900;
-          color: #fff;
-          text-shadow: 2px 2px #000;
-          font-style: italic;
-        }
-        .btn {
-          width: 100px;
-          height: 80px;
-          background: rgba(255, 255, 255, 0.05);
-          border: 2px solid rgba(255, 255, 255, 0.1);
-          color: rgba(255, 255, 255, 0.8);
-          border-radius: 8px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 0.9rem;
-          font-weight: 800;
-          letter-spacing: 1px;
-          transform: skewX(-10deg);
-          transition: all 0.05s;
-          cursor: pointer;
-        }
-        .btn:active,
-        .btn.pressed {
-          background: rgba(255, 0, 0, 0.3);
-          border-color: #f00;
-          color: #fff;
-          transform: skewX(-10deg) scale(0.95);
-          box-shadow: 0 0 20px #f00;
-        }
-      `}</style>
     </div>
   );
 };
