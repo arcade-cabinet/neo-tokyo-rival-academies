@@ -1,12 +1,9 @@
 import { Character } from '@components/react/objects/Character';
+import { Connector } from '@components/react/objects/Connector';
+import { DataShard } from '@components/react/objects/DataShard';
 import { Enemy } from '@components/react/objects/Enemy';
 import { Obstacle } from '@components/react/objects/Obstacle';
 import { Platform } from '@components/react/objects/Platform';
-import { DataShard } from '@components/react/objects/DataShard';
-import { Connector } from '@components/react/objects/Connector';
-import { ParallaxBackground } from './ParallaxBackground';
-import { SpaceshipBackground } from './SpaceshipBackground';
-import { MallBackground } from './MallBackground';
 import { useFrame, useThree } from '@react-three/fiber';
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
@@ -14,10 +11,15 @@ import { ECS, world } from '@/state/ecs';
 import { useGameStore } from '@/state/gameStore';
 import { aiSystem } from '@/systems/AISystem';
 import { CombatSystem } from '@/systems/CombatSystem';
+import { startDialogue } from '@/systems/DialogueSystem';
 import { InputSystem } from '@/systems/InputSystem';
 import { PhysicsSystem } from '@/systems/PhysicsSystem';
+import { updateProgression } from '@/systems/ProgressionSystem';
 import { stageSystem } from '@/systems/StageSystem';
 import type { GameState, InputState } from '@/types/game';
+import { MallBackground } from './MallBackground';
+import { ParallaxBackground } from './ParallaxBackground';
+import { SpaceshipBackground } from './SpaceshipBackground';
 
 interface GameWorldProps {
   gameState: GameState;
@@ -28,14 +30,6 @@ interface GameWorldProps {
   onCameraShake?: () => void;
   onDialogue?: (speaker: string, text: string) => void;
 }
-
-const B_STORY_LOGS = [
-    "LOG 001: The simulation boundaries are decaying...",
-    "LOG 002: 'Midnight Exam' is a cover. They are harvesting our kinetic data.",
-    "LOG 003: Subject 'Vera' shows unauthorized deviation. Is she the cause?",
-    "LOG 004: GLITCH PROTOCOL ACTIVE. The world is trying to delete us.",
-    "LOG 005: There is no Academy. Wake up."
-];
 
 const pickEnemyColor = () => {
   // Randomize Yakuza (Black) vs Rival (Cyan) vs Biker (Red)
@@ -58,7 +52,7 @@ export function GameWorld({
 }: GameWorldProps) {
   const { camera } = useThree();
   const { showDialogue, addItem, addXp } = useGameStore();
-  const collectedLogs = useRef(0);
+  // const collectedLogs = useRef(0); // Legacy B-Story logic removed in favor of DialogueSystem
   const exitSequenceActive = useRef(false);
   const initialized = useRef(false);
   const bossSpawned = useRef(false);
@@ -89,6 +83,12 @@ export function GameWorld({
       characterState: 'run',
       faction: 'Kurenai',
       modelColor: 0xff0000,
+      // RPG Stats
+      health: 100,
+      stats: { structure: 100, ignition: 20, logic: 10, flow: 15 },
+      level: { current: 1, xp: 0, nextLevelXp: 1000, statPoints: 0 },
+      equipment: { weapon: 'weapon_1', armor: 'armor_1', accessory: 'none' },
+      dialogueState: { isInteracting: false, currentDialogueId: '', nodeId: '' },
     });
 
     // Spawn Rival (Ally)
@@ -100,6 +100,7 @@ export function GameWorld({
       characterState: 'run',
       faction: 'Azure',
       modelColor: 0x00ffff,
+      health: 100, // Ally health
     });
 
     // Spawn Start Platform
@@ -114,10 +115,10 @@ export function GameWorld({
 
     // Start Quest
     useGameStore.getState().startQuest({
-        id: 'sector7_patrol',
-        title: 'Sector 7 Patrol',
-        description: 'Patrol the streets and clear out 5 Yakuza members.',
-        completed: false
+      id: 'sector7_patrol',
+      title: 'Sector 7 Patrol',
+      description: 'Patrol the streets and clear out 5 Yakuza members.',
+      completed: false,
     });
 
     return () => {
@@ -133,41 +134,44 @@ export function GameWorld({
     // AI Update
     aiSystem.update();
 
+    // Progression Update
+    updateProgression();
+
     // Camera follow player (Side View)
-    const player = world.with('isPlayer', 'position').first;
+    const player = world.with('isPlayer', 'position', 'velocity', 'characterState').first;
     if (player) {
       // Platformer Camera Logic (Damped Follow)
       // Isometric/Diorama feel: Higher Y, angled down.
 
-      let targetX = player.position.x;
-      let targetY = player.position.y + 8; // Higher up
-      let targetZ = 30; // Further back
-      let lookAtY = player.position.y + 2;
+      const targetX = player.position.x;
+      const targetY = player.position.y + 8; // Higher up
+      const targetZ = 30; // Further back
+      const lookAtY = player.position.y + 2;
 
       // Exit Sequence Override
       if (exitSequenceActive.current) {
-          // Camera stays fixed or pans to watch player walk away
-          // Player walks into Z
-          player.velocity.x = 0;
-          player.velocity.y = 0;
-          player.position.z -= 5 * delta; // Walk into background
-          player.characterState = 'run';
+        // Camera stays fixed or pans to watch player walk away
+        // Player walks into Z
+        player.velocity.x = 0;
+        player.velocity.y = 0;
+        player.position.z -= 5 * delta; // Walk into background
+        player.characterState = 'run';
 
-          if (player.position.z < -20) {
-              // Complete Stage
-              exitSequenceActive.current = false;
-              stageSystem.completeStage();
+        if (player.position.z < -20) {
+          // Complete Stage
+          exitSequenceActive.current = false;
+          stageSystem.completeStage();
 
-              // Reset Player Z for next stage
-              player.position.z = 0;
-          }
+          // Reset Player Z for next stage
+          player.position.z = 0;
+        }
       } else {
-          // Normal Camera Follow
-          camera.position.x = THREE.MathUtils.lerp(camera.position.x, targetX, 3 * delta);
-          camera.position.y = THREE.MathUtils.lerp(camera.position.y, targetY, 3 * delta);
-          camera.position.z = THREE.MathUtils.lerp(camera.position.z, targetZ, 3 * delta);
+        // Normal Camera Follow
+        camera.position.x = THREE.MathUtils.lerp(camera.position.x, targetX, 3 * delta);
+        camera.position.y = THREE.MathUtils.lerp(camera.position.y, targetY, 3 * delta);
+        camera.position.z = THREE.MathUtils.lerp(camera.position.z, targetZ, 3 * delta);
 
-          camera.lookAt(camera.position.x, lookAtY, 0);
+        camera.lookAt(camera.position.x, lookAtY, 0);
       }
 
       const score = Math.floor(player.position.x);
@@ -175,151 +179,163 @@ export function GameWorld({
       stageSystem.update(player.position.x);
 
       // Trigger Abduction Event (Hardcoded for demo at X > 50) - Only in Sector 7
-      if (stageSystem.currentStageId === 'sector7_streets' && player.position.x > 50 && !bossSpawned.current && stageSystem.activeEvent !== 'ABDUCTION') {
-           stageSystem.triggerEvent('ABDUCTION');
-           onDialogue?.('Rival', "Kai! The gravity... it's glitching out!");
+      if (
+        stageSystem.currentStageId === 'sector7_streets' &&
+        player.position.x > 50 &&
+        !bossSpawned.current &&
+        stageSystem.activeEvent !== 'ABDUCTION'
+      ) {
+        stageSystem.triggerEvent('ABDUCTION');
+        startDialogue('player', 'rival_encounter_1');
       }
 
       // Handle Abduction Physics
       if (stageSystem.activeEvent === 'ABDUCTION') {
-          // Override Physics: Lift Player & Ally
-          player.velocity.y = 10;
-          player.velocity.x = 0;
+        // Override Physics: Lift Player & Ally
+        player.velocity.y = 10;
+        player.velocity.x = 0;
 
-          // Lift Ally too
+        // Lift Ally too
+        const ally = world.with('isAlly', 'position', 'velocity').first;
+        if (ally) {
+          ally.velocity.y = 10;
+          ally.velocity.x = 0;
+        }
+
+        // Camera Look Up
+        camera.position.y += 10 * delta;
+        camera.lookAt(player.position.x, player.position.y + 10, 0);
+
+        // Transition to Space Stage if high enough
+        if (player.position.y > 50) {
+          console.log('Welcome to Space!');
+          // We can add a dialogue trigger here for space entry if we had one in JSON
+          // startDialogue('player', 'space_entry');
+          stageSystem.loadStage('alien_ship');
+
+          // Reset Player & Ally Position
+          player.position.set(0, 5, 0);
+          player.velocity.set(0, 0, 0);
+
           const ally = world.with('isAlly', 'position', 'velocity').first;
-          if (ally && ally.velocity) {
-              ally.velocity.y = 10;
-              ally.velocity.x = 0;
+          if (ally) {
+            ally.position.set(-3, 5, 0);
+            ally.velocity.set(0, 0, 0);
           }
 
-          // Camera Look Up
-          camera.position.y += 10 * delta;
-          camera.lookAt(player.position.x, player.position.y + 10, 0);
+          // Spawn Platform for Alien Ship
+          world.add({
+            isPlatform: true,
+            position: new THREE.Vector3(0, 0, 0),
+            platformData: { length: 100, slope: 0, width: 20 },
+            modelColor: 0x333333,
+          });
 
-          // Transition to Space Stage if high enough
-          if (player.position.y > 50) {
-              console.log("Welcome to Space!");
-              onDialogue?.('Rival', "This environment... it's corrupted data! We have to purge it!");
-              stageSystem.loadStage('alien_ship');
+          // Spawn Alien Queen
+          hasAlienQueenSpawned.current = true;
+          world.add({
+            id: 'alien-queen',
+            isEnemy: true,
+            isBoss: true,
+            position: new THREE.Vector3(20, 10, -5),
+            velocity: new THREE.Vector3(0, 0, 0),
+            characterState: 'stand',
+            faction: 'Azure', // Or specific Alien faction? Yuka treats as Enemy
+            modelColor: 0x00ff00, // Green
+            health: 500,
+          });
 
-              // Reset Player & Ally Position
-              player.position.set(0, 5, 0);
-              player.velocity.set(0, 0, 0);
-
-              const ally = world.with('isAlly', 'position', 'velocity').first;
-              if (ally && ally.velocity && ally.position) {
-                  ally.position.set(-3, 5, 0);
-                  ally.velocity.set(0, 0, 0);
-              }
-
-              // Spawn Platform for Alien Ship
-              world.add({
-                isPlatform: true,
-                position: new THREE.Vector3(0, 0, 0),
-                platformData: { length: 100, slope: 0, width: 20 },
-                modelColor: 0x333333,
-              });
-
-              // Spawn Alien Queen
-              hasAlienQueenSpawned.current = true;
-              world.add({
-                  id: 'alien-queen',
-                  isEnemy: true,
-                  isBoss: true,
-                  position: new THREE.Vector3(20, 10, -5),
-                  velocity: new THREE.Vector3(0, 0, 0),
-                  characterState: 'stand',
-                  faction: 'Azure', // Or specific Alien faction? Yuka treats as Enemy
-                  modelColor: 0x00ff00, // Green
-                  health: 500,
-              });
-
-              // Spawn Tentacles
-              for(let i=0; i<4; i++) {
-                  world.add({
-                      id: `tentacle-${i}`,
-                      isEnemy: true,
-                      position: new THREE.Vector3(10 + i*5, 0, 5),
-                      velocity: new THREE.Vector3(0, 0, 0),
-                      characterState: 'attack',
-                      faction: 'Azure',
-                      modelColor: 0x00aa00,
-                  });
-              }
-
-              // Reset Gen State
-              genStateRef.current.nextX = 100; // Far away
+          // Spawn Tentacles
+          for (let i = 0; i < 4; i++) {
+            world.add({
+              id: `tentacle-${i}`,
+              isEnemy: true,
+              position: new THREE.Vector3(10 + i * 5, 0, 5),
+              velocity: new THREE.Vector3(0, 0, 0),
+              characterState: 'attack',
+              faction: 'Azure',
+              modelColor: 0x00aa00,
+            });
           }
-          return; // Skip normal platform generation/physics
+
+          // Reset Gen State
+          genStateRef.current.nextX = 100; // Far away
+        }
+        return; // Skip normal platform generation/physics
       }
 
       // Check for Alien Queen Death -> Mall Drop
       if (stageSystem.currentStageId === 'alien_ship' && hasAlienQueenSpawned.current) {
-         let bossCount = 0;
-         for (const _b of world.with('isBoss')) { bossCount++; }
+        let bossCount = 0;
+        for (const _b of world.with('isBoss')) {
+          bossCount++;
+        }
 
-         if (bossCount === 0) {
-             console.log("Alien Queen Defeated! Dropping to Mall...");
-             onDialogue?.('Rival', "Gravity's back! Brace for impact!");
-             stageSystem.loadStage('mall_drop');
+        if (bossCount === 0) {
+          console.log('Alien Queen Defeated! Dropping to Mall...');
+          startDialogue('player', 'victory');
+          stageSystem.loadStage('mall_drop');
 
-             // Setup Mall
-             player.position.set(0, 20, 0); // High up
-             player.velocity.set(0, -5, 0);
+          // Setup Mall
+          player.position.set(0, 20, 0); // High up
+          player.velocity.set(0, -5, 0);
 
-             const ally = world.with('isAlly', 'position', 'velocity').first;
-             if (ally && ally.velocity && ally.position) {
-                  ally.position.set(-3, 20, 0);
-                  ally.velocity.set(0, -5, 0);
-             }
+          const ally = world.with('isAlly', 'position', 'velocity').first;
+          if (ally) {
+            ally.position.set(-3, 20, 0);
+            ally.velocity.set(0, -5, 0);
+          }
 
-             // Clear old entities
-             const toRemove: any[] = [];
-             for (const e of world.with('isPlatform')) toRemove.push(e);
-             for (const e of world.with('isEnemy')) toRemove.push(e);
-             for (const e of toRemove) world.remove(e);
+          // Clear old entities
+          const toRemove: any[] = [];
+          for (const e of world.with('isPlatform')) toRemove.push(e);
+          for (const e of world.with('isEnemy')) toRemove.push(e);
+          for (const e of toRemove) world.remove(e);
 
-             // Spawn Mall Platforms
-             world.add({
-                isPlatform: true,
-                position: new THREE.Vector3(0, 0, 0),
-                platformData: { length: 50, slope: 0, width: 10 },
-                modelColor: 0xff00ff, // Neon Pink
-              });
+          // Spawn Mall Platforms
+          world.add({
+            isPlatform: true,
+            position: new THREE.Vector3(0, 0, 0),
+            platformData: { length: 50, slope: 0, width: 10 },
+            modelColor: 0xff00ff, // Neon Pink
+          });
 
-              world.add({
-                isPlatform: true,
-                position: new THREE.Vector3(60, 10, 0),
-                platformData: { length: 40, slope: 0, width: 10 },
-                modelColor: 0x00ffff, // Neon Blue
-              });
+          world.add({
+            isPlatform: true,
+            position: new THREE.Vector3(60, 10, 0),
+            platformData: { length: 40, slope: 0, width: 10 },
+            modelColor: 0x00ffff, // Neon Blue
+          });
 
-              // Spawn Mall Cops
-              for(let i=0; i<3; i++) {
-                  world.add({
-                      id: `mall-cop-${i}`,
-                      isEnemy: true,
-                      position: new THREE.Vector3(20 + i*10, 0, 0),
-                      velocity: new THREE.Vector3(0, 0, 0),
-                      characterState: 'stand',
-                      faction: 'Azure',
-                      modelColor: 0x0000ff, // Blue Cop
-                  });
-              }
+          // Spawn Mall Cops
+          for (let i = 0; i < 3; i++) {
+            world.add({
+              id: `mall-cop-${i}`,
+              isEnemy: true,
+              position: new THREE.Vector3(20 + i * 10, 0, 0),
+              velocity: new THREE.Vector3(0, 0, 0),
+              characterState: 'stand',
+              faction: 'Azure',
+              modelColor: 0x0000ff, // Blue Cop
+            });
+          }
 
-              genStateRef.current.nextX = 120;
-         }
+          genStateRef.current.nextX = 120;
+        }
       }
 
       // Check stage END REACHED (Not complete yet, triggering connector)
       // If we walked far enough, spawn exit connector
-      if (stageSystem.state === 'playing' && player.position.x > stageSystem.currentStage.length && !exitSequenceActive.current) {
-          // Check if we already spawned exit?
-          // Let's rely on stageSystem state transition.
-          // Currently stageSystem sets 'complete' when x > length.
-          // We want to intercept that.
-          // Actually stageSystem.update sets 'complete'.
+      if (
+        stageSystem.state === 'playing' &&
+        player.position.x > stageSystem.currentStage.length &&
+        !exitSequenceActive.current
+      ) {
+        // Check if we already spawned exit?
+        // Let's rely on stageSystem state transition.
+        // Currently stageSystem sets 'complete' when x > length.
+        // We want to intercept that.
+        // Actually stageSystem.update sets 'complete'.
       }
 
       // Check stage completion
@@ -333,51 +349,51 @@ export function GameWorld({
 
           // If boss stage, spawn Boss. If street stage, spawn Connector.
           if (stageSystem.currentStageId === 'sector7_streets') {
-              // Spawn Connector
-              onDialogue?.('Rival', "There's the bridge to the Upper Plate! Let's go!");
-
-              world.add({
-                  isPlatform: true,
-                  position: new THREE.Vector3(endX, endY, 0),
-                  platformData: { length: 20, slope: 0, width: 10 },
-                  modelColor: 0x222222
-              });
-
-              // We need a visual entity for the connector (not ECS physics, just visual)
-              // But we can add a dummy ECS entity or just render it if we tracked it.
-              // Let's add a "Connector" entity to ECS?
-              // ECS entities render based on components.
-              // We haven't added <Connector> to render loop yet.
-              // Let's trigger the exit sequence logic here.
-          } else {
-             // Boss Spawn (Alien Ship / Mall)
-             // ... (Existing Boss Logic)
+            // Spawn Connector
+            startDialogue('player', 'intro'); // Re-using intro for now as generic "Let's go"
 
             world.add({
-                isPlatform: true,
-                position: new THREE.Vector3(endX, endY, 0),
-                platformData: { length: 60, slope: 0, width: 12 },
+              isPlatform: true,
+              position: new THREE.Vector3(endX, endY, 0),
+              platformData: { length: 20, slope: 0, width: 10 },
+              modelColor: 0x222222,
+            });
+
+            // We need a visual entity for the connector (not ECS physics, just visual)
+            // But we can add a dummy ECS entity or just render it if we tracked it.
+            // Let's add a "Connector" entity to ECS?
+            // ECS entities render based on components.
+            // We haven't added <Connector> to render loop yet.
+            // Let's trigger the exit sequence logic here.
+          } else {
+            // Boss Spawn (Alien Ship / Mall)
+            // ... (Existing Boss Logic)
+
+            world.add({
+              isPlatform: true,
+              position: new THREE.Vector3(endX, endY, 0),
+              platformData: { length: 60, slope: 0, width: 12 },
             });
 
             world.add({
-                id: 'boss-vera',
-                isEnemy: true,
-                position: new THREE.Vector3(endX + 30, endY + 5, 0),
-                velocity: new THREE.Vector3(0, 0, 0),
-                characterState: 'stand',
-                faction: 'Azure',
-                modelColor: 0xffffff,
+              id: 'boss-vera',
+              isEnemy: true,
+              position: new THREE.Vector3(endX + 30, endY + 5, 0),
+              velocity: new THREE.Vector3(0, 0, 0),
+              characterState: 'stand',
+              faction: 'Azure',
+              modelColor: 0xffffff,
             });
           }
         }
 
         // Handle Exit Sequence Logic (If on connector)
         if (stageSystem.currentStageId === 'sector7_streets' && bossSpawned.current) {
-             const endX = genStateRef.current.nextX + 20; // Approx connector center
-             if (Math.abs(player.position.x - endX) < 5 && !exitSequenceActive.current) {
-                 console.log("Entering Connector...");
-                 exitSequenceActive.current = true;
-             }
+          const endX = genStateRef.current.nextX + 20; // Approx connector center
+          if (Math.abs(player.position.x - endX) < 5 && !exitSequenceActive.current) {
+            console.log('Entering Connector...');
+            exitSequenceActive.current = true;
+          }
         }
       }
 
@@ -457,13 +473,13 @@ export function GameWorld({
           obstacleType: Math.random() > 0.5 ? 'low' : 'high',
         });
       } else if (rand > 0.35) {
-          // Rare spawn for Data Shard (B-Story)
-          const sx = x + 5 + Math.random() * (length - 10);
-          world.add({
-              isCollectible: true,
-              position: new THREE.Vector3(sx, y + 2, 0),
-              modelColor: 0x00ff00,
-          });
+        // Rare spawn for Data Shard (B-Story)
+        const sx = x + 5 + Math.random() * (length - 10);
+        world.add({
+          isCollectible: true,
+          position: new THREE.Vector3(sx, y + 2, 0),
+          modelColor: 0x00ff00,
+        });
       }
     }
 
@@ -482,19 +498,14 @@ export function GameWorld({
         onScoreUpdate={onScoreUpdate}
         onCameraShake={onCameraShake}
         onCombatText={(msg, color) => {
-            if (msg === 'DATA ACQUIRED') {
-                const logIndex = collectedLogs.current % B_STORY_LOGS.length;
-                // UI Update
-                showDialogue('SYSTEM', B_STORY_LOGS[logIndex]);
-                addItem('data_shard', 'Data Shard');
-
-                // Legacy support if needed
-                onDialogue?.('SYSTEM', B_STORY_LOGS[logIndex]);
-                collectedLogs.current++;
-            } else if (msg === 'DESTROYED!' || msg === 'KO!') {
-                addXp(100);
-            }
-            onCombatText?.(msg, color);
+          if (msg === 'DATA ACQUIRED') {
+             // Just grant item/XP. Dialogue is handled by HUD observing state if we had a proper "Item Acquired" dialog
+             // For now, let's trigger a generic dialogue or just leave it to CombatText
+             addItem('data_shard', 'Data Shard');
+          } else if (msg === 'DESTROYED!' || msg === 'KO!') {
+            addXp(100);
+          }
+          onCombatText?.(msg, color);
         }}
       />
 
@@ -511,9 +522,9 @@ export function GameWorld({
       </ECS.Entities>
 
       <ECS.Entities in={world.with('isCollectible', 'position')}>
-          {(entity) => (
-              <DataShard position={[entity.position.x, entity.position.y, entity.position.z]} />
-          )}
+        {(entity) => (
+          <DataShard position={[entity.position.x, entity.position.y, entity.position.z]} />
+        )}
       </ECS.Entities>
 
       {/* We need to render the connector if we spawned one.
@@ -521,7 +532,10 @@ export function GameWorld({
           Let's just conditionally render one at the end if bossSpawned for Sector 7.
       */}
       {bossSpawned.current && stageSystem.currentStageId === 'sector7_streets' && (
-          <Connector position={[genStateRef.current.nextX + 20, genStateRef.current.nextY, 0]} type="bridge" />
+        <Connector
+          position={[genStateRef.current.nextX + 20, genStateRef.current.nextY, 0]}
+          type="bridge"
+        />
       )}
 
       <ECS.Entities in={world.with('isAlly', 'position', 'characterState')}>
@@ -570,9 +584,13 @@ export function GameWorld({
         <shadowMaterial opacity={0.3} />
       </mesh>
 
-      {stageSystem.currentStageId === 'alien_ship' ? <SpaceshipBackground /> :
-       stageSystem.currentStageId === 'mall_drop' ? <MallBackground /> :
-       <ParallaxBackground />}
+      {stageSystem.currentStageId === 'alien_ship' ? (
+        <SpaceshipBackground />
+      ) : stageSystem.currentStageId === 'mall_drop' ? (
+        <MallBackground />
+      ) : (
+        <ParallaxBackground />
+      )}
     </>
   );
 }

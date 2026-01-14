@@ -57,37 +57,47 @@ export const useGameStore = create<GameStore>((set) => ({
 
   setHp: (hp) => set({ hp }),
 
-  addXp: (amount) => set((state) => {
+  addXp: (amount) =>
+    set((state) => {
       const newXp = state.xp + amount;
       // Simple level up logic
       const nextLevelXp = state.level * 1000;
       if (newXp >= nextLevelXp) {
-          return { xp: newXp - nextLevelXp, level: state.level + 1, maxHp: state.maxHp + 20, hp: state.maxHp + 20 };
+        return {
+          xp: newXp - nextLevelXp,
+          level: state.level + 1,
+          maxHp: state.maxHp + 20,
+          hp: state.maxHp + 20,
+        };
       }
       return { xp: newXp };
-  }),
+    }),
 
-  startQuest: (quest) => set({ activeQuest: quest, questLog: [...useGameStore.getState().questLog, quest] }),
+  startQuest: (quest) =>
+    set({ activeQuest: quest, questLog: [...useGameStore.getState().questLog, quest] }),
 
-  completeQuest: (questId) => set((state) => ({
+  completeQuest: (questId) =>
+    set((state) => ({
       activeQuest: state.activeQuest?.id === questId ? null : state.activeQuest,
-      questLog: state.questLog.map(q => q.id === questId ? { ...q, completed: true } : q)
-  })),
+      questLog: state.questLog.map((q) => (q.id === questId ? { ...q, completed: true } : q)),
+    })),
 
-  showDialogue: (speaker, text) => set((state) => ({
+  showDialogue: (speaker, text) =>
+    set((state) => ({
       currentDialogue: { speaker, text },
-      dialogueHistory: [...state.dialogueHistory, { speaker, text }]
-  })),
+      dialogueHistory: [...state.dialogueHistory, { speaker, text }],
+    })),
 
   hideDialogue: () => set({ currentDialogue: null }),
 
-  addItem: (id, name) => set((state) => {
-      const existing = state.inventory.find(i => i.id === id);
+  addItem: (id, name) =>
+    set((state) => {
+      const existing = state.inventory.find((i) => i.id === id);
       if (existing) {
-          return {
-              inventory: state.inventory.map(i => i.id === id ? { ...i, count: i.count + 1 } : i)
-          };
+        return {
+          inventory: state.inventory.map((i) => (i.id === id ? { ...i, count: i.count + 1 } : i)),
+        };
       }
       return { inventory: [...state.inventory, { id, name, count: 1 }] };
-  }),
+    }),
 }));

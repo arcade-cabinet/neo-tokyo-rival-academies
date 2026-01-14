@@ -111,9 +111,9 @@ export const NeoTokyoGame: FC = () => {
 
   const dialogueTimeoutRef = useRef<number>(0);
   const handleDialogue = useCallback((speaker: string, text: string) => {
-      setDialogue({ speaker, text });
-      if (dialogueTimeoutRef.current) clearTimeout(dialogueTimeoutRef.current);
-      dialogueTimeoutRef.current = window.setTimeout(() => setDialogue(null), 4000);
+    setDialogue({ speaker, text });
+    if (dialogueTimeoutRef.current) clearTimeout(dialogueTimeoutRef.current);
+    dialogueTimeoutRef.current = window.setTimeout(() => setDialogue(null), 4000);
   }, []);
 
   const shakeTimeoutRef = useRef<number>(0);
@@ -240,10 +240,7 @@ export const NeoTokyoGame: FC = () => {
 
       {viewState === 'game' && (
         <>
-          <JRPGHUD
-            inputState={inputState}
-            onInput={handleInput}
-          />
+          <JRPGHUD inputState={inputState} onInput={handleInput} />
           {combatText && (
             <CombatText
               message={combatText.message}

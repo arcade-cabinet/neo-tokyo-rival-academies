@@ -2,7 +2,15 @@ import { useFrame, useThree } from '@react-three/fiber';
 import { useMemo, useRef } from 'react';
 import * as THREE from 'three';
 
-function StarLayer({ count, depth, speedFactor }: { count: number; depth: number; speedFactor: number }) {
+function StarLayer({
+  count,
+  depth,
+  speedFactor,
+}: {
+  count: number;
+  depth: number;
+  speedFactor: number;
+}) {
   const { camera } = useThree();
   const mesh = useRef<THREE.InstancedMesh>(null);
   const dummy = useMemo(() => new THREE.Object3D(), []);

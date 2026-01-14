@@ -33,6 +33,36 @@ export type ECSEntity = {
 
   // Visuals
   modelColor?: number;
+
+  // RPG Stats
+  stats?: {
+    structure: number; // Max Health
+    ignition: number; // Attack
+    logic: number; // Tech/Ranged
+    flow: number; // Speed/Evasion
+  };
+
+  // Progression
+  level?: {
+    current: number;
+    xp: number;
+    nextLevelXp: number;
+    statPoints: number;
+  };
+
+  // Equipment
+  equipment?: {
+    weapon: string; // Item ID
+    armor: string; // Item ID
+    accessory: string; // Item ID
+  };
+
+  // Dialogue
+  dialogueState?: {
+    isInteracting: boolean;
+    currentDialogueId: string;
+    nodeId: string;
+  };
 };
 
 // Create the ECS world
