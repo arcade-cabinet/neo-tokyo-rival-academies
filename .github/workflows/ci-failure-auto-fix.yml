@@ -37,10 +37,15 @@ jobs:
       - name: Create fix branch
         id: branch
         env:
+      - name: Create fix branch
+        id: branch
+        env:
           HEAD_BRANCH: ${{ github.event.workflow_run.head_branch }}
-          GITHUB_RUN_ID: ${{ github.run_id }}
+          RUN_ID: ${{ github.run_id }}
         run: |
-          BRANCH_NAME="claude-auto-fix-ci-$HEAD_BRANCH-$GITHUB_RUN_ID"
+          # Sanitize branch name to alphanumeric, dash, underscore only
+          SAFE_BRANCH=$(echo "$HEAD_BRANCH" | tr -cd '[:alnum:]-_')
+          BRANCH_NAME="claude-auto-fix-ci-${SAFE_BRANCH}-${RUN_ID}"
           git checkout -b "$BRANCH_NAME"
           echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
 
