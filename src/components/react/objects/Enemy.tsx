@@ -10,7 +10,7 @@ interface EnemyProps {
 
 export const Enemy: FC<EnemyProps> = ({ position, enemyType, color = 0x00ffff }) => {
   // Enemy uses Character component
-  const state: CharacterState = enemyType === 'stand' ? 'stand' : 'block';
+  const state: CharacterState = enemyType;
 
   return (
     <group position={position} rotation={[0, -Math.PI / 2, 0]}>
