@@ -1,0 +1,85 @@
+name: Jules Batch Executor
+
+on:
+  schedule:
+    - cron: '0 2 * * *' # Daily at 2 AM
+  workflow_dispatch:
+
+jobs:
+  batch-fix:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Prepare Batch Prompt
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          pnpm --filter @repo/scripts run triage PREPARE_BATCH
+          # The script runs in packages/scripts, so prompt.txt is likely there
+          # We need to move it to root for the next steps or read from there
+          if [ -f packages/scripts/prompt.txt ]; then
+             mv packages/scripts/prompt.txt .
+          fi
+
+      - name: Check Work Status
+        id: check_work
+        run: |
+          if [ ! -f prompt.txt ]; then
+             echo "prompt.txt not found!"
+             exit 1
+          fi
+          if grep -q "NO_WORK" prompt.txt; then
+            echo "has_work=false" >> $GITHUB_OUTPUT
+            echo "No work to do."
+          else
+            echo "has_work=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Determine Starting Branch
+        if: steps.check_work.outputs.has_work == 'true'
+        id: set_branch
+        run: |
+          # Check if jules-automation branch exists remotely
+          if git ls-remote --exit-code --heads origin jules-automation; then
+            echo "branch=jules-automation" >> $GITHUB_OUTPUT
+          else
+            echo "branch=main" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Read Prompt File
+        if: steps.check_work.outputs.has_work == 'true'
+        id: read_prompt
+        run: |
+          echo "PROMPT_CONTENT<<EOF" >> $GITHUB_ENV
+          cat prompt.txt >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      - name: Invoke Jules
+        if: steps.check_work.outputs.has_work == 'true'
+        uses: google-labs-code/jules-action@main
+        with:
+          prompt: ${{ env.PROMPT_CONTENT }}
+          jules_api_key: ${{ secrets.GOOGLE_JULES_API_KEY }}
+          starting_branch: ${{ steps.set_branch.outputs.branch }}

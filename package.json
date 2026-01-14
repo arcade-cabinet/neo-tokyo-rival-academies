@@ -1,54 +1,18 @@
 {
-  "name": "neo-tokyo-rival-academies",
-  "version": "0.1.0",
-  "description": "A 3D platformer game set in Neo-Tokyo featuring rival academies",
-  "type": "module",
-  "scripts": {
-    "dev": "astro dev",
-    "start": "astro dev",
-    "build": "astro check && astro build",
-    "preview": "astro preview",
-    "astro": "astro",
-    "format": "biome format --write .",
-    "lint": "biome lint .",
-    "lint:fix": "biome lint --write .",
-    "check": "biome check .",
-    "check:fix": "biome check --write .",
-    "type-check": "astro check"
-  },
-  "dependencies": {
-    "@astrojs/react": "^4.4.2",
-    "@capacitor/android": "^8.0.1",
-    "@capacitor/cli": "^8.0.1",
-    "@capacitor/core": "^8.0.1",
-    "@capacitor/haptics": "^8.0.0",
-    "@capacitor/motion": "^8.0.0",
-    "@capacitor/screen-orientation": "^8.0.0",
-    "@react-three/drei": "^10.7.7",
-    "@react-three/fiber": "^9.5.0",
-    "@react-three/postprocessing": "^3.0.4",
-    "@types/react": "^19.2.8",
-    "@types/react-dom": "^19.2.3",
-    "astro": "^5.16.9",
-    "miniplex": "^2.0.0",
-    "miniplex-react": "^2.0.1",
-    "react": "^19.2.3",
-    "react-dom": "^19.2.3",
-    "three": "^0.182.0",
-    "yuka": "^0.7.8",
-    "zustand": "^5.0.10"
-  },
-  "devDependencies": {
-    "@astrojs/check": "^0.9.6",
-    "@biomejs/biome": "^2.3.11",
-    "@google/genai": "^1.35.0",
-    "@types/three": "^0.182.0",
-    "@types/yuka": "^0.7.4",
-    "typescript": "^5.9.3"
-  },
+  "name": "neo-tokyo-rival-academies-root",
+  "private": true,
+  "packageManager": "pnpm@10.28.0",
   "engines": {
     "node": ">=22.22.0",
     "pnpm": ">=10.0.0"
   },
-  "packageManager": "pnpm@10.28.0"
+  "scripts": {
+    "build": "pnpm -r build",
+    "check": "pnpm -r check",
+    "format": "pnpm -r format"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.3.11",
+    "typescript": "^5.9.3"
+  }
 }
