@@ -187,7 +187,7 @@ export function Character({
           {/* Engine block detail */}
           <mesh position={[0, 1.2, 0.45]}>
             <boxGeometry args={[0.6, 0.4, 0.2]} />
-            <meshToonMaterial color="#gold" />
+            <meshToonMaterial color="#ffd700" />
           </mesh>
         </group>
       )}
