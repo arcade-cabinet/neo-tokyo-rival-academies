@@ -10,7 +10,7 @@ interface HUDProps {
 }
 
 export const JRPGHUD: FC<HUDProps> = ({ inputState, onInput, playerPos }) => {
-  const { hp, maxHp, xp, level, currentDialogue, activeQuest, questLog } = useGameStore();
+  const { hp, maxHp, xp, level, currentDialogue, activeQuest } = useGameStore();
 
   const handleTouch = (key: keyof InputState, pressed: boolean) => (e: any) => {
     e.preventDefault();
