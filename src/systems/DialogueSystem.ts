@@ -68,7 +68,7 @@ export const getCurrentDialogueNode = (entityId: string) => {
     const dialogueSequence = storyData.dialogues[entity.dialogueState.currentDialogueId];
     if (!dialogueSequence) return null;
 
-    return dialogueSequence.find((n) => n.id === entity.dialogueState!.nodeId) || null;
+    return dialogueSequence.find((n) => n.id === entity.dialogueState?.nodeId) ?? null;
   }
   return null;
 };
