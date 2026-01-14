@@ -1,12 +1,13 @@
 import { STAGES, type StageConfig } from '@/content/stages';
 
-type StageState = 'loading' | 'playing' | 'cutscene' | 'complete';
+type StageState = 'loading' | 'playing' | 'cutscene' | 'complete' | 'event';
 
 export class StageSystem {
   currentStageId: string;
   currentStage: StageConfig;
   state: StageState = 'loading';
   progress = 0;
+  activeEvent: string | null = null;
 
   constructor(initialStageId = 'intro_cutscene') {
     this.currentStageId = initialStageId;
@@ -25,10 +26,13 @@ export class StageSystem {
     this.currentStage = stage;
     this.progress = 0;
     this.state = stage.cutsceneId ? 'cutscene' : 'playing';
+    this.activeEvent = null;
+  }
 
-    // Clear world entities except player?
-    // In a real ECS we might recycle, but for now we rely on GameWorld useEffect cleanup or manual clear
-    // We will let GameWorld handle the heavy lifting of entity spawning based on this system's state
+  triggerEvent(eventId: string) {
+      console.log(`Triggering Event: ${eventId}`);
+      this.state = 'event';
+      this.activeEvent = eventId;
   }
 
   completeStage() {

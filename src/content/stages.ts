@@ -29,6 +29,24 @@ export const STAGES: Record<string, StageConfig> = {
     platforms: 'procedural',
     nextStageId: 'boss_ambush',
   },
+  alien_ship: {
+    id: 'alien_ship',
+    name: 'Alien Mothership',
+    type: 'boss',
+    backgroundTheme: 'dark',
+    length: 100,
+    platforms: 'fixed_sector7',
+    nextStageId: 'mall_drop',
+  },
+  mall_drop: {
+     id: 'mall_drop',
+     name: 'Neo-Tokyo Mall',
+     type: 'platformer',
+     backgroundTheme: 'neon',
+     length: 300,
+     platforms: 'procedural',
+     nextStageId: 'sector7_streets'
+  },
   boss_ambush: {
     id: 'boss_ambush',
     name: 'The Ambush',

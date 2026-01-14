@@ -1,96 +1,160 @@
 import { EntityManager, GameEntity, State, StateMachine } from 'yuka';
 import { ECS, world } from '@/state/ecs';
 
-// --- Yuka States ---
+// --- COMMON STATES ---
 
-class IdleState extends State<YukaEnemy> {
-  enter(_enemy: YukaEnemy) {
-    // console.log('Enemy Idle');
+class IdleState extends State<YukaAgent> {
+  enter(_agent: YukaAgent) {
+    // console.log('Idle');
   }
-  execute(enemy: YukaEnemy) {
-    const player = ECS.world.with('isPlayer', 'position').first;
-    if (player?.position) {
-      const dist = enemy.position.distanceTo(player.position as unknown as import('yuka').Vector3);
-      if (dist < 30) {
-        enemy.fsm.changeTo('CHASE');
+  execute(agent: YukaAgent) {
+    if (agent.faction === 'ENEMY') {
+      // Enemy Logic: Look for Player
+      const player = ECS.world.with('isPlayer', 'position').first;
+      if (player?.position) {
+        const dist = agent.position.distanceTo(player.position as unknown as import('yuka').Vector3);
+        if (dist < 30) {
+          agent.fsm.changeTo('CHASE');
+        }
       }
+    } else if (agent.faction === 'ALLY') {
+      // Ally Logic: Follow Player or Attack Enemy
+      // Prioritize attacking if enemy near
+      const enemy = ECS.world.with('isEnemy', 'position').first;
+      if (enemy?.position) {
+         const dist = agent.position.distanceTo(enemy.position as unknown as import('yuka').Vector3);
+         if (dist < 15) {
+             agent.fsm.changeTo('COOP_ATTACK');
+             return;
+         }
+      }
+      // Otherwise follow player
+      agent.fsm.changeTo('COOP_FOLLOW');
     }
   }
 }
 
-class ChaseState extends State<YukaEnemy> {
-  enter(_enemy: YukaEnemy) {
-    // console.log('Enemy Chase');
-  }
-  execute(enemy: YukaEnemy) {
+// --- ENEMY STATES ---
+
+class ChaseState extends State<YukaAgent> {
+  execute(agent: YukaAgent) {
     const player = ECS.world.with('isPlayer', 'position').first;
     if (player?.position) {
-      const dx = player.position.x - enemy.position.x;
+      const dx = player.position.x - agent.position.x;
       if (Math.abs(dx) > 2) {
-        enemy.velocity.x = Math.sign(dx) * 8; // Faster chase
+        agent.velocity.x = Math.sign(dx) * 8;
       } else {
-        enemy.fsm.changeTo('ATTACK');
+        agent.fsm.changeTo('ATTACK');
       }
     }
   }
 }
 
-class AttackState extends State<YukaEnemy> {
-  enter(enemy: YukaEnemy) {
-    // console.log('Enemy Attack');
-    const ecsEnt = world.with('id').where((e) => e.id === enemy.ecsId).first;
+class AttackState extends State<YukaAgent> {
+  enter(agent: YukaAgent) {
+    const ecsEnt = world.with('id').where((e) => e.id === agent.ecsId).first;
     if (ecsEnt) ecsEnt.characterState = 'block'; // Attack anim
   }
-  execute(enemy: YukaEnemy) {
-    // Simple cooldown
+  execute(agent: YukaAgent) {
     if (Math.random() < 0.02) {
-      enemy.fsm.changeTo('IDLE');
+      agent.fsm.changeTo('IDLE');
     }
   }
+}
+
+// --- ALLY STATES ---
+
+class CoopFollowState extends State<YukaAgent> {
+    execute(agent: YukaAgent) {
+        const player = ECS.world.with('isPlayer', 'position').first;
+        if (player?.position) {
+            // Stay slightly behind or ahead
+            const targetX = player.position.x - 3;
+            const dx = targetX - agent.position.x;
+            if (Math.abs(dx) > 1) {
+                agent.velocity.x = dx * 2; // Catch up fast
+            } else {
+                agent.velocity.x = 0;
+            }
+
+            // Jump if player jumps?
+            // Simplified: If player is way above, teleport or super jump.
+            // For now, let physics handle Y, just move X.
+        }
+
+        // Check for enemies to engage
+        const enemy = ECS.world.with('isEnemy', 'position').first;
+        if (enemy?.position) {
+             const dist = agent.position.distanceTo(enemy.position as unknown as import('yuka').Vector3);
+             if (dist < 10) {
+                 agent.fsm.changeTo('COOP_ATTACK');
+             }
+        }
+    }
+}
+
+class CoopAttackState extends State<YukaAgent> {
+    enter(agent: YukaAgent) {
+        const ecsEnt = world.with('id').where((e) => e.id === agent.ecsId).first;
+        if (ecsEnt) ecsEnt.characterState = 'attack';
+    }
+    execute(agent: YukaAgent) {
+        // Find nearest enemy
+        const enemy = ECS.world.with('isEnemy', 'position').first;
+        if (enemy?.position) {
+            const dx = enemy.position.x - agent.position.x;
+             if (Math.abs(dx) > 2) {
+                agent.velocity.x = Math.sign(dx) * 10; // Rush them
+             } else {
+                 // Attacking
+             }
+
+             // If enemy dead (no enemy found next frame) or far away, return to follow
+             const dist = agent.position.distanceTo(enemy.position as unknown as import('yuka').Vector3);
+             if (dist > 20) {
+                 agent.fsm.changeTo('COOP_FOLLOW');
+             }
+        } else {
+            agent.fsm.changeTo('COOP_FOLLOW');
+        }
+    }
 }
 
 // --- BOSS STATES ---
 
-class BossHoverState extends State<YukaEnemy> {
-  enter(enemy: YukaEnemy) {
-    enemy.velocity.y = 0;
+class BossHoverState extends State<YukaAgent> {
+  enter(agent: YukaAgent) {
+    agent.velocity.y = 0;
   }
-  execute(enemy: YukaEnemy) {
+  execute(agent: YukaAgent) {
     const player = ECS.world.with('isPlayer', 'position').first;
     if (player?.position) {
-      // Hover ahead of player
       const targetX = player.position.x + 10;
-      const dx = targetX - enemy.position.x;
-      enemy.velocity.x = dx * 1.0;
+      const dx = targetX - agent.position.x;
+      agent.velocity.x = dx * 1.0;
 
-      // Hover Height (Sine wave around height 6)
       const targetY = 6 + Math.sin(performance.now() * 0.003) * 2;
-      const dy = targetY - enemy.position.y;
-      enemy.velocity.y = dy * 2.0;
+      const dy = targetY - agent.position.y;
+      agent.velocity.y = dy * 2.0;
     }
 
     if (Math.random() < 0.005) {
-      enemy.fsm.changeTo('BOSS_SLAM');
+      agent.fsm.changeTo('BOSS_SLAM');
     }
   }
 }
 
-class BossSlamState extends State<YukaEnemy> {
-  enter(enemy: YukaEnemy) {
-    enemy.velocity.x = 0;
-    enemy.velocity.y = -25; // Fast Crash down
+class BossSlamState extends State<YukaAgent> {
+  enter(agent: YukaAgent) {
+    agent.velocity.x = 0;
+    agent.velocity.y = -25;
   }
-  execute(enemy: YukaEnemy) {
-    // Detect ground hit (approximate)
-    if (enemy.position.y <= 0.5) {
-      // Impact logic could go here (shake, particles)
-      enemy.velocity.y = 0;
-      enemy.position.y = 0.5;
-
-      // Wait a bit or immediately return?
-      // For now, bounce back up
+  execute(agent: YukaAgent) {
+    if (agent.position.y <= 0.5) {
+      agent.velocity.y = 0;
+      agent.position.y = 0.5;
       if (Math.random() < 0.1) {
-          enemy.fsm.changeTo('BOSS_HOVER');
+          agent.fsm.changeTo('BOSS_HOVER');
       }
     }
   }
@@ -98,25 +162,29 @@ class BossSlamState extends State<YukaEnemy> {
 
 // --- Yuka Entity Wrapper ---
 
-export class YukaEnemy extends GameEntity {
+export class YukaAgent extends GameEntity {
   ecsId: string;
-  fsm: StateMachine<YukaEnemy>;
-  isBoss: boolean;
+  fsm: StateMachine<YukaAgent>;
+  faction: 'ENEMY' | 'ALLY' | 'BOSS';
 
-  // Type assertions for Yuka properties
   declare position: import('yuka').Vector3;
   declare velocity: import('yuka').Vector3;
 
-  constructor(ecsId: string, isBoss = false) {
+  constructor(ecsId: string, faction: 'ENEMY' | 'ALLY' | 'BOSS') {
     super();
     this.ecsId = ecsId;
-    this.isBoss = isBoss;
+    this.faction = faction;
     this.fsm = new StateMachine(this);
 
-    if (isBoss) {
+    if (faction === 'BOSS') {
       this.fsm.add('BOSS_HOVER', new BossHoverState());
       this.fsm.add('BOSS_SLAM', new BossSlamState());
       this.fsm.changeTo('BOSS_HOVER');
+    } else if (faction === 'ALLY') {
+        this.fsm.add('IDLE', new IdleState()); // Fallback
+        this.fsm.add('COOP_FOLLOW', new CoopFollowState());
+        this.fsm.add('COOP_ATTACK', new CoopAttackState());
+        this.fsm.changeTo('COOP_FOLLOW');
     } else {
       this.fsm.add('IDLE', new IdleState());
       this.fsm.add('CHASE', new ChaseState());
@@ -136,7 +204,7 @@ export class YukaEnemy extends GameEntity {
 
 class AISystem {
   entityManager: EntityManager;
-  entityMap: Map<string, YukaEnemy>;
+  entityMap: Map<string, YukaAgent>;
   lastTime: number;
 
   constructor() {
@@ -150,48 +218,84 @@ class AISystem {
     const delta = (time - this.lastTime) / 1000;
     this.lastTime = time;
 
-    // 1. Sync ECS Enemies -> Yuka
+    // 1. Sync ECS Enemies/Allies -> Yuka
+    // We need to query both enemies and allies.
+    // Let's assume we add 'isAlly' to ECS for the Rival.
+    // Or we just query 'characterState' and infer?
+    // Better to have a unified query or iterate multiple.
+
+    // Query Enemies (and Bosses tagged as isEnemy)
     const enemies = ECS.world.with('isEnemy', 'position', 'velocity', 'id', 'modelColor');
+    for (const e of enemies) {
+        this.syncEntity(e, 'ENEMY');
+    }
 
-    for (const ecsEnemy of enemies) {
-      if (!ecsEnemy.id) continue;
-
-      let yukaEnemy = this.entityMap.get(ecsEnemy.id);
-      if (!yukaEnemy) {
-        // Check if boss based on color or some tag?
-        // Ideally we add 'isBoss' tag to ECS.
-        // For now, hack: Yakuza/Biker are normal.
-        // If we spawn a Boss, we need a flag.
-        // Let's assume normal for now, will add Boss tag later.
-        const isBoss = ecsEnemy.modelColor === 0xffffff; // White/Silver = Vera?
-        yukaEnemy = new YukaEnemy(ecsEnemy.id, isBoss);
-        if (ecsEnemy.position)
-          yukaEnemy.position.copy(ecsEnemy.position as unknown as import('yuka').Vector3);
-        this.entityManager.add(yukaEnemy);
-        this.entityMap.set(ecsEnemy.id, yukaEnemy);
-      }
-
-      // Update Yuka position from ECS (if physics moved it)
-      if (ecsEnemy.position) {
-        yukaEnemy.position.x = ecsEnemy.position.x;
-        yukaEnemy.position.y = ecsEnemy.position.y;
-        yukaEnemy.position.z = ecsEnemy.position.z;
-      }
+    // Query Allies (Need to add isAlly component or similar tag to ECS defs,
+    // for now we can infer from 'faction' string if present, but simpler to use isAlly)
+    // Let's assume we use 'isAlly' tag.
+    const allies = ECS.world.with('isAlly', 'position', 'velocity', 'id');
+    for (const a of allies) {
+        this.syncEntity(a, 'ALLY');
     }
 
     // 2. Update Yuka Logic
     this.entityManager.update(delta);
 
     // 3. Write Yuka Velocity -> ECS
-    for (const ecsEnemy of enemies) {
-      if (!ecsEnemy.id) continue;
-      const yukaEnemy = this.entityMap.get(ecsEnemy.id);
-      if (yukaEnemy && ecsEnemy.velocity) {
-        ecsEnemy.velocity.x = yukaEnemy.velocity.x;
-        if (yukaEnemy.isBoss) ecsEnemy.velocity.y = yukaEnemy.velocity.y; // Boss flies
-        ecsEnemy.velocity.z = yukaEnemy.velocity.z;
+    this.writeBackVelocity(enemies);
+    this.writeBackVelocity(allies);
+  }
+
+  syncEntity(ecsEntity: any, defaultFaction: 'ENEMY' | 'ALLY') {
+      if (!ecsEntity.id) return;
+
+      let agent = this.entityMap.get(ecsEntity.id);
+      if (!agent) {
+          let faction = defaultFaction;
+          // Check for explicit boss tag or fallback legacy color check
+          if (ecsEntity.isBoss || (defaultFaction === 'ENEMY' && ecsEntity.modelColor === 0xffffff)) {
+              faction = 'BOSS';
+          }
+
+          agent = new YukaAgent(ecsEntity.id, faction);
+          if (ecsEntity.position)
+            agent.position.copy(ecsEntity.position as unknown as import('yuka').Vector3);
+
+          this.entityManager.add(agent);
+          this.entityMap.set(ecsEntity.id, agent);
       }
-    }
+
+      // Update Yuka position
+      if (ecsEntity.position) {
+          agent.position.x = ecsEntity.position.x;
+          agent.position.y = ecsEntity.position.y;
+          agent.position.z = ecsEntity.position.z;
+      }
+  }
+
+  writeBackVelocity(ecsEntities: any) {
+      for (const e of ecsEntities) {
+          if (!e.id) continue;
+          const agent = this.entityMap.get(e.id);
+          if (agent && e.velocity) {
+              e.velocity.x = agent.velocity.x;
+              // Boss/Flying check? For now trust Yuka velocity
+              // If agent has heavy gravity logic, we might override Y here.
+              // But we rely on PhysicsSystem for gravity usually.
+              // EXCEPT for BossHover/Slam which drives Y.
+              if (agent.faction === 'BOSS') {
+                 e.velocity.y = agent.velocity.y;
+              }
+              // Allies/Enemies: Yuka controls X, Physics controls Y (gravity).
+              // So we only write X for them?
+              // ChaseState only sets X.
+              // So safe to copy X.
+              if (agent.faction !== 'BOSS') {
+                   // Keep ECS Y velocity (gravity), only take X
+                   e.velocity.x = agent.velocity.x;
+              }
+          }
+      }
   }
 }
 

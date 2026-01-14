@@ -8,8 +8,11 @@ export type ECSEntity = {
   // Tags
   isPlayer?: boolean;
   isEnemy?: boolean;
+  isBoss?: boolean;
+  isAlly?: boolean;
   isPlatform?: boolean;
   isObstacle?: boolean;
+  isCollectible?: boolean;
 
   // Physics & Transform
   position?: THREE.Vector3;
