@@ -129,10 +129,12 @@ export function GameWorld({ gameState, inputState, onGameOver, onScoreUpdate, on
         const ex = x + 5 + Math.random() * (length - 10);
         // Randomize Yakuza (Black) vs Rival (Cyan) vs Biker (Red)
         const enemyTypeRand = Math.random();
-        let color = 0x00ffff; // Rival
-        if (enemyTypeRand > 0.7)
-          color = 0x111111; // Yakuza
-        else if (enemyTypeRand > 0.4) color = 0x880000; // Biker
+        const color =
+          enemyTypeRand > 0.7
+            ? 0x111111  // Yakuza
+            : enemyTypeRand > 0.4
+              ? 0x880000  // Biker
+              : 0x00ffff; // Rival
 
         world.add({
           isEnemy: true,
