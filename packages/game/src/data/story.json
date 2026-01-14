@@ -19,6 +19,168 @@
       { "id": "re1_1", "speaker": "Vera", "text": "You're lagging. Expected.", "next": "re1_2" },
       { "id": "re1_2", "speaker": "Kai", "text": "I'm just warming up!", "next": null }
     ],
+    "alien_abduction": [
+      {
+        "id": "alien_1",
+        "speaker": "Kai",
+        "text": "What the—?! Those tentacles are coming from ABOVE!",
+        "next": "alien_2"
+      },
+      {
+        "id": "alien_2",
+        "speaker": "Vera",
+        "text": "Impossible! My sensors didn't—ARGH!",
+        "next": "alien_3"
+      },
+      {
+        "id": "alien_3",
+        "speaker": "Kai",
+        "text": "VERA! Hold on! We're getting pulled into that ship!",
+        "next": "alien_4"
+      },
+      {
+        "id": "alien_4",
+        "speaker": "Vera",
+        "text": "Tactical analysis: We need to work together. Forget the rivalry—for now.",
+        "next": null
+      }
+    ],
+    "alien_ship_interior": [
+      {
+        "id": "ship_1",
+        "speaker": "Kai",
+        "text": "These corridors... they're organic. What ARE these things?",
+        "next": "ship_2"
+      },
+      {
+        "id": "ship_2",
+        "speaker": "Vera",
+        "text": "Bio-mechanical hybrids. Highly advanced. We're severely outmatched.",
+        "next": "ship_3"
+      },
+      {
+        "id": "ship_3",
+        "speaker": "Kai",
+        "text": "Then we fight smarter. You handle the tentacles on the left, I'll take the right.",
+        "next": "ship_4"
+      },
+      {
+        "id": "ship_4",
+        "speaker": "Vera",
+        "text": "...Acceptable strategy. Don't get yourself killed, Takeda.",
+        "next": null
+      }
+    ],
+    "alien_queen_battle": [
+      {
+        "id": "queen_1",
+        "speaker": "Kai",
+        "text": "THAT'S the boss?! It's the size of a building!",
+        "next": "queen_2"
+      },
+      {
+        "id": "queen_2",
+        "speaker": "Vera",
+        "text": "The Alien Queen. Focus on the tentacles first—they're her attack vectors.",
+        "next": "queen_3"
+      },
+      {
+        "id": "queen_3",
+        "speaker": "Kai",
+        "text": "You take high, I'll take low. Let's show her what Neo-Tokyo is made of!",
+        "next": "queen_4"
+      },
+      {
+        "id": "queen_4",
+        "speaker": "Vera",
+        "text": "Synchronizing attack patterns. Mark your targets, Takeda.",
+        "next": null
+      }
+    ],
+    "mall_drop_start": [
+      {
+        "id": "mall_1",
+        "speaker": "Kai",
+        "text": "We're falling! Grab onto something—WHOA!",
+        "next": "mall_2"
+      },
+      {
+        "id": "mall_2",
+        "speaker": "Vera",
+        "text": "*CRASH* My weapon! It's stuck on the roof!",
+        "next": "mall_3"
+      },
+      {
+        "id": "mall_3",
+        "speaker": "Kai",
+        "text": "Mine too. Great. Mall cops incoming and we're unarmed.",
+        "next": "mall_4"
+      },
+      {
+        "id": "mall_4",
+        "speaker": "Vera",
+        "text": "Improvise. Those scissors look sharp enough. Kill La Kill style?",
+        "next": "mall_5"
+      },
+      {
+        "id": "mall_5",
+        "speaker": "Kai",
+        "text": "Hell yeah. Let's cut through this mess!",
+        "next": null
+      }
+    ],
+    "mall_combat": [
+      {
+        "id": "mallc_1",
+        "speaker": "Vera",
+        "text": "The mall security system is activating. More cops inbound.",
+        "next": "mallc_2"
+      },
+      {
+        "id": "mallc_2",
+        "speaker": "Kai",
+        "text": "Good. I was getting bored. Watch this fountain move!",
+        "next": "mallc_3"
+      },
+      {
+        "id": "mallc_3",
+        "speaker": "Vera",
+        "text": "Environmental advantage noted. Using escalator as ramp.",
+        "next": "mallc_4"
+      },
+      {
+        "id": "mallc_4",
+        "speaker": "Kai",
+        "text": "Show-off. But effective. Let's clear this floor and find the exit.",
+        "next": null
+      }
+    ],
+    "mystery_hint": [
+      {
+        "id": "mystery_1",
+        "speaker": "Vera",
+        "text": "Kai... those weren't normal aliens. Look at this data shard I found.",
+        "next": "mystery_2"
+      },
+      {
+        "id": "mystery_2",
+        "speaker": "Kai",
+        "text": "What? They're... from INSIDE Neo-Tokyo? A lab experiment?",
+        "next": "mystery_3"
+      },
+      {
+        "id": "mystery_3",
+        "speaker": "Vera",
+        "text": "The Academy Directors knew. This whole Midnight Exam... it's a cover-up.",
+        "next": "mystery_4"
+      },
+      {
+        "id": "mystery_4",
+        "speaker": "Kai",
+        "text": "Then we need to dig deeper. But first—we finish this race.",
+        "next": null
+      }
+    ],
     "victory": [
       {
         "id": "vic_1",
@@ -29,22 +191,137 @@
       {
         "id": "vic_2",
         "speaker": "Vera",
-        "text": "Recalculating... next year, Takeda.",
+        "text": "Recalculating... next year, Takeda. But about those aliens...",
+        "next": "vic_3"
+      },
+      {
+        "id": "vic_3",
+        "speaker": "Kai",
+        "text": "Yeah. We'll figure it out. Together?",
+        "next": "vic_4"
+      },
+      {
+        "id": "vic_4",
+        "speaker": "Vera",
+        "text": "...Together. But I'm still beating you next time.",
         "next": null
       }
     ]
   },
   "items": {
-    "potion_s": { "name": "Coolant S", "description": "Restores 50 Structure." },
+    "potion_s": { "name": "Coolant S", "description": "Restores 50 Structure. Cool blue liquid." },
+    "potion_m": { "name": "Coolant M", "description": "Restores 100 Structure. Standard green coolant." },
+    "potion_l": { "name": "Coolant L", "description": "Restores 200 Structure. Rare red-grade coolant." },
     "weapon_1": {
       "name": "Redline Piston",
-      "description": "Kai's signature weapon. Smokes constantly."
+      "description": "Kai's signature weapon. Smokes constantly from overheating."
+    },
+    "weapon_2": {
+      "name": "Vector Blade",
+      "description": "Vera's precision weapon. Glows with calculated energy."
+    },
+    "weapon_3": {
+      "name": "Plasma Edge",
+      "description": "High-tech blade found in the alien ship. Deals bonus damage."
+    },
+    "weapon_mall": {
+      "name": "Giant Scissors",
+      "description": "Improvised mall weapon. Surprisingly effective. Kill La Kill tribute."
+    },
+    "armor_1": {
+      "name": "Racer Jacket",
+      "description": "Standard academy racing gear. Provides basic protection."
+    },
+    "armor_2": {
+      "name": "Reinforced Plating",
+      "description": "Salvaged from alien tech. Boosts Structure significantly."
+    },
+    "accessory_1": {
+      "name": "Lucky Charm",
+      "description": "Increases critical hit chance by 5%."
+    },
+    "accessory_2": {
+      "name": "Sync Booster",
+      "description": "When fighting alongside Vera, boosts all stats by 10%."
     }
   },
   "lore": {
     "shard_1": {
       "title": "The First Race",
-      "content": "Legend says the first Midnight Exam wasn't a race, but a riot."
+      "content": "Legend says the first Midnight Exam wasn't a race, but a riot. The academies fought for control of the Data Core, and only speed could claim victory."
+    },
+    "shard_2": {
+      "title": "Azure Academy",
+      "content": "Known for precision and calculation. Vera Volkov is their top pilot, nicknamed 'Vector' for her perfect trajectories."
+    },
+    "shard_3": {
+      "title": "Crimson Academy",
+      "content": "Thrives on passion and instinct. Kai Takeda embodies their 'Redline' philosophy—push until you break, then push harder."
+    },
+    "shard_4": {
+      "title": "The Alien Incursion",
+      "content": "Official records claim the aliens arrived three months ago. But this data shard suggests they've been here much longer... and were CREATED here."
+    },
+    "shard_5": {
+      "title": "The Mothership",
+      "content": "The massive ship hovering above Neo-Tokyo isn't alien at all. It's a bioweapon prototype from Project TITAN, gone rogue."
+    },
+    "shard_6": {
+      "title": "Director's Secret",
+      "content": "The Academy Directors aren't just race organizers—they're the ones who funded Project TITAN. The Midnight Exam is a distraction while they contain the outbreak."
+    },
+    "shard_7": {
+      "title": "Kai's Past",
+      "content": "Before joining Crimson Academy, Kai lost someone in a failed Midnight Exam. That's why he pushes so hard—he's running from the memory."
+    },
+    "shard_8": {
+      "title": "Vera's Origin",
+      "content": "Vera isn't fully human. She's a prototype AI-human hybrid, created by Azure Academy. Her calculations are perfect because she IS a computer."
+    }
+  },
+  "quests": {
+    "main_01": {
+      "id": "main_01",
+      "title": "Midnight Exam: Sector 7",
+      "description": "Race through Sector 7 and prove your academy's superiority.",
+      "objectives": ["Reach the first checkpoint", "Defeat Vera in the race"],
+      "rewards": { "xp": 500, "item": "potion_m" }
+    },
+    "main_02": {
+      "id": "main_02",
+      "title": "Alien Abduction",
+      "description": "Survive the alien ship and escape with Vera.",
+      "objectives": [
+        "Defeat the tentacle swarm",
+        "Reach the alien ship core",
+        "Defeat the Alien Queen"
+      ],
+      "rewards": { "xp": 1000, "item": "weapon_3" }
+    },
+    "main_03": {
+      "id": "main_03",
+      "title": "Mall Mayhem",
+      "description": "Fight through the mall security without your weapons.",
+      "objectives": [
+        "Find improvised weapons",
+        "Defeat 10 mall cops",
+        "Escape the mall"
+      ],
+      "rewards": { "xp": 750, "item": "accessory_2" }
+    },
+    "side_01": {
+      "id": "side_01",
+      "title": "Data Shard Collector",
+      "description": "Collect all 8 lore data shards hidden across Neo-Tokyo.",
+      "objectives": ["Find all 8 data shards"],
+      "rewards": { "xp": 2000, "item": "accessory_1" }
+    },
+    "side_02": {
+      "id": "side_02",
+      "title": "Perfect Sync",
+      "description": "Defeat 50 enemies while fighting alongside Vera.",
+      "objectives": ["Defeat 50 enemies with Vera present"],
+      "rewards": { "xp": 1500, "item": "armor_2" }
     }
   }
 }
