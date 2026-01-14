@@ -23,7 +23,7 @@ Entities will possess the following stats:
 - **Break System**: Enemies have a "Stability" gauge. Depleting it stuns them for a critical strike.
 
 ### 4. Narrative System
-- **Dialogue**: A visual-novel-style overlay for conversations between Kai and Vera (or allies).
+- **Dialogue**: A visual novel style overlay for conversations between Kai and Vera (or allies).
 - **Triggers**: Dialogue triggers on specific distance markers or boss encounters.
 - **Data Shards**: Collectibles that unlock lore entries in the "Database".
 
