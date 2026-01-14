@@ -6,14 +6,14 @@ A futuristic 3D Action JRPG set in the neon-lit streets of Neo-Tokyo, where riva
 
 Neo-Tokyo: Rival Academies combines high-speed runner mechanics with deep RPG progression.
 - **Action JRPG Combat**: Real-time combat driven by character stats (Structure, Ignition, Logic, Flow).
-- **Narrative Depth**: Visual novel style storytelling with rival factions.
+- **Narrative Depth**: Visual-novel-style storytelling with rival factions.
 - **Immersive 3D**: Powered by Three.js and React Three Fiber.
-- **Modern Tech**: Astro, Miniplex ECS, and TypeScript.
+- **Modern Tech**: Vite, Miniplex ECS, and TypeScript.
 
 ## 🚀 Tech Stack
 
-- **Framework**: [Astro](https://astro.build/) v4.x
-- **3D Engine**: [Three.js](https://threejs.org/) v0.170
+- **Framework**: [Vite](https://vite.dev/) v6.x
+- **3D Engine**: [Three.js](https://threejs.org/) v0.182
 - **React Integration**: [@astrojs/react](https://docs.astro.build/en/guides/integrations-guide/react/)
 - **3D React Components**: [React Three Fiber](https://docs.pmnd.rs/react-three-fiber/) & [Drei](https://github.com/pmndrs/drei)
 - **ECS**: [Miniplex](https://github.com/hmans/miniplex)

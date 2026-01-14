@@ -48,4 +48,16 @@ describe('DialogueSystem', () => {
     startDialogue('missing_entity', 'intro');
     advanceDialogue('missing_entity');
   });
+
+  it('should handle advanceDialogue when not interacting', () => {
+    const player = world.add({
+      id: 'player',
+      dialogueState: { isInteracting: false, currentDialogueId: '', nodeId: '' },
+    });
+
+    // Advancing when not interacting should be a no-op
+    advanceDialogue('player');
+    expect(player.dialogueState?.isInteracting).toBe(false);
+    expect(player.dialogueState?.currentDialogueId).toBe('');
+  });
 });
