@@ -28,12 +28,13 @@ function BuildingLayer({
         y: -20, // Base
         z: 0,
         scaleY: h,
+        // Pre-compute random width scaling
         scaleX: 3 + Math.random() * 2,
         scaleZ: 3 + Math.random() * 2,
         color: CITY_COLORS[Math.floor(Math.random() * CITY_COLORS.length)],
       });
     }
-    return arr.sort((a, b) => a.x - b.x); // Sort for easier wrapping logic?
+    return arr.sort((a, b) => a.x - b.x);
   }, [count, heightRange]);
 
   useFrame(() => {
@@ -43,14 +44,6 @@ function BuildingLayer({
     const camX = camera.position.x;
 
     buildings.forEach((b, i) => {
-      // Infinite wrapping
-      // Standard parallax: Object moves with camera but slower.
-      // Pos = Origin + Cam * (1-Speed)
-
-      // Let's stick to world-space placement.
-      // If speed = 0.5, it moves half as fast as camera.
-      // We need to reposition instances that fall out of view.
-
       const wrapRange = 100;
       let worldX = b.x + camX * (1 - speedFactor);
 
@@ -59,11 +52,10 @@ function BuildingLayer({
       while (worldX > camX + wrapRange) worldX -= wrapRange * 2;
 
       dummy.position.set(worldX, b.y + b.scaleY / 2, z);
+      // Use pre-computed scales to avoid jitter
       dummy.scale.set(b.scaleX, b.scaleY, b.scaleZ);
       dummy.updateMatrix();
-      mesh.current!.setMatrixAt(i, dummy.matrix);
-      // We can't easily change color per frame without attribute buffer magic,
-      // but we set it once usually. For now, ignore dynamic color updates.
+      mesh.current?.setMatrixAt(i, dummy.matrix);
     });
     mesh.current.instanceMatrix.needsUpdate = true;
   });
@@ -84,8 +76,9 @@ function NeonLights({ count, z, speedFactor }: { count: number; z: number; speed
     return new Array(count).fill(0).map(() => ({
       x: (Math.random() - 0.5) * 200,
       y: Math.random() * 40 - 10,
-      scaleY: 2 + Math.random() * 5,
       color: new THREE.Color().setHex(CITY_COLORS[Math.floor(Math.random() * CITY_COLORS.length)]),
+      // Pre-compute scale
+      scaleY: 2 + Math.random() * 5,
     }));
   }, [count]);
 
@@ -100,10 +93,11 @@ function NeonLights({ count, z, speedFactor }: { count: number; z: number; speed
       while (worldX > camX + wrapRange) worldX -= wrapRange * 2;
 
       dummy.position.set(worldX, l.y, z + 0.6); // Slightly in front of buildings
+      // Use pre-computed scale
       dummy.scale.set(0.5, l.scaleY, 0.1);
       dummy.updateMatrix();
-      mesh.current!.setMatrixAt(i, dummy.matrix);
-      mesh.current!.setColorAt(i, l.color);
+      mesh.current?.setMatrixAt(i, dummy.matrix);
+      mesh.current?.setColorAt(i, l.color);
     });
     mesh.current.instanceMatrix.needsUpdate = true;
     if (mesh.current.instanceColor) mesh.current.instanceColor.needsUpdate = true;

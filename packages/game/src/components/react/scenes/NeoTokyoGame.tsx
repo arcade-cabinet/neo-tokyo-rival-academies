@@ -240,7 +240,13 @@ export default function NeoTokyoGame() {
 
       {viewState === 'game' && (
         <>
-          <JRPGHUD inputState={inputState} onInput={handleInput} />
+          <JRPGHUD
+            onInput={handleInput}
+            // Pass simple 2D representation or null for now,
+            // ideally we'd query ECS for actual player pos in HUD or pass from GameWorld callback
+            // For MVP HUD, we just need to satisfy the prop interface.
+            playerPos={{ x: 0, y: 0 }}
+          />
           {combatText && (
             <CombatText
               message={combatText.message}

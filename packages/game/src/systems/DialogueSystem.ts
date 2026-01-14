@@ -1,5 +1,5 @@
-import storyDataRaw from '../data/story.json';
 import { world } from '../state/ecs';
+import storyDataRaw from '../data/story.json';
 
 interface DialogueNode {
   id: string;
@@ -24,13 +24,14 @@ export const startDialogue = (entityId: string, dialogueId: string) => {
 
   const dialogueSequence = storyData.dialogues[dialogueId];
 
-  if (entity && entity.dialogueState && dialogueSequence) {
+  // Optional chaining fix: Check if entity exists and dialogueState is present
+  if (entity?.dialogueState && dialogueSequence) {
     entity.dialogueState.isInteracting = true;
     entity.dialogueState.currentDialogueId = dialogueId;
     entity.dialogueState.nodeId = dialogueSequence[0].id;
-    console.log(`Dialogue started: ${dialogueId}`);
+    // console.debug(`Dialogue started: ${dialogueId}`);
   } else {
-    console.warn(`Could not start dialogue: ${dialogueId} for entity ${entityId}`);
+      console.warn(`Could not start dialogue: ${dialogueId} for entity ${entityId}`);
   }
 };
 
@@ -44,17 +45,18 @@ export const advanceDialogue = (entityId: string) => {
     const dialogueSequence = storyData.dialogues[entity.dialogueState.currentDialogueId];
     if (!dialogueSequence) return;
 
-    const currentNode = dialogueSequence.find((n) => n.id === entity.dialogueState!.nodeId);
+    // Optional chaining fix
+    const currentNode = dialogueSequence.find((n) => n.id === entity.dialogueState?.nodeId);
 
     if (currentNode && currentNode.next) {
       entity.dialogueState.nodeId = currentNode.next;
-      console.log(`Dialogue advanced to: ${currentNode.next}`);
+      // console.debug(`Dialogue advanced to: ${currentNode.next}`);
     } else {
       // End dialogue
       entity.dialogueState.isInteracting = false;
       entity.dialogueState.currentDialogueId = '';
       entity.dialogueState.nodeId = '';
-      console.log('Dialogue ended');
+      // console.debug('Dialogue ended');
     }
   }
 };
@@ -63,12 +65,13 @@ export const advanceDialogue = (entityId: string) => {
  * Gets the current dialogue node data.
  */
 export const getCurrentDialogueNode = (entityId: string) => {
-  const entity = world.with('dialogueState').where((e) => e.id === entityId).first;
-  if (entity && entity.dialogueState && entity.dialogueState.isInteracting) {
-    const dialogueSequence = storyData.dialogues[entity.dialogueState.currentDialogueId];
-    if (!dialogueSequence) return null;
+    const entity = world.with('dialogueState').where((e) => e.id === entityId).first;
+    if (entity && entity.dialogueState && entity.dialogueState.isInteracting) {
+        const dialogueSequence = storyData.dialogues[entity.dialogueState.currentDialogueId];
+        if (!dialogueSequence) return null;
 
-    return dialogueSequence.find((n) => n.id === entity.dialogueState!.nodeId) || null;
-  }
-  return null;
-};
+        // Optional chaining fix
+        return dialogueSequence.find((n) => n.id === entity.dialogueState?.nodeId) || null;
+    }
+    return null;
+}

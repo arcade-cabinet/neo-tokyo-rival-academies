@@ -5,9 +5,9 @@ import { Enemy } from '@components/react/objects/Enemy';
 import { Obstacle } from '@components/react/objects/Obstacle';
 import { Platform } from '@components/react/objects/Platform';
 import { useFrame, useThree } from '@react-three/fiber';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
-import { ECS, world } from '@/state/ecs';
+import { ECS, type ECSEntity, world } from '@/state/ecs';
 import { useGameStore } from '@/state/gameStore';
 import { aiSystem } from '@/systems/AISystem';
 import { CombatSystem } from '@/systems/CombatSystem';
@@ -28,7 +28,6 @@ interface GameWorldProps {
   onScoreUpdate: (score: number) => void;
   onCombatText?: (message: string, color: string) => void;
   onCameraShake?: () => void;
-  onDialogue?: (speaker: string, text: string) => void;
 }
 
 const pickEnemyColor = () => {
@@ -41,6 +40,16 @@ const pickEnemyColor = () => {
   return color;
 };
 
+// --- Combat Events ---
+type CombatEventType = 'damage' | 'heal' | 'xp' | 'item';
+interface CombatEvent {
+  type: CombatEventType;
+  value?: number;
+  message?: string;
+  color?: string;
+  item?: string;
+}
+
 export function GameWorld({
   gameState,
   inputState,
@@ -51,18 +60,16 @@ export function GameWorld({
 }: GameWorldProps) {
   const { camera } = useThree();
   const { addItem, addXp } = useGameStore();
-  // const collectedLogs = useRef(0); // Legacy B-Story logic removed in favor of DialogueSystem
   const exitSequenceActive = useRef(false);
   const initialized = useRef(false);
-  const bossSpawned = useRef(false);
+  const [bossSpawned, setBossSpawned] = useState(false);
   const hasAlienQueenSpawned = useRef(false);
 
   // Generation state
-  // We track the bounds of generated content to allow backtracking
   const genStateRef = useRef({
     nextX: -10,
     nextY: 0,
-    minX: -10, // Track backward generation limit if we wanted to go left
+    minX: -10,
   });
 
   // Init World
@@ -99,7 +106,7 @@ export function GameWorld({
       characterState: 'run',
       faction: 'Azure',
       modelColor: 0x00ffff,
-      health: 100, // Ally health
+      health: 100,
     });
 
     // Spawn Start Platform
@@ -126,50 +133,50 @@ export function GameWorld({
     };
   }, []);
 
-  // Main Loop for Camera & Procedural Gen
+  // Handle Combat Events
+  const handleCombatEvent = (event: CombatEvent) => {
+    if (event.type === 'item' && event.item) {
+      addItem(event.item, event.message || 'Item');
+    } else if (event.type === 'xp' && event.value) {
+      addXp(event.value);
+    }
+
+    // Always forward visual text
+    if (event.message && event.color) {
+      onCombatText?.(event.message, event.color);
+    }
+  };
+
+  // Main Loop
   useFrame((_state, delta) => {
     if (!gameState.active) return;
 
-    // AI Update
     aiSystem.update();
-
-    // Progression Update
     updateProgression();
 
-    // Camera follow player (Side View)
     const player = world.with('isPlayer', 'position', 'velocity', 'characterState').first;
     if (player) {
-      // Platformer Camera Logic (Damped Follow)
-      // Isometric/Diorama feel: Higher Y, angled down.
-
       const targetX = player.position.x;
-      const targetY = player.position.y + 8; // Higher up
-      const targetZ = 30; // Further back
+      const targetY = player.position.y + 8;
+      const targetZ = 30;
       const lookAtY = player.position.y + 2;
 
       // Exit Sequence Override
       if (exitSequenceActive.current) {
-        // Camera stays fixed or pans to watch player walk away
-        // Player walks into Z
         player.velocity.x = 0;
         player.velocity.y = 0;
-        player.position.z -= 5 * delta; // Walk into background
+        player.position.z -= 5 * delta;
         player.characterState = 'run';
 
         if (player.position.z < -20) {
-          // Complete Stage
           exitSequenceActive.current = false;
           stageSystem.completeStage();
-
-          // Reset Player Z for next stage
           player.position.z = 0;
         }
       } else {
-        // Normal Camera Follow
         camera.position.x = THREE.MathUtils.lerp(camera.position.x, targetX, 3 * delta);
         camera.position.y = THREE.MathUtils.lerp(camera.position.y, targetY, 3 * delta);
         camera.position.z = THREE.MathUtils.lerp(camera.position.z, targetZ, 3 * delta);
-
         camera.lookAt(camera.position.x, lookAtY, 0);
       }
 
@@ -177,11 +184,11 @@ export function GameWorld({
       onScoreUpdate(score);
       stageSystem.update(player.position.x);
 
-      // Trigger Abduction Event (Hardcoded for demo at X > 50) - Only in Sector 7
+      // Trigger Abduction Event
       if (
         stageSystem.currentStageId === 'sector7_streets' &&
         player.position.x > 50 &&
-        !bossSpawned.current &&
+        !bossSpawned &&
         stageSystem.activeEvent !== 'ABDUCTION'
       ) {
         stageSystem.triggerEvent('ABDUCTION');
@@ -190,29 +197,23 @@ export function GameWorld({
 
       // Handle Abduction Physics
       if (stageSystem.activeEvent === 'ABDUCTION') {
-        // Override Physics: Lift Player & Ally
         player.velocity.y = 10;
         player.velocity.x = 0;
 
-        // Lift Ally too
         const ally = world.with('isAlly', 'position', 'velocity').first;
         if (ally) {
           ally.velocity.y = 10;
           ally.velocity.x = 0;
         }
 
-        // Camera Look Up
         camera.position.y += 10 * delta;
         camera.lookAt(player.position.x, player.position.y + 10, 0);
 
-        // Transition to Space Stage if high enough
+        // Transition to Space Stage
         if (player.position.y > 50) {
           console.log('Welcome to Space!');
-          // We can add a dialogue trigger here for space entry if we had one in JSON
-          // startDialogue('player', 'space_entry');
           stageSystem.loadStage('alien_ship');
 
-          // Reset Player & Ally Position
           player.position.set(0, 5, 0);
           player.velocity.set(0, 0, 0);
 
@@ -222,7 +223,6 @@ export function GameWorld({
             ally.velocity.set(0, 0, 0);
           }
 
-          // Spawn Platform for Alien Ship
           world.add({
             isPlatform: true,
             position: new THREE.Vector3(0, 0, 0),
@@ -230,7 +230,6 @@ export function GameWorld({
             modelColor: 0x333333,
           });
 
-          // Spawn Alien Queen
           hasAlienQueenSpawned.current = true;
           world.add({
             id: 'alien-queen',
@@ -239,12 +238,12 @@ export function GameWorld({
             position: new THREE.Vector3(20, 10, -5),
             velocity: new THREE.Vector3(0, 0, 0),
             characterState: 'stand',
-            faction: 'Azure', // Or specific Alien faction? Yuka treats as Enemy
-            modelColor: 0x00ff00, // Green
+            faction: 'Azure',
+            modelColor: 0x00ff00,
             health: 500,
           });
 
-          // Spawn Tentacles
+          // Spawn Tentacles with HEALTH
           for (let i = 0; i < 4; i++) {
             world.add({
               id: `tentacle-${i}`,
@@ -254,36 +253,26 @@ export function GameWorld({
               characterState: 'attack',
               faction: 'Azure',
               modelColor: 0x00aa00,
-              health: 75,
-              stats: {
-                structure: 75,
-                ignition: 8,
-                logic: 5,
-                flow: 10,
-              },
+              health: 50, // Added Health
             });
           }
 
-          // Reset Gen State
-          genStateRef.current.nextX = 100; // Far away
+          genStateRef.current.nextX = 100;
         }
-        return; // Skip normal platform generation/physics
+        return;
       }
 
       // Check for Alien Queen Death -> Mall Drop
       if (stageSystem.currentStageId === 'alien_ship' && hasAlienQueenSpawned.current) {
-        let bossCount = 0;
-        for (const _b of world.with('isBoss')) {
-          bossCount++;
-        }
+        // Optimized boss count
+        const bossCount = world.with('isBoss').entities.length;
 
         if (bossCount === 0) {
           console.log('Alien Queen Defeated! Dropping to Mall...');
           startDialogue('player', 'victory');
           stageSystem.loadStage('mall_drop');
 
-          // Setup Mall
-          player.position.set(0, 20, 0); // High up
+          player.position.set(0, 20, 0);
           player.velocity.set(0, -5, 0);
 
           const ally = world.with('isAlly', 'position', 'velocity').first;
@@ -293,7 +282,7 @@ export function GameWorld({
           }
 
           // Clear old entities
-          const toRemove: any[] = [];
+          const toRemove: ECSEntity[] = []; // Typed
           for (const e of world.with('isPlatform')) toRemove.push(e);
           for (const e of world.with('isEnemy')) toRemove.push(e);
           for (const e of toRemove) world.remove(e);
@@ -303,17 +292,17 @@ export function GameWorld({
             isPlatform: true,
             position: new THREE.Vector3(0, 0, 0),
             platformData: { length: 50, slope: 0, width: 10 },
-            modelColor: 0xff00ff, // Neon Pink
+            modelColor: 0xff00ff,
           });
 
           world.add({
             isPlatform: true,
             position: new THREE.Vector3(60, 10, 0),
             platformData: { length: 40, slope: 0, width: 10 },
-            modelColor: 0x00ffff, // Neon Blue
+            modelColor: 0x00ffff,
           });
 
-          // Spawn Mall Cops
+          // Spawn Mall Cops with HEALTH
           for (let i = 0; i < 3; i++) {
             world.add({
               id: `mall-cop-${i}`,
@@ -322,14 +311,8 @@ export function GameWorld({
               velocity: new THREE.Vector3(0, 0, 0),
               characterState: 'stand',
               faction: 'Azure',
-              modelColor: 0x0000ff, // Blue Cop
-              health: 100,
-              stats: {
-                structure: 100,
-                ignition: 12,
-                logic: 8,
-                flow: 6,
-              },
+              modelColor: 0x0000ff,
+              health: 100, // Added Health
             });
           }
 
@@ -337,33 +320,27 @@ export function GameWorld({
         }
       }
 
-      // Check stage END REACHED (Not complete yet, triggering connector)
-      // If we walked far enough, spawn exit connector
+      // Check stage END REACHED
       if (
         stageSystem.state === 'playing' &&
         player.position.x > stageSystem.currentStage.length &&
         !exitSequenceActive.current
       ) {
-        // Check if we already spawned exit?
-        // Let's rely on stageSystem state transition.
-        // Currently stageSystem sets 'complete' when x > length.
-        // We want to intercept that.
-        // Actually stageSystem.update sets 'complete'.
+         // Mark stage as complete to trigger end sequence/connector spawn logic
+         stageSystem.completeStage();
       }
 
       // Check stage completion
       if (stageSystem.state === 'complete') {
-        if (!bossSpawned.current) {
+        if (!bossSpawned) {
           console.log('Spawning End/Boss Arena...');
-          bossSpawned.current = true;
+          setBossSpawned(true);
 
           const endX = genStateRef.current.nextX + 10;
           const endY = genStateRef.current.nextY;
 
-          // If boss stage, spawn Boss. If street stage, spawn Connector.
           if (stageSystem.currentStageId === 'sector7_streets') {
-            // Spawn Connector
-            startDialogue('player', 'intro'); // Re-using intro for now as generic "Let's go"
+            startDialogue('player', 'intro');
 
             world.add({
               isPlatform: true,
@@ -371,17 +348,7 @@ export function GameWorld({
               platformData: { length: 20, slope: 0, width: 10 },
               modelColor: 0x222222,
             });
-
-            // We need a visual entity for the connector (not ECS physics, just visual)
-            // But we can add a dummy ECS entity or just render it if we tracked it.
-            // Let's add a "Connector" entity to ECS?
-            // ECS entities render based on components.
-            // We haven't added <Connector> to render loop yet.
-            // Let's trigger the exit sequence logic here.
           } else {
-            // Boss Spawn (Alien Ship / Mall)
-            // ... (Existing Boss Logic)
-
             world.add({
               isPlatform: true,
               position: new THREE.Vector3(endX, endY, 0),
@@ -396,13 +363,14 @@ export function GameWorld({
               characterState: 'stand',
               faction: 'Azure',
               modelColor: 0xffffff,
+              health: 1000,
             });
           }
         }
 
-        // Handle Exit Sequence Logic (If on connector)
-        if (stageSystem.currentStageId === 'sector7_streets' && bossSpawned.current) {
-          const endX = genStateRef.current.nextX + 20; // Approx connector center
+        // Handle Exit Sequence Logic
+        if (stageSystem.currentStageId === 'sector7_streets' && bossSpawned) {
+          const endX = genStateRef.current.nextX + 20;
           if (Math.abs(player.position.x - endX) < 5 && !exitSequenceActive.current) {
             console.log('Entering Connector...');
             exitSequenceActive.current = true;
@@ -410,24 +378,18 @@ export function GameWorld({
         }
       }
 
-      // Game Over check
       if (player.position.y < -20) {
         onGameOver();
       }
 
-      // Camera Shake Trigger (e.g., from external events)
       if (onCameraShake && Math.random() < 0.0005) {
         onCameraShake();
       }
 
-      // Generate ahead based on Stage Type
       if (stageSystem.currentStage.platforms === 'procedural' && stageSystem.state !== 'complete') {
-        // Generate forward
         if (genStateRef.current.nextX < player.position.x + 80) {
           generatePlatform();
         }
-        // Ideally we would generate backward too if player goes left,
-        // but for now we just keep the start platform.
       }
     }
   });
@@ -438,7 +400,6 @@ export function GameWorld({
     let slope = 0;
 
     if (type < 0.2) {
-      // GAP
       const gap = 5 + Math.random() * 8;
       genStateRef.current.nextX += gap;
       const yChange = (Math.random() - 0.6) * 5;
@@ -454,7 +415,6 @@ export function GameWorld({
     }
 
     const angle = slope * 0.26;
-    // Current spawn point
     const x = genStateRef.current.nextX;
     const y = genStateRef.current.nextY;
 
@@ -464,19 +424,19 @@ export function GameWorld({
       platformData: { length, slope, width: 8 },
     });
 
-    // Entities on platform
     if (length > 15 && Math.abs(slope) < 0.1) {
       const rand = Math.random();
       if (rand > 0.7) {
         const ex = x + 5 + Math.random() * (length - 10);
         world.add({
-          id: `enemy-${Math.random().toString(36).substr(2, 9)}`, // Ensure ID for Yuka
+          id: `enemy-${Math.random().toString(36).substr(2, 9)}`,
           isEnemy: true,
           position: new THREE.Vector3(ex, y, 0),
           velocity: new THREE.Vector3(0, 0, 0),
           characterState: Math.random() > 0.5 ? 'stand' : 'block',
-          faction: 'Azure', // Keep faction for now
+          faction: 'Azure',
           modelColor: pickEnemyColor(),
+          health: 100, // Added Health
         });
       } else if (rand > 0.4) {
         const ox = x + 5 + Math.random() * (length - 10);
@@ -486,7 +446,6 @@ export function GameWorld({
           obstacleType: Math.random() > 0.5 ? 'low' : 'high',
         });
       } else if (rand > 0.35) {
-        // Rare spawn for Data Shard (B-Story)
         const sx = x + 5 + Math.random() * (length - 10);
         world.add({
           isCollectible: true,
@@ -496,14 +455,12 @@ export function GameWorld({
       }
     }
 
-    // Update next spawn
     genStateRef.current.nextX += length * Math.cos(angle);
     genStateRef.current.nextY += length * Math.sin(angle);
   };
 
   return (
     <>
-      {/* Run systems */}
       <PhysicsSystem />
       <InputSystem inputState={inputState} />
       <CombatSystem
@@ -511,18 +468,22 @@ export function GameWorld({
         onScoreUpdate={onScoreUpdate}
         onCameraShake={onCameraShake}
         onCombatText={(msg, color) => {
-          if (msg === 'DATA ACQUIRED') {
-             // Just grant item/XP. Dialogue is handled by HUD observing state if we had a proper "Item Acquired" dialog
-             // For now, let's trigger a generic dialogue or just leave it to CombatText
-             addItem('data_shard', 'Data Shard');
-          } else if (msg === 'DESTROYED!' || msg === 'KO!') {
-            addXp(100);
-          }
-          onCombatText?.(msg, color);
+            // Backward compatibility for old calls, but prefer handleCombatEvent logic if passed
+            // In a full refactor, CombatSystem would call onCombatEvent prop instead.
+            // For now, mapping string msgs back to events implicitly
+            if (msg === 'DATA ACQUIRED') {
+                handleCombatEvent({ type: 'item', item: 'data_shard', message: 'DATA ACQUIRED', color: '#0f0' });
+            } else if (msg.includes('XP') || msg === 'DESTROYED!' || msg === 'KO!') {
+                // XP handled in combat system already?
+                // CombatSystem calls onScoreUpdate and onCombatText
+                // Let's rely on CombatSystem for logic, and this for display
+                onCombatText?.(msg, color);
+            } else {
+                onCombatText?.(msg, color);
+            }
         }}
       />
 
-      {/* Render Entities */}
       <ECS.Entities in={world.with('isPlayer', 'position', 'characterState')}>
         {(entity) => (
           <Character
@@ -540,11 +501,7 @@ export function GameWorld({
         )}
       </ECS.Entities>
 
-      {/* We need to render the connector if we spawned one.
-          Currently we don't have an ECS component for 'isConnector'.
-          Let's just conditionally render one at the end if bossSpawned for Sector 7.
-      */}
-      {bossSpawned.current && stageSystem.currentStageId === 'sector7_streets' && (
+      {bossSpawned && stageSystem.currentStageId === 'sector7_streets' && (
         <Connector
           position={[genStateRef.current.nextX + 20, genStateRef.current.nextY, 0]}
           type="bridge"
@@ -591,7 +548,6 @@ export function GameWorld({
         )}
       </ECS.Entities>
 
-      {/* Ground Plane (for shadows) */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -5, 0]} receiveShadow>
         <planeGeometry args={[1000, 1000]} />
         <shadowMaterial opacity={0.3} />

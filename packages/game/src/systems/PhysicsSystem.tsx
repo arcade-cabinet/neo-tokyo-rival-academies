@@ -17,9 +17,7 @@ export const PhysicsSystem = () => {
     for (const entity of dynamicEntities) {
       // Apply Gravity
       // Bosses might ignore gravity (e.g. if flying)
-      // For now, let's assume all dynamic entities have gravity unless they have a 'flying' tag (not yet impl)
-      // Or checking if it's the boss
-      const isFlying = (entity as any).modelColor === 0xffffff; // Quick Boss hack check matching AISystem
+      const isFlying = entity.isFlying || entity.modelColor === 0xffffff;
       if (!isFlying) {
         entity.velocity.y += CONFIG.gravity * dt;
       }

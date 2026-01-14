@@ -17,6 +17,7 @@ export type ECSEntity = {
   // Physics & Transform
   position?: THREE.Vector3;
   velocity?: THREE.Vector3;
+  isFlying?: boolean;
 
   // Game Logic
   faction?: 'Kurenai' | 'Azure';

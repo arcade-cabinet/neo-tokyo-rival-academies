@@ -1,23 +1,30 @@
 import type { ECSEntity } from '../state/ecs';
 
-export function resolveCombat(
-  attacker: ECSEntity,
-  defender: ECSEntity
-): { damage: number; isCritical: boolean } {
-  // Base stats or defaults (use nullish coalescing to allow 0 values)
+/**
+ * Calculates damage based on stats.
+ *
+ * Formula:
+ * Damage = Attack - (Defense / 2)
+ *
+ * Attack is based on 'Ignition' stat.
+ * Defense is based on 'Structure' stat (conceptually).
+ *
+ * Crit Chance = Ignition / 2 %
+ */
+export const resolveCombat = (attacker: ECSEntity, defender: ECSEntity) => {
+  // Default stats if missing
   const atk = attacker.stats?.ignition ?? 10;
-  // Defense is derived from Structure (10% of Max HP/Structure)
-  const def = (defender.stats?.structure ?? 10) * 0.1;
+  const def = defender.stats?.structure ?? 10;
 
-  let damage = Math.max(1, atk - def);
-  let isCritical = false;
+  let damage = Math.max(1, Math.floor(atk - def / 2));
 
-  // Critical hit chance: 1% per Ignition point, capped at 50%
+  // Critical Hit Logic (1% per Ignition point, max 50%)
   const critChance = Math.min(atk * 0.01, 0.5);
-  if (Math.random() < critChance) {
-    damage *= 1.5;
-    isCritical = true;
+  const isCritical = Math.random() < critChance;
+
+  if (isCritical) {
+    damage = Math.floor(damage * 1.5);
   }
 
-  return { damage: Math.floor(damage), isCritical };
-}
+  return { damage, isCritical };
+};

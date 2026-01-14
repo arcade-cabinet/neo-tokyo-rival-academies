@@ -32,4 +32,20 @@ describe('DialogueSystem', () => {
     advanceDialogue('player');
     expect(player.dialogueState?.isInteracting).toBe(false); // Ended
   });
+
+  it('should handle non-existent dialogue gracefully', () => {
+    const player = world.add({
+      id: 'player',
+      dialogueState: { isInteracting: false, currentDialogueId: '', nodeId: '' },
+    });
+
+    startDialogue('player', 'MISSING_ID');
+    expect(player.dialogueState?.isInteracting).toBe(false);
+  });
+
+  it('should handle missing entities gracefully', () => {
+    // Should not throw
+    startDialogue('missing_entity', 'intro');
+    advanceDialogue('missing_entity');
+  });
 });

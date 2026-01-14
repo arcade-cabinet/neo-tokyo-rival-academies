@@ -73,8 +73,12 @@ export const useGameStore = create<GameStore>((set) => ({
       return { xp: newXp };
     }),
 
+  // Fix race condition: use state callback
   startQuest: (quest) =>
-    set((state) => ({ activeQuest: quest, questLog: [...state.questLog, quest] })),
+    set((state) => ({
+      activeQuest: quest,
+      questLog: [...state.questLog, quest]
+    })),
 
   completeQuest: (questId) =>
     set((state) => ({

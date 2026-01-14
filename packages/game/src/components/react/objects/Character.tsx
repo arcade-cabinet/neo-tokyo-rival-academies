@@ -1,5 +1,5 @@
 import { useFrame } from '@react-three/fiber';
-import { useRef } from 'react';
+import { memo, useRef } from 'react';
 import * as THREE from 'three';
 import type { CharacterState } from '@/types/game';
 
@@ -9,30 +9,6 @@ interface CharacterProps {
   position?: [number, number, number];
   state?: CharacterState;
 }
-
-/**
- * Toon Material for Cel Shading
- * Extracted to module scope to prevent remounting on every render
- */
-const ToonMat = ({
-  color,
-  wireframe = false,
-  transparent = false,
-  opacity = 1,
-}: {
-  color: THREE.ColorRepresentation;
-  wireframe?: boolean;
-  transparent?: boolean;
-  opacity?: number;
-}) => (
-  <meshToonMaterial
-    color={color}
-    wireframe={wireframe}
-    transparent={transparent}
-    opacity={opacity}
-    gradientMap={null}
-  />
-);
 
 /**
  * Renders a stylized humanoid character as a Three.js group with animated coat segments and pose-driven limb motion.
@@ -46,6 +22,17 @@ interface CharacterPropsWithSpeed extends CharacterProps {
   speed?: number;
   isPlayer?: boolean;
 }
+
+// Extracted Toon Material for Cel Shading to avoid re-renders
+const ToonMat = memo(({ color, wireframe = false, transparent = false, opacity = 1 }: { color: THREE.ColorRepresentation, wireframe?: boolean, transparent?: boolean, opacity?: number }) => (
+    <meshToonMaterial
+        color={color}
+        wireframe={wireframe}
+        transparent={transparent}
+        opacity={opacity}
+        gradientMap={null} // Default gradient
+    />
+));
 
 export function Character({
   color,

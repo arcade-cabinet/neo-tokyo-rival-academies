@@ -1,5 +1,11 @@
 import { EntityManager, GameEntity, State, StateMachine } from 'yuka';
+import * as THREE from 'three';
 import { ECS, world } from '@/state/ecs';
+
+// --- Helper ---
+const toYukaVector = (v: THREE.Vector3): import('yuka').Vector3 => {
+  return v as unknown as import('yuka').Vector3;
+};
 
 // --- COMMON STATES ---
 
@@ -12,9 +18,7 @@ class IdleState extends State<YukaAgent> {
       // Enemy Logic: Look for Player
       const player = ECS.world.with('isPlayer', 'position').first;
       if (player?.position) {
-        const dist = agent.position.distanceTo(
-          player.position as unknown as import('yuka').Vector3
-        );
+        const dist = agent.position.distanceTo(toYukaVector(player.position));
         if (dist < 30) {
           agent.fsm.changeTo('CHASE');
         }
@@ -24,7 +28,7 @@ class IdleState extends State<YukaAgent> {
       // Prioritize attacking if enemy near
       const enemy = ECS.world.with('isEnemy', 'position').first;
       if (enemy?.position) {
-        const dist = agent.position.distanceTo(enemy.position as unknown as import('yuka').Vector3);
+        const dist = agent.position.distanceTo(toYukaVector(enemy.position));
         if (dist < 15) {
           agent.fsm.changeTo('COOP_ATTACK');
           return;
@@ -81,13 +85,13 @@ class CoopFollowState extends State<YukaAgent> {
 
       // Jump if player jumps?
       // Simplified: If player is way above, teleport or super jump.
-      // For now, let physics handle Y, just move X.
+      // For now, let's just physics handle Y, just move X.
     }
 
     // Check for enemies to engage
     const enemy = ECS.world.with('isEnemy', 'position').first;
     if (enemy?.position) {
-      const dist = agent.position.distanceTo(enemy.position as unknown as import('yuka').Vector3);
+      const dist = agent.position.distanceTo(toYukaVector(enemy.position));
       if (dist < 10) {
         agent.fsm.changeTo('COOP_ATTACK');
       }
@@ -112,7 +116,7 @@ class CoopAttackState extends State<YukaAgent> {
       }
 
       // If enemy dead (no enemy found next frame) or far away, return to follow
-      const dist = agent.position.distanceTo(enemy.position as unknown as import('yuka').Vector3);
+      const dist = agent.position.distanceTo(toYukaVector(enemy.position));
       if (dist > 20) {
         agent.fsm.changeTo('COOP_FOLLOW');
       }
@@ -261,7 +265,7 @@ class AISystem {
 
       agent = new YukaAgent(ecsEntity.id, faction);
       if (ecsEntity.position)
-        agent.position.copy(ecsEntity.position as unknown as import('yuka').Vector3);
+        agent.position.copy(toYukaVector(ecsEntity.position));
 
       this.entityManager.add(agent);
       this.entityMap.set(ecsEntity.id, agent);
@@ -280,21 +284,10 @@ class AISystem {
       if (!e.id) continue;
       const agent = this.entityMap.get(e.id);
       if (agent && e.velocity) {
+        // Optimize: Set X once, only set Y if boss
         e.velocity.x = agent.velocity.x;
-        // Boss/Flying check? For now trust Yuka velocity
-        // If agent has heavy gravity logic, we might override Y here.
-        // But we rely on PhysicsSystem for gravity usually.
-        // EXCEPT for BossHover/Slam which drives Y.
         if (agent.faction === 'BOSS') {
           e.velocity.y = agent.velocity.y;
-        }
-        // Allies/Enemies: Yuka controls X, Physics controls Y (gravity).
-        // So we only write X for them?
-        // ChaseState only sets X.
-        // So safe to copy X.
-        if (agent.faction !== 'BOSS') {
-          // Keep ECS Y velocity (gravity), only take X
-          e.velocity.x = agent.velocity.x;
         }
       }
     }

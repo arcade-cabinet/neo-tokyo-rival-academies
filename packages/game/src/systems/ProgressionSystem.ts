@@ -1,5 +1,10 @@
 import { world } from '../state/ecs';
 
+// Logger interface placeholder (can be replaced with a real logger later)
+const logger = {
+  info: (msg: string, data?: any) => console.log(`[Progression] ${msg}`, data || ''),
+};
+
 /**
  * Handles leveling up when XP threshold is met.
  */
@@ -8,7 +13,7 @@ export const updateProgression = () => {
   const entities = world.with('level', 'stats');
 
   for (const entity of entities) {
-    // Process all pending level-ups (handles multi-level XP overflow)
+    // Multi-level up logic via while loop
     while (entity.level.xp >= entity.level.nextLevelXp) {
       // Level Up Logic
       const overflowXp = entity.level.xp - entity.level.nextLevelXp;
@@ -28,7 +33,8 @@ export const updateProgression = () => {
         entity.health = entity.stats.structure;
       }
 
-      console.log(`Entity ${entity.id} leveled up to ${entity.level.current}!`);
+      // Structured logging
+      logger.info('Level Up', { entityId: entity.id, newLevel: entity.level.current });
     }
   }
 };

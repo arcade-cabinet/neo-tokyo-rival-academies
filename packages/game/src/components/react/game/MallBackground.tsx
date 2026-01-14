@@ -36,9 +36,10 @@ function ShopLayer({
   const { camera } = useThree();
   const group = useRef<THREE.Group>(null);
 
-  // Create random shops
+  // Create random shops with stable IDs
   const shops = useMemo(() => {
-    return Array.from({ length: count }, () => ({
+    return Array.from({ length: count }, (_, idx) => ({
+      id: `shop-${idx}-${Math.random()}`, // Stable ID within this session
       x: (Math.random() - 0.5) * 300,
       y: (Math.random() - 0.5) * 50, // Vertical spread
       width: 5 + Math.random() * 10,
@@ -53,15 +54,12 @@ function ShopLayer({
 
     // Parallax
     group.current.position.x = camX * speedFactor;
-
-    // We might need to wrap them manually if we want infinite scrolling,
-    // but for now let's just place them widely.
   });
 
   return (
     <group ref={group}>
-      {shops.map((s, i) => (
-        <NeonSign key={i} position={[s.x, s.y, depth]} color={s.color} size={[s.width, s.height]} />
+      {shops.map((s) => (
+        <NeonSign key={s.id} position={[s.x, s.y, depth]} color={s.color} size={[s.width, s.height]} />
       ))}
     </group>
   );

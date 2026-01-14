@@ -37,4 +37,21 @@ describe('ProgressionSystem', () => {
     expect(entity.level?.current).toBe(2);
     expect(entity.level?.xp).toBe(50);
   });
+
+  it('should handle multi-level overflow', () => {
+    const entity = world.add({
+      id: 'player',
+      health: 50,
+      stats: { structure: 100, ignition: 10, logic: 10, flow: 10 },
+      // Lvl 1->2 cost 100. Lvl 2->3 cost 150. Total 250.
+      // XP 300 should reach Lvl 3 with 50 remainder.
+      level: { current: 1, xp: 300, nextLevelXp: 100, statPoints: 0 },
+    });
+
+    updateProgression();
+
+    expect(entity.level?.current).toBe(3);
+    expect(entity.level?.xp).toBe(50);
+    expect(entity.level?.statPoints).toBe(6);
+  });
 });
