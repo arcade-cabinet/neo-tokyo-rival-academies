@@ -11,7 +11,7 @@ interface HUDProps {
   playerPos?: { x: number; y: number };
 }
 
-export const JRPGHUD: FC<HUDProps> = ({ inputState: _inputState, onInput, playerPos }) => {
+export const JRPGHUD: FC<HUDProps> = ({ onInput, playerPos }) => {
   // Use useEntities from miniplex-react directly
   const { entities } = useEntities(world.with('isPlayer'));
   const player = entities[0];

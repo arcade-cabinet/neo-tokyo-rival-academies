@@ -28,7 +28,7 @@ describe('CombatLogic', () => {
     const attacker = { stats: { ignition: 20, structure: 100, logic: 10, flow: 10 } };
     const defender = { stats: { ignition: 10, structure: 50, logic: 10, flow: 10 } };
     // Base = 15
-    // Crit = 15 * 1.5 = 22.5, then Math.floor is applied, resulting in 22.
+    // Crit = 15 * 1.5 = 22.5 -> floor(22) or 22.5? Logic used damage *= 1.5.
     // Math.floor(22.5) = 22.
 
     const { damage, isCritical } = resolveCombat(attacker as any, defender as any);
