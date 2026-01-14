@@ -114,10 +114,7 @@ export const CombatSystem = ({
                 isGameOver = true;
                 break;
               } else {
-                // Knockback or I-frames?
-                // For now, just a push back to avoid multi-frame hits?
-                // Simplified: remove enemy so we don't die instantly next frame
-                // Or set a "stunned" state.
+                // Remove the enemy after collision so the player doesn't take damage again next frame
                 toRemove.push(enemy); // "We crashed into them, they break, we take damage"
               }
             } else {
