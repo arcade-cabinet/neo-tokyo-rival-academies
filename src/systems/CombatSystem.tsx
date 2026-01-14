@@ -100,10 +100,8 @@ export const CombatSystem = ({
               }
             }
           } else {
-            // Enemy Attacks Player (Game Over or Damage?)
-            // For now, classic runner style: Contact = Death unless attacking
-            // Ideally we'd calculate damage to player too, but let's keep the runner stakes high for now
-            // or maybe deduct health?
+            // Enemy attacks player
+            // If the player has health/stats, apply damage instead of instant death; otherwise trigger game over
             if (player.health !== undefined && player.stats) {
               // Take damage instead of instant death if we have health
               const enemyDmg = resolveCombat(enemy, player).damage;
