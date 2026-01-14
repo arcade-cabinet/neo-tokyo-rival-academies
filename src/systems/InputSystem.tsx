@@ -25,11 +25,11 @@ export const InputSystem = ({ inputState }: InputSystemProps) => {
       let targetVelocityX = 0;
 
       if (inputState.right) {
-          targetVelocityX = inputState.run ? CONFIG.sprintSpeed : CONFIG.baseSpeed;
+        targetVelocityX = inputState.run ? CONFIG.sprintSpeed : CONFIG.baseSpeed;
       } else if (inputState.left) {
-          targetVelocityX = -(inputState.run ? CONFIG.sprintSpeed : CONFIG.baseSpeed);
+        targetVelocityX = -(inputState.run ? CONFIG.sprintSpeed : CONFIG.baseSpeed);
       } else {
-          targetVelocityX = 0;
+        targetVelocityX = 0;
       }
 
       // X Acceleration

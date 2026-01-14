@@ -21,7 +21,7 @@ export const PhysicsSystem = () => {
       // Or checking if it's the boss
       const isFlying = (entity as any).modelColor === 0xffffff; // Quick Boss hack check matching AISystem
       if (!isFlying) {
-         entity.velocity.y += CONFIG.gravity * dt;
+        entity.velocity.y += CONFIG.gravity * dt;
       }
 
       // Apply Air Drag / Friction to X
@@ -30,9 +30,9 @@ export const PhysicsSystem = () => {
       // InputSystem sets 'run' or 'stand'.
       // If 'stand' or 'block', damp velocity.
       if (entity.characterState === 'stand' || entity.characterState === 'block') {
-          // Friction
-          entity.velocity.x *= 0.8;
-          if(Math.abs(entity.velocity.x) < 0.1) entity.velocity.x = 0;
+        // Friction
+        entity.velocity.x *= 0.8;
+        if (Math.abs(entity.velocity.x) < 0.1) entity.velocity.x = 0;
       }
 
       // Integrate Position (Physics movement)

@@ -75,44 +75,43 @@ function BuildingLayer({
 }
 
 function NeonLights({ count, z, speedFactor }: { count: number; z: number; speedFactor: number }) {
-    const { camera } = useThree();
-    const mesh = useRef<THREE.InstancedMesh>(null);
-    const dummy = useMemo(() => new THREE.Object3D(), []);
-    const lights = useMemo(() => {
-        return new Array(count).fill(0).map(() => ({
-            x: (Math.random() - 0.5) * 200,
-            y: Math.random() * 40 - 10,
-            color: new THREE.Color().setHex(CITY_COLORS[Math.floor(Math.random() * CITY_COLORS.length)]),
-        }));
-    }, [count]);
+  const { camera } = useThree();
+  const mesh = useRef<THREE.InstancedMesh>(null);
+  const dummy = useMemo(() => new THREE.Object3D(), []);
+  const lights = useMemo(() => {
+    return new Array(count).fill(0).map(() => ({
+      x: (Math.random() - 0.5) * 200,
+      y: Math.random() * 40 - 10,
+      color: new THREE.Color().setHex(CITY_COLORS[Math.floor(Math.random() * CITY_COLORS.length)]),
+    }));
+  }, [count]);
 
-    useFrame(() => {
-        if (!mesh.current) return;
-        const camX = camera.position.x;
-        const wrapRange = 100;
+  useFrame(() => {
+    if (!mesh.current) return;
+    const camX = camera.position.x;
+    const wrapRange = 100;
 
-        lights.forEach((l, i) => {
-            let worldX = l.x + camX * (1 - speedFactor);
-            while (worldX < camX - wrapRange) worldX += wrapRange * 2;
-            while (worldX > camX + wrapRange) worldX -= wrapRange * 2;
+    lights.forEach((l, i) => {
+      let worldX = l.x + camX * (1 - speedFactor);
+      while (worldX < camX - wrapRange) worldX += wrapRange * 2;
+      while (worldX > camX + wrapRange) worldX -= wrapRange * 2;
 
-            dummy.position.set(worldX, l.y, z + 0.6); // Slightly in front of buildings
-            dummy.scale.set(0.5, 2 + Math.random() * 5, 0.1);
-            dummy.updateMatrix();
-            mesh.current!.setMatrixAt(i, dummy.matrix);
-            mesh.current!.setColorAt(i, l.color);
-        });
-        mesh.current.instanceMatrix.needsUpdate = true;
-        if (mesh.current.instanceColor) mesh.current.instanceColor.needsUpdate = true;
+      dummy.position.set(worldX, l.y, z + 0.6); // Slightly in front of buildings
+      dummy.scale.set(0.5, 2 + Math.random() * 5, 0.1);
+      dummy.updateMatrix();
+      mesh.current!.setMatrixAt(i, dummy.matrix);
+      mesh.current!.setColorAt(i, l.color);
     });
+    mesh.current.instanceMatrix.needsUpdate = true;
+    if (mesh.current.instanceColor) mesh.current.instanceColor.needsUpdate = true;
+  });
 
-    return (
-        <instancedMesh ref={mesh} args={[undefined, undefined, count]}>
-            <planeGeometry args={[1, 1]} />
-            <meshBasicMaterial toneMapped={false} />
-        </instancedMesh>
-    );
-
+  return (
+    <instancedMesh ref={mesh} args={[undefined, undefined, count]}>
+      <planeGeometry args={[1, 1]} />
+      <meshBasicMaterial toneMapped={false} />
+    </instancedMesh>
+  );
 }
 
 export function ParallaxBackground() {

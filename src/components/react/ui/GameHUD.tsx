@@ -43,32 +43,38 @@ export const GameHUD: FC<GameHUDProps> = ({ score, biome, inputState, onInput, d
 
       {/* In-Game Dialogue Toast */}
       {dialogue && (
-          <div style={{
-              position: 'absolute',
-              top: '12%',
-              left: '50%',
-              transform: 'translateX(-50%)',
-              background: 'rgba(0, 0, 10, 0.9)',
-              border: '2px solid #0ff',
-              borderRadius: '8px',
-              padding: '1.5vmin 3vmin',
-              color: '#fff',
-              zIndex: 100,
-              maxWidth: '90%',
-              minWidth: '40%',
-              pointerEvents: 'none',
-              textAlign: 'center',
-              boxShadow: '0 0 10px #0ff'
-          }}>
-              <div style={{
-                  color: dialogue.speaker === 'Rival' ? '#0ff' : '#f0f',
-                  fontSize: '3vmin',
-                  fontWeight: 'bold',
-                  textTransform: 'uppercase',
-                  marginBottom: '0.5vmin'
-              }}>{dialogue.speaker}</div>
-              <div style={{fontSize: '3vmin', fontFamily: 'monospace'}}>{dialogue.text}</div>
+        <div
+          style={{
+            position: 'absolute',
+            top: '12%',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            background: 'rgba(0, 0, 10, 0.9)',
+            border: '2px solid #0ff',
+            borderRadius: '8px',
+            padding: '1.5vmin 3vmin',
+            color: '#fff',
+            zIndex: 100,
+            maxWidth: '90%',
+            minWidth: '40%',
+            pointerEvents: 'none',
+            textAlign: 'center',
+            boxShadow: '0 0 10px #0ff',
+          }}
+        >
+          <div
+            style={{
+              color: dialogue.speaker === 'Rival' ? '#0ff' : '#f0f',
+              fontSize: '3vmin',
+              fontWeight: 'bold',
+              textTransform: 'uppercase',
+              marginBottom: '0.5vmin',
+            }}
+          >
+            {dialogue.speaker}
           </div>
+          <div style={{ fontSize: '3vmin', fontFamily: 'monospace' }}>{dialogue.text}</div>
+        </div>
       )}
 
       {/* Combat Text */}

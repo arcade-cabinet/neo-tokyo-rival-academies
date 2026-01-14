@@ -1,6 +1,7 @@
 import { useFrame } from '@react-three/fiber';
 import type { ECSEntity } from '../state/ecs';
 import { ECS, world } from '../state/ecs';
+import { resolveCombat } from './CombatLogic';
 
 interface CombatSystemProps {
   onGameOver: () => void;
@@ -15,38 +16,47 @@ const enemiesQuery = ECS.world.with('isEnemy', 'position');
 const obstaclesQuery = ECS.world.with('isObstacle', 'position', 'obstacleType');
 const collectiblesQuery = ECS.world.with('isCollectible', 'position');
 
-export const CombatSystem = ({ onGameOver, onScoreUpdate, onCameraShake, onCombatText }: CombatSystemProps) => {
+export const CombatSystem = ({
+  onGameOver,
+  onScoreUpdate,
+  onCameraShake,
+  onCombatText,
+}: CombatSystemProps) => {
   useFrame(() => {
-    // 1. Allies vs Enemies (Independent of Player)
+    // 1. Allies vs Enemies
     for (const ally of alliesQuery) {
-       if (!ally.position) continue;
-       const toRemove: ECSEntity[] = [];
+      if (!ally.position) continue;
+      const toRemove: ECSEntity[] = [];
 
-       for (const enemy of enemiesQuery) {
-           if (!enemy.position) continue;
-           const dx = Math.abs(ally.position.x - enemy.position.x);
-           const dy = Math.abs(ally.position.y - enemy.position.y);
+      for (const enemy of enemiesQuery) {
+        if (!enemy.position) continue;
+        const dx = Math.abs(ally.position.x - enemy.position.x);
+        const dy = Math.abs(ally.position.y - enemy.position.y);
 
-           if (dx < 1.5 && dy < 2.0) {
-               // If ally is attacking, kill enemy
-               // If not, maybe nothing happens or enemy pushes ally?
-               // For fun, let's say Ally is always lethal in this mode or auto-attacks
-               if (ally.characterState === 'attack') {
-                   if (enemy.health && enemy.health > 0) {
-                       enemy.health -= 10; // Ally chips away
-                       onCameraShake?.();
-                       onCombatText?.('HIT!', '#0ff');
-                   } else {
-                       toRemove.push(enemy);
-                       onCameraShake?.(); // Feel the ally's impact too!
-                       onCombatText?.('KO!', '#0ff');
-                   }
-               }
-           }
-       }
-       for (const enemy of toRemove) {
-           world.remove(enemy);
-       }
+        if (dx < 1.5 && dy < 2.0) {
+          if (ally.characterState === 'attack') {
+            // Calculate RPG Damage
+            const { damage, isCritical } = resolveCombat(ally, enemy);
+
+            if (enemy.health !== undefined) {
+              enemy.health -= damage;
+              const color = isCritical ? '#ff0' : '#0ff';
+              const text = isCritical ? `CRIT ${damage}!` : `${damage}`;
+              onCombatText?.(text, color);
+
+              if (enemy.health <= 0) {
+                toRemove.push(enemy);
+                onCameraShake?.();
+              } else {
+                onCameraShake?.();
+              }
+            }
+          }
+        }
+      }
+      for (const enemy of toRemove) {
+        world.remove(enemy);
+      }
     }
 
     // 2. Player Logic
@@ -64,25 +74,59 @@ export const CombatSystem = ({ onGameOver, onScoreUpdate, onCameraShake, onComba
         const dy = Math.abs(player.position.y - enemy.position.y);
         const dz = Math.abs((player.position.z || 0) - (enemy.position.z || 0));
 
-        // Simple box collision
         if (dx < 1.5 && dy < 2.0 && dz < 1.0) {
           if (player.characterState === 'attack' || player.characterState === 'sprint') {
-            if (enemy.health && enemy.health > 0) {
-                enemy.health -= 50; // Player deals heavy damage
-                onCameraShake?.();
-                onCombatText?.('CRITICAL!', '#f00');
-            } else {
-                // Player destroys enemy
+            // Player Attacks
+            const { damage, isCritical } = resolveCombat(player, enemy);
+
+            if (enemy.health !== undefined) {
+              enemy.health -= damage;
+              const color = isCritical ? '#ff0' : '#f00';
+              const text = isCritical ? `CRIT ${damage}!` : `${damage}`;
+              onCombatText?.(text, color);
+
+              if (enemy.health <= 0) {
                 toRemove.push(enemy);
-                onScoreUpdate(100); // More points for Yakuza
+                onScoreUpdate(100);
                 onCameraShake?.();
-                onCombatText?.('DESTROYED!', '#f00');
+
+                // Grant XP
+                if (player.level) {
+                  player.level.xp += 20;
+                  onCombatText?.('+20 XP', '#0f0');
+                }
+              } else {
+                onCameraShake?.();
+              }
             }
           } else {
-            // Enemy kills player
-            onGameOver();
-            isGameOver = true;
-            break;
+            // Enemy Attacks Player (Game Over or Damage?)
+            // For now, classic runner style: Contact = Death unless attacking
+            // Ideally we'd calculate damage to player too, but let's keep the runner stakes high for now
+            // or maybe deduct health?
+            if (player.health !== undefined && player.stats) {
+              // Take damage instead of instant death if we have health
+              const enemyDmg = resolveCombat(enemy, player).damage;
+              player.health -= enemyDmg;
+              onCombatText?.(`-${enemyDmg}`, '#f00');
+              onCameraShake?.();
+
+              if (player.health <= 0) {
+                onGameOver();
+                isGameOver = true;
+                break;
+              } else {
+                // Knockback or I-frames?
+                // For now, just a push back to avoid multi-frame hits?
+                // Simplified: remove enemy so we don't die instantly next frame
+                // Or set a "stunned" state.
+                toRemove.push(enemy); // "We crashed into them, they break, we take damage"
+              }
+            } else {
+              onGameOver();
+              isGameOver = true;
+              break;
+            }
           }
         }
       }
@@ -97,25 +141,21 @@ export const CombatSystem = ({ onGameOver, onScoreUpdate, onCameraShake, onComba
       // --- COLLECTIBLE COLLISION ---
       const collectiblesToRemove: ECSEntity[] = [];
       for (const collectible of collectiblesQuery) {
-          if (!collectible.position) continue;
-          const dx = Math.abs(player.position.x - collectible.position.x);
-          const dy = Math.abs(player.position.y - collectible.position.y);
+        if (!collectible.position) continue;
+        const dx = Math.abs(player.position.x - collectible.position.x);
+        const dy = Math.abs(player.position.y - collectible.position.y);
 
-          if (dx < 1.0 && dy < 1.0) {
-              collectiblesToRemove.push(collectible);
-              onCombatText?.('DATA ACQUIRED', '#0f0');
-              // We rely on GameWorld or NeoTokyoGame to listen for this via a callback ideally,
-              // but for now we just show combat text.
-              // We need a way to trigger the Log Dialogue.
-              // Let's use a "hack": set a special property on player or world temporarily?
-              // Or better, trigger an event?
-              // Actually, CombatSystem doesn't have access to onDialogue directly.
-              // Let's assume we can trigger a global event or reuse onScoreUpdate for special values?
-              // No, let's just use onCombatText for now, and handle logic in GameWorld loop if we want proper dialogue.
+        if (dx < 1.0 && dy < 1.0) {
+          collectiblesToRemove.push(collectible);
+          onCombatText?.('DATA ACQUIRED', '#0f0');
+          if (player.level) {
+            player.level.xp += 10;
           }
+          onScoreUpdate(50);
+        }
       }
       for (const c of collectiblesToRemove) {
-          world.remove(c);
+        world.remove(c);
       }
 
       // --- OBSTACLE COLLISION ---
@@ -123,33 +163,39 @@ export const CombatSystem = ({ onGameOver, onScoreUpdate, onCameraShake, onComba
         if (!obstacle.position) continue;
 
         const dx = Math.abs(player.position.x - obstacle.position.x);
-
-        // Obstacle.tsx: boxGeometry args={[1, height, 4]}
-        // x-width=1, z-depth=4. Check X overlap.
+        // Box collision logic preserved from original
         if (dx < 1.0) {
           const obsHeight = obstacle.obstacleType === 'high' ? 3 : 1;
-          // Obstacle visual is offset up, but entity position is at base
-          // Visual bottom is at position.y
-          // Visual top is at position.y + obsHeight
-
-          // Player (approx) bottom at player.position.y
-          // Player height approx 2
-
           const playerBottom = player.position.y;
-          const playerTop = player.position.y + 2; // Standing height
-
-          // Apply sliding hitbox reduction
+          const playerTop = player.position.y + 2;
           const effectivePlayerTop =
             player.characterState === 'slide' ? player.position.y + 1 : playerTop;
-
           const obsBottom = obstacle.position.y;
           const obsTop = obstacle.position.y + obsHeight;
 
-          // Check Y overlap
           if (effectivePlayerTop > obsBottom && playerBottom < obsTop) {
-            onGameOver();
-            isGameOver = true;
-            break;
+            // Obstacles deal damage now too
+            if (player.health !== undefined) {
+              const obsDmg = 20;
+              player.health -= obsDmg;
+              onCombatText?.(`HIT -${obsDmg}`, '#fa0');
+              onCameraShake?.();
+              if (player.health <= 0) {
+                onGameOver();
+                isGameOver = true;
+                break;
+              }
+              // Remove obstacle to prevent multi-hit
+              // world.remove(obstacle); // Maybe don't remove walls?
+              // For now, instant game over on walls usually, but let's be generous
+              // Actually, original code was instant Game Over.
+              // Let's keep it instant Game Over for obstacles unless we have "Structure" to tank it?
+              // Let's say: High obstacles = Death, Low obstacles = Trip/Damage?
+              // Sticking to Game Over for obstacles ensures "Runner" skill is still needed.
+              onGameOver();
+              isGameOver = true;
+              break;
+            }
           }
         }
       }

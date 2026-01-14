@@ -30,9 +30,9 @@ export class StageSystem {
   }
 
   triggerEvent(eventId: string) {
-      console.log(`Triggering Event: ${eventId}`);
-      this.state = 'event';
-      this.activeEvent = eventId;
+    console.log(`Triggering Event: ${eventId}`);
+    this.state = 'event';
+    this.activeEvent = eventId;
   }
 
   completeStage() {

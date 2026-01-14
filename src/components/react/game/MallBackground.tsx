@@ -2,7 +2,15 @@ import { useFrame, useThree } from '@react-three/fiber';
 import { useMemo, useRef } from 'react';
 import * as THREE from 'three';
 
-function NeonSign({ position, color, size }: { position: [number, number, number]; color: string; size: [number, number] }) {
+function NeonSign({
+  position,
+  color,
+  size,
+}: {
+  position: [number, number, number];
+  color: string;
+  size: [number, number];
+}) {
   return (
     <mesh position={new THREE.Vector3(...position)}>
       <boxGeometry args={[size[0], size[1], 0.5]} />
@@ -16,7 +24,15 @@ function NeonSign({ position, color, size }: { position: [number, number, number
   );
 }
 
-function ShopLayer({ count, depth, speedFactor }: { count: number; depth: number; speedFactor: number }) {
+function ShopLayer({
+  count,
+  depth,
+  speedFactor,
+}: {
+  count: number;
+  depth: number;
+  speedFactor: number;
+}) {
   const { camera } = useThree();
   const group = useRef<THREE.Group>(null);
 
@@ -45,12 +61,7 @@ function ShopLayer({ count, depth, speedFactor }: { count: number; depth: number
   return (
     <group ref={group}>
       {shops.map((s, i) => (
-        <NeonSign
-          key={i}
-          position={[s.x, s.y, depth]}
-          color={s.color}
-          size={[s.width, s.height]}
-        />
+        <NeonSign key={i} position={[s.x, s.y, depth]} color={s.color} size={[s.width, s.height]} />
       ))}
     </group>
   );
@@ -66,8 +77,8 @@ export function MallBackground() {
 
       {/* Floor reflection hint? */}
       <mesh position={[0, -10, -10]} rotation={[-Math.PI / 2, 0, 0]}>
-         <planeGeometry args={[1000, 100]} />
-         <meshBasicMaterial color="#200020" transparent opacity={0.5} />
+        <planeGeometry args={[1000, 100]} />
+        <meshBasicMaterial color="#200020" transparent opacity={0.5} />
       </mesh>
     </group>
   );
