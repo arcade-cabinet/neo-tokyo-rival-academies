@@ -1,43 +1,53 @@
-import asyncio
-from playwright.async_api import async_playwright
-import os
+from playwright.sync_api import Page, expect, sync_playwright
+import time
 
-async def verify_game():
-    async with async_playwright() as p:
-        browser = await p.chromium.launch(headless=True)
-        page = await browser.new_page()
+def test_game_load(page: Page):
+    print("Navigating to game...")
+    page.goto("http://localhost:4323/neo-tokyo-rival-academies")
 
-        # Start server (assuming it's running on 4321)
-        try:
-            await page.goto("http://localhost:4321/neo-tokyo-rival-academies", timeout=20000)
-            print("Successfully loaded http://localhost:4321")
+    # Wait for the canvas element which confirms 3D scene load
+    page.wait_for_selector("canvas", timeout=30000)
 
-            # Wait for canvas
-            await page.wait_for_selector("canvas", timeout=20000)
-            print("Canvas element found")
+    print("Canvas found. Waiting for splash screen (5s)...")
+    time.sleep(5)
 
-            # Check for Main Menu text (after Splash)
-            # Splash takes ~3s.
-            await asyncio.sleep(4)
-            content = await page.content()
-            if "NEO-TOKYO" in content:
-                print("Main Menu text found")
-            else:
-                print("WARNING: Main Menu text NOT found")
+    page.screenshot(path="/home/jules/verification/game_menu.png")
+    print("Menu screenshot taken.")
 
-            # Take screenshot
-            os.makedirs("screenshots", exist_ok=True)
-            await page.screenshot(path="screenshots/game_screen.png")
-            print("Screenshot saved to screenshots/game_screen.png")
+    # Look for START STORY button
+    try:
+        # Use get_by_text since the button text is specific
+        start_btn = page.get_by_text("INITIATE STORY MODE")
+        if start_btn.is_visible():
+            start_btn.click()
+            print("Clicked INITIATE STORY MODE")
 
-        except Exception as e:
-            print(f"Error: {e}")
-            # Take screenshot of error
-            os.makedirs("screenshots", exist_ok=True)
-            await page.screenshot(path="screenshots/error_screen.png")
+            # Wait for Intro Overlay
+            time.sleep(2)
+            page.screenshot(path="/home/jules/verification/game_intro.png")
 
-        finally:
-            await browser.close()
+            # Click to advance intro
+            print("Advancing intro...")
+            # Intro likely takes full screen clicks
+            for i in range(10):
+                page.mouse.click(640, 360) # Center
+                time.sleep(0.3)
+
+            print("Intro should be done. Waiting for gameplay...")
+            time.sleep(3)
+            page.screenshot(path="/home/jules/verification/game_gameplay.png")
+            print("Gameplay screenshot taken.")
+        else:
+            print("Start button not visible.")
+    except Exception as e:
+        print(f"Error: {e}")
 
 if __name__ == "__main__":
-    asyncio.run(verify_game())
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        # Set viewport to landscape mobile-ish or desktop
+        page = browser.new_page(viewport={"width": 1280, "height": 720})
+        try:
+            test_game_load(page)
+        finally:
+            browser.close()

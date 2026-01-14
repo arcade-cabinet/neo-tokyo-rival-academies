@@ -58,7 +58,7 @@ const INTRO_SCRIPT = [
 export const NeoTokyoGame: FC = () => {
   const [gameState, setGameState] = useState<GameState>(initialGameState);
   const [inputState, setInputState] = useState<InputState>(initialInputState);
-  const [viewState, setViewState] = useState<ViewState>('splash');
+  const [viewState, setViewState] = useState<ViewState>('menu');
   const [combatText, setCombatText] = useState<{ message: string; color: string } | null>(null);
   const [shakeIntensity, setShakeIntensity] = useState(0);
 
@@ -102,55 +102,7 @@ export const NeoTokyoGame: FC = () => {
     setInputState((prev) => ({ ...prev, [key]: value }));
   }, []);
 
-  useEffect(() => {
-    const _handleKeyDown = (e: KeyboardEvent) => {
-      switch (e.code) {
-        case 'Space':
-        case 'ArrowUp':
-          handleInput('jump', true);
-          break;
-        case 'ArrowDown':
-          handleInput('slide', true);
-          break;
-        case 'ShiftLeft':
-        case 'ShiftRight':
-          handleInput('run', true);
-          break;
-        case 'KeyK':
-        case 'KeyZ':
-          handleInput('attack', true);
-          break;
-      }
-    };
-
-    const _handleKeyUp = (e: KeyboardEvent) => {
-      switch (e.code) {
-        case 'Space':
-        case 'ArrowUp':
-          handleInput('jump', false);
-          break;
-        case 'ArrowDown':
-          handleInput('slide', false);
-          break;
-        case 'ShiftLeft':
-        case 'ShiftRight':
-          handleInput('run', false);
-          break;
-        case 'KeyK':
-        case 'KeyZ':
-          handleInput('attack', false);
-          break;
-      }
-    };
-
-    // Keyboard listeners REMOVED - Touch Only
-    // window.addEventListener('keydown', handleKeyDown);
-    // window.addEventListener('keyup', handleKeyUp);
-    // return () => {
-    //   window.removeEventListener('keydown', handleKeyDown);
-    //   window.removeEventListener('keyup', handleKeyUp);
-    // };
-  }, [handleInput]);
+  // useEffect for keyboard listeners removed (Touch Only)
 
   const handleCombatText = (message: string, color: string) => {
     setCombatText({ message, color });

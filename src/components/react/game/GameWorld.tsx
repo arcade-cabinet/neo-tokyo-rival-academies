@@ -2,6 +2,7 @@ import { Character } from '@components/react/objects/Character';
 import { Enemy } from '@components/react/objects/Enemy';
 import { Obstacle } from '@components/react/objects/Obstacle';
 import { Platform } from '@components/react/objects/Platform';
+import { ParallaxBackground } from './ParallaxBackground';
 import { useFrame, useThree } from '@react-three/fiber';
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
@@ -9,7 +10,6 @@ import { ECS, world } from '@/state/ecs';
 import { aiSystem } from '@/systems/AISystem';
 import { CombatSystem } from '@/systems/CombatSystem';
 import { InputSystem } from '@/systems/InputSystem';
-import { MovementSystem } from '@/systems/MovementSystem';
 import { PhysicsSystem } from '@/systems/PhysicsSystem';
 import { stageSystem } from '@/systems/StageSystem';
 import type { GameState, InputState } from '@/types/game';
@@ -42,6 +42,7 @@ export function GameWorld({
 }: GameWorldProps) {
   const { camera } = useThree();
   const initialized = useRef(false);
+  const bossSpawned = useRef(false);
 
   // Generation state
   const genStateRef = useRef({
@@ -106,10 +107,35 @@ export function GameWorld({
 
       // Check stage completion
       if (stageSystem.state === 'complete') {
-        // Here we would trigger cutscene or loading
-        // For now, reset to next stage loop
-        console.log('Stage Complete! looping...');
-        // genStateRef.current.nextX = player.position.x + 20; // Keep going for infinite runner feel
+        if (!bossSpawned.current) {
+          console.log('Spawning Boss Arena...');
+          bossSpawned.current = true;
+
+          // Spawn Boss Arena
+          const arenaX = genStateRef.current.nextX + 10;
+          const arenaY = genStateRef.current.nextY;
+
+          world.add({
+            isPlatform: true,
+            position: new THREE.Vector3(arenaX, arenaY, 0),
+            platformData: { length: 60, slope: 0, width: 12 },
+          });
+
+          // Spawn Boss (Vera)
+          world.add({
+            id: 'boss-vera',
+            isEnemy: true,
+            position: new THREE.Vector3(arenaX + 30, arenaY + 5, 0),
+            velocity: new THREE.Vector3(0, 0, 0),
+            characterState: 'stand',
+            faction: 'Azure',
+            modelColor: 0xffffff, // White = Boss in AISystem
+          });
+
+          // Stop procedural generation by pushing nextX way out or handling state
+          // For now, we just let it be, but the "if procedural" check below handles it if we switch stage type?
+          // StageSystem.state is complete, so we should stop calling generatePlatform.
+        }
       }
 
       // Game Over check
@@ -123,7 +149,7 @@ export function GameWorld({
       }
 
       // Generate ahead based on Stage Type
-      if (stageSystem.currentStage.platforms === 'procedural') {
+      if (stageSystem.currentStage.platforms === 'procedural' && stageSystem.state !== 'complete') {
         if (genStateRef.current.nextX < player.position.x + 80) {
           generatePlatform();
         }
@@ -195,10 +221,13 @@ export function GameWorld({
   return (
     <>
       {/* Run systems */}
-      <MovementSystem />
       <PhysicsSystem />
       <InputSystem inputState={inputState} />
-      <CombatSystem onGameOver={onGameOver} onScoreUpdate={onScoreUpdate} />
+      <CombatSystem
+        onGameOver={onGameOver}
+        onScoreUpdate={onScoreUpdate}
+        onCameraShake={onCameraShake}
+      />
 
       {/* Render Entities */}
       <ECS.Entities in={world.with('isPlayer', 'position', 'characterState')}>
@@ -243,10 +272,12 @@ export function GameWorld({
       </ECS.Entities>
 
       {/* Ground Plane (for shadows) */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.01, 0]} receiveShadow>
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -5, 0]} receiveShadow>
         <planeGeometry args={[1000, 1000]} />
         <shadowMaterial opacity={0.3} />
       </mesh>
+
+      <ParallaxBackground />
     </>
   );
 }

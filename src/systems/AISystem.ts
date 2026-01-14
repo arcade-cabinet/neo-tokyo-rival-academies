@@ -12,7 +12,7 @@ class IdleState extends State<YukaEnemy> {
     if (player?.position) {
       const dist = enemy.position.distanceTo(player.position as unknown as import('yuka').Vector3);
       if (dist < 30) {
-        enemy.fsm.changeState('CHASE');
+        enemy.fsm.changeTo('CHASE');
       }
     }
   }
@@ -29,7 +29,7 @@ class ChaseState extends State<YukaEnemy> {
       if (Math.abs(dx) > 2) {
         enemy.velocity.x = Math.sign(dx) * 8; // Faster chase
       } else {
-        enemy.fsm.changeState('ATTACK');
+        enemy.fsm.changeTo('ATTACK');
       }
     }
   }
@@ -44,7 +44,7 @@ class AttackState extends State<YukaEnemy> {
   execute(enemy: YukaEnemy) {
     // Simple cooldown
     if (Math.random() < 0.02) {
-      enemy.fsm.changeState('IDLE');
+      enemy.fsm.changeTo('IDLE');
     }
   }
 }
@@ -53,22 +53,24 @@ class AttackState extends State<YukaEnemy> {
 
 class BossHoverState extends State<YukaEnemy> {
   enter(enemy: YukaEnemy) {
-    // Fly up
-    enemy.velocity.y = 2;
+    enemy.velocity.y = 0;
   }
   execute(enemy: YukaEnemy) {
-    // Hover logic: sine wave height
-    // enemy.position.y = 5 + Math.sin(performance.now() * 0.001) * 2; // handled in physics or visual?
-    // Let's just drift towards player X but keep distance
     const player = ECS.world.with('isPlayer', 'position').first;
     if (player?.position) {
-      const targetX = player.position.x + 15; // Hover ahead
+      // Hover ahead of player
+      const targetX = player.position.x + 10;
       const dx = targetX - enemy.position.x;
-      enemy.velocity.x = dx * 0.5;
+      enemy.velocity.x = dx * 1.0;
+
+      // Hover Height (Sine wave around height 6)
+      const targetY = 6 + Math.sin(performance.now() * 0.003) * 2;
+      const dy = targetY - enemy.position.y;
+      enemy.velocity.y = dy * 2.0;
     }
 
-    if (Math.random() < 0.01) {
-      enemy.fsm.changeState('BOSS_SLAM');
+    if (Math.random() < 0.005) {
+      enemy.fsm.changeTo('BOSS_SLAM');
     }
   }
 }
@@ -76,11 +78,20 @@ class BossHoverState extends State<YukaEnemy> {
 class BossSlamState extends State<YukaEnemy> {
   enter(enemy: YukaEnemy) {
     enemy.velocity.x = 0;
-    enemy.velocity.y = -20; // Crash down
+    enemy.velocity.y = -25; // Fast Crash down
   }
   execute(enemy: YukaEnemy) {
-    if (enemy.position.y <= 0) {
-      enemy.fsm.changeState('BOSS_HOVER');
+    // Detect ground hit (approximate)
+    if (enemy.position.y <= 0.5) {
+      // Impact logic could go here (shake, particles)
+      enemy.velocity.y = 0;
+      enemy.position.y = 0.5;
+
+      // Wait a bit or immediately return?
+      // For now, bounce back up
+      if (Math.random() < 0.1) {
+          enemy.fsm.changeTo('BOSS_HOVER');
+      }
     }
   }
 }
@@ -105,12 +116,12 @@ export class YukaEnemy extends GameEntity {
     if (isBoss) {
       this.fsm.add('BOSS_HOVER', new BossHoverState());
       this.fsm.add('BOSS_SLAM', new BossSlamState());
-      this.fsm.changeState('BOSS_HOVER');
+      this.fsm.changeTo('BOSS_HOVER');
     } else {
       this.fsm.add('IDLE', new IdleState());
       this.fsm.add('CHASE', new ChaseState());
       this.fsm.add('ATTACK', new AttackState());
-      this.fsm.changeState('IDLE');
+      this.fsm.changeTo('IDLE');
     }
   }
 

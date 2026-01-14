@@ -62,11 +62,6 @@ export const NarrativeOverlay: FC<NarrativeOverlayProps> = ({ script, onComplete
     <button
       type="button"
       onClick={handleNext}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          handleNext();
-        }
-      }}
       style={{
         position: 'absolute',
         background: 'transparent',

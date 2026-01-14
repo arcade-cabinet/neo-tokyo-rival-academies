@@ -5,13 +5,14 @@ import { ECS, world } from '../state/ecs';
 interface CombatSystemProps {
   onGameOver: () => void;
   onScoreUpdate: (score: number) => void;
+  onCameraShake?: () => void;
 }
 
 const playersQuery = ECS.world.with('isPlayer', 'position', 'characterState');
 const enemiesQuery = ECS.world.with('isEnemy', 'position');
 const obstaclesQuery = ECS.world.with('isObstacle', 'position', 'obstacleType');
 
-export const CombatSystem = ({ onGameOver, onScoreUpdate }: CombatSystemProps) => {
+export const CombatSystem = ({ onGameOver, onScoreUpdate, onCameraShake }: CombatSystemProps) => {
   useFrame(() => {
     for (const player of playersQuery) {
       if (!player.position) continue;
@@ -33,6 +34,7 @@ export const CombatSystem = ({ onGameOver, onScoreUpdate }: CombatSystemProps) =
             // Player destroys enemy
             toRemove.push(enemy);
             onScoreUpdate(100); // More points for Yakuza
+            onCameraShake?.();
           } else {
             // Enemy kills player
             onGameOver();
