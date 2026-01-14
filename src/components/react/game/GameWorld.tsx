@@ -498,9 +498,8 @@ export function GameWorld({
         onCameraShake={onCameraShake}
         onCombatText={(msg, color) => {
           if (msg === 'DATA ACQUIRED') {
-             // Just grant item/XP. Dialogue is handled by HUD observing state if we had a proper "Item Acquired" dialog
-             // For now, let's trigger a generic dialogue or just leave it to CombatText
-             addItem('data_shard', 'Data Shard');
+            // Grant the item/XP here; item acquisition dialogue is currently handled elsewhere by the HUD/state.
+            addItem('data_shard', 'Data Shard');
           } else if (msg === 'DESTROYED!' || msg === 'KO!') {
             addXp(100);
           }
