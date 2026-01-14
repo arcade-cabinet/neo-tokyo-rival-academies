@@ -70,9 +70,13 @@ jobs:
                 repo: context.repo.repo,
                 job_id: job.id
               });
+              // Truncate logs to last 50KB to avoid token limits
+              const truncatedLogs = logs.data.length > 50000 
+                ? '...[truncated]...\n' + logs.data.slice(-50000)
+                : logs.data;
               errorLogs.push({
                 jobName: job.name,
-                logs: logs.data
+                logs: truncatedLogs
               });
             }
 
