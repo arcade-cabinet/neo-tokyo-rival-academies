@@ -208,8 +208,6 @@ export function GameWorld({
         // Transition to Space Stage if high enough
         if (player.position.y > 50) {
           console.log('Welcome to Space!');
-          // We can add a dialogue trigger here for space entry if we had one in JSON
-          // startDialogue('player', 'space_entry');
           stageSystem.loadStage('alien_ship');
 
           // Reset Player & Ally Position
