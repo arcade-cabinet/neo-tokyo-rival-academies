@@ -52,7 +52,6 @@ export function GameWorld({
 }: GameWorldProps) {
   const { camera } = useThree();
   const { showDialogue, addItem, addXp } = useGameStore();
-  // const collectedLogs = useRef(0); // Legacy B-Story logic removed in favor of DialogueSystem
   const exitSequenceActive = useRef(false);
   const initialized = useRef(false);
   const bossSpawned = useRef(false);
