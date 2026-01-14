@@ -349,7 +349,7 @@ export function GameWorld({
           // If boss stage, spawn Boss. If street stage, spawn Connector.
           if (stageSystem.currentStageId === 'sector7_streets') {
             // Spawn Connector
-            startDialogue('player', 'intro'); // Re-using intro for now as generic "Let's go"
+            startDialogue('player', 'bridge_transition'); // Trigger connector/bridge transition dialogue
 
             world.add({
               isPlatform: true,
