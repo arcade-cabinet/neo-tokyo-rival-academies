@@ -21,7 +21,7 @@ interface GameWorldProps {
   onCameraShake?: () => void;
 }
 
-export function GameWorld({ gameState, inputState, onGameOver, onScoreUpdate }: GameWorldProps) {
+export function GameWorld({ gameState, inputState, onGameOver, onScoreUpdate, onCameraShake }: GameWorldProps) {
   const { camera } = useThree();
   const initialized = useRef(false);
 
