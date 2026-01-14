@@ -1,4 +1,4 @@
-from playwright.sync_api import Page, sync_playwright
+from playwright.sync_api import Page, sync_playwright, Error
 import time
 import os
 
@@ -26,7 +26,7 @@ def verify_rpg_gameplay(page: Page):
     try:
         start_btn = page.get_by_text("INITIATE STORY MODE")
         start_btn.click()
-    except:
+    except Error:
         print("Could not find start button")
         return
 
