@@ -1,4 +1,4 @@
-from playwright.sync_api import Page, sync_playwright
+from playwright.sync_api import Page, expect, sync_playwright
 import time
 
 def verify_rpg_gameplay(page: Page):
@@ -20,7 +20,7 @@ def verify_rpg_gameplay(page: Page):
     try:
         start_btn = page.get_by_text("INITIATE STORY MODE")
         start_btn.click()
-    except Exception:
+    except:
         print("Could not find start button, checking screenshot")
         page.screenshot(path="/home/jules/verification/debug_menu.png")
         return

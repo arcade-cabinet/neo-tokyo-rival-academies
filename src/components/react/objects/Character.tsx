@@ -153,6 +153,17 @@ export function Character({
     }
   });
 
+  // Toon Material for Cel Shading
+  const ToonMat = ({ color, wireframe = false, transparent = false, opacity = 1 }: { color: THREE.ColorRepresentation, wireframe?: boolean, transparent?: boolean, opacity?: number }) => (
+      <meshToonMaterial
+          color={color}
+          wireframe={wireframe}
+          transparent={transparent}
+          opacity={opacity}
+          gradientMap={null} // Default gradient
+      />
+  );
+
   const Limb = ({
     x,
     y,
@@ -171,23 +182,23 @@ export function Character({
     <group position={[x, y, 0]} ref={limbRef}>
       <mesh position={[0, -h / 2, 0]} castShadow>
         <boxGeometry args={[w, h, w]} />
-        <meshToonMaterial color={0x111111} />
+        <ToonMat color={0x111111} />
       </mesh>
       {hasWeapon && isPlayer && (
         // THE REDLINE PISTON (Hammer)
         <group position={[0, -h, 0]} rotation={[0, 0, -Math.PI / 2]}>
           <mesh position={[0, 0.5, 0]}>
             <boxGeometry args={[0.3, 1.2, 0.3]} />
-            <meshToonMaterial color="#333" />
+            <ToonMat color="#333" />
           </mesh>
           <mesh position={[0, 1.2, 0]}>
             <boxGeometry args={[0.8, 0.6, 0.8]} />
-            <meshToonMaterial color="#a00" />
+            <ToonMat color="#a00" />
           </mesh>
           {/* Engine block detail */}
           <mesh position={[0, 1.2, 0.45]}>
             <boxGeometry args={[0.6, 0.4, 0.2]} />
-            <meshToonMaterial color="#ffd700" />
+            <ToonMat color="#ffd700" />
           </mesh>
         </group>
       )}
@@ -196,11 +207,11 @@ export function Character({
         <group position={[0, -h, 0]} rotation={[0, 0, -Math.PI / 2]}>
           <mesh position={[0, 1.0, 0]}>
             <cylinderGeometry args={[0.05, 0.1, 2.5, 8]} />
-            <meshToonMaterial color="#0ff" transparent opacity={0.8} />
+            <ToonMat color="#0ff" transparent opacity={0.8} />
           </mesh>
           <mesh position={[0, 1.0, 0]} rotation={[0, 0, Math.PI / 4]}>
             <boxGeometry args={[0.4, 0.4, 0.4]} />
-            <meshToonMaterial color="#fff" wireframe />
+            <ToonMat color="#fff" wireframe />
           </mesh>
         </group>
       )}
@@ -213,26 +224,26 @@ export function Character({
         {/* Torso */}
         <mesh position={[0, 0.85, 0]} castShadow>
           <boxGeometry args={[0.5, 0.7, 0.3]} />
-          <meshToonMaterial color={0x111111} />
+          <ToonMat color={0x111111} />
         </mesh>
 
         {/* Coat Segments - Hierarchical for physics */}
         <group ref={coatSeg1Ref} position={[0, 0.5, 0]}>
           <mesh position={[0, -0.25, 0]} castShadow>
             <boxGeometry args={[0.52, 0.5, 0.32]} />
-            <meshToonMaterial color={isPlayer ? 0xaa0000 : 0x0000aa} />
+            <ToonMat color={isPlayer ? 0xaa0000 : 0x0000aa} />
           </mesh>
 
           <group ref={coatSeg2Ref} position={[0, -0.45, 0]}>
             <mesh position={[0, -0.25, 0]} castShadow>
               <boxGeometry args={[0.52, 0.5, 0.32]} />
-              <meshToonMaterial color={isPlayer ? 0x880000 : 0x000088} />
+              <ToonMat color={isPlayer ? 0x880000 : 0x000088} />
             </mesh>
 
             <group ref={coatSeg3Ref} position={[0, -0.45, 0]}>
               <mesh position={[0, -0.25, 0]} castShadow>
                 <boxGeometry args={[0.52, 0.5, 0.32]} />
-                <meshToonMaterial color={isPlayer ? 0x660000 : 0x000066} />
+                <ToonMat color={isPlayer ? 0x660000 : 0x000066} />
               </mesh>
             </group>
           </group>
@@ -242,12 +253,12 @@ export function Character({
         <group position={[0, 1.3, 0]}>
           <mesh>
             <sphereGeometry args={[0.22, 16, 16]} />
-            <meshToonMaterial color={0xffccaa} />
+            <ToonMat color={0xffccaa} />
           </mesh>
           {/* Pompadour Hair or Bob Cut */}
           <mesh rotation={[Math.PI / 2, 0, 0]}>
             <cylinderGeometry args={[0.25, 0.25, 0.15, 16]} />
-            <meshToonMaterial color={color} />
+            <ToonMat color={color} />
           </mesh>
         </group>
 

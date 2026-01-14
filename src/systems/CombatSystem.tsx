@@ -100,8 +100,10 @@ export const CombatSystem = ({
               }
             }
           } else {
-            // Enemy attacks player
-            // If the player has health/stats, apply damage instead of instant death; otherwise trigger game over
+            // Enemy Attacks Player (Game Over or Damage?)
+            // For now, classic runner style: Contact = Death unless attacking
+            // Ideally we'd calculate damage to player too, but let's keep the runner stakes high for now
+            // or maybe deduct health?
             if (player.health !== undefined && player.stats) {
               // Take damage instead of instant death if we have health
               const enemyDmg = resolveCombat(enemy, player).damage;
@@ -114,7 +116,10 @@ export const CombatSystem = ({
                 isGameOver = true;
                 break;
               } else {
-                // Remove the enemy after collision so the player doesn't take damage again next frame
+                // Knockback or I-frames?
+                // For now, just a push back to avoid multi-frame hits?
+                // Simplified: remove enemy so we don't die instantly next frame
+                // Or set a "stunned" state.
                 toRemove.push(enemy); // "We crashed into them, they break, we take damage"
               }
             } else {

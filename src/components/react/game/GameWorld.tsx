@@ -52,6 +52,7 @@ export function GameWorld({
 }: GameWorldProps) {
   const { camera } = useThree();
   const { showDialogue, addItem, addXp } = useGameStore();
+  // const collectedLogs = useRef(0); // Legacy B-Story logic removed in favor of DialogueSystem
   const exitSequenceActive = useRef(false);
   const initialized = useRef(false);
   const bossSpawned = useRef(false);
@@ -208,6 +209,8 @@ export function GameWorld({
         // Transition to Space Stage if high enough
         if (player.position.y > 50) {
           console.log('Welcome to Space!');
+          // We can add a dialogue trigger here for space entry if we had one in JSON
+          // startDialogue('player', 'space_entry');
           stageSystem.loadStage('alien_ship');
 
           // Reset Player & Ally Position
@@ -347,7 +350,7 @@ export function GameWorld({
           // If boss stage, spawn Boss. If street stage, spawn Connector.
           if (stageSystem.currentStageId === 'sector7_streets') {
             // Spawn Connector
-            startDialogue('player', 'bridge_transition'); // Trigger connector/bridge transition dialogue
+            startDialogue('player', 'intro'); // Re-using intro for now as generic "Let's go"
 
             world.add({
               isPlatform: true,
@@ -496,8 +499,9 @@ export function GameWorld({
         onCameraShake={onCameraShake}
         onCombatText={(msg, color) => {
           if (msg === 'DATA ACQUIRED') {
-            // Grant the item/XP here; item acquisition dialogue is currently handled elsewhere by the HUD/state.
-            addItem('data_shard', 'Data Shard');
+             // Just grant item/XP. Dialogue is handled by HUD observing state if we had a proper "Item Acquired" dialog
+             // For now, let's trigger a generic dialogue or just leave it to CombatText
+             addItem('data_shard', 'Data Shard');
           } else if (msg === 'DESTROYED!' || msg === 'KO!') {
             addXp(100);
           }
