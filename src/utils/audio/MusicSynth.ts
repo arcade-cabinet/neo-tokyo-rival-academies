@@ -164,6 +164,7 @@ export class MusicSynth {
   // --- ONE-SHOT EFFECTS ---
 
   playJump(): void {
+    this.init();
     if (!this.ctx) return;
     const t = this.ctx.currentTime;
     const o = this.ctx.createOscillator();
