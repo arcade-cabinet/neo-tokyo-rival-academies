@@ -1,10 +1,10 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import { GoogleGenAI } from '@google/genai';
 
-// import { GoogleGenerativeAI } from '@google/genai';
-
-// Mock config if env var is missing
+// Config
 const API_KEY = process.env.GOOGLE_GENAI_API_KEY;
+const MODEL_NAME = 'imagen-4.0-generate-001';
 
 // Defined scenes from STORY.md - Expanded for Full Narrative
 const SCENES = [
@@ -89,30 +89,90 @@ async function generateManifests() {
   console.log('Generating Story Manifests...');
 
   const manifest: Record<string, { prompt: string; description: string; imagePath: string }> = {};
+  const outDir = path.join(process.cwd(), 'public/assets/story');
+  await fs.mkdir(outDir, { recursive: true });
 
   if (!API_KEY) {
     console.warn('GOOGLE_GENAI_API_KEY not found. Generating placeholder manifests.');
-
     for (const scene of SCENES) {
       manifest[scene.id] = {
-        description: `Generated Description for ${scene.title}: ${scene.context}`,
-        prompt: `Anime style, cel shaded, ${scene.context} ${scene.action} --ar 16:9 --style raw`,
+        description: `Placeholder for ${scene.title}`,
+        prompt: `Placeholder`,
         imagePath: `/assets/story/${scene.id}_placeholder.png`,
       };
     }
   } else {
-    // Real generation logic would go here using the SDK
-    // const genAI = new GoogleGenerativeAI(API_KEY);
-    // ...
-    console.log('API Key detected (Mock logic for safety in this env).');
+    console.log('API Key detected. Initializing GoogleGenAI...');
+    const client = new GoogleGenAI({ apiKey: API_KEY });
+
+    for (const scene of SCENES) {
+      const fileName = `${scene.id}.png`;
+      const filePath = path.join(outDir, fileName);
+      const publicPath = `/assets/story/${fileName}`;
+      const prompt = `Anime style, cel shaded, 8k masterpiece, detailed, neo-tokyo cyberpunk. ${scene.context} ${scene.action} --style raw`;
+
+      // Check if file exists (Idempotency)
+      try {
+        await fs.access(filePath);
+        console.log(`[SKIP] Image exists: ${fileName}`);
+        manifest[scene.id] = {
+          description: scene.context,
+          prompt: prompt,
+          imagePath: publicPath,
+        };
+        continue;
+      } catch {
+        // File does not exist, generate
+      }
+
+      console.log(`[GEN] Generating image for: ${scene.title}...`);
+
+      try {
+        const response = await client.models.generateImages({
+          model: MODEL_NAME,
+          prompt: prompt,
+          config: {
+            numberOfImages: 1,
+            aspectRatio: '16:9',
+            safetyFilterLevel: 'block_low_and_above',
+            personGeneration: 'allow_adult',
+          },
+        });
+
+        // Response structure for generateImages usually has generatedImages[]
+        const imgData = response.generatedImages?.[0]?.image?.imageBytes;
+
+        if (imgData) {
+          const buffer = Buffer.from(imgData, 'base64');
+          await fs.writeFile(filePath, buffer);
+          console.log(`[OK] Saved: ${fileName}`);
+
+          manifest[scene.id] = {
+            description: scene.context,
+            prompt: prompt,
+            imagePath: publicPath,
+          };
+        } else {
+          console.error(`[ERR] No image data returned for ${scene.id}`);
+        }
+      } catch (err) {
+        console.error(`[ERR] Failed to generate ${scene.id}:`, err);
+        // Fallback to placeholder in manifest so app doesn't crash
+        manifest[scene.id] = {
+          description: `Failed to generate: ${scene.context}`,
+          prompt: prompt,
+          imagePath: `/assets/story/${scene.id}_placeholder.png`,
+        };
+      }
+    }
   }
 
   // Write Manifest
-  const outDir = path.join(process.cwd(), 'src/content/story');
-  await fs.mkdir(outDir, { recursive: true });
-  await fs.writeFile(path.join(outDir, 'manifest.json'), JSON.stringify(manifest, null, 2));
+  const manifestDir = path.join(process.cwd(), 'src/content/story');
+  await fs.mkdir(manifestDir, { recursive: true });
+  await fs.writeFile(path.join(manifestDir, 'manifest.json'), JSON.stringify(manifest, null, 2));
 
-  console.log(`Manifest written to ${path.join(outDir, 'manifest.json')}`);
+  console.log(`Manifest written to ${path.join(manifestDir, 'manifest.json')}`);
 }
 
 generateManifests().catch(console.error);

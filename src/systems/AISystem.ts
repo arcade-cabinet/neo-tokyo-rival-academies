@@ -1,4 +1,4 @@
-import { EntityManager, FSM, GameEntity, State } from 'yuka';
+import { EntityManager, GameEntity, State, StateMachine } from 'yuka';
 import { ECS, world } from '@/state/ecs';
 
 // --- Yuka States ---
@@ -89,7 +89,7 @@ class BossSlamState extends State<YukaEnemy> {
 
 export class YukaEnemy extends GameEntity {
   ecsId: string;
-  fsm: FSM<YukaEnemy>;
+  fsm: StateMachine<YukaEnemy>;
   isBoss: boolean;
 
   // Type assertions for Yuka properties
@@ -100,7 +100,7 @@ export class YukaEnemy extends GameEntity {
     super();
     this.ecsId = ecsId;
     this.isBoss = isBoss;
-    this.fsm = new FSM(this);
+    this.fsm = new StateMachine(this);
 
     if (isBoss) {
       this.fsm.add('BOSS_HOVER', new BossHoverState());
@@ -114,9 +114,10 @@ export class YukaEnemy extends GameEntity {
     }
   }
 
-  update(delta: number) {
+  update(delta: number): this {
     this.fsm.update();
     super.update(delta);
+    return this;
   }
 }
 
