@@ -4,15 +4,27 @@
   "type": "character",
   "description": "The hot-headed protagonist from the Crimson Academy.",
   "visualPrompt": "Full body character design of Kai, a young cyberpunk academy student, male, messy spiky red hair, wearing a stylized futuristic school uniform with crimson armored plating, red and gold accents, holding a massive heavy mechanical piston-hammer, high-tops, confident stance, anime style, cel shaded, highly detailed, 8k, neo-tokyo aesthetic, isolated on solid white background.",
+  "modelConfig": {
+    "aiModel": "latest",
+    "topology": "quad",
+    "targetPolycount": 50000,
+    "symmetryMode": "auto",
+    "poseMode": "t-pose",
+    "enablePbr": true
+  },
   "riggingConfig": {
     "heightMeters": 1.78
   },
-  "modelConfig": {
-    "targetPolycount": 50000,
-    "enablePbr": true
-  },
   "animationConfig": {
-    "animations": ["IDLE_COMBAT", "RUN_IN_PLACE", "ATTACK_MELEE_1", "HIT_REACTION", "DEATH", "JUMP_IDLE", "BLOCK"]
+    "animations": [
+      "IDLE_COMBAT",
+      "RUN_IN_PLACE",
+      "ATTACK_MELEE_1",
+      "HIT_REACTION",
+      "DEATH",
+      "JUMP_IDLE",
+      "BLOCK"
+    ]
   },
   "tasks": {
     "conceptArt": {
@@ -24,6 +36,70 @@
       "taskId": "019bc0e2-59e7-7ad2-a13e-92b626b6cf23",
       "status": "SUCCEEDED",
       "localPath": "model.glb"
-    }
+    },
+    "rigging": {
+      "taskId": "019bc101-247f-7ef7-9b68-8a2791811dcb",
+      "status": "SUCCEEDED",
+      "resultUrl": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019bc101-247f-7ef7-9b68-8a2791811dcb/output/Character_output.glb?Expires=1768728863&Signature=a1NEjtWNbGkCfrPD75s-cfozPqsBO8UgKMfii1vcyEmJBk-jhUcsS1cZL4UFakTsfRVTtY86TuUM97EudqOLh3ADWXJsqBOOwfbS8B0jYcqT0D2EE8hFp9YBxrJLE08Ob-d~43jRIGhg0eBO8vVKYkNVdcMjt3iZsRPFwzyekOFSOIf4jGgO2TGgFR7auxiHQY-b0u40xi6KVT5V-Gy8UCvTsgHZAaH3MYXWIsLsXOEDYCkDFm5geCsC4fbcJJz8-ZkPkSSMkG4hxkrw6c9UJT99Y1IoYpO2FVBF9G-GP8CD~mwxw2-DZ91R2sb4qTu2joFHVCEsWaJLebO-dpRSwQ__&Key-Pair-Id=KL5I0C8H7HX83",
+      "localPath": "/Users/jbogaty/src/arcade-cabinet/neo-tokyo-rival-academies/packages/game/public/assets/characters/main/kai/rigged.glb"
+    },
+    "animations": [
+      {
+        "taskId": "019bc101-9116-7e1d-8523-ef8afed5489b",
+        "status": "SUCCEEDED",
+        "animationName": "IDLE_COMBAT",
+        "actionId": 89,
+        "resultUrl": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019bc101-9116-7e1d-8523-ef8afed5489b/output/Animation_Combat_Stance_withSkin.glb?Expires=1768728885&Signature=A7L9Is2jcjLnLZzDr5TWcuuz3m1FfYJDCVNcFNA1enJ8lWiHSA0M39EBc4r1Z5GI~KWBFQk426g0dBCSy4UWEUImMjfOE3Hn2uxVVpFwpj-kFeC2DOur~~3YNCsgwdGKtKdxWLWf7KpTk11OjGAwzeHcpqzUk9WPJTiGvMg16WfANfzaosPt37~vv1eiZUucpgI3pmfI24gARghXIcn1qMp4eeRCa6SmxTwmyYV-tww8faqpJ4ngJzH78B~gsgF5Edtvw3wR~mm3FRloeS29IoA4-iZvttmkT1fLKAv1qfY1nH~U20Lzf9Cd38vMfY2TkZhoEOQjyoCK3wgDy-PyCg__&Key-Pair-Id=KL5I0C8H7HX83",
+        "localPath": "/Users/jbogaty/src/arcade-cabinet/neo-tokyo-rival-academies/packages/game/public/assets/characters/main/kai/animations/idle_combat.glb"
+      },
+      {
+        "taskId": "019bc101-e83b-75f8-b76a-6724efb9e361",
+        "status": "SUCCEEDED",
+        "animationName": "RUN_IN_PLACE",
+        "actionId": 657,
+        "resultUrl": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019bc101-e83b-75f8-b76a-6724efb9e361/output/Animation_run_fast_10_inplace_withSkin.glb?Expires=1768728898&Signature=jYm-RyUQYEMrmZKZv10Nckjv2vqe-J9QEYwxkIo0TSwIAu52pBZsl8BN42Nyglerrazkb5a~DhQ5J-3L-zmYi-SdpyOJL2naTZXxKR-eYUC3xX2jhhA5U0Fk6mPk5i2lIlWRGOI7NYubwYLF6~IvFHOuFNbKdDBjHU-KaPoyi59RW4urmggKRdeARysNL-hE0MJymYzfZV~x3Pvhe5F-2kmioAyANDCDObj4NfnCMHCfcjgWS4RMY7OWtyc22UtHCL-Cxj-k6-c2i-NL1C2ug1fD6MQBLwK2o3~7iSZxC7LMbiELbUqT5db-3H1VCkLQOrMHhT2GcItiDUmD78D46g__&Key-Pair-Id=KL5I0C8H7HX83",
+        "localPath": "/Users/jbogaty/src/arcade-cabinet/neo-tokyo-rival-academies/packages/game/public/assets/characters/main/kai/animations/run_in_place.glb"
+      },
+      {
+        "taskId": "019bc102-1a8b-7789-bd78-800e06e09aaf",
+        "status": "SUCCEEDED",
+        "animationName": "ATTACK_MELEE_1",
+        "actionId": 4,
+        "resultUrl": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019bc102-1a8b-7789-bd78-800e06e09aaf/output/Animation_Attack_withSkin.glb?Expires=1768728932&Signature=pEQ04ivgwsvuvmAj7m5gktWSPHtbvD1gTbAtLEOuNlzaHlGze4TsNkZ8J9nlCkdUvmYB49W2Fqgoww~XAm49O5qYyfeyy4kbKGhbZ0QWmAKh5Ae4VopXK4iPheP-EUAC7EZ5eJkyzGCZNROQVtMXHUZdNQsS5vdJQdeO3KuHyShRpwnbcm~46PfE7pf-zwDH37QLQ5DCvMl2dDNuhXmhG2joJguu5sc1xA7Is7T5LObdVYS-0CxUs-lH8hAsqFo9SaPa4PuWw~xuOdJ04UWitKW~6NyZxS-20vgYe4AROHhTgA6Dg2nR6b99KZSCg3zrLTLC4~lHsPd14fKdLk3EEg__&Key-Pair-Id=KL5I0C8H7HX83",
+        "localPath": "/Users/jbogaty/src/arcade-cabinet/neo-tokyo-rival-academies/packages/game/public/assets/characters/main/kai/animations/attack_melee_1.glb"
+      },
+      {
+        "taskId": "019bc102-9fdc-7e2d-8f5c-8d12e2ac4a98",
+        "status": "SUCCEEDED",
+        "animationName": "HIT_REACTION",
+        "actionId": 178,
+        "resultUrl": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019bc102-9fdc-7e2d-8f5c-8d12e2ac4a98/output/Animation_Hit_Reaction_withSkin.glb?Expires=1768728951&Signature=GK1qxfYgcmxJmPo8MxJtouDrUwLF-L~kJKpEGTiqaWE-iMbRCqTTes-tpJo6yTA~eNtMq~o53Gz7yCtZDeI49jf5LB4ifqTy5gTgY~moy42a-PJDUvc867ajCY8pu0HxLojcJyZ34JLvEw2phLTsZNB1IwXDUPbAy3XK0NUee8VaFF-~RGFVfi1~g1FJjJyEOS9raQ5LhTAMBDhIO46rh3-1xS8AXp2MrgkxLYrR2pkH6sNJzgI3lINM-G7iC~H9G73p1OLQmruD3QE53up~UtBqK4uoLX6nSEpyvMCOUMIzt7rVn-mUExEu~H9DSDgCLf-ZF~kXI0AHlSgAtZ-gOA__&Key-Pair-Id=KL5I0C8H7HX83",
+        "localPath": "/Users/jbogaty/src/arcade-cabinet/neo-tokyo-rival-academies/packages/game/public/assets/characters/main/kai/animations/hit_reaction.glb"
+      },
+      {
+        "taskId": "019bc102-e9e6-7e3c-9fa9-cefa83da406d",
+        "status": "SUCCEEDED",
+        "animationName": "DEATH",
+        "actionId": 8,
+        "resultUrl": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019bc102-e9e6-7e3c-9fa9-cefa83da406d/output/Animation_Dead_withSkin.glb?Expires=1768728978&Signature=NdhXgyXm~ZViUqGLVZ6y3QD-duxCMY0lT-ScS03peFg6SelCVC8VGjWE95Q2jNlcVgNfvLToXNJBMyZ-e-0Xvp3WY3mVnjCm3b7REGG5w~-OTxyffeDCMHNWPFENBEUqB2U2n-eDev~19UyDIG0isYw13ylcRYyE80JxVuPMq1qZaOQPoUl6-J565n3Ut3AiV2PVFgSD~Y-SjFhTvLk76HtGvR-eHz4e5cHd7jADmKjqh4j7yKC7ZZB7DUUvq0FOCQcUiMuSYq28Q50xk2CKp11Id~MOQpU6A4BUYMcClAEuTyHPMlCZ19lBhtd1oX~3~dcCrQhloLhAzURkrHPdTA__&Key-Pair-Id=KL5I0C8H7HX83",
+        "localPath": "/Users/jbogaty/src/arcade-cabinet/neo-tokyo-rival-academies/packages/game/public/assets/characters/main/kai/animations/death.glb"
+      },
+      {
+        "taskId": "019bc103-542e-760c-a570-b144bb910e66",
+        "status": "SUCCEEDED",
+        "animationName": "JUMP_IDLE",
+        "actionId": 86,
+        "resultUrl": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019bc103-542e-760c-a570-b144bb910e66/output/Animation_Basic_Jump_withSkin.glb?Expires=1768729053&Signature=JshytyiGyJQH1BKnvYUfpf-9~WS1gIKLGYejMZj50pu6J2tB~WJuPphGnYZ~DefR6BP8gH3tFPHWdo5bRrbdJdj~Y9v~s4sfCerV~mZdRBXEgxlFlK8jFSpA82C9W6pjHv26u19Yc3VmnbRrBNDHyBsd4hfDYJ7qS7F0u96WLDNryFtzpX9HqculFw1unv-XMfoHfsBPqTI0CG4wUQXDNWtLudCVKjCqwU20AzQ8GhHQ~s659o1KqVlZPh7Cm4YhncPh7wY-MIuAp-UjAMeIdy4uX8N3pI9t7cvajuK~dkvvHwLWb5l2HCpYFqUiXlBcyUR8siSO8AccaFJ98DSAyA__&Key-Pair-Id=KL5I0C8H7HX83",
+        "localPath": "/Users/jbogaty/src/arcade-cabinet/neo-tokyo-rival-academies/packages/game/public/assets/characters/main/kai/animations/jump_idle.glb"
+      },
+      {
+        "taskId": "019bc104-7553-7f61-a474-408a15708fcd",
+        "status": "SUCCEEDED",
+        "animationName": "BLOCK",
+        "actionId": 138,
+        "resultUrl": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019bc104-7553-7f61-a474-408a15708fcd/output/Animation_Block1_withSkin.glb?Expires=1768729071&Signature=dCnY5EbTXENM8e1ACTBL~JrG7p~ls-9sWzEcfSWUKRLN7xqjHNuRyomT1pQhSZqcT9-A6qCyxkG16kb0Znk~YPC9X8Q6uApP6ta9gPD~K5qLnvEUj3B3BTWrDRB5Ua6jBic-C4GexP205sdinmU9-tcvlF81He4V3fQLIRwsT0DEannBHRlYvNtd1oTEe7Dpq8vVdNLE1hCLBfoZty57pwYlok5Rw8suxcDZ18891tJoGB6urXkJ8eEDOUWEW4qfiZa7lwQ6fP63aAGD7qEEKqxcBlhS0m8stBpKMQtIkJ9jIShJSp6EK-F~uNlqeTGvrlyc6dXwJEB6nvDQ6YlMyg__&Key-Pair-Id=KL5I0C8H7HX83",
+        "localPath": "/Users/jbogaty/src/arcade-cabinet/neo-tokyo-rival-academies/packages/game/public/assets/characters/main/kai/animations/block.glb"
+      }
+    ]
   }
 }

@@ -1,17 +1,15 @@
 import { Canvas, useFrame } from '@react-three/fiber';
-import { PerspectiveCamera, Environment, Text, useTexture } from '@react-three/drei';
-import { Physics, RigidBody, CuboidCollider } from '@react-three/rapier';
-import { Suspense, useRef } from 'react';
+import { PerspectiveCamera, Environment, useGLTF, useAnimations } from '@react-three/drei';
+import { Physics, RigidBody } from '@react-three/rapier';
+import { Suspense, useRef, useEffect } from 'react';
 import { Leva, useControls } from 'leva';
-import * as THREE from 'three';
+import type { Group, Mesh } from 'three';
 
 function ParallaxLayer({ z, speed, color }: { z: number, speed: number, color: string }) {
-  const ref = useRef<THREE.Mesh>(null);
-  useFrame(({ clock, camera }) => {
+  const ref = useRef<Mesh>(null);
+  useFrame(({ clock }) => {
     if (ref.current) {
-        // Simple parallax: move opposite to camera/player
-        // For now just drift
-        ref.current.position.x = Math.sin(clock.getElapsedTime() * speed) * 2;
+      ref.current.position.x = Math.sin(clock.getElapsedTime() * speed) * 2;
     }
   });
 
@@ -20,6 +18,26 @@ function ParallaxLayer({ z, speed, color }: { z: number, speed: number, color: s
       <planeGeometry args={[40, 20]} />
       <meshStandardMaterial color={color} transparent opacity={0.8} />
     </mesh>
+  );
+}
+
+function KaiCharacter({ position = [0, 0, 0] }: { position?: [number, number, number] }) {
+  const group = useRef<Group>(null);
+  const { scene } = useGLTF('/assets/characters/main/kai/rigged.glb');
+  const runAnim = useGLTF('/assets/characters/main/kai/animations/run_in_place.glb');
+  const { actions } = useAnimations(runAnim.animations, group);
+
+  useEffect(() => {
+    const run = actions[Object.keys(actions)[0]];
+    if (run) {
+      run.reset().fadeIn(0.5).play();
+    }
+  }, [actions]);
+
+  return (
+    <group ref={group} position={position} rotation={[0, Math.PI / 2, 0]}>
+      <primitive object={scene} scale={1} castShadow />
+    </group>
   );
 }
 
@@ -35,7 +53,7 @@ export default function SideScrollScene() {
       <Canvas shadows>
         <Suspense fallback={null}>
           <PerspectiveCamera makeDefault position={camPos} fov={fov} />
-          
+
           <ambientLight intensity={0.4} />
           <spotLight position={[10, 10, 10]} angle={0.3} penumbra={1} intensity={1} castShadow />
 
@@ -56,19 +74,16 @@ export default function SideScrollScene() {
               </mesh>
             </RigidBody>
 
-             <RigidBody type="fixed" position={[6, 5, 0]}>
+            <RigidBody type="fixed" position={[6, 5, 0]}>
               <mesh receiveShadow castShadow>
                 <boxGeometry args={[4, 0.5, 4]} />
                 <meshStandardMaterial color="#00ffff" emissive="#004444" />
               </mesh>
             </RigidBody>
 
-            {/* Character (Physics) */}
-            <RigidBody position={[0, 5, 0]} enabledRotations={[false, false, false]} friction={0}>
-              <mesh castShadow>
-                <capsuleGeometry args={[0.5, 1.8]} />
-                <meshStandardMaterial color="orange" />
-              </mesh>
+            {/* Kai - Actual Generated Model */}
+            <RigidBody position={[0, 2, 0]} enabledRotations={[false, false, false]} friction={0}>
+              <KaiCharacter />
             </RigidBody>
           </Physics>
 
@@ -82,3 +97,6 @@ export default function SideScrollScene() {
     </>
   );
 }
+
+useGLTF.preload('/assets/characters/main/kai/rigged.glb');
+useGLTF.preload('/assets/characters/main/kai/animations/run_in_place.glb');
