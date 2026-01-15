@@ -1,8 +1,10 @@
-import { generateStory } from './generators/story';
+import { generateFullStory } from './generators/story';
 
 async function main() {
-  await generateStory();
-  // Future: generateAssets(), generateQuests()
+  console.log('Starting GenAI Content Generation...');
+  await generateFullStory();
+  // Future: generateQuests(), generateAssets()
+  console.log('Generation Complete.');
 }
 
 main().catch(console.error);
