@@ -1,7 +1,11 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import fs from 'fs';
 import path from 'path';
-import { STORY_A_PROMPT, STORY_B_PROMPT, STORY_C_PROMPT } from '../prompts';
+import { fileURLToPath } from 'url';
+import { STORY_A_PROMPT, STORY_B_PROMPT, STORY_C_PROMPT } from '../prompts/index';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 async function generateArc(model: any, prompt: string, arcName: string) {
   console.log(`Generating ${arcName}...`);
@@ -26,7 +30,7 @@ export async function generateFullStory() {
   }
 
   const genAI = new GoogleGenerativeAI(apiKey);
-  const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash', generationConfig: { responseMimeType: "application/json" } });
+  const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash-latest', generationConfig: { responseMimeType: "application/json" } });
 
   const [storyA, storyB, storyC] = await Promise.all([
     generateArc(model, STORY_A_PROMPT, 'A-Story'),

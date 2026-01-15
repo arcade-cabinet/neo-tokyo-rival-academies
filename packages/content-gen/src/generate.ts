@@ -1,10 +1,5 @@
-import { generateFullStory } from './generators/story';
+import './StoryOrchestrator';
 
-async function main() {
-  console.log('Starting GenAI Content Generation...');
-  await generateFullStory();
-  // Future: generateQuests(), generateAssets()
-  console.log('Generation Complete.');
-}
-
-main().catch(console.error);
+// The Orchestrator runs automatically on import for now, or we can export a function.
+// For this setup, we just need to ensure the file is executed.
+console.log('Orchestrator Initiated via Import.');
