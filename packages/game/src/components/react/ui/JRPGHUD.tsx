@@ -4,6 +4,8 @@ import React, { type FC } from 'react';
 import { world } from '@/state/ecs';
 import { advanceDialogue, getCurrentDialogueNode } from '@/systems/DialogueSystem';
 import type { InputState } from '@/types/game';
+import { Inventory } from './Inventory';
+import { QuestLog } from './QuestLog';
 import styles from './JRPG_HUD.module.css';
 
 interface HUDProps {
@@ -19,6 +21,12 @@ export const JRPGHUD: FC<HUDProps> = ({ inputState, onInput, playerPos }) => {
 
   // Debug overlay toggle state
   const [showDebugOverlay, setShowDebugOverlay] = React.useState(false);
+
+  // Quest log toggle state
+  const [showQuestLog, setShowQuestLog] = React.useState(false);
+
+  // Inventory toggle state
+  const [showInventory, setShowInventory] = React.useState(false);
 
   // Derive Stats
   const level = player?.level?.current ?? 1;
@@ -46,6 +54,54 @@ export const JRPGHUD: FC<HUDProps> = ({ inputState, onInput, playerPos }) => {
 
   return (
     <div className={styles.container}>
+      {/* Inventory Toggle Button */}
+      <button
+        type="button"
+        onClick={() => setShowInventory(!showInventory)}
+        style={{
+          position: 'absolute',
+          top: '10px',
+          right: '10px',
+          padding: '8px 16px',
+          background: 'rgba(255, 0, 255, 0.2)',
+          border: '2px solid #f0f',
+          color: '#f0f',
+          fontSize: '12px',
+          fontWeight: 'bold',
+          cursor: 'pointer',
+          borderRadius: '4px',
+          zIndex: 1000,
+          minWidth: '48px',
+          minHeight: '48px',
+        }}
+      >
+        BAG
+      </button>
+
+      {/* Quest Log Toggle Button */}
+      <button
+        type="button"
+        onClick={() => setShowQuestLog(!showQuestLog)}
+        style={{
+          position: 'absolute',
+          top: '10px',
+          right: '90px',
+          padding: '8px 16px',
+          background: 'rgba(255, 255, 0, 0.2)',
+          border: '2px solid #ff0',
+          color: '#ff0',
+          fontSize: '12px',
+          fontWeight: 'bold',
+          cursor: 'pointer',
+          borderRadius: '4px',
+          zIndex: 1000,
+          minWidth: '48px',
+          minHeight: '48px',
+        }}
+      >
+        QUESTS
+      </button>
+
       {/* Debug Overlay Toggle Button */}
       <button
         type="button"
@@ -53,7 +109,7 @@ export const JRPGHUD: FC<HUDProps> = ({ inputState, onInput, playerPos }) => {
         style={{
           position: 'absolute',
           top: '10px',
-          right: '10px',
+          right: '200px',
           padding: '8px 16px',
           background: 'rgba(0, 255, 255, 0.2)',
           border: '2px solid #0ff',
@@ -69,6 +125,12 @@ export const JRPGHUD: FC<HUDProps> = ({ inputState, onInput, playerPos }) => {
       >
         DEBUG
       </button>
+
+      {/* Inventory Modal */}
+      {showInventory && <Inventory onClose={() => setShowInventory(false)} />}
+
+      {/* Quest Log Modal */}
+      {showQuestLog && <QuestLog onClose={() => setShowQuestLog(false)} />}
 
       {/* Debug Overlay Panel */}
       {showDebugOverlay && (
