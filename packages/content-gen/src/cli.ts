@@ -1,63 +1,54 @@
 import { Command } from 'commander';
 import { generateFullStory } from './game/generators/story';
-import * as assetsModule from './ui/generators/assets';
-import { migrateContent } from './utils/migration';
-
-const generateAssets = (assetsModule as any).generateAssets ?? (assetsModule as any).default;
+import { generateAssets } from './ui/generators/assets';
 
 const program = new Command();
 
-program.name('content-gen').description('CLI for Neo-Tokyo Content Generation').version('0.1.0');
-
 program
-  .command('story')
+  .name('content-gen')
+  .description('CLI for Neo-Tokyo Content Generation')
+  .version('0.1.0');
+
+program.command('story')
   .description('Generate narrative content (A/B/C stories)')
   .action(async () => {
+    console.log('Running Story Generation...');
     try {
       await generateFullStory();
-      console.log('Story generation complete.');
     } catch (error) {
       console.error('Story generation failed:', error);
       process.exit(1);
     }
   });
 
-program
-  .command('assets')
+program.command('assets')
   .description('Generate UI assets (Icons, Splash)')
   .action(async () => {
+    console.log('Running Asset Generation...');
     try {
       await generateAssets();
-      console.log('Asset generation complete.');
     } catch (error) {
       console.error('Asset generation failed:', error);
       process.exit(1);
     }
   });
 
-program
-  .command('migrate')
-  .description('Decompose monolithic JSON into granular files')
-  .action(async () => {
-    try {
-      await migrateContent();
-    } catch (error) {
-      console.error('Migration failed:', error);
-      process.exit(1);
-    }
-  });
-
-program
-  .command('all')
+program.command('all')
   .description('Generate all content')
   .action(async () => {
+    console.log('Running Story Generation...');
     try {
-      console.log('Starting full generation pipeline...');
       await generateFullStory();
-      await generateAssets();
-      console.log('All content generated successfully.');
     } catch (error) {
-      console.error('Generation pipeline failed:', error);
+      console.error('Story generation failed:', error);
+      process.exit(1);
+    }
+
+    console.log('Running Asset Generation...');
+    try {
+      await generateAssets();
+    } catch (error) {
+      console.error('Asset generation failed:', error);
       process.exit(1);
     }
   });

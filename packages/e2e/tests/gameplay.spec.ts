@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 
 test.describe('JRPG Gameplay Verification', () => {
   test('should verify full gameplay loop: Menu -> Dialogue -> HUD', async ({ page }) => {
@@ -8,10 +8,13 @@ test.describe('JRPG Gameplay Verification', () => {
 
     // 2. Verify Menu
     console.log('Waiting for Menu...');
-    await page.waitForSelector('[data-testid="scene-ready"]', { state: 'visible' });
+    await page.waitForSelector('canvas', { state: 'visible' });
 
+    // Wait for the splash screen to disappear (assuming it has a class/id, or wait for start button)
+    // Assuming splash screen might be present initially.
+    // Better to wait for the Start Button which confirms Menu state.
     const startBtn = page.getByText('INITIATE STORY MODE');
-    await expect(startBtn).toBeVisible({ timeout: 20000 });
+    await expect(startBtn).toBeVisible({ timeout: 15000 });
 
     await page.screenshot({ path: 'verification/1_menu.png' });
 
@@ -21,36 +24,50 @@ test.describe('JRPG Gameplay Verification', () => {
 
     // 4. Verify Intro Dialogue
     console.log('Waiting for Intro Dialogue...');
-    const dialogueBox = page.getByTestId('dialogue-box');
-    await expect(dialogueBox).toBeVisible({ timeout: 10000 });
+    // Look for unique dialogue text from INTRO_SCRIPT (NeoTokyoGame.tsx) or story.json
+    // "Hey Vector! Try not to overheat..."
+    const dialogueBox = page.locator('div[class*="dialogueBox"]'); // Assuming css module hash in class name
+    await expect(dialogueBox).toBeVisible();
+    await expect(page.getByText('Hey Vector!')).toBeVisible();
+
+    await page.screenshot({ path: 'verification/2_dialogue_intro.png' });
 
     // 5. Advance Dialogue
     console.log('Advancing dialogue...');
-    const introLines = ['Hey Vector!', 'Your noise pollution', 'optimal path', 'Calculated? Hah!'];
+    // We know there are 5 lines in INTRO_SCRIPT.
+    const introLines = [
+        'Hey Vector!',
+        'Your noise pollution',
+        'optimal path',
+        'Calculated? Hah!',
+        'MIDNIGHT EXAM'
+    ];
 
     const viewport = page.viewportSize();
-    if (!viewport) throw new Error('Viewport not available');
+    if (!viewport) throw new Error("Viewport not available");
 
     for (const lineFragment of introLines) {
-      // Double click strategy to skip typewriter and advance
-      await page.waitForTimeout(600);
-      await page.mouse.click(viewport.width / 2, viewport.height / 2); // Finish text
-      await page.waitForTimeout(300);
-      await expect(page.getByText(lineFragment)).toBeVisible({ timeout: 10000 });
-      await page.mouse.click(viewport.width / 2, viewport.height / 2); // Advance node
+        // Verify current line is visible (except maybe the first one which we checked above, but harmless to recheck)
+        // Note: rapid clicks might skip if animation is slow, but we wait for text.
+        // Actually, "NarrativeOverlay" might just tap to advance.
+        // Wait for the specific text to be stable/visible
+        await expect(page.getByText(lineFragment)).toBeVisible();
+
+        // Click to advance
+        await page.mouse.click(viewport.width / 2, viewport.height / 2);
+
+        // Wait for next text or completion
+        // Since we loop, the next expect() acts as the wait.
     }
 
-    // Final click to close overlay if still visible
-    await page.waitForTimeout(1000);
-    if (await dialogueBox.isVisible()) {
-      await page.mouse.click(viewport.width / 2, viewport.height / 2);
-    }
+    // Final click to close overlay
+    await page.mouse.click(viewport.width / 2, viewport.height / 2);
 
     // 6. Verify Gameplay HUD
     console.log('Waiting for Gameplay...');
-    // Use regex to match LVL 1 KAI
-    await expect(page.getByText(/LVL \d KAI/)).toBeVisible({ timeout: 20000 });
-    await expect(page.getByText(/\d+\/\d+/)).toBeVisible({ timeout: 20000 });
+    // Wait for HUD specific element
+    await expect(page.getByText('LVL 1 KAI')).toBeVisible();
+    await expect(page.getByText('100/100')).toBeVisible();
 
     await page.screenshot({ path: 'verification/3_gameplay_hud.png' });
     console.log('Gameplay Verified.');

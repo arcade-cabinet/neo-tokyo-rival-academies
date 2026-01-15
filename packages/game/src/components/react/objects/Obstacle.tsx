@@ -3,8 +3,8 @@ import { useRef } from 'react';
 import type * as THREE from 'three';
 
 interface ObstacleProps {
-  position: THREE.Vector3 | [number, number, number];
-  type?: 'low' | 'high';
+  type: 'low' | 'high';
+  position: [number, number, number];
 }
 
 /**
@@ -32,19 +32,17 @@ export function Obstacle({ type, position }: ObstacleProps) {
   const yOffset = type === 'low' ? 0.5 : 1.5;
 
   return (
-    <mesh ref={meshRef} position={position} castShadow>
-      <group position={[0, yOffset, 0]}>
-        <boxGeometry args={[1.2, height, 1.2]} />
-        <meshStandardMaterial
-          color={0xffff00}
-          emissive={0xffff00}
-          emissiveIntensity={0.2}
-          roughness={0.3}
-          metalness={0.7}
-        />
-        {/* Glow effect */}
-        <pointLight position={[0, 0, 0]} color={0xffff00} intensity={0.5} distance={5} />
-      </group>
+    <mesh ref={meshRef} position={[position[0], position[1] + yOffset, position[2]]} castShadow>
+      <boxGeometry args={[1, height, 4]} />
+      <meshStandardMaterial
+        color={0xffff00}
+        emissive={0xffff00}
+        emissiveIntensity={0.2}
+        roughness={0.3}
+        metalness={0.7}
+      />
+      {/* Glow effect */}
+      <pointLight position={[0, 0, 0]} color={0xffff00} intensity={0.5} distance={5} />
     </mesh>
   );
 }

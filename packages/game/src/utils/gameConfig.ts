@@ -1,6 +1,6 @@
 import type { GameConfig, GameState, InputState } from '@/types/game';
 
-export const CONFIG: GameConfig & { FRICTION_MULTIPLIER: number; VELOCITY_THRESHOLD: number } = {
+export const CONFIG: GameConfig & { FRICTION_MULTIPLIER: number, VELOCITY_THRESHOLD: number } = {
   gravity: -50,
   baseSpeed: 14,
   sprintSpeed: 22,

@@ -1,19 +1,20 @@
-import { GoogleGenerativeAI } from '@google/generative-ai';
-import dotenv from 'dotenv';
+import { GoogleGenAI } from '@google/genai';
 
-dotenv.config();
+const API_KEY = process.env.GOOGLE_GENAI_API_KEY;
 
-async function main() {
-  const apiKey = process.env.GEMINI_API_KEY;
-  if (!apiKey) {
-    console.error('GEMINI_API_KEY not found');
+async function list() {
+  if (!API_KEY) {
+    console.log('No API Key');
     return;
   }
-  const genAI = new GoogleGenerativeAI(apiKey);
-  const models = await genAI.listModels();
-  for (const model of models.models) {
-    console.log(`${model.name} - ${model.supportedGenerationMethods}`);
+  const client = new GoogleGenAI({ apiKey: API_KEY });
+  try {
+    const response = await client.models.list();
+    // The response structure might be { models: [...] } or just array
+    console.log(JSON.stringify(response, null, 2));
+  } catch (e) {
+    console.error(e);
   }
 }
 
-main().catch(console.error);
+list();

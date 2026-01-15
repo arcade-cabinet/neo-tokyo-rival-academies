@@ -46,7 +46,7 @@ function StarLayer({
       dummy.position.set(worldX, worldY, depth);
       dummy.scale.setScalar(s.scale);
       dummy.updateMatrix();
-      mesh.current?.setMatrixAt(i, dummy.matrix);
+      mesh.current!.setMatrixAt(i, dummy.matrix);
     });
     mesh.current.instanceMatrix.needsUpdate = true;
   });

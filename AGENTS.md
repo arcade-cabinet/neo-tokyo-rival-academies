@@ -8,7 +8,7 @@ This document provides guidelines and context for AI coding agents working on th
 
 ### Core Technologies
 
-- **Vite 6.x**: Build tool and dev server
+- **Astro 5.x**: Static site generator with partial hydration
 - **React 19**: For interactive 3D components
 - **Three.js 0.182**: Core 3D graphics library
 - **React Three Fiber 9.x**: React renderer for Three.js
