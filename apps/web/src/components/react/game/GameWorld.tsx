@@ -261,10 +261,7 @@ export function GameWorld({
 
       // Check for Alien Queen Death -> Mall Drop
       if (stageSystem.currentStageId === 'alien_ship' && hasAlienQueenSpawned.current) {
-        let bossCount = 0;
-        for (const _b of world.with('isBoss')) {
-          bossCount++;
-        }
+        const bossCount = [...world.with('isBoss')].length;
 
         if (bossCount === 0) {
           console.log('Alien Queen Defeated! Dropping to Mall...');
