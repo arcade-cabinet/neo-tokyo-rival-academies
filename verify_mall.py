@@ -1,4 +1,4 @@
-from playwright.sync_api import Page, expect, sync_playwright
+from playwright.sync_api import Page, sync_playwright
 import time
 
 def test_game_load(page: Page):
