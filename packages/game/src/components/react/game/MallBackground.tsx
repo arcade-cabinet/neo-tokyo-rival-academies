@@ -2,17 +2,9 @@ import { useFrame, useThree } from '@react-three/fiber';
 import { useMemo, useRef } from 'react';
 import * as THREE from 'three';
 
-function NeonSign({
-  position,
-  color,
-  size,
-}: {
-  position: [number, number, number];
-  color: string;
-  size: [number, number];
-}) {
+function NeonSign({ position, color, size }: { position: [number, number, number]; color: string; size: [number, number] }) {
   return (
-    <mesh position={new THREE.Vector3(...position)}>
+    <mesh position={position}>
       <boxGeometry args={[size[0], size[1], 0.5]} />
       <meshStandardMaterial
         color={color}
