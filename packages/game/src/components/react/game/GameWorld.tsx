@@ -210,6 +210,10 @@ export function GameWorld({
         if (ally) {
           ally.velocity.y = 10;
           ally.velocity.x = 0;
+        const ally = world.with('isAlly', 'position', 'velocity').first;
+        if (ally) {
+          ally.velocity.y = 10;
+          ally.velocity.x = 0;
         }
 
         camera.position.y += 10 * delta;
@@ -220,14 +224,9 @@ export function GameWorld({
           console.log('Welcome to Space!');
           stageSystem.loadStage('alien_ship');
 
-          // Trigger dialogue for space transition
-          showDialogue('Vera', 'We need to work together to survive this!');
-          onDialogue?.('Vera', 'We need to work together to survive this!');
-
           player.position.set(0, 5, 0);
           player.velocity.set(0, 0, 0);
 
-          const ally = world.with('isAlly', 'position', 'velocity').first;
           if (ally) {
             ally.position.set(-3, 5, 0);
             ally.velocity.set(0, 0, 0);
