@@ -4,10 +4,13 @@ on:
   issues:
     types: [opened]
   pull_request:
-    types: [opened]
+    types: [opened, labeled, synchronize]
+  check_suite:
+    types: [completed]
 
 jobs:
   triage:
+    if: github.event_name == 'issues' || (github.event_name == 'pull_request' && github.event.action == 'opened')
     runs-on: ubuntu-latest
     permissions:
       issues: write
@@ -35,3 +38,31 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           pnpm --filter @repo/scripts run triage TRIAGE
+
+  automerge:
+    if: github.event_name == 'check_suite' || (github.event_name == 'pull_request' && (github.event.action == 'labeled' || github.event.action == 'synchronize'))
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run Automerge Script
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          pnpm --filter @repo/scripts run triage AUTOMERGE
