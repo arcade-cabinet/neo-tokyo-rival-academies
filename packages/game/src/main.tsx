@@ -1,54 +1,126 @@
-import { StrictMode, useState, useEffect } from 'react';
+import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import IsometricScene from './components/react/scenes/IsometricScene';
-import SideScrollScene from './components/react/scenes/SideScrollScene';
 import './index.css';
 
 const App = () => {
-  const [mode, setMode] = useState<'iso' | 'side'>('iso');
-
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const m = params.get('mode');
-    if (m === 'side') setMode('side');
-    else if (m === 'iso') setMode('iso');
-  }, []);
-
-  const switchMode = (newMode: 'iso' | 'side') => {
-    setMode(newMode);
-    const url = new URL(window.location.href);
-    url.searchParams.set('mode', newMode);
-    window.history.pushState({}, '', url);
-  };
-
   return (
-    <div style={{ width: '100vw', height: '100vh', background: '#000' }}>
-      <div style={{ position: 'absolute', top: 10, left: 10, zIndex: 1000, display: 'flex', gap: '10px' }}>
-        <button 
-          onClick={() => switchMode('iso')}
-          style={{ 
-            padding: '10px', 
-            background: mode === 'iso' ? '#0ff' : '#333',
-            color: mode === 'iso' ? '#000' : '#fff',
-            border: '1px solid #0ff'
-          }}
-        >
-          ISOMETRIC (DIORAMA)
-        </button>
-        <button 
-          onClick={() => switchMode('side')}
-          style={{ 
-            padding: '10px', 
-            background: mode === 'side' ? '#f0f' : '#333', 
-            color: mode === 'side' ? '#000' : '#fff',
-            border: '1px solid #f0f'
-          }}
-        >
-          SIDE SCROLL (PRINCE)
-        </button>
+    <div style={{
+      width: '100vw',
+      height: '100vh',
+      background: 'linear-gradient(135deg, #0a0a1a 0%, #1a0a2a 50%, #0a1a1a 100%)',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      overflow: 'hidden',
+    }}>
+      {/* Main Game Container - Responsive with max dimensions */}
+      <div style={{
+        width: 'min(95vw, 1400px)',
+        height: 'min(90vh, 900px)',
+        display: 'grid',
+        gridTemplateRows: '48px 1fr 80px',
+        gridTemplateColumns: '1fr',
+        gap: '0',
+        background: 'linear-gradient(180deg, #0d0d15 0%, #15151f 100%)',
+        border: '2px solid #2a2a4a',
+        borderRadius: '8px',
+        boxShadow: '0 0 40px rgba(0, 255, 255, 0.1), 0 0 80px rgba(255, 0, 255, 0.05), inset 0 0 20px rgba(0, 0, 0, 0.5)',
+        overflow: 'hidden',
+      }}>
+        {/* Top HUD Bar - Title/Status */}
+        <div style={{
+          background: 'linear-gradient(90deg, rgba(0,255,255,0.1) 0%, transparent 30%, transparent 70%, rgba(255,0,255,0.1) 100%)',
+          borderBottom: '1px solid #2a2a4a',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: '0 20px',
+        }}>
+          <div style={{
+            color: '#0ff',
+            fontFamily: 'monospace',
+            fontSize: '14px',
+            textTransform: 'uppercase',
+            letterSpacing: '2px',
+            textShadow: '0 0 10px rgba(0,255,255,0.5)',
+          }}>
+            NEO-TOKYO // SECTOR 0
+          </div>
+          <div style={{
+            color: '#f0f',
+            fontFamily: 'monospace',
+            fontSize: '12px',
+            textShadow: '0 0 10px rgba(255,0,255,0.5)',
+          }}>
+            RIVAL ACADEMIES
+          </div>
+        </div>
+
+        {/* Main Scene Viewport */}
+        <div style={{
+          position: 'relative',
+          overflow: 'hidden',
+          background: '#000',
+        }}>
+          {/* Corner Decorations */}
+          <div style={{ position: 'absolute', top: 0, left: 0, width: '40px', height: '40px', borderTop: '2px solid #0ff', borderLeft: '2px solid #0ff', zIndex: 10 }} />
+          <div style={{ position: 'absolute', top: 0, right: 0, width: '40px', height: '40px', borderTop: '2px solid #f0f', borderRight: '2px solid #f0f', zIndex: 10 }} />
+          <div style={{ position: 'absolute', bottom: 0, left: 0, width: '40px', height: '40px', borderBottom: '2px solid #0ff', borderLeft: '2px solid #0ff', zIndex: 10 }} />
+          <div style={{ position: 'absolute', bottom: 0, right: 0, width: '40px', height: '40px', borderBottom: '2px solid #f0f', borderRight: '2px solid #f0f', zIndex: 10 }} />
+
+          <IsometricScene />
+        </div>
+
+        {/* Bottom HUD Bar - Controls/Info */}
+        <div style={{
+          background: 'linear-gradient(90deg, rgba(0,255,255,0.05) 0%, transparent 50%, rgba(255,0,255,0.05) 100%)',
+          borderTop: '1px solid #2a2a4a',
+          display: 'grid',
+          gridTemplateColumns: '1fr 2fr 1fr',
+          alignItems: 'center',
+          padding: '10px 20px',
+        }}>
+          {/* Left - Character Info Placeholder */}
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '4px',
+          }}>
+            <div style={{ color: '#0ff', fontFamily: 'monospace', fontSize: '12px' }}>KAI</div>
+            <div style={{
+              width: '100%',
+              height: '6px',
+              background: '#1a1a2a',
+              borderRadius: '3px',
+              overflow: 'hidden',
+            }}>
+              <div style={{ width: '75%', height: '100%', background: 'linear-gradient(90deg, #0f0, #0a0)' }} />
+            </div>
+          </div>
+
+          {/* Center - Controls hint */}
+          <div style={{
+            textAlign: 'center',
+            color: '#666',
+            fontFamily: 'monospace',
+            fontSize: '11px',
+          }}>
+            WASD / ARROWS - MOVE
+          </div>
+
+          {/* Right - Location/Status */}
+          <div style={{
+            textAlign: 'right',
+            color: '#f0f',
+            fontFamily: 'monospace',
+            fontSize: '11px',
+            textShadow: '0 0 5px rgba(255,0,255,0.3)',
+          }}>
+            ROOFTOP ARENA
+          </div>
+        </div>
       </div>
-      
-      {mode === 'iso' ? <IsometricScene /> : <SideScrollScene />}
     </div>
   );
 };

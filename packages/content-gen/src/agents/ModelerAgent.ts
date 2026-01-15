@@ -145,10 +145,10 @@ export class ModelerAgent {
 
     const task = await this.client.post('/v1/text-to-image', {
       ai_model: cfg.aiModel,
-      prompt: `${manifest.visualPrompt}${poseStr}, full body character sheet, neutral lighting, white background, high detailed, 8k`,
+      prompt: manifest.visualPrompt,
       pose_mode: isBackground ? undefined : cfg.poseMode,
       aspect_ratio: aspectRatio,
-      negative_prompt: 'blurry, low quality, distorted, watermark, text, cropped, out of frame'
+      negative_prompt: manifest.imageConfig?.negativePrompt ?? 'blurry, low quality, distorted, watermark'
     }) as any;
 
     if (task.error) throw new Error(`Concept Art Init Failed: ${JSON.stringify(task.error)}`);
