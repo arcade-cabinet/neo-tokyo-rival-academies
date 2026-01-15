@@ -52,8 +52,11 @@ export function updatePhysics(
     entity.position.y += entity.velocity.y * dt;
     entity.position.z += entity.velocity.z * dt;
 
+    const NO_GROUND = -999;
+    const SNAP_DISTANCE = 1.0;
+
     // Platform Collision
-    let groundHeight = -999;
+    let groundHeight = NO_GROUND;
 
     for (const p of platforms) {
         if (!p.platformData) continue;
@@ -72,7 +75,7 @@ export function updatePhysics(
     }
 
     // Ground snapping
-    const snapDist = 1.0;
+    const snapDist = SNAP_DISTANCE;
     const isGrounded =
       entity.velocity.y <= 0 &&
       (entity.position.y <= groundHeight + 0.1 ||
