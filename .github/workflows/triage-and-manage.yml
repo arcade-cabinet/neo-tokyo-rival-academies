@@ -9,13 +9,12 @@ on:
     types: [completed]
 
 jobs:
-jobs:
   triage:
+    if: github.event_name == 'issues' || (github.event_name == 'pull_request' && github.event.action == 'opened')
     runs-on: ubuntu-latest
     permissions:
       issues: write
       pull-requests: write
-      contents: read
     steps:
       - name: Checkout code
         uses: actions/checkout@v4

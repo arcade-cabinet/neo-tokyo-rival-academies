@@ -1,5 +1,4 @@
-import { callLLM } from '../lib/llm.js';
-
+import { callLLM } from '../lib/llm';
 export async function modeAnalyzeFailure() {
     console.log("Analyzing Failure...");
     const runId = process.env.GITHUB_RUN_ID;
@@ -7,3 +6,4 @@ export async function modeAnalyzeFailure() {
     const analysis = await callLLM(prompt);
     console.log("Analysis:", analysis);
 }
+//# sourceMappingURL=analyze-failure.js.map

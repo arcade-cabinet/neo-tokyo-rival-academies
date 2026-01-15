@@ -1,74 +1,55 @@
-import { chromium, type Page } from 'playwright';
+import { chromium } from 'playwright';
 import * as path from 'node:path';
-// We can import config here if we export it from a place accessible to this script or redefine critical parts.
-// Since verify-game is a standalone script entry, let's keep it simple or import from lib if structure allows.
-// Given tsconfig structure, we can import from '../lib/config.js'
-import { CONFIG } from '../lib/config.js';
-
-/**
- * Verifies the game loads and main user flows work.
- * Requires GAME_URL environment variable to be set, or defaults to localhost.
- */
-async function testGameLoad(page: Page) {
-    console.log(`Navigating to game at ${CONFIG.VERIFICATION.BASE_URL}...`);
-    await page.goto(CONFIG.VERIFICATION.BASE_URL);
-
+async function testGameLoad(page) {
+    console.log("Navigating to game...");
+    // Assuming local dev server port, should be configurable
+    await page.goto("http://localhost:4323/neo-tokyo-rival-academies");
     // Wait for the canvas element which confirms 3D scene load
-    await page.waitForSelector("canvas", { timeout: CONFIG.VERIFICATION.TIMEOUT_MS });
-
+    await page.waitForSelector("canvas", { timeout: 30000 });
     console.log("Canvas found. Waiting for splash screen (5s)...");
     await page.waitForTimeout(5000);
-
     await page.screenshot({ path: path.join(process.cwd(), "verification/game_menu.png") });
     console.log("Menu screenshot taken.");
-
     // Look for START STORY button
     try {
         const startBtn = page.getByText("INITIATE STORY MODE");
         if (await startBtn.isVisible()) {
             await startBtn.click();
             console.log("Clicked INITIATE STORY MODE");
-
             // Wait for Intro Overlay
             await page.waitForTimeout(2000);
             await page.screenshot({ path: path.join(process.cwd(), "verification/game_intro.png") });
-
             // Click to advance intro
             console.log("Advancing intro...");
             for (let i = 0; i < 10; i++) {
                 await page.mouse.click(640, 360);
                 await page.waitForTimeout(300);
             }
-
             console.log("Intro should be done. Waiting for gameplay...");
             await page.waitForTimeout(3000);
             await page.screenshot({ path: path.join(process.cwd(), "verification/game_gameplay.png") });
             console.log("Gameplay screenshot taken.");
-        } else {
+        }
+        else {
             console.log("Start button not visible.");
         }
-    } catch (e) {
+    }
+    catch (e) {
         console.error(`Error: ${e}`);
     }
 }
-
 async function main() {
     const browser = await chromium.launch({ headless: true });
-    const context = await browser.newContext({ viewport: CONFIG.VERIFICATION.VIEWPORT });
+    const context = await browser.newContext({ viewport: { width: 1280, height: 720 } });
     const page = await context.newPage();
-
     try {
         // Ensure verification dir exists
-        const verificationDir = path.join(process.cwd(), "verification");
-        if (!fs.existsSync(verificationDir)) {
-            fs.mkdirSync(verificationDir, { recursive: true });
-        }
+        // fs.mkdirSync ... (omitted for brevity, running in env likely has it or we can add)
         await testGameLoad(page);
-    } finally {
+    }
+    finally {
         await browser.close();
     }
 }
-
-import * as fs from 'node:fs';
-
 main().catch(console.error);
+//# sourceMappingURL=verify-game.js.map

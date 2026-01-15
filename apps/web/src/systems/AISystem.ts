@@ -167,18 +167,18 @@ class BossSlamState extends State<YukaAgent> {
 export class YukaAgent extends GameEntity {
   ecsId: string;
   fsm: StateMachine<YukaAgent>;
-  faction: 'ENEMY' | 'ALLY' | 'BOSS';
+  faction: 'ENEMY' | 'ALLY' | 'ENEMY';
 
   declare position: import('yuka').Vector3;
   declare velocity: import('yuka').Vector3;
 
-  constructor(ecsId: string, faction: 'ENEMY' | 'ALLY' | 'BOSS') {
+  constructor(ecsId: string, faction: 'ENEMY' | 'ALLY' | 'ENEMY') {
     super();
     this.ecsId = ecsId;
     this.faction = faction;
     this.fsm = new StateMachine(this);
 
-    if (faction === 'BOSS') {
+    if (faction === 'ENEMY') {
       this.fsm.add('BOSS_HOVER', new BossHoverState());
       this.fsm.add('BOSS_SLAM', new BossSlamState());
       this.fsm.changeTo('BOSS_HOVER');
@@ -256,7 +256,7 @@ class AISystem {
       let faction = defaultFaction;
       // Check for explicit boss tag or fallback legacy color check
       if (ecsEntity.isBoss || (defaultFaction === 'ENEMY' && ecsEntity.modelColor === 0xffffff)) {
-        faction = 'BOSS';
+        faction = 'ENEMY';
       }
 
       agent = new YukaAgent(ecsEntity.id, faction);
@@ -285,14 +285,14 @@ class AISystem {
         // If agent has heavy gravity logic, we might override Y here.
         // But we rely on PhysicsSystem for gravity usually.
         // EXCEPT for BossHover/Slam which drives Y.
-        if (agent.faction === 'BOSS') {
+        if (agent.faction === 'ENEMY') {
           e.velocity.y = agent.velocity.y;
         }
         // Allies/Enemies: Yuka controls X, Physics controls Y (gravity).
         // So we only write X for them?
         // ChaseState only sets X.
         // So safe to copy X.
-        if (agent.faction !== 'BOSS') {
+        if (agent.faction !== 'ENEMY') {
           // Keep ECS Y velocity (gravity), only take X
           e.velocity.x = agent.velocity.x;
         }

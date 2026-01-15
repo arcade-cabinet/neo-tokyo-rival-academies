@@ -1,74 +1,53 @@
 import * as fs from 'node:fs';
-import { githubRequest } from '../lib/github.js';
-
+import { githubRequest } from '../lib/github';
 export async function modeAutomerge() {
     console.log("Running Automerge Check...");
     const eventPath = process.env.GITHUB_EVENT_PATH;
-    if (!eventPath) return;
-
+    if (!eventPath)
+        return;
     try {
         const event = JSON.parse(fs.readFileSync(eventPath, 'utf8'));
         // Handle different event types
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        let pr: any = event.pull_request;
-
+        let pr = event.pull_request;
         // If it's a check_run or status event, we might need to fetch the PR
         if (!pr && event.check_suite && event.check_suite.pull_requests.length > 0) {
             pr = event.check_suite.pull_requests[0];
         }
-
         if (!pr) {
             console.log("No PR found in event.");
             return;
         }
-
         // Fetch full PR details to get labels and mergeable status
         const prDetails = await githubRequest(`pulls/${pr.number}`);
-        if (!prDetails) {
-            console.error("Failed to fetch PR details.");
+        if (!prDetails)
             return;
-        }
-
         console.log(`Checking PR #${pr.number} for automerge...`);
-
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const labels = (prDetails as any).labels.map((l: any) => l.name);
+        const labels = prDetails.labels.map((l) => l.name);
         if (!labels.includes('automerge')) {
             console.log("PR does not have 'automerge' label.");
             return;
         }
-
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        if ((prDetails as any).mergeable_state === 'dirty') {
+        if (prDetails.mergeable_state === 'dirty') {
             console.log("PR is dirty (conflicts). Cannot merge.");
             return;
         }
-
         // Check CI status
         // We can use the 'commits/{ref}/check-runs' endpoint
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const checks = await githubRequest(`commits/${(prDetails as any).head.sha}/check-runs`);
-        if (!checks) {
-            console.error("Failed to fetch check runs.");
+        const checks = await githubRequest(`commits/${prDetails.head.sha}/check-runs`);
+        const allPassed = checks.check_runs.every((run) => run.conclusion === 'success' || run.conclusion === 'skipped');
+        if (!allPassed) {
+            console.log("Not all checks have passed yet.");
             return;
         }
-
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const allPassed = (checks as any).check_runs.every((run: any) => run.conclusion === 'success' || run.conclusion === 'skipped');
-
-        if (!allPassed) {
-             console.log("Not all checks have passed yet.");
-             return;
-        }
-
         console.log("All checks passed and label present. Merging...");
         await githubRequest(`pulls/${pr.number}/merge`, 'PUT', {
             commit_title: `Automerge PR #${pr.number}`,
             merge_method: 'squash'
         });
         console.log("Merge request sent.");
-
-    } catch (e) {
+    }
+    catch (e) {
         console.error("Automerge Failed:", e);
     }
 }
+//# sourceMappingURL=automerge.js.map

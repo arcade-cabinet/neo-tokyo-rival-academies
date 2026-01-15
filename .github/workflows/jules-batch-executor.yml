@@ -36,11 +36,11 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          pnpm --filter `@repo/scripts` run triage PREPARE_BATCH
-          # Find and move prompt.txt to root
-          PROMPT_FILE=$(find . -name 'prompt.txt' -type f 2>/dev/null | head -1)
-          if [ -n "$PROMPT_FILE" ] && [ "$PROMPT_FILE" != "./prompt.txt" ]; then
-            mv "$PROMPT_FILE" .
+          pnpm --filter @repo/scripts run triage PREPARE_BATCH
+          # The script runs in packages/scripts, so prompt.txt is likely there
+          # We need to move it to root for the next steps or read from there
+          if [ -f packages/scripts/prompt.txt ]; then
+             mv packages/scripts/prompt.txt .
           fi
 
       - name: Check Work Status
@@ -72,9 +72,9 @@ jobs:
         if: steps.check_work.outputs.has_work == 'true'
         id: read_prompt
         run: |
-          echo "PROMPT_CONTENT<<__PROMPT_EOF_DELIM__" >> $GITHUB_ENV
+          echo "PROMPT_CONTENT<<EOF" >> $GITHUB_ENV
           cat prompt.txt >> $GITHUB_ENV
-          echo "__PROMPT_EOF_DELIM__" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
 
       - name: Invoke Jules
         if: steps.check_work.outputs.has_work == 'true'

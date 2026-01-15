@@ -1,18 +1,22 @@
 import Anthropic from '@anthropic-ai/sdk';
+import type { GeminiResponse } from '../types/llm.js';
+import { CONFIG } from './config.js';
 
 export async function callGemini(prompt: string): Promise<string | null> {
-    const apiKey = process.env.GEMINI_API_KEY;
+    const apiKey = CONFIG.LLM.GEMINI.API_KEY;
     if (!apiKey) return null;
 
     try {
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+        const url = `${CONFIG.LLM.GEMINI.BASE_URL}/${CONFIG.LLM.GEMINI.MODEL}:generateContent`;
         const response = await fetch(url, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json',
+                'x-goog-api-key': apiKey // Send API Key in header for better security
+            },
             body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
         });
-        const data = await response.json();
-        // @ts-ignore
+        const data = (await response.json()) as GeminiResponse;
         return data?.candidates?.[0]?.content?.parts?.[0]?.text || null;
     } catch (e) {
         console.error("Gemini Error:", e);
@@ -21,18 +25,21 @@ export async function callGemini(prompt: string): Promise<string | null> {
 }
 
 export async function callAnthropic(prompt: string): Promise<string | null> {
-    const apiKey = process.env.ANTHROPIC_API_KEY;
+    const apiKey = CONFIG.LLM.ANTHROPIC.API_KEY;
     if (!apiKey) return null;
 
     try {
         const client = new Anthropic({ apiKey });
         const message = await client.messages.create({
-            max_tokens: 1024,
+            max_tokens: CONFIG.LLM.ANTHROPIC.MAX_TOKENS,
             messages: [{ role: 'user', content: prompt }],
-            model: 'claude-3-haiku-20240307',
+            model: CONFIG.LLM.ANTHROPIC.MODEL,
         });
-        // @ts-ignore
-        return message.content[0].text;
+
+        if (message.content && message.content.length > 0 && message.content[0].type === 'text') {
+             return message.content[0].text;
+        }
+        return null;
     } catch (e) {
         console.error("Anthropic Error:", e);
         return null;
@@ -41,8 +48,8 @@ export async function callAnthropic(prompt: string): Promise<string | null> {
 
 export async function callLLM(prompt: string): Promise<string | null> {
     const providers = [];
-    if (process.env.GEMINI_API_KEY) providers.push('gemini');
-    if (process.env.ANTHROPIC_API_KEY) providers.push('anthropic');
+    if (CONFIG.LLM.GEMINI.API_KEY) providers.push('gemini');
+    if (CONFIG.LLM.ANTHROPIC.API_KEY) providers.push('anthropic');
 
     if (providers.length === 0) {
         console.log("No API keys found.");

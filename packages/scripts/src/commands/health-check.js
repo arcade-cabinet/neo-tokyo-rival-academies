@@ -1,36 +1,28 @@
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import { execSync } from 'node:child_process';
-import { callLLM } from '../lib/llm.js';
-import { githubRequest } from '../lib/github.js';
+import { callLLM } from '../lib/llm';
+import { githubRequest } from '../lib/github';
 import { fileURLToPath } from 'node:url';
-
 // Assuming we run this from packages/scripts
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const ROOT_DIR = path.resolve(__dirname, '../../../..');
-
 export async function modeHealthCheck() {
     console.log("Running Health Check...");
-
     let lintOutput = "";
     try {
         // Run check from root
         lintOutput = execSync("pnpm -r check", { cwd: ROOT_DIR, encoding: 'utf8', stdio: 'pipe' });
-    } catch (e: unknown) {
-         if (typeof e === 'object' && e !== null && 'stdout' in e && 'stderr' in e) {
-            lintOutput = (e as { stdout: string; stderr: string }).stdout + (e as { stdout: string; stderr: string }).stderr;
-         } else {
-             lintOutput = String(e);
-         }
     }
-
+    catch (e) {
+        lintOutput = e.stdout + e.stderr;
+    }
     let agentsMd = "";
     const agentsPath = path.join(ROOT_DIR, "AGENTS.md");
     if (fs.existsSync(agentsPath)) {
         agentsMd = fs.readFileSync(agentsPath, 'utf8');
     }
-
     const prompt = `
     Review the project health.
 
@@ -47,20 +39,14 @@ export async function modeHealthCheck() {
 
     Return a markdown summary.
     `;
-
     const report = await callLLM(prompt);
     if (report) {
         console.log("Health Report Generated.");
-        const result = await githubRequest("issues", "POST", {
+        await githubRequest("issues", "POST", {
             title: "Weekly Health Report",
             body: report,
             labels: ["health-check"]
         });
-
-        if (!result) {
-            console.error("Failed to create Health Report issue.");
-        } else {
-            console.log("Health Report issue created successfully.");
-        }
     }
 }
+//# sourceMappingURL=health-check.js.map

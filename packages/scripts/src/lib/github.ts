@@ -1,16 +1,18 @@
-const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
-const REPO = process.env.GITHUB_REPOSITORY;
+import { CONFIG } from './config.js';
 
-export async function githubRequest(endpoint: string, method = 'GET', body: any = null) {
-    if (!GITHUB_TOKEN || !REPO) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function githubRequest<T = any>(endpoint: string, method = 'GET', body: Record<string, unknown> | null = null): Promise<T | null> {
+    const { TOKEN, REPO, BASE_URL } = CONFIG.GITHUB;
+
+    if (!TOKEN || !REPO) {
         console.log("Missing GITHUB_TOKEN or GITHUB_REPOSITORY");
         return null;
     }
-    const url = `https://api.github.com/repos/${REPO}/${endpoint}`;
+    const url = `${BASE_URL}/repos/${REPO}/${endpoint}`;
     const opts: RequestInit = {
         method,
         headers: {
-            'Authorization': `Bearer ${GITHUB_TOKEN}`,
+            'Authorization': `Bearer ${TOKEN}`,
             'Accept': 'application/vnd.github.v3+json',
             'User-Agent': 'Jules-Triage-Script'
         }
@@ -20,10 +22,15 @@ export async function githubRequest(endpoint: string, method = 'GET', body: any 
     try {
         const res = await fetch(url, opts);
         if (!res.ok) {
-            console.error(`GitHub API Error: ${res.status} ${res.statusText}`);
+            console.error(`GitHub API Error: ${res.status} ${res.statusText} for ${endpoint}`);
+            // Attempt to read body for more info
+            try {
+                const errBody = await res.text();
+                console.error(`Error details: ${errBody}`);
+            } catch { /* ignore */ }
             return null;
         }
-        return await res.json();
+        return (await res.json()) as T;
     } catch (e) {
         console.error("GitHub Request Failed:", e);
         return null;

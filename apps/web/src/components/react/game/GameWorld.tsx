@@ -148,8 +148,10 @@ export function GameWorld({
       if (exitSequenceActive.current) {
         // Camera stays fixed or pans to watch player walk away
         // Player walks into Z
-        player.velocity.x = 0;
-        player.velocity.y = 0;
+        if (player.velocity) {
+          player.velocity.x = 0;
+          player.velocity.y = 0;
+        }
         player.position.z -= 5 * delta; // Walk into background
         player.characterState = 'run';
 
@@ -188,8 +190,10 @@ export function GameWorld({
       // Handle Abduction Physics
       if (stageSystem.activeEvent === 'ABDUCTION') {
         // Override Physics: Lift Player & Ally
-        player.velocity.y = 10;
-        player.velocity.x = 0;
+        if (player.velocity) {
+          player.velocity.y = 10;
+          player.velocity.x = 0;
+        }
 
         // Lift Ally too
         const ally = world.with('isAlly', 'position', 'velocity').first;
@@ -210,7 +214,7 @@ export function GameWorld({
 
           // Reset Player & Ally Position
           player.position.set(0, 5, 0);
-          player.velocity.set(0, 0, 0);
+          player.velocity?.set(0, 0, 0);
 
           const ally = world.with('isAlly', 'position', 'velocity').first;
           if (ally?.velocity && ally.position) {
@@ -261,7 +265,10 @@ export function GameWorld({
 
       // Check for Alien Queen Death -> Mall Drop
       if (stageSystem.currentStageId === 'alien_ship' && hasAlienQueenSpawned.current) {
-        const bossCount = [...world.with('isBoss')].length;
+        let bossCount = 0;
+        for (const _b of world.with('isBoss')) {
+          bossCount++;
+        }
 
         if (bossCount === 0) {
           console.log('Alien Queen Defeated! Dropping to Mall...');
@@ -270,7 +277,7 @@ export function GameWorld({
 
           // Setup Mall
           player.position.set(0, 20, 0); // High up
-          player.velocity.set(0, -5, 0);
+          player.velocity?.set(0, -5, 0);
 
           const ally = world.with('isAlly', 'position', 'velocity').first;
           if (ally?.velocity && ally.position) {
@@ -470,6 +477,7 @@ export function GameWorld({
         world.add({
           isCollectible: true,
           position: new THREE.Vector3(sx, y + 2, 0),
+          modelColor: 0x00ff00,
         });
       }
     }

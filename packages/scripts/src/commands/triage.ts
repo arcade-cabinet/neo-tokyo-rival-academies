@@ -1,6 +1,44 @@
 import * as fs from 'node:fs';
-import { callLLM } from '../lib/llm';
-import { githubRequest } from '../lib/github';
+import { callLLM } from '../lib/llm.js';
+import { githubRequest } from '../lib/github.js';
+
+interface TriageResponse {
+    labels?: string[];
+    is_duplicate?: boolean;
+}
+
+function extractJsonFromResponse(response: string): TriageResponse | null {
+    try {
+        // Clean markdown code blocks
+        let clean = response.trim();
+
+        // Remove markdown code block markers
+        if (clean.startsWith('```')) {
+            const firstNewline = clean.indexOf('\n');
+            if (firstNewline !== -1) {
+                clean = clean.substring(firstNewline + 1);
+            }
+            if (clean.endsWith('```')) {
+                clean = clean.substring(0, clean.length - 3);
+            }
+        }
+
+        // Find start/end of JSON object
+        const start = clean.indexOf('{');
+        const end = clean.lastIndexOf('}');
+
+        if (start !== -1 && end !== -1) {
+            clean = clean.substring(start, end + 1);
+            const data = JSON.parse(clean);
+            if (typeof data === 'object' && data !== null) {
+                return data as TriageResponse;
+            }
+        }
+    } catch (e) {
+        console.error("Failed to parse JSON response:", e);
+    }
+    return null;
+}
 
 export async function modeTriage() {
     console.log("Running Triage Mode...");
@@ -24,22 +62,18 @@ export async function modeTriage() {
         Return ONLY a JSON object: {"labels": ["label1", "label2"], "is_duplicate": false}
         `;
 
-        let response = await callLLM(prompt);
+        const response = await callLLM(prompt);
         if (response) {
-             response = response.replace(/```json/g, '').replace(/```/g, '').trim();
-             const start = response.indexOf('{');
-             const end = response.lastIndexOf('}');
-             if (start !== -1 && end !== -1) {
-                response = response.substring(start, end + 1);
-                const data = JSON.parse(response);
-                if (data.labels && data.labels.length > 0) {
-                    console.log(`Applying labels: ${data.labels}`);
-                    await githubRequest(`issues/${issue.number}/labels`, 'POST', { labels: data.labels });
-                }
+             const data = extractJsonFromResponse(response);
+             if (data && data.labels && data.labels.length > 0) {
+                 console.log(`Applying labels: ${data.labels}`);
+                 const result = await githubRequest(`issues/${issue.number}/labels`, 'POST', { labels: data.labels });
+                 if (!result) {
+                     console.error("Failed to apply labels via GitHub API.");
+                 }
              }
         }
     } catch (e) {
         console.error("Triage Failed:", e);
-        throw e;
     }
 }
