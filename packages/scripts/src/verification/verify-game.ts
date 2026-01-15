@@ -51,9 +51,24 @@ async function main() {
     const page = await context.newPage();
 
     try {
+import * as fs from 'node:fs';
+import * as path from 'node:path';
+
+async function main() {
+    const browser = await chromium.launch({ headless: true });
+    const context = await browser.newContext({ viewport: { width: 1280, height: 720 } });
+    const page = await context.newPage();
+
+    try {
         // Ensure verification dir exists
-        // fs.mkdirSync ... (omitted for brevity, running in env likely has it or we can add)
+        const verificationDir = path.join(process.cwd(), "verification");
+        fs.mkdirSync(verificationDir, { recursive: true });
+
         await testGameLoad(page);
+    } finally {
+        await browser.close();
+    }
+}
     } finally {
         await browser.close();
     }
