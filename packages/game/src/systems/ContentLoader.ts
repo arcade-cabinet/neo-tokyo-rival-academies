@@ -12,7 +12,7 @@ export function loadContent() {
           ...q,
           completed: false,
           active: false,
-        })),
+        }))
       );
     }
   }

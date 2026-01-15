@@ -114,9 +114,9 @@ export const JRPGHUD: FC<HUDProps> = ({ onInput, playerPos }) => {
           className={styles.dialogueBox}
           onClick={() => player?.id && advanceDialogue(player.id)}
           onKeyDown={(e) => {
-             if (e.key === 'Enter' || e.key === ' ') {
-                 player?.id && advanceDialogue(player.id);
-             }
+            if (e.key === 'Enter' || e.key === ' ') {
+              player?.id && advanceDialogue(player.id);
+            }
           }}
         >
           <div className={styles.speaker}>{dialogueNode.speaker}</div>

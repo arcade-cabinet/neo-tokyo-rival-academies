@@ -272,7 +272,7 @@ class AISystem {
         e.velocity.x = agent.velocity.x;
         // Use single assignment where possible
         if (agent.faction === 'BOSS') {
-            e.velocity.y = agent.velocity.y;
+          e.velocity.y = agent.velocity.y;
         }
       }
     }
