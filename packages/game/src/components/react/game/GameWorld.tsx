@@ -61,7 +61,7 @@ export function GameWorld({
   onDialogue,
 }: GameWorldProps) {
   const { camera } = useThree();
-  const { addItem, addXp, showDialogue } = useGameStore();
+  const { addItem, addXp } = useGameStore();
   const exitSequenceActive = useRef(false);
   const initialized = useRef(false);
   const [bossSpawned, setBossSpawned] = useState(false);
@@ -194,11 +194,12 @@ export function GameWorld({
         stageSystem.activeEvent !== 'ABDUCTION'
       ) {
         stageSystem.triggerEvent('ABDUCTION');
-        startDialogue('player', 'rival_encounter_1');
-
-        // Trigger UI dialogue overlay
-        showDialogue('Kai', 'What... what is that?!');
-        onDialogue?.('Kai', 'What... what is that?!');
+        if (onDialogue) {
+            // Trigger UI
+            onDialogue('Vera', 'You are lagging. Expected.');
+        } else {
+            startDialogue('player', 'rival_encounter_1');
+        }
       }
 
       // Handle Abduction Physics
@@ -206,10 +207,6 @@ export function GameWorld({
         player.velocity.y = 10;
         player.velocity.x = 0;
 
-        const ally = world.with('isAlly', 'position', 'velocity').first;
-        if (ally) {
-          ally.velocity.y = 10;
-          ally.velocity.x = 0;
         const ally = world.with('isAlly', 'position', 'velocity').first;
         if (ally) {
           ally.velocity.y = 10;
@@ -227,6 +224,7 @@ export function GameWorld({
           player.position.set(0, 5, 0);
           player.velocity.set(0, 0, 0);
 
+          const ally = world.with('isAlly', 'position', 'velocity').first;
           if (ally) {
             ally.position.set(-3, 5, 0);
             ally.velocity.set(0, 0, 0);
@@ -280,10 +278,6 @@ export function GameWorld({
           console.log('Alien Queen Defeated! Dropping to Mall...');
           startDialogue('player', 'victory');
           stageSystem.loadStage('mall_drop');
-
-          // Trigger victory dialogue
-          showDialogue('Kai', 'We did it! But... where are we falling to?!');
-          onDialogue?.('Kai', 'We did it! But... where are we falling to?!');
 
           player.position.set(0, 20, 0);
           player.velocity.set(0, -5, 0);
@@ -354,10 +348,6 @@ export function GameWorld({
 
           if (stageSystem.currentStageId === 'sector7_streets') {
             startDialogue('player', 'intro');
-
-            // Trigger intro dialogue
-            showDialogue('Kai', 'This is it... the final stretch!');
-            onDialogue?.('Kai', 'This is it... the final stretch!');
 
             world.add({
               isPlatform: true,

@@ -41,7 +41,7 @@ export const startDialogue = (entityId: string, dialogueId: string) => {
 export const advanceDialogue = (entityId: string) => {
   const entity = world.with('dialogueState').where((e) => e.id === entityId).first;
 
-  if (entity?.dialogueState?.isInteracting) {
+  if (entity && entity.dialogueState && entity.dialogueState.isInteracting) {
     const dialogueSequence = storyData.dialogues[entity.dialogueState.currentDialogueId];
     if (!dialogueSequence) return;
 
@@ -66,7 +66,7 @@ export const advanceDialogue = (entityId: string) => {
  */
 export const getCurrentDialogueNode = (entityId: string) => {
     const entity = world.with('dialogueState').where((e) => e.id === entityId).first;
-    if (entity?.dialogueState?.isInteracting) {
+    if (entity && entity.dialogueState && entity.dialogueState.isInteracting) {
         const dialogueSequence = storyData.dialogues[entity.dialogueState.currentDialogueId];
         if (!dialogueSequence) return null;
 

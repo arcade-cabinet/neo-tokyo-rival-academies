@@ -21,8 +21,8 @@ importers:
   packages/content-gen:
     devDependencies:
       '@google/generative-ai':
-        specifier: ^0.2.1
-        version: 0.2.1
+        specifier: ^0.24.1
+        version: 0.24.1
       '@types/node':
         specifier: ^20.11.24
         version: 20.19.29
@@ -594,8 +594,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@google/generative-ai@0.2.1':
-    resolution: {integrity: sha512-gNmMFadfwi7qf/6M9gImgyGJXY1jKQ/de8vGOqgJ0PPYgQ7WwzZDavbKrIuXS2zdqZZaYtxW3EFN6aG9x5wtFw==}
+  '@google/generative-ai@0.24.1':
+    resolution: {integrity: sha512-MqO+MLfM6kjxcKoy0p1wRzG3b4ZZXtPI+z2IE26UogS2Cm/XHO+7gGRBh6gcJsOiIVoH93UwKvW4HdgiOZCy9Q==}
     engines: {node: '>=18.0.0'}
 
   '@hmans/id@0.0.1':
@@ -2162,7 +2162,7 @@ snapshots:
   '@esbuild/win32-x64@0.27.2':
     optional: true
 
-  '@google/generative-ai@0.2.1': {}
+  '@google/generative-ai@0.24.1': {}
 
   '@hmans/id@0.0.1': {}
 

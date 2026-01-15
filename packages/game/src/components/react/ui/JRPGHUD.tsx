@@ -1,11 +1,8 @@
-import { Haptics, ImpactStyle } from '@capacitor/haptics';
 import { useEntities } from 'miniplex-react';
-import React, { type FC } from 'react';
+import type { FC } from 'react';
 import { world } from '@/state/ecs';
 import { advanceDialogue, getCurrentDialogueNode } from '@/systems/DialogueSystem';
 import type { InputState } from '@/types/game';
-import { Inventory } from './Inventory';
-import { QuestLog } from './QuestLog';
 import styles from './JRPG_HUD.module.css';
 
 interface HUDProps {
@@ -14,19 +11,10 @@ interface HUDProps {
   playerPos?: { x: number; y: number };
 }
 
-export const JRPGHUD: FC<HUDProps> = ({ inputState, onInput, playerPos }) => {
+export const JRPGHUD: FC<HUDProps> = ({ onInput, playerPos }) => {
   // Use useEntities from miniplex-react directly
   const { entities } = useEntities(world.with('isPlayer'));
   const player = entities[0];
-
-  // Debug overlay toggle state
-  const [showDebugOverlay, setShowDebugOverlay] = React.useState(false);
-
-  // Quest log toggle state
-  const [showQuestLog, setShowQuestLog] = React.useState(false);
-
-  // Inventory toggle state
-  const [showInventory, setShowInventory] = React.useState(false);
 
   // Derive Stats
   const level = player?.level?.current ?? 1;
@@ -41,136 +29,10 @@ export const JRPGHUD: FC<HUDProps> = ({ inputState, onInput, playerPos }) => {
   const handleTouch = (key: keyof InputState, pressed: boolean) => (e: React.TouchEvent | React.MouseEvent) => {
     e.preventDefault();
     onInput(key, pressed);
-
-    // Trigger haptic feedback on touch start
-    if (pressed) {
-      // Light haptic for D-Pad, medium for actions
-      const style = ['attack', 'jump'].includes(key) ? ImpactStyle.Medium : ImpactStyle.Light;
-      Haptics.impact({ style }).catch(() => {
-        // Silently fail if haptics not available (e.g., web browser)
-      });
-    }
   };
 
   return (
     <div className={styles.container}>
-      {/* Inventory Toggle Button */}
-      <button
-        type="button"
-        onClick={() => setShowInventory(!showInventory)}
-        style={{
-          position: 'absolute',
-          top: '10px',
-          right: '10px',
-          padding: '8px 16px',
-          background: 'rgba(255, 0, 255, 0.2)',
-          border: '2px solid #f0f',
-          color: '#f0f',
-          fontSize: '12px',
-          fontWeight: 'bold',
-          cursor: 'pointer',
-          borderRadius: '4px',
-          zIndex: 1000,
-          minWidth: '48px',
-          minHeight: '48px',
-        }}
-      >
-        BAG
-      </button>
-
-      {/* Quest Log Toggle Button */}
-      <button
-        type="button"
-        onClick={() => setShowQuestLog(!showQuestLog)}
-        style={{
-          position: 'absolute',
-          top: '10px',
-          right: '90px',
-          padding: '8px 16px',
-          background: 'rgba(255, 255, 0, 0.2)',
-          border: '2px solid #ff0',
-          color: '#ff0',
-          fontSize: '12px',
-          fontWeight: 'bold',
-          cursor: 'pointer',
-          borderRadius: '4px',
-          zIndex: 1000,
-          minWidth: '48px',
-          minHeight: '48px',
-        }}
-      >
-        QUESTS
-      </button>
-
-      {/* Debug Overlay Toggle Button */}
-      <button
-        type="button"
-        onClick={() => setShowDebugOverlay(!showDebugOverlay)}
-        style={{
-          position: 'absolute',
-          top: '10px',
-          right: '200px',
-          padding: '8px 16px',
-          background: 'rgba(0, 255, 255, 0.2)',
-          border: '2px solid #0ff',
-          color: '#0ff',
-          fontSize: '12px',
-          fontWeight: 'bold',
-          cursor: 'pointer',
-          borderRadius: '4px',
-          zIndex: 1000,
-          minWidth: '48px',
-          minHeight: '48px',
-        }}
-      >
-        DEBUG
-      </button>
-
-      {/* Inventory Modal */}
-      {showInventory && <Inventory onClose={() => setShowInventory(false)} />}
-
-      {/* Quest Log Modal */}
-      {showQuestLog && <QuestLog onClose={() => setShowQuestLog(false)} />}
-
-      {/* Debug Overlay Panel */}
-      {showDebugOverlay && (
-        <div
-          style={{
-            position: 'absolute',
-            top: '70px',
-            right: '10px',
-            padding: '16px',
-            background: 'rgba(0, 0, 0, 0.8)',
-            border: '2px solid #0ff',
-            borderRadius: '8px',
-            color: '#0ff',
-            fontSize: '12px',
-            fontFamily: 'monospace',
-            zIndex: 999,
-            minWidth: '200px',
-          }}
-        >
-          <div style={{ marginBottom: '8px', fontWeight: 'bold' }}>INPUT STATE:</div>
-          <div>Left: {inputState.left ? '✓' : '✗'}</div>
-          <div>Right: {inputState.right ? '✓' : '✗'}</div>
-          <div>Jump: {inputState.jump ? '✓' : '✗'}</div>
-          <div>Slide: {inputState.slide ? '✓' : '✗'}</div>
-          <div>Attack: {inputState.attack ? '✓' : '✗'}</div>
-          <div>Run: {inputState.run ? '✓' : '✗'}</div>
-          <div style={{ marginTop: '12px', fontWeight: 'bold' }}>PLAYER STATS:</div>
-          <div>Level: {level}</div>
-          <div>HP: {Math.floor(hp)}/{maxHp}</div>
-          <div>XP: {xp}/{nextXp}</div>
-          {playerPos && (
-            <>
-              <div style={{ marginTop: '12px', fontWeight: 'bold' }}>POSITION:</div>
-              <div>X: {Math.floor(playerPos.x)}</div>
-              <div>Y: {Math.floor(playerPos.y)}</div>
-            </>
-          )}
-        </div>
-      )}
-
       {/* 1. Status Frame */}
       <div className={styles.statusFrame}>
         <div className={styles.portrait}>
@@ -256,12 +118,7 @@ export const JRPGHUD: FC<HUDProps> = ({ inputState, onInput, playerPos }) => {
           {/* Left */}
           <div
             className={styles.dpadBtn}
-            style={{
-              top: '50px',
-              left: '0',
-              opacity: inputState.left ? 1 : 0.6,
-              transform: inputState.left ? 'scale(0.95)' : 'scale(1)',
-            }}
+            style={{ top: '50px', left: '0' }}
             onTouchStart={handleTouch('left', true)}
             onTouchEnd={handleTouch('left', false)}
           >
@@ -270,12 +127,7 @@ export const JRPGHUD: FC<HUDProps> = ({ inputState, onInput, playerPos }) => {
           {/* Right */}
           <div
             className={styles.dpadBtn}
-            style={{
-              top: '50px',
-              right: '0',
-              opacity: inputState.right ? 1 : 0.6,
-              transform: inputState.right ? 'scale(0.95)' : 'scale(1)',
-            }}
+            style={{ top: '50px', right: '0' }}
             onTouchStart={handleTouch('right', true)}
             onTouchEnd={handleTouch('right', false)}
           >
@@ -284,29 +136,14 @@ export const JRPGHUD: FC<HUDProps> = ({ inputState, onInput, playerPos }) => {
           {/* Down (Slide) */}
           <div
             className={styles.dpadBtn}
-            style={{
-              bottom: '0',
-              left: '50px',
-              opacity: inputState.slide ? 1 : 0.6,
-              transform: inputState.slide ? 'scale(0.95)' : 'scale(1)',
-            }}
+            style={{ bottom: '0', left: '50px' }}
             onTouchStart={handleTouch('slide', true)}
             onTouchEnd={handleTouch('slide', false)}
           >
             ↓
           </div>
-          {/* Up (Jump/Interact) */}
-          <div
-            className={styles.dpadBtn}
-            style={{
-              top: '0',
-              left: '50px',
-              opacity: inputState.jump ? 1 : 0.6,
-              transform: inputState.jump ? 'scale(0.95)' : 'scale(1)',
-            }}
-            onTouchStart={handleTouch('jump', true)}
-            onTouchEnd={handleTouch('jump', false)}
-          >
+          {/* Up (Not used much but maybe interact?) */}
+          <div className={styles.dpadBtn} style={{ top: '0', left: '50px' }}>
             ↑
           </div>
         </div>
@@ -315,11 +152,7 @@ export const JRPGHUD: FC<HUDProps> = ({ inputState, onInput, playerPos }) => {
         <div style={{ display: 'flex', alignItems: 'flex-end' }}>
           <div
             className={styles.actionBtn}
-            style={{
-              background: inputState.attack ? 'rgba(0, 255, 255, 0.5)' : 'rgba(0, 255, 255, 0.2)',
-              borderColor: '#0ff',
-              transform: inputState.attack ? 'scale(0.95)' : 'scale(1)',
-            }}
+            style={{ background: 'rgba(0, 255, 255, 0.2)', borderColor: '#0ff' }}
             onTouchStart={handleTouch('attack', true)}
             onTouchEnd={handleTouch('attack', false)}
           >
@@ -328,10 +161,9 @@ export const JRPGHUD: FC<HUDProps> = ({ inputState, onInput, playerPos }) => {
           <div
             className={styles.actionBtn}
             style={{
-              background: inputState.jump ? 'rgba(0, 255, 0, 0.5)' : 'rgba(0, 255, 0, 0.2)',
+              background: 'rgba(0, 255, 0, 0.2)',
               borderColor: '#0f0',
               marginBottom: '40px',
-              transform: inputState.jump ? 'scale(0.95)' : 'scale(1)',
             }}
             onTouchStart={handleTouch('jump', true)}
             onTouchEnd={handleTouch('jump', false)}
@@ -340,11 +172,7 @@ export const JRPGHUD: FC<HUDProps> = ({ inputState, onInput, playerPos }) => {
           </div>
           <div
             className={styles.actionBtn}
-            style={{
-              background: inputState.run ? 'rgba(255, 255, 0, 0.5)' : 'rgba(255, 255, 0, 0.2)',
-              borderColor: '#ff0',
-              transform: inputState.run ? 'scale(0.95)' : 'scale(1)',
-            }}
+            style={{ background: 'rgba(255, 255, 0, 0.2)', borderColor: '#ff0' }}
             onTouchStart={handleTouch('run', true)}
             onTouchEnd={handleTouch('run', false)}
           >

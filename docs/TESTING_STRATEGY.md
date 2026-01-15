@@ -5,9 +5,9 @@ We employ a rigorous testing strategy to ensure the stability of the JRPG transf
 
 ## 1. Unit Testing (Vitest)
 - **Scope**: Pure logic systems (Math, ECS Systems, State Machines).
-- **Location**: `src/systems/__tests__/` and `src/utils/__tests__/`.
+- **Location**: `packages/game/src/systems/__tests__/` and `packages/game/src/utils/__tests__/`.
 - **Requirement**: All new systems (Progression, Combat, Dialogue) must have >90% code coverage.
-- **Tool**: Vitest.
+- **Tool**: Vitest (run via `pnpm test`).
 
 ## 2. Component Testing (React)
 - **Scope**: UI Components (`RPGInterface`, `HealthBar`).

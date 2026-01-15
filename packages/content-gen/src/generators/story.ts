@@ -34,11 +34,6 @@ export async function generateFullStory() {
     generateArc(model, STORY_C_PROMPT, 'C-Story'),
   ]);
 
-  if (!storyA || !storyB || !storyC) {
-    console.error('One or more story arcs failed to generate. Aborting write.');
-    return;
-  }
-
   const mergedStory = {
     a_story: storyA,
     b_story: storyB,

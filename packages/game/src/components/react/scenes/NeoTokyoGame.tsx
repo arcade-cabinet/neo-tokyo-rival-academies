@@ -17,9 +17,9 @@ import { Canvas } from '@react-three/fiber';
 import { Bloom, ChromaticAberration, EffectComposer } from '@react-three/postprocessing';
 import { musicSynth } from '@neo-tokyo/content-gen';
 import { initialGameState, initialInputState } from '@utils/gameConfig';
+import type { FC } from 'react';
 import { Suspense, useCallback, useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
-import { world } from '@/state/ecs';
 import { SaveSystem } from '@/systems/SaveSystem';
 import type { GameState, InputState } from '@/types/game';
 
@@ -62,7 +62,6 @@ export default function NeoTokyoGame() {
   const [combatText, setCombatText] = useState<{ message: string; color: string } | null>(null);
   const [, setDialogue] = useState<{ speaker: string; text: string } | null>(null);
   const [shakeIntensity, setShakeIntensity] = useState(0);
-  const [playerPos, setPlayerPos] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
 
   const handleStartStory = () => {
     // Attempt load
@@ -135,20 +134,6 @@ export default function NeoTokyoGame() {
       }
     };
   }, []);
-
-  // Update player position from ECS
-  useEffect(() => {
-    if (viewState !== 'game') return;
-
-    const interval = setInterval(() => {
-      const player = world.with('isPlayer', 'position').first;
-      if (player) {
-        setPlayerPos({ x: player.position.x, y: player.position.y });
-      }
-    }, 100); // Update 10 times per second
-
-    return () => clearInterval(interval);
-  }, [viewState]);
 
   return (
     <div style={{ width: '100vw', height: '100vh', position: 'relative' }}>
@@ -258,7 +243,10 @@ export default function NeoTokyoGame() {
           <JRPGHUD
             inputState={inputState}
             onInput={handleInput}
-            playerPos={playerPos}
+            // Pass simple 2D representation or null for now,
+            // ideally we'd query ECS for actual player pos in HUD or pass from GameWorld callback
+            // For MVP HUD, we just need to satisfy the prop interface.
+            playerPos={{ x: 0, y: 0 }}
           />
           {combatText && (
             <CombatText
