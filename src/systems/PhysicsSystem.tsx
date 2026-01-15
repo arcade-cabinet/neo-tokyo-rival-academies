@@ -45,12 +45,20 @@ export const PhysicsSystem = () => {
 
       // Check collision with all platforms
       for (const p of platforms) {
-        const { length, slope } = p.platformData;
-        const angle = slope * SLOPE_TO_RAD;
-        const projLen = length * Math.cos(angle);
         const dx = entity.position.x - p.position.x;
 
-        if (dx >= -0.5 && dx <= projLen + 0.5) {
+        // Optimization: Broad phase check (right side)
+        if (dx < -0.5) continue;
+
+        const { length, slope } = p.platformData;
+
+        // Optimization: Broad phase check (left side) using length as upper bound
+        if (dx > length + 0.5) continue;
+
+        const angle = slope * SLOPE_TO_RAD;
+        const projLen = length * Math.cos(angle);
+
+        if (dx <= projLen + 0.5) {
           const gy = p.position.y + dx * Math.tan(angle);
           if (gy > groundHeight) {
             groundHeight = gy;
