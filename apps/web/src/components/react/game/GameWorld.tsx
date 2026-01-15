@@ -473,7 +473,6 @@ export function GameWorld({
         world.add({
           isCollectible: true,
           position: new THREE.Vector3(sx, y + 2, 0),
-          modelColor: 0x00ff00,
         });
       }
     }
