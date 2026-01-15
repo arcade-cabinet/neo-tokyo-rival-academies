@@ -1,4 +1,5 @@
-import { updatePhysics, type PhysicsEntity, type PhysicsWorld } from '../src/logic/physics';
+import type { PhysicsEntity, PhysicsWorld } from '../src/logic/physics';
+import { updatePhysics } from '../src/logic/physics';
 
 // --- Mocks ---
 
