@@ -34,12 +34,6 @@ export async function generateFullStory() {
     generateArc(model, STORY_C_PROMPT, 'C-Story'),
   ]);
 
-  const [storyA, storyB, storyC] = await Promise.all([
-    generateArc(model, STORY_A_PROMPT, 'A-Story'),
-    generateArc(model, STORY_B_PROMPT, 'B-Story'),
-    generateArc(model, STORY_C_PROMPT, 'C-Story'),
-  ]);
-
   if (!storyA || !storyB || !storyC) {
     console.error('One or more story arcs failed to generate. Aborting write.');
     return;
