@@ -40,5 +40,6 @@ export async function modeTriage() {
         }
     } catch (e) {
         console.error("Triage Failed:", e);
+        throw e;
     }
 }
