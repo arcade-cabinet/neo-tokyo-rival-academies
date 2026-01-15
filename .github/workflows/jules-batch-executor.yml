@@ -36,11 +36,11 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          pnpm --filter @repo/scripts run triage PREPARE_BATCH
-          # The script runs in packages/scripts, so prompt.txt is likely there
-          # We need to move it to root for the next steps or read from there
-          if [ -f packages/scripts/prompt.txt ]; then
-             mv packages/scripts/prompt.txt .
+          pnpm --filter `@repo/scripts` run triage PREPARE_BATCH
+          # Find and move prompt.txt to root
+          PROMPT_FILE=$(find . -name 'prompt.txt' -type f 2>/dev/null | head -1)
+          if [ -n "$PROMPT_FILE" ] && [ "$PROMPT_FILE" != "./prompt.txt" ]; then
+            mv "$PROMPT_FILE" .
           fi
 
       - name: Check Work Status
