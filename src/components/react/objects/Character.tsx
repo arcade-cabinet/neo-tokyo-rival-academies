@@ -6,7 +6,7 @@ import type { CharacterState } from '@/types/game';
 interface CharacterProps {
   color: THREE.ColorRepresentation;
   isPlayer?: boolean;
-  position?: [number, number, number];
+  position?: THREE.Vector3 | [number, number, number];
   state?: CharacterState;
 }
 

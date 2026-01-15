@@ -1,9 +1,10 @@
 import type { FC } from 'react';
+import * as THREE from 'three';
 import type { CharacterState } from '@/types/game';
 import { Character } from './Character';
 
 interface EnemyProps {
-  position: [number, number, number];
+  position: THREE.Vector3 | [number, number, number];
   enemyType: 'stand' | 'block';
   color?: number;
 }

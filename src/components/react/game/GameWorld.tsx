@@ -502,7 +502,7 @@ export function GameWorld({
       <ECS.Entities in={world.with('isPlayer', 'position', 'characterState')}>
         {(entity) => (
           <Character
-            position={[entity.position.x, entity.position.y, entity.position.z]}
+            position={entity.position}
             state={entity.characterState}
             color={entity.modelColor || 0xff0000}
             isPlayer
@@ -527,7 +527,7 @@ export function GameWorld({
       <ECS.Entities in={world.with('isAlly', 'position', 'characterState')}>
         {(entity) => (
           <Character
-            position={[entity.position.x, entity.position.y, entity.position.z]}
+            position={entity.position}
             state={entity.characterState}
             color={entity.modelColor || 0x00ffff}
           />
@@ -537,7 +537,7 @@ export function GameWorld({
       <ECS.Entities in={world.with('isEnemy', 'position', 'characterState')}>
         {(entity) => (
           <Enemy
-            position={[entity.position.x, entity.position.y, entity.position.z]}
+            position={entity.position}
             enemyType={entity.characterState === 'block' ? 'block' : 'stand'}
             color={entity.modelColor}
           />
