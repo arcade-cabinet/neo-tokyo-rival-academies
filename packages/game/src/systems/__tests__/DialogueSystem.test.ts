@@ -46,8 +46,11 @@ describe('DialogueSystem', () => {
 
   it('should handle missing entities gracefully', () => {
     // Should not throw
-    startDialogue('missing_entity', 'intro');
-    advanceDialogue('missing_entity');
+    expect(() => {
+        startDialogue('missing_entity', 'intro');
+        advanceDialogue('missing_entity');
+    }).not.toThrow();
+
     const node = getCurrentDialogueNode('missing_entity');
     expect(node).toBeNull();
   });

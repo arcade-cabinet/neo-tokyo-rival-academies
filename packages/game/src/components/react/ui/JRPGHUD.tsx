@@ -6,7 +6,6 @@ import type { InputState } from '@/types/game';
 import styles from './JRPG_HUD.module.css';
 
 interface HUDProps {
-  // inputState removed as redundant/unused in component logic directly, passed for completeness if needed but removed per request
   onInput: (key: keyof InputState, value: boolean) => void;
   playerPos?: { x: number; y: number };
 }
@@ -142,8 +141,13 @@ export const JRPGHUD: FC<HUDProps> = ({ onInput, playerPos }) => {
           >
             ↓
           </div>
-          {/* Up (Not used much but maybe interact?) */}
-          <div className={styles.dpadBtn} style={{ top: '0', left: '50px' }}>
+          {/* Up (Wired to Jump or Interact for now to prevent no-op) */}
+          <div
+            className={styles.dpadBtn}
+            style={{ top: '0', left: '50px' }}
+            onTouchStart={handleTouch('jump', true)} // Mapping Up to Jump as alternative
+            onTouchEnd={handleTouch('jump', false)}
+          >
             ↑
           </div>
         </div>

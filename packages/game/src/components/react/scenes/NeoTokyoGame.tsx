@@ -17,7 +17,6 @@ import { Canvas } from '@react-three/fiber';
 import { Bloom, ChromaticAberration, EffectComposer } from '@react-three/postprocessing';
 import { musicSynth } from '@neo-tokyo/content-gen';
 import { initialGameState, initialInputState } from '@utils/gameConfig';
-import type { FC } from 'react';
 import { Suspense, useCallback, useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { SaveSystem } from '@/systems/SaveSystem';
@@ -242,9 +241,7 @@ export default function NeoTokyoGame() {
         <>
           <JRPGHUD
             onInput={handleInput}
-            // Pass simple 2D representation or null for now,
-            // ideally we'd query ECS for actual player pos in HUD or pass from GameWorld callback
-            // For MVP HUD, we just need to satisfy the prop interface.
+            // TODO: replace placeholder playerPos with actual player position from ECS/GameWorld and update JRPGHUD props
             playerPos={{ x: 0, y: 0 }}
           />
           {combatText && (

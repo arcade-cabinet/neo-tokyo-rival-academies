@@ -15,8 +15,17 @@ export const updateProgression = () => {
   const gameStore = useGameStore.getState();
 
   for (const entity of entities) {
-    // Multi-level up logic via while loop
-    while (entity.level.xp >= entity.level.nextLevelXp) {
+    // Safety guard for invalid nextLevelXp to prevent infinite loop
+    if (entity.level.nextLevelXp <= 0) {
+        logger.info('Invalid nextLevelXp detected, resetting to safe default.', { entityId: entity.id });
+        entity.level.nextLevelXp = 100;
+    }
+
+    // Multi-level up logic via while loop with safety counter
+    let loopGuard = 0;
+    while (entity.level.xp >= entity.level.nextLevelXp && loopGuard < 100) {
+      loopGuard++;
+
       // Level Up Logic
       const overflowXp = entity.level.xp - entity.level.nextLevelXp;
 
@@ -42,6 +51,10 @@ export const updateProgression = () => {
 
       // Structured logging
       logger.info('Level Up', { entityId: entity.id, newLevel: entity.level.current });
+    }
+
+    if (loopGuard >= 100) {
+        logger.info('Level Up loop guard hit, stopping progression update.', { entityId: entity.id });
     }
   }
 };

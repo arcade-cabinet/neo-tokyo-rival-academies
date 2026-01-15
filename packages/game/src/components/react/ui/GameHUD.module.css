@@ -45,6 +45,45 @@
   font-style: italic;
 }
 
+/* Dialogue Toast Styles */
+.dialogueToast {
+  position: absolute;
+  top: 12%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 10, 0.9);
+  border: 2px solid #0ff;
+  border-radius: 8px;
+  padding: 1.5vmin 3vmin;
+  color: #fff;
+  z-index: 100;
+  max-width: 90%;
+  min-width: 40%;
+  pointer-events: none;
+  text-align: center;
+  box-shadow: 0 0 10px #0ff;
+}
+
+.dialogueSpeaker {
+  font-size: 3vmin;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-bottom: 0.5vmin;
+}
+
+.dialogueSpeakerRival {
+  color: #0ff;
+}
+
+.dialogueSpeakerOther {
+  color: #f0f;
+}
+
+.dialogueText {
+  font-size: 3vmin;
+  font-family: monospace;
+}
+
 .touchControls {
   height: 40%;
   width: 100%;

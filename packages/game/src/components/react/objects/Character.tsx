@@ -33,6 +33,7 @@ const ToonMat = memo(({ color, wireframe = false, transparent = false, opacity =
         gradientMap={null} // Default gradient
     />
 ));
+ToonMat.displayName = 'ToonMat';
 
 export function Character({
   color,

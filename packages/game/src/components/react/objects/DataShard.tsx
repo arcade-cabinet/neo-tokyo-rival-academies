@@ -15,7 +15,7 @@ export function DataShard({ position }: { position: [number, number, number] }) 
 
   return (
     <Float speed={2} rotationIntensity={1} floatIntensity={1}>
-      <mesh ref={meshRef} position={new THREE.Vector3(...position)}>
+      <mesh ref={meshRef} position={position}>
         {/* A floating digital chip/crystal */}
         <octahedronGeometry args={[0.5, 0]} />
         <meshStandardMaterial

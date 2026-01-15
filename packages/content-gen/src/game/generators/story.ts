@@ -1,7 +1,11 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
 import { STORY_A_PROMPT, STORY_B_PROMPT, STORY_C_PROMPT } from '../prompts';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 async function generateArc(model: any, prompt: string, arcName: string) {
   console.log(`Generating ${arcName}...`);
@@ -11,7 +15,8 @@ async function generateArc(model: any, prompt: string, arcName: string) {
     let text = response.text();
     // Sanitize JSON
     text = text.replace(/```json/g, '').replace(/```/g, '');
-    return JSON.parse(text);
+    const json = JSON.parse(text);
+    return json;
   } catch (e) {
     console.error(`Failed to generate ${arcName}:`, e);
     return null;
@@ -34,10 +39,26 @@ export async function generateFullStory() {
     generateArc(model, STORY_C_PROMPT, 'C-Story'),
   ]);
 
+  // Validate results
+  if (!storyA || !storyB || !storyC) {
+      console.error("Story generation incomplete. Skipping write.");
+      return; // Or throw error
+  }
+
+  // Deep merge strategy:
+  // A-Story provides 'dialogues'
+  // B-Story provides 'lore'
+  // C-Story provides 'dialogues'
+
   const mergedStory = {
-    a_story: storyA,
-    b_story: storyB,
-    c_story: storyC,
+    dialogues: {
+      ...(storyA?.dialogues || {}),
+      ...(storyC?.dialogues || {})
+    },
+    lore: {
+      ...(storyB?.lore || {})
+    },
+    items: {}, // Items are currently static or procedural, not yet LLM generated in this pass
     generated_at: new Date().toISOString()
   };
 

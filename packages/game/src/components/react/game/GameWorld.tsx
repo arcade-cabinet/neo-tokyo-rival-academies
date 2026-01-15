@@ -51,6 +51,8 @@ interface CombatEvent {
   item?: string;
 }
 
+const SHAKE_INTERVAL = 2000; // ms
+
 export function GameWorld({
   gameState,
   inputState,
@@ -68,6 +70,8 @@ export function GameWorld({
   // Use a ref to track spawn state synchronously during frames to avoid race conditions
   const bossSpawnedRef = useRef(false);
   const hasAlienQueenSpawned = useRef(false);
+
+  const lastShakeTime = useRef(0);
 
   // Generation state
   const genStateRef = useRef({
@@ -209,6 +213,7 @@ export function GameWorld({
         player.velocity.y = 10;
         player.velocity.x = 0;
 
+        // Correctly handle ally query to avoid shadowing
         const ally = world.with('isAlly', 'position', 'velocity').first;
         if (ally) {
           ally.velocity.y = 10;
@@ -226,7 +231,6 @@ export function GameWorld({
           player.position.set(0, 5, 0);
           player.velocity.set(0, 0, 0);
 
-          const ally = world.with('isAlly', 'position', 'velocity').first;
           if (ally) {
             ally.position.set(-3, 5, 0);
             ally.velocity.set(0, 0, 0);
@@ -392,8 +396,12 @@ export function GameWorld({
         onGameOver();
       }
 
-      if (onCameraShake && Math.random() < 0.0005) {
-        onCameraShake();
+      if (onCameraShake) {
+          const now = performance.now();
+          if (now - lastShakeTime.current > SHAKE_INTERVAL) {
+              onCameraShake();
+              lastShakeTime.current = now;
+          }
       }
 
       if (stageSystem.currentStage.platforms === 'procedural' && stageSystem.state !== 'complete') {

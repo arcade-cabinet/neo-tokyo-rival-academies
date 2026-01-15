@@ -34,7 +34,7 @@ This document provides guidelines and context for AI coding agents working on th
 - React components in `src/components/react/game/` should primarily render based on ECS state.
 
 ### 2. Directory Structure
-```
+```text
 src/
 ├── components/react/   # React components
 │   ├── objects/       # 3D Objects (Character, Enemy)
@@ -50,7 +50,7 @@ src/
 
 - Run unit tests: `pnpm test`
 - Lint code: `pnpm check`
-- E2E Verification: `python3 scripts/verify_rpg_gameplay.py`
+- E2E Verification: `pnpm test:e2e` (Playwright)
 
 ## 🎮 Game Context (JRPG)
 

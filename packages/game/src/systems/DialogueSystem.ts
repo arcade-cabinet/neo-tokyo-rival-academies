@@ -25,13 +25,13 @@ export const startDialogue = (entityId: string, dialogueId: string) => {
   const dialogueSequence = storyData.dialogues[dialogueId];
 
   // Optional chaining fix: Check if entity exists and dialogueState is present
-  if (entity?.dialogueState && dialogueSequence) {
+  if (entity?.dialogueState && dialogueSequence && dialogueSequence.length > 0) {
     entity.dialogueState.isInteracting = true;
     entity.dialogueState.currentDialogueId = dialogueId;
     entity.dialogueState.nodeId = dialogueSequence[0].id;
     // console.debug(`Dialogue started: ${dialogueId}`);
   } else {
-      console.warn(`Could not start dialogue: ${dialogueId} for entity ${entityId}`);
+    console.warn(`Could not start dialogue: ${dialogueId} for entity ${entityId}`);
   }
 };
 
@@ -41,7 +41,7 @@ export const startDialogue = (entityId: string, dialogueId: string) => {
 export const advanceDialogue = (entityId: string) => {
   const entity = world.with('dialogueState').where((e) => e.id === entityId).first;
 
-  if (entity && entity.dialogueState && entity.dialogueState.isInteracting) {
+  if (entity?.dialogueState?.isInteracting) {
     const dialogueSequence = storyData.dialogues[entity.dialogueState.currentDialogueId];
     if (!dialogueSequence) return;
 
@@ -66,7 +66,7 @@ export const advanceDialogue = (entityId: string) => {
  */
 export const getCurrentDialogueNode = (entityId: string) => {
     const entity = world.with('dialogueState').where((e) => e.id === entityId).first;
-    if (entity && entity.dialogueState && entity.dialogueState.isInteracting) {
+    if (entity?.dialogueState?.isInteracting) {
         const dialogueSequence = storyData.dialogues[entity.dialogueState.currentDialogueId];
         if (!dialogueSequence) return null;
 
