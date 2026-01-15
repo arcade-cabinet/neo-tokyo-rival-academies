@@ -23,7 +23,7 @@ interface CharacterPropsWithSpeed extends CharacterProps {
   isPlayer?: boolean;
 }
 
-const Limb = React.memo(({
+const Limb = ({
   x,
   y,
   w,
@@ -77,7 +77,7 @@ const Limb = React.memo(({
       </group>
     )}
   </group>
-));
+);
 export function Character({
   color,
   position = [0, 0, 0],
