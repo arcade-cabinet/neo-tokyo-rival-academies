@@ -12,12 +12,8 @@ import type { ECSEntity } from '../state/ecs';
  * Crit Chance = Ignition / 2 %
  */
 export const resolveCombat = (attacker: ECSEntity, defender: ECSEntity) => {
-  // Default stats if missing
+  // Default stats if missing (use nullish coalescing for zero values)
   const atk = attacker.stats?.ignition ?? 10;
-  // Use structure as a proxy for defense if not explicitly defined,
-  // BUT logic suggests Structure is HP.
-  // Let's assume Defense = Structure / 10 for now to avoid massive reduction,
-  // OR just fix the test expectation if we want high defense.
 
   // Looking at the test:
   // Attacker Ignition: 20
@@ -32,6 +28,7 @@ export const resolveCombat = (attacker: ECSEntity, defender: ECSEntity) => {
   let damage = Math.max(1, Math.floor(atk - def));
 
   // Critical Hit Logic (1% per Ignition point, max 50%)
+  // Cap critical hit chance at 50%
   const critChance = Math.min(atk * 0.01, 0.5);
   const isCritical = Math.random() < critChance;
 

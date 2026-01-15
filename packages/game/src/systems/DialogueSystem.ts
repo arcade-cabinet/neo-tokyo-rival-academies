@@ -48,7 +48,7 @@ export const advanceDialogue = (entityId: string) => {
     // Optional chaining fix
     const currentNode = dialogueSequence.find((n) => n.id === entity.dialogueState?.nodeId);
 
-    if (currentNode && currentNode.next) {
+    if (currentNode?.next) {
       entity.dialogueState.nodeId = currentNode.next;
       // console.debug(`Dialogue advanced to: ${currentNode.next}`);
     } else {

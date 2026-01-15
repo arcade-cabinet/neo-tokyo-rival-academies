@@ -6,7 +6,7 @@ import type { InputState } from '@/types/game';
 import styles from './JRPG_HUD.module.css';
 
 interface HUDProps {
-  inputState: InputState;
+  // inputState removed as redundant/unused in component logic directly, passed for completeness if needed but removed per request
   onInput: (key: keyof InputState, value: boolean) => void;
   playerPos?: { x: number; y: number };
 }

@@ -1,6 +1,6 @@
 import { EntityManager, GameEntity, State, StateMachine } from 'yuka';
 import * as THREE from 'three';
-import { ECS, world } from '@/state/ecs';
+import { ECS, world, type ECSEntity } from '@/state/ecs';
 
 // --- Helper ---
 const toYukaVector = (v: THREE.Vector3): import('yuka').Vector3 => {
@@ -82,10 +82,6 @@ class CoopFollowState extends State<YukaAgent> {
       } else {
         agent.velocity.x = 0;
       }
-
-      // Jump if player jumps?
-      // Simplified: If player is way above, teleport or super jump.
-      // For now, let's just physics handle Y, just move X.
     }
 
     // Check for enemies to engage
@@ -225,20 +221,11 @@ class AISystem {
     this.lastTime = time;
 
     // 1. Sync ECS Enemies/Allies -> Yuka
-    // We need to query both enemies and allies.
-    // Let's assume we add 'isAlly' to ECS for the Rival.
-    // Or we just query 'characterState' and infer?
-    // Better to have a unified query or iterate multiple.
-
-    // Query Enemies (and Bosses tagged as isEnemy)
-    const enemies = ECS.world.with('isEnemy', 'position', 'velocity', 'id', 'modelColor');
+    const enemies = ECS.world.with('isEnemy', 'position', 'velocity', 'id');
     for (const e of enemies) {
       this.syncEntity(e, 'ENEMY');
     }
 
-    // Query Allies (Need to add isAlly component or similar tag to ECS defs,
-    // for now we can infer from 'faction' string if present, but simpler to use isAlly)
-    // Let's assume we use 'isAlly' tag.
     const allies = ECS.world.with('isAlly', 'position', 'velocity', 'id');
     for (const a of allies) {
       this.syncEntity(a, 'ALLY');
@@ -252,9 +239,7 @@ class AISystem {
     this.writeBackVelocity(allies);
   }
 
-  syncEntity(ecsEntity: any, defaultFaction: 'ENEMY' | 'ALLY') {
-    if (!ecsEntity.id) return;
-
+  syncEntity(ecsEntity: ECSEntity & { id: string }, defaultFaction: 'ENEMY' | 'ALLY') {
     let agent = this.entityMap.get(ecsEntity.id);
     if (!agent) {
       let faction: 'ENEMY' | 'ALLY' | 'BOSS' = defaultFaction;
@@ -286,6 +271,7 @@ class AISystem {
       if (agent && e.velocity) {
         // Optimize: Set X once, only set Y if boss
         e.velocity.x = agent.velocity.x;
+        // Use single assignment where possible
         if (agent.faction === 'BOSS') {
           e.velocity.y = agent.velocity.y;
         }

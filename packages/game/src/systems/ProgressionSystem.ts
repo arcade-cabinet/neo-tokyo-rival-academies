@@ -1,4 +1,5 @@
 import { world } from '../state/ecs';
+import { useGameStore } from '../state/gameStore';
 
 // Logger interface placeholder (can be replaced with a real logger later)
 const logger = {
@@ -11,6 +12,7 @@ const logger = {
 export const updateProgression = () => {
   // Query entities with level and stats components
   const entities = world.with('level', 'stats');
+  const gameStore = useGameStore.getState();
 
   for (const entity of entities) {
     // Multi-level up logic via while loop
@@ -31,6 +33,11 @@ export const updateProgression = () => {
       // We use 'structure' as Max Health
       if (entity.health !== undefined) {
         entity.health = entity.stats.structure;
+      }
+
+      // Notify UI via GameStore if it's the player
+      if (entity.isPlayer) {
+          gameStore.onCombatText?.(`LEVEL UP! ${entity.level.current}`, '#ff00ff');
       }
 
       // Structured logging

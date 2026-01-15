@@ -52,7 +52,10 @@ function ShopLayer({
     if (!group.current) return;
     const camX = camera.position.x;
 
-    // Parallax
+    // Parallax logic adjusted for groups
+    // Simple translation isn't enough for infinite scrolling like the instanced mesh approach
+    // But for "MallBackground" specifically, maybe it's just a scrolling backdrop
+    // Let's stick to the requested change: Stable IDs (already present in my read, verifying)
     group.current.position.x = camX * speedFactor;
   });
 

@@ -33,7 +33,7 @@ export type ECSEntity = {
   };
 
   // Visuals
-  modelColor?: number;
+  modelColor?: number; // Optional color property
 
   // RPG Stats
   stats?: {

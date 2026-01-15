@@ -1,5 +1,5 @@
 import { useFrame, useThree } from '@react-three/fiber';
-import { useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import * as THREE from 'three';
 
 const CITY_COLORS = [0x00ffff, 0xff00ff, 0x9900ff, 0x0000ff];
@@ -82,6 +82,17 @@ function NeonLights({ count, z, speedFactor }: { count: number; z: number; speed
     }));
   }, [count]);
 
+  // Set colors once on mount to avoid re-uploading attribute buffer every frame
+  useEffect(() => {
+    if (!mesh.current) return;
+    lights.forEach((l, i) => {
+      mesh.current?.setColorAt(i, l.color);
+    });
+    if (mesh.current.instanceColor) {
+        mesh.current.instanceColor.needsUpdate = true;
+    }
+  }, [lights]);
+
   useFrame(() => {
     if (!mesh.current) return;
     const camX = camera.position.x;
@@ -97,10 +108,8 @@ function NeonLights({ count, z, speedFactor }: { count: number; z: number; speed
       dummy.scale.set(0.5, l.scaleY, 0.1);
       dummy.updateMatrix();
       mesh.current?.setMatrixAt(i, dummy.matrix);
-      mesh.current?.setColorAt(i, l.color);
     });
     mesh.current.instanceMatrix.needsUpdate = true;
-    if (mesh.current.instanceColor) mesh.current.instanceColor.needsUpdate = true;
   });
 
   return (

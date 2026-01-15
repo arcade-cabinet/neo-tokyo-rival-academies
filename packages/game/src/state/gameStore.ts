@@ -39,6 +39,7 @@ export interface GameStore {
   showDialogue: (speaker: string, text: string) => void;
   hideDialogue: () => void;
   addItem: (id: string, name: string) => void;
+  onCombatText?: (message: string, color: string) => void;
 }
 
 export const useGameStore = create<GameStore>((set) => ({

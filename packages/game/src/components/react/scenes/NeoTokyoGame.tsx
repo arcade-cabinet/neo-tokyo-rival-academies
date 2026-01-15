@@ -241,7 +241,6 @@ export default function NeoTokyoGame() {
       {viewState === 'game' && (
         <>
           <JRPGHUD
-            inputState={inputState}
             onInput={handleInput}
             // Pass simple 2D representation or null for now,
             // ideally we'd query ECS for actual player pos in HUD or pass from GameWorld callback

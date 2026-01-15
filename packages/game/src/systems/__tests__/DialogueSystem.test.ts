@@ -40,6 +40,7 @@ describe('DialogueSystem', () => {
     });
 
     startDialogue('player', 'MISSING_ID');
+    // Should NOT set interacting true
     expect(player.dialogueState?.isInteracting).toBe(false);
   });
 
@@ -47,5 +48,20 @@ describe('DialogueSystem', () => {
     // Should not throw
     startDialogue('missing_entity', 'intro');
     advanceDialogue('missing_entity');
+    const node = getCurrentDialogueNode('missing_entity');
+    expect(node).toBeNull();
+  });
+
+  it('should do nothing when advancing dialogue if not interacting', () => {
+      const player = world.add({
+          id: 'player',
+          dialogueState: { isInteracting: false, currentDialogueId: '', nodeId: '' },
+      });
+
+      // Call advance without starting
+      advanceDialogue('player');
+
+      expect(player.dialogueState?.isInteracting).toBe(false);
+      expect(player.dialogueState?.currentDialogueId).toBe('');
   });
 });

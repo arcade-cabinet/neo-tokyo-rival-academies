@@ -19,5 +19,6 @@ We employ a rigorous testing strategy to ensure the stability of the JRPG transf
 - **Requirement**: Every major feature merge requires a visual verification screenshot.
 
 ## 4. Manual Verification
+
 - Developers must run `pnpm dev` and verify gameplay feel.
-- Use `scripts/verify_game.py` (if available) to automate smoke tests.
+- Use `pnpm test:e2e` (Playwright) to automate smoke tests and generate verification screenshots.

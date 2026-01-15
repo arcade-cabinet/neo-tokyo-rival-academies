@@ -39,12 +39,17 @@ describe('ProgressionSystem', () => {
   });
 
   it('should handle multi-level overflow', () => {
+    // Test case: XP exceeds multiple thresholds
+    // Level 1 -> 2: Needs 100 XP.
+    // Level 2 -> 3: Needs 150 XP. (100 * 1.5)
+    // Total for Lvl 3: 250 XP.
+    // Given XP: 300.
+    // Expected: Level 3, Remaining XP: 50.
+
     const entity = world.add({
       id: 'player',
       health: 50,
       stats: { structure: 100, ignition: 10, logic: 10, flow: 10 },
-      // Lvl 1->2 cost 100. Lvl 2->3 cost 150. Total 250.
-      // XP 300 should reach Lvl 3 with 50 remainder.
       level: { current: 1, xp: 300, nextLevelXp: 100, statPoints: 0 },
     });
 
@@ -52,6 +57,7 @@ describe('ProgressionSystem', () => {
 
     expect(entity.level?.current).toBe(3);
     expect(entity.level?.xp).toBe(50);
-    expect(entity.level?.statPoints).toBe(6);
+    expect(entity.level?.statPoints).toBe(6); // 2 levels * 3 points
+    expect(entity.level?.nextLevelXp).toBe(225); // 150 * 1.5
   });
 });

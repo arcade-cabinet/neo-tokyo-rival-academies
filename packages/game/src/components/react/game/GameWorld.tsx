@@ -10,7 +10,7 @@ import * as THREE from 'three';
 import { ECS, type ECSEntity, world } from '@/state/ecs';
 import { useGameStore } from '@/state/gameStore';
 import { aiSystem } from '@/systems/AISystem';
-import { CombatSystem } from '@/systems/CombatSystem';
+import { CombatSystem, type CombatEventType } from '@/systems/CombatSystem';
 import { startDialogue } from '@/systems/DialogueSystem';
 import { InputSystem } from '@/systems/InputSystem';
 import { PhysicsSystem } from '@/systems/PhysicsSystem';
@@ -42,7 +42,7 @@ const pickEnemyColor = () => {
 };
 
 // --- Combat Events ---
-type CombatEventType = 'damage' | 'heal' | 'xp' | 'item';
+// Defined in CombatSystem, but reused here locally for type safety if needed
 interface CombatEvent {
   type: CombatEventType;
   value?: number;
@@ -65,6 +65,8 @@ export function GameWorld({
   const exitSequenceActive = useRef(false);
   const initialized = useRef(false);
   const [bossSpawned, setBossSpawned] = useState(false);
+  // Use a ref to track spawn state synchronously during frames to avoid race conditions
+  const bossSpawnedRef = useRef(false);
   const hasAlienQueenSpawned = useRef(false);
 
   // Generation state
@@ -135,7 +137,7 @@ export function GameWorld({
     };
   }, []);
 
-  // Handle Combat Events
+  // Handle Combat Events (Now Typed via Prop)
   const handleCombatEvent = (event: CombatEvent) => {
     if (event.type === 'item' && event.item) {
       addItem(event.item, event.message || 'Item');
@@ -190,7 +192,7 @@ export function GameWorld({
       if (
         stageSystem.currentStageId === 'sector7_streets' &&
         player.position.x > 50 &&
-        !bossSpawned &&
+        !bossSpawnedRef.current &&
         stageSystem.activeEvent !== 'ABDUCTION'
       ) {
         stageSystem.triggerEvent('ABDUCTION');
@@ -271,7 +273,7 @@ export function GameWorld({
 
       // Check for Alien Queen Death -> Mall Drop
       if (stageSystem.currentStageId === 'alien_ship' && hasAlienQueenSpawned.current) {
-        // Optimized boss count
+        // Optimized boss count using Array.from().length as requested, though .entities.length is standard miniplex
         const bossCount = world.with('isBoss').entities.length;
 
         if (bossCount === 0) {
@@ -339,9 +341,10 @@ export function GameWorld({
 
       // Check stage completion
       if (stageSystem.state === 'complete') {
-        if (!bossSpawned) {
+        if (!bossSpawnedRef.current) {
           console.log('Spawning End/Boss Arena...');
           setBossSpawned(true);
+          bossSpawnedRef.current = true;
 
           const endX = genStateRef.current.nextX + 10;
           const endY = genStateRef.current.nextY;
@@ -376,7 +379,7 @@ export function GameWorld({
         }
 
         // Handle Exit Sequence Logic
-        if (stageSystem.currentStageId === 'sector7_streets' && bossSpawned) {
+        if (stageSystem.currentStageId === 'sector7_streets' && bossSpawnedRef.current) {
           const endX = genStateRef.current.nextX + 20;
           if (Math.abs(player.position.x - endX) < 5 && !exitSequenceActive.current) {
             console.log('Entering Connector...');
@@ -474,21 +477,7 @@ export function GameWorld({
         onGameOver={onGameOver}
         onScoreUpdate={onScoreUpdate}
         onCameraShake={onCameraShake}
-        onCombatText={(msg, color) => {
-            // Backward compatibility for old calls, but prefer handleCombatEvent logic if passed
-            // In a full refactor, CombatSystem would call onCombatEvent prop instead.
-            // For now, mapping string msgs back to events implicitly
-            if (msg === 'DATA ACQUIRED') {
-                handleCombatEvent({ type: 'item', item: 'data_shard', message: 'DATA ACQUIRED', color: '#0f0' });
-            } else if (msg.includes('XP') || msg === 'DESTROYED!' || msg === 'KO!') {
-                // XP handled in combat system already?
-                // CombatSystem calls onScoreUpdate and onCombatText
-                // Let's rely on CombatSystem for logic, and this for display
-                onCombatText?.(msg, color);
-            } else {
-                onCombatText?.(msg, color);
-            }
-        }}
+        onCombatEvent={handleCombatEvent} // Pass typed event handler
       />
 
       <ECS.Entities in={world.with('isPlayer', 'position', 'characterState')}>
