@@ -86,6 +86,7 @@ export function updatePhysics(
 
   // 2. Platform Cleanup
   // Remove platforms that are far behind the camera
+  // Threshold of 100 units ensures platforms are well off-screen before removal
   const CLEANUP_THRESHOLD = 100;
   const toRemove: PhysicsEntity[] = [];
 
