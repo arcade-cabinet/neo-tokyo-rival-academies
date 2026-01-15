@@ -1,0 +1,29 @@
+{
+  "id": "kai",
+  "name": "Kai",
+  "type": "character",
+  "description": "The hot-headed protagonist from the Crimson Academy.",
+  "visualPrompt": "Full body character design of Kai, a young cyberpunk academy student, male, messy spiky red hair, wearing a stylized futuristic school uniform with crimson armored plating, red and gold accents, holding a massive heavy mechanical piston-hammer, high-tops, confident stance, anime style, cel shaded, highly detailed, 8k, neo-tokyo aesthetic, isolated on solid white background.",
+  "riggingConfig": {
+    "heightMeters": 1.78
+  },
+  "modelConfig": {
+    "targetPolycount": 50000,
+    "enablePbr": true
+  },
+  "animationConfig": {
+    "animations": ["IDLE_COMBAT", "RUN_IN_PLACE", "ATTACK_MELEE_1", "HIT_REACTION", "DEATH", "JUMP_IDLE", "BLOCK"]
+  },
+  "tasks": {
+    "conceptArt": {
+      "taskId": "019bc0e2-0d24-7acc-9396-bffc036b5088",
+      "status": "SUCCEEDED",
+      "localPath": "concept.png"
+    },
+    "model3d": {
+      "taskId": "019bc0e2-59e7-7ad2-a13e-92b626b6cf23",
+      "status": "SUCCEEDED",
+      "localPath": "model.glb"
+    }
+  }
+}

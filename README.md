@@ -1,79 +1,55 @@
 # Neo-Tokyo: Rival Academies
 
-A futuristic 3D Action JRPG set in the neon-lit streets of Neo-Tokyo, where rival academies compete for the Data Core.
+A high-fidelity 3D Action-JRPG set in a cyberpunk Neo-Tokyo, featuring a sophisticated GenAI asset pipeline.
 
-## 🎮 About
+## 🚀 Quick Start
 
-Neo-Tokyo: Rival Academies combines high-speed runner mechanics with deep RPG progression.
-- **Action JRPG Combat**: Real-time combat driven by character stats (Structure, Ignition, Logic, Flow).
-- **Narrative Depth**: Visual-novel-style storytelling with rival factions.
-- **Immersive 3D**: Powered by Three.js and React Three Fiber.
-- **Modern Tech**: Vite, Miniplex ECS, and TypeScript.
-
-## 🚀 Tech Stack
-
-- **Framework**: [Vite](https://vitejs.dev/) v5.x
-- **3D Engine**: [Three.js](https://threejs.org/) v0.182
-- **React Integration**: [@astrojs/react](https://docs.astro.build/en/guides/integrations-guide/react/)
-- **3D React Components**: [React Three Fiber](https://docs.pmnd.rs/react-three-fiber/) & [Drei](https://github.com/pmndrs/drei)
-- **ECS**: [Miniplex](https://github.com/hmans/miniplex)
-- **Package Manager**: [PNPM](https://pnpm.io/) v10
-- **Linter/Formatter**: [Biome](https://biomejs.dev/) v1.9.4
-- **Language**: TypeScript v5.7
-- **Testing**: Vitest
-
-## 📋 Prerequisites
-
-- Node.js >= 20.0.0
-- PNPM >= 10.0.0
-
-## 🛠️ Installation
-
+### 1. Setup
 ```bash
-# Install PNPM globally if you haven't already
-npm install -g pnpm@10
-
-# Clone the repository
-git clone https://github.com/arcade-cabinet/neo-tokyo-rival-academies.git
-cd neo-tokyo-rival-academies
-
 # Install dependencies
 pnpm install
+
+# Configure Environment
+cp .env.example .env
+# Add your MESHY_API_KEY to .env
 ```
 
-## 🎯 Development
-
+### 2. Generate Content
+Populate the game with AI-generated assets (Characters, Models, Animations).
 ```bash
-# Start development server
+# Generate everything defined in packages/game/src/content/manifest.json
+pnpm generate
+
+# Or generate a specific character
+pnpm generate --target hero_kai
+```
+
+### 3. Run the Game
+```bash
 pnpm dev
-
-# Run tests
-pnpm test
-
-# Build for production
-pnpm build
 ```
+Open `http://localhost:5173`.
+*   **Toggle Prototypes**: Use the UI buttons to switch between **Isometric Diorama** and **Side-Scroll** modes.
 
-## 🏗️ Project Structure
+## 🏗️ Architecture
 
-```
-neo-tokyo-rival-academies/
-├── src/
-│   ├── components/
-│   │   ├── react/ui/      # HUD, Dialogue Interfaces
-│   │   └── react/game/    # 3D Game Objects
-│   ├── systems/           # ECS Logic (Combat, Progression)
-│   ├── state/             # Global State (ECS)
-│   ├── data/              # Static Assets (Story, Items)
-│   └── pages/             # Astro Routes
-```
+### Monorepo Structure
+*   `packages/game`: The React Three Fiber game client.
+*   `packages/content-gen`: The Node.js toolchain for GenAI asset creation.
 
-## 🤖 AI Development
+### The GenAI Pipeline
+We use a **Manifest-Driven** approach. You define characters in `manifest.json`, and the `ModelerAgent` automates the rest:
+1.  **Text-to-Image** (Concept Art)
+2.  **Image-to-3D** (High-poly Model)
+3.  **Auto-Rigging**
+4.  **Animation** (Combat/Movement loops)
 
-See `AGENTS.md` for strict development guidelines.
-- **Zero Stubs Policy**: All code must be functional.
-- **Documentation**: See `docs/JRPG_TRANSFORMATION.md`.
+See [docs/GENAI_PIPELINE.md](docs/GENAI_PIPELINE.md) for details.
 
-## 📄 License
+## 📚 Documentation
+*   [Master Design Plan](docs/DESIGN_MASTER_PLAN.md)
+*   [Agents Architecture](AGENTS.md)
+*   [Prototype Strategy](docs/PROTOTYPE_STRATEGY.md)
 
-MIT License.
+## 🤝 Contributing
+Please use `pnpm` for package management. Run `pnpm check` before committing to ensure Biome linting compliance.

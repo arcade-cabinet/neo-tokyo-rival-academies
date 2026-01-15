@@ -2,16 +2,13 @@ import { GoogleGenAI } from '@google/genai';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 
-const MODEL_NAME = 'imagen-3.0-generate-001'; // Fallback to stable if 4.0 is preview/unavailable
-// Note: User mentioned "imagen 4" was used. I'll try to use the one from the script if possible, 
-// but 'imagen-3.0-generate-001' is the current standard GA in many regions. 
-// I will allow override.
+const MODEL_NAME = 'imagen-4.0-generate-001';
 
 export class ArtDirectorAgent {
   private client: GoogleGenAI;
   private modelName: string;
 
-  constructor(apiKey: string, modelName = 'imagen-3.0-generate-001') {
+  constructor(apiKey: string, modelName = 'imagen-4.0-generate-001') {
     this.client = new GoogleGenAI({ apiKey });
     this.modelName = modelName;
   }

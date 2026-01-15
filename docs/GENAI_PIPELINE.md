@@ -1,41 +1,56 @@
-# GenAI Content Pipeline
+# GenAI Asset Pipeline Documentation
 
 ## Overview
-This project uses a dedicated `packages/content-gen` workspace to procedurally generate game assets and narrative content using LLMs (Google Gemini).
+The **GenAI Pipeline** is a specialized subsystem responsible for autonomously creating production-ready game assets. It is designed to be **idempotent**, **resumable**, and **manifest-driven**.
 
-## Setup
-1.  Ensure you have a `GEMINI_API_KEY` set in your environment variables.
-2.  Install dependencies: `pnpm install`
+## Core Components
 
-## Usage
+### 1. The Manifest (`packages/game/src/content/manifest.json`)
+The single source of truth. It defines the "desired state" of the game's content.
+*   **Characters**: Names, descriptions, visual prompts.
+*   **Backgrounds**: Scene descriptions.
+*   **State Tracking**: Each entry tracks its generation status (`conceptArt`, `model3d`, `rigging`, `animations`) to allow resumption.
 
-### CLI
-The unified CLI is located in `packages/content-gen/src/cli.ts`.
+### 2. ModelerAgent (`packages/content-gen/src/agents/ModelerAgent.ts`)
+The primary worker class that interfaces with the **Meshy AI API**.
 
-```bash
-# Generate everything (Story + Assets)
-pnpm --filter @neo-tokyo/content-gen generate
+**Capabilities:**
+*   **Concept Art Generation**:
+    *   Uses `POST /v1/text-to-image`.
+    *   Enforces `t-pose` and `white background` to ensure downstream compatibility.
+*   **3D Model Generation**:
+    *   Uses `POST /v1/image-to-3d`.
+    *   Converts local concept art images to Data URIs.
+    *   Parameters: `ai_model: "latest"`, `pose_mode: "t-pose"`, `topology: "quad"`, `target_polycount: 50000`.
+*   **Auto-Rigging**:
+    *   Uses `POST /v1/rigging`.
+*   **Animation**:
+    *   Uses `POST /v1/animations`.
+    *   Maps semantic keys (e.g., `IDLE_COMBAT`) to Meshy Action IDs via `ANIMATION_IDS` constant.
 
-# Generate Story Only
-pnpm --filter @neo-tokyo/content-gen gen:story
+### 3. CLI (`packages/content-gen/src/cli.ts`)
+The interface for developers.
 
-# Generate Assets Only (Icons)
-pnpm --filter @neo-tokyo/content-gen gen:assets
+**Commands:**
+*   `pnpm generate`: Process the entire manifest.
+*   `pnpm generate --target <id>`: Process a specific entity (e.g., `hero_kai`).
+
+## Workflow Details
+
+### The "White Animation" Fix
+To prevent animations from losing texture data or structure:
+1.  We explicitly generate a **Textured Concept Art** first.
+2.  We feed this into `Image-to-3D` with `enable_pbr: true` and `should_texture: true`.
+3.  We use `pose_mode: "t-pose"` to ensure the model is rig-ready.
+4.  We pass the *Rigged Model ID* (`rig_task_id`) to the Animation endpoint, ensuring animations apply to the skinned mesh.
+
+## Configuration
+Requires `.env` file in root:
+```env
+MESHY_API_KEY=your_key_here
 ```
 
-## Architecture
-
-### 1. Narrative Generation (`src/game`)
--   **Prompts**: Located in `src/game/prompts/index.ts`. Defines strict JSON schemas for Dialogues and Lore.
--   **Generator**: `src/game/generators/story.ts` queries the LLM for A-Story (Rivalry), B-Story (Mystery), and C-Story (Events) arcs.
--   **Output**: Merges all arcs into `packages/game/src/data/story_gen.json`.
-
-### 2. UI Asset Generation (`src/ui`)
--   **Prompts**: `src/ui/prompts/index.ts` asks for optimized SVG code with Cyberpunk/Cel-shaded styling.
--   **Generator**: `src/ui/generators/assets.ts` generates raw SVG XML, wraps it in a React Component (`export const IconName = ...`), and saves it to `packages/game/src/components/react/generated/`.
--   **Output**: Functional React components ready for import.
-
 ## Adding New Content
-1.  Add a new entry to `ASSET_LIST` in `src/ui/prompts/index.ts`.
-2.  Run `pnpm gen:assets`.
-3.  Import the new icon in your game component.
+1.  Open `packages/game/src/content/manifest.json`.
+2.  Add a new entry to `characters` array.
+3.  Run `pnpm generate --target <new_id>`.

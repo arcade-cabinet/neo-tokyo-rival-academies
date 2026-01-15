@@ -1,119 +1,165 @@
 import { Command } from 'commander';
-import { generateFullStory } from './game/generators/story';
-import * as assetsModule from './ui/generators/file-assets';
-import { migrateContent } from './utils/migration';
 import { ModelerAgent } from './agents/ModelerAgent';
-import { ArtDirectorAgent } from './agents/ArtDirectorAgent';
 import path from 'node:path';
+import fs from 'node:fs';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
-const generateAssets = (assetsModule as any).generateAssets ?? (assetsModule as any).default;
-
 const program = new Command();
 
-program.name('content-gen').description('CLI for Neo-Tokyo Content Generation').version('0.1.0');
+// Assets root - all content lives here in organized subdirectories
+const ASSETS_ROOT = path.resolve(process.cwd(), '../../packages/game/public/assets');
 
 program
-  .command('story')
-  .description('Generate narrative content (A/B/C stories)')
-  .action(async () => {
+  .name('content-gen')
+  .description('Idempotent, declarative content generation bound to directory structure')
+  .version('0.1.0');
+
+program
+  .command('generate [path]')
+  .description(`
+Generate assets for a path relative to assets root.
+Each asset directory must contain a manifest.json.
+
+Examples:
+  pnpm generate                     # Process all assets
+  pnpm generate characters          # All characters
+  pnpm generate characters/main     # All main characters
+  pnpm generate characters/main/kai # Just Kai
+  pnpm generate backgrounds/sector0 # Backgrounds for sector 0
+`)
+  .action(async (targetPath?: string) => {
+    const meshyKey = process.env.MESHY_API_KEY;
+
+    if (!meshyKey) {
+      console.error('Error: MESHY_API_KEY not set in .env');
+      process.exit(1);
+    }
+
+    const fullPath = targetPath
+      ? path.join(ASSETS_ROOT, targetPath)
+      : ASSETS_ROOT;
+
+    if (!fs.existsSync(fullPath)) {
+      console.error(`Path not found: ${fullPath}`);
+      console.error(`\nCreate the directory structure and add manifest.json files.`);
+      console.error(`Assets root: ${ASSETS_ROOT}`);
+      process.exit(1);
+    }
+
+    console.log(`\n=== Content Generation ===`);
+    console.log(`Target: ${fullPath}`);
+    console.log(`Assets Root: ${ASSETS_ROOT}\n`);
+
+    const modeler = new ModelerAgent(meshyKey);
+
     try {
-      await generateFullStory();
-      console.log('Story generation complete.');
+      await modeler.processPath(fullPath);
+      console.log('\n=== Generation Complete ===');
     } catch (error) {
-      console.error('Story generation failed:', error);
+      console.error('\nGeneration failed:', error);
       process.exit(1);
     }
   });
 
 program
-  .command('assets')
-  .description('Generate UI assets (Icons, Splash)')
-  .action(async () => {
-    try {
-      await generateAssets();
-      console.log('Asset generation complete.');
-    } catch (error) {
-      console.error('Asset generation failed:', error);
+  .command('init <path>')
+  .description('Initialize a new asset directory with template manifest.json')
+  .option('-t, --type <type>', 'Asset type (character, background, prop, environment)', 'character')
+  .option('-n, --name <name>', 'Display name')
+  .action((targetPath: string, options: { type: string; name?: string }) => {
+    const fullPath = path.join(ASSETS_ROOT, targetPath);
+    const id = path.basename(targetPath);
+    const name = options.name ?? id.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+
+    if (fs.existsSync(path.join(fullPath, 'manifest.json'))) {
+      console.error(`manifest.json already exists in ${fullPath}`);
       process.exit(1);
     }
+
+    fs.mkdirSync(fullPath, { recursive: true });
+
+    const manifest = {
+      id,
+      name,
+      type: options.type,
+      description: `TODO: Add description for ${name}`,
+      visualPrompt: `TODO: Add visual prompt for ${name}`,
+      ...(options.type === 'character' ? {
+        riggingConfig: { heightMeters: 1.7 },
+        animationConfig: {
+          animations: ['IDLE_COMBAT', 'RUN_IN_PLACE', 'ATTACK_MELEE_1', 'HIT_REACTION', 'DEATH']
+        }
+      } : {}),
+      tasks: {}
+    };
+
+    fs.writeFileSync(
+      path.join(fullPath, 'manifest.json'),
+      JSON.stringify(manifest, null, 2)
+    );
+
+    console.log(`Created: ${path.join(fullPath, 'manifest.json')}`);
+    console.log(`\nEdit the manifest.json to configure the asset, then run:`);
+    console.log(`  pnpm generate ${targetPath}`);
   });
 
 program
-  .command('character')
-  .description('Generate a fully rigged and animated 3D character from Image Concept')
-  .argument('<name>', 'Name of the character (e.g., "hero_kai")')
-  .argument('<prompt>', 'Visual description prompt')
-  .option('-s, --style <style>', 'Art style', 'cartoon')
-  .action(async (name, prompt, options) => {
-      const meshyKey = process.env.MESHY_API_KEY;
-      const googleKey = process.env.GOOGLE_GENAI_API_KEY;
+  .command('status [path]')
+  .description('Show generation status for assets')
+  .action((targetPath?: string) => {
+    const fullPath = targetPath
+      ? path.join(ASSETS_ROOT, targetPath)
+      : ASSETS_ROOT;
 
-      if (!meshyKey) {
-          console.error("Error: MESHY_API_KEY is not set in .env");
-          process.exit(1);
-      }
-      if (!googleKey) {
-          console.error("Error: GOOGLE_GENAI_API_KEY is not set in .env");
-          process.exit(1);
-      }
-
-      // Output dirs
-      const baseDir = path.resolve(process.cwd(), '../../packages/game/public');
-      const modelsDir = path.join(baseDir, 'models/generated');
-      const conceptsDir = path.join(baseDir, 'assets/concepts');
-
-      const fs = await import('node:fs');
-      if (!fs.existsSync(modelsDir)) fs.mkdirSync(modelsDir, { recursive: true });
-      if (!fs.existsSync(conceptsDir)) fs.mkdirSync(conceptsDir, { recursive: true });
-
-      const artDirector = new ArtDirectorAgent(googleKey);
-      const modeler = new ModelerAgent(meshyKey);
-
-      try {
-          // 1. Generate Concept Art
-          console.log("=== Step 1: Generating Concept Art (Imagen) ===");
-          const conceptPath = await artDirector.generateConceptArt(name, prompt, conceptsDir);
-          
-          // 2. Generate 3D Model from Image
-          console.log("=== Step 2: Generating 3D Model & Animation (Meshy) ===");
-          const result = await modeler.generateCharacterFromImage(name, conceptPath, modelsDir);
-          
-          console.log("=== Character Generation Complete! ===");
-          console.log(JSON.stringify(result, null, 2));
-      } catch (e) {
-          console.error("CRITICAL FAILURE in Character Generation Pipeline:", e);
-          process.exit(1);
-      }
-  });
-
-program
-  .command('migrate')
-  .description('Decompose monolithic JSON into granular files')
-  .action(async () => {
-    try {
-      await migrateContent();
-    } catch (error) {
-      console.error('Migration failed:', error);
+    if (!fs.existsSync(fullPath)) {
+      console.error(`Path not found: ${fullPath}`);
       process.exit(1);
     }
+
+    console.log(`\n=== Asset Status ===\n`);
+    printStatus(fullPath, '');
   });
 
-program
-  .command('all')
-  .description('Generate all content')
-  .action(async () => {
-    try {
-      console.log('Starting full generation pipeline...');
-      await generateFullStory();
-      await generateAssets();
-      console.log('All content generated successfully.');
-    } catch (error) {
-      console.error('Generation pipeline failed:', error);
-      process.exit(1);
+function printStatus(dir: string, indent: string) {
+  const manifestPath = path.join(dir, 'manifest.json');
+
+  if (fs.existsSync(manifestPath)) {
+    const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf-8'));
+    const tasks = manifest.tasks ?? {};
+
+    const status = (task: any) => {
+      if (!task) return '⬜ pending';
+      if (task.status === 'SUCCEEDED') return '✅ done';
+      if (task.status === 'FAILED') return '❌ failed';
+      if (task.status === 'IN_PROGRESS') return '🔄 running';
+      return '⬜ pending';
+    };
+
+    console.log(`${indent}📁 ${manifest.name} (${manifest.type})`);
+    console.log(`${indent}   concept: ${status(tasks.conceptArt)}`);
+
+    if (manifest.type === 'character') {
+      console.log(`${indent}   model:   ${status(tasks.model3d)}`);
+      console.log(`${indent}   rigging: ${status(tasks.rigging)}`);
+
+      const anims = tasks.animations ?? [];
+      const done = anims.filter((a: any) => a.status === 'SUCCEEDED').length;
+      const total = manifest.animationConfig?.animations?.length ?? 5;
+      console.log(`${indent}   anims:   ${done}/${total}`);
     }
-  });
+    console.log();
+    return;
+  }
+
+  // Recurse
+  const entries = fs.readdirSync(dir, { withFileTypes: true });
+  for (const entry of entries) {
+    if (entry.isDirectory() && !entry.name.startsWith('.')) {
+      printStatus(path.join(dir, entry.name), indent);
+    }
+  }
+}
 
 program.parse();

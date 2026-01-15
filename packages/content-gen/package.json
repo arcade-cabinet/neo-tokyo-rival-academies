@@ -13,9 +13,8 @@
   },
   "scripts": {
     "build": "tsc",
-    "generate": "tsx src/cli.ts all",
-    "gen:story": "tsx src/cli.ts story",
-    "gen:assets": "tsx src/cli.ts assets"
+    "generate": "tsx src/cli.ts generate",
+    "migrate": "tsx src/cli.ts migrate"
   },
   "devDependencies": {
     "@google/generative-ai": "^0.24.1",
@@ -34,6 +33,7 @@
     "commander": "^14.0.2",
     "dotenv": "^17.2.3",
     "fs-extra": "^11.3.3",
-    "sharp": "^0.34.5"
+    "sharp": "^0.34.5",
+    "zod": "^4.3.5"
   }
 }

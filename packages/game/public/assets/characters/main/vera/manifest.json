@@ -1,0 +1,18 @@
+{
+  "id": "vera",
+  "name": "Vera",
+  "type": "character",
+  "description": "The cold, calculating rival from the Azure Academy.",
+  "visualPrompt": "Full body character design of Vera, a young cyberpunk academy student, female, sleek long silver hair, wearing a pristine futuristic school uniform with azure blue tactical data-suits, silver accents, floating geometric holographic lances behind her, glasses, cold expression, anime style, cel shaded, highly detailed, 8k, neo-tokyo aesthetic, isolated on solid white background.",
+  "riggingConfig": {
+    "heightMeters": 1.65
+  },
+  "modelConfig": {
+    "targetPolycount": 50000,
+    "enablePbr": true
+  },
+  "animationConfig": {
+    "animations": ["IDLE_COMBAT", "RUN_IN_PLACE", "ATTACK_MELEE_1", "CAST_SPELL", "HIT_REACTION", "DEATH", "DODGE_BACK"]
+  },
+  "tasks": {}
+}

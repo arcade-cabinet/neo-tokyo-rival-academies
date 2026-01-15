@@ -1,0 +1,11 @@
+{
+  "id": "rooftop",
+  "name": "Sector 0 Rooftop",
+  "type": "background",
+  "description": "The starting area - a rain-slicked rooftop in Neo-Tokyo.",
+  "visualPrompt": "Anime background art, rain-slicked rooftop in Neo-Tokyo Sector 0, night, thunderstorm, glowing neon signs reflecting in puddles, cybernetic cables, industrial vents, wide angle, atmospheric, 8k, highly detailed, cel shaded, no characters.",
+  "imageConfig": {
+    "aspectRatio": "16:9"
+  },
+  "tasks": {}
+}
