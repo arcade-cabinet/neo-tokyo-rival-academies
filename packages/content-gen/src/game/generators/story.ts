@@ -1,108 +1,68 @@
-import fs from 'node:fs';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { MacroArchitect } from '../../agents/MacroArchitect';
-import { MesoDesigner } from '../../agents/MesoDesigner';
-import { MicroWriter } from '../../agents/MicroWriter';
+import { GoogleGenerativeAI } from '@google/generative-ai';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { STORY_A_PROMPT, STORY_B_PROMPT, STORY_C_PROMPT } from '../prompts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Helper to batch promises
-async function batchProcess<T, R>(
-  items: T[],
-  batchSize: number,
-  processor: (item: T) => Promise<R>
-): Promise<R[]> {
-  const results: R[] = [];
-  for (let i = 0; i < items.length; i += batchSize) {
-    const batch = items.slice(i, i + batchSize);
-    console.log(
-      `Processing batch ${Math.floor(i / batchSize) + 1}/${Math.ceil(items.length / batchSize)}...`
-    );
-    try {
-      const batchResults = await Promise.all(batch.map(processor));
-      results.push(...batchResults);
-    } catch (e) {
-      console.error('Batch processing error:', e);
-    }
-    // Delay between batches to respect rate limits
-    if (i + batchSize < items.length) await new Promise((resolve) => setTimeout(resolve, 5000));
+async function generateArc(model: any, prompt: string, arcName: string) {
+  console.log(`Generating ${arcName}...`);
+  try {
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    let text = response.text();
+    // Sanitize JSON
+    text = text.replace(/```json/g, '').replace(/```/g, '');
+    const json = JSON.parse(text);
+    return json;
+  } catch (e) {
+    console.error(`Failed to generate ${arcName}:`, e);
+    return null;
   }
-  return results;
 }
 
 export async function generateFullStory() {
   const apiKey = process.env.GEMINI_API_KEY;
-  if (!apiKey) throw new Error('GEMINI_API_KEY required');
-
-  // 1. MACRO PHASE
-  const macroAgent = new MacroArchitect(apiKey);
-  const macroStory = await macroAgent.designStory();
-
-  console.log(`Macro Phase Complete: ${macroStory.title}`);
-
-  // Prepare Meso Tasks
-  const mesoTasks = [];
-  if (!macroStory.acts || !macroStory.world_atlas) {
-    throw new Error('Macro Story generation failed to return valid acts or world_atlas');
+  if (!apiKey) {
+    console.warn('Skipping Story Generation: GEMINI_API_KEY not found.');
+    return;
   }
 
-  for (const act of macroStory.acts) {
-    for (const chapterId of act.chapters) {
-      mesoTasks.push({
-        chapterId,
-        actDesc: act.description,
-        // Simple round-robin region assignment for variety if multiple regions exist
-        region: macroStory.world_atlas[mesoTasks.length % macroStory.world_atlas.length],
-      });
-    }
+  const genAI = new GoogleGenerativeAI(apiKey);
+  const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash', generationConfig: { responseMimeType: "application/json" } });
+
+  const [storyA, storyB, storyC] = await Promise.all([
+    generateArc(model, STORY_A_PROMPT, 'A-Story'),
+    generateArc(model, STORY_B_PROMPT, 'B-Story'),
+    generateArc(model, STORY_C_PROMPT, 'C-Story'),
+  ]);
+
+  // Validate results
+  if (!storyA || !storyB || !storyC) {
+      console.error("Story generation incomplete. Skipping write.");
+      return; // Or throw error
   }
 
-  // 2. MESO PHASE (Batched)
-  const mesoAgent = new MesoDesigner(apiKey);
-  const chapters = await batchProcess(mesoTasks, 2, async (task) => {
-    return mesoAgent.designChapter(task.chapterId, task.actDesc, task.region);
-  });
+  // Deep merge strategy:
+  // A-Story provides 'dialogues'
+  // B-Story provides 'lore'
+  // C-Story provides 'dialogues'
 
-  console.log(`Meso Phase Complete: ${chapters.length} Chapters Generated.`);
-
-  // Prepare Micro Tasks
-  const microTasks = [];
-  for (const chapter of chapters) {
-    if (!chapter.story_beats) continue;
-    for (const beat of chapter.story_beats) {
-      if (beat.type === 'Dialogue') {
-        microTasks.push({ beat, chapterId: chapter.id });
-      }
-    }
-  }
-
-  // 3. MICRO PHASE (Batched)
-  const microAgent = new MicroWriter(apiKey);
-  const scripts = await batchProcess(microTasks, 3, async (task) => {
-    const dialogues = await microAgent.writeDialogue(task.beat);
-    return {
-      chapterId: task.chapterId,
-      beatId: task.beat.id,
-      dialogues,
-    };
-  });
-
-  console.log(`Micro Phase Complete: ${scripts.length} Dialogue Sequences.`);
-
-  // 4. ASSEMBLY
-  const fullGameData = {
-    meta: macroStory,
-    chapters: chapters,
-    scripts: scripts,
+  const mergedStory = {
+    dialogues: {
+      ...(storyA?.dialogues || {}),
+      ...(storyC?.dialogues || {})
+    },
+    lore: {
+      ...(storyB?.lore || {})
+    },
+    items: {}, // Items are currently static or procedural, not yet LLM generated in this pass
+    generated_at: new Date().toISOString()
   };
 
-  // Adjust path for new location (src/game/generators/story.ts -> ../../../../packages/game/src/data)
-  const outputPath = path.resolve(
-    __dirname,
-    '../../../../../packages/game/src/data/generated_jrpg.json'
-  );
-  fs.writeFileSync(outputPath, JSON.stringify(fullGameData, null, 2));
-  console.log(`JRPG Generated: ${outputPath}`);
+  const outputPath = path.resolve(__dirname, '../../../../packages/game/src/data/story_gen.json');
+  fs.writeFileSync(outputPath, JSON.stringify(mergedStory, null, 2));
+  console.log(`Full Story written to ${outputPath}`);
 }

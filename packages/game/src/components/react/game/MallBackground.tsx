@@ -1,6 +1,6 @@
 import { useFrame, useThree } from '@react-three/fiber';
 import { useMemo, useRef } from 'react';
-import type * as THREE from 'three';
+import * as THREE from 'three';
 
 function NeonSign({
   position,
@@ -12,7 +12,7 @@ function NeonSign({
   size: [number, number];
 }) {
   return (
-    <mesh position={position}>
+    <mesh position={new THREE.Vector3(...position)}>
       <boxGeometry args={[size[0], size[1], 0.5]} />
       <meshStandardMaterial
         color={color}
@@ -62,12 +62,7 @@ function ShopLayer({
   return (
     <group ref={group}>
       {shops.map((s) => (
-        <NeonSign
-          key={s.id}
-          position={[s.x, s.y, depth]}
-          color={s.color}
-          size={[s.width, s.height]}
-        />
+        <NeonSign key={s.id} position={[s.x, s.y, depth]} color={s.color} size={[s.width, s.height]} />
       ))}
     </group>
   );

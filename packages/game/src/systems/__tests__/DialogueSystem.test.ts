@@ -21,7 +21,7 @@ describe('DialogueSystem', () => {
 
     const node = getCurrentDialogueNode('player');
     expect(node).toBeDefined();
-    expect(node?.id).toBe('intro_1');
+    expect(node?.text).toContain("Engine's hot");
 
     advanceDialogue('player');
     expect(player.dialogueState?.nodeId).toBe('intro_2');
@@ -47,8 +47,8 @@ describe('DialogueSystem', () => {
   it('should handle missing entities gracefully', () => {
     // Should not throw
     expect(() => {
-      startDialogue('missing_entity', 'intro');
-      advanceDialogue('missing_entity');
+        startDialogue('missing_entity', 'intro');
+        advanceDialogue('missing_entity');
     }).not.toThrow();
 
     const node = getCurrentDialogueNode('missing_entity');
@@ -56,15 +56,15 @@ describe('DialogueSystem', () => {
   });
 
   it('should do nothing when advancing dialogue if not interacting', () => {
-    const player = world.add({
-      id: 'player',
-      dialogueState: { isInteracting: false, currentDialogueId: '', nodeId: '' },
-    });
+      const player = world.add({
+          id: 'player',
+          dialogueState: { isInteracting: false, currentDialogueId: '', nodeId: '' },
+      });
 
-    // Call advance without starting
-    advanceDialogue('player');
+      // Call advance without starting
+      advanceDialogue('player');
 
-    expect(player.dialogueState?.isInteracting).toBe(false);
-    expect(player.dialogueState?.currentDialogueId).toBe('');
+      expect(player.dialogueState?.isInteracting).toBe(false);
+      expect(player.dialogueState?.currentDialogueId).toBe('');
   });
 });

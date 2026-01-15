@@ -89,7 +89,7 @@ function NeonLights({ count, z, speedFactor }: { count: number; z: number; speed
       mesh.current?.setColorAt(i, l.color);
     });
     if (mesh.current.instanceColor) {
-      mesh.current.instanceColor.needsUpdate = true;
+        mesh.current.instanceColor.needsUpdate = true;
     }
   }, [lights]);
 

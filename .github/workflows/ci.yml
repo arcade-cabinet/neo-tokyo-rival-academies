@@ -49,9 +49,6 @@ jobs:
       - name: Run Biome check
         run: pnpm biome check .
 
-      - name: Build Content Gen (for types)
-        run: pnpm --filter @neo-tokyo/content-gen build
-
       - name: Run TypeScript type check
         run: pnpm type-check
 

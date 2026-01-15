@@ -25,11 +25,10 @@ export const JRPGHUD: FC<HUDProps> = ({ onInput, playerPos }) => {
   // Dialogue State
   const dialogueNode = player?.id ? getCurrentDialogueNode(player.id) : null;
 
-  const handleTouch =
-    (key: keyof InputState, pressed: boolean) => (e: React.TouchEvent | React.MouseEvent) => {
-      e.preventDefault();
-      onInput(key, pressed);
-    };
+  const handleTouch = (key: keyof InputState, pressed: boolean) => (e: React.TouchEvent | React.MouseEvent) => {
+    e.preventDefault();
+    onInput(key, pressed);
+  };
 
   return (
     <div className={styles.container}>
@@ -37,21 +36,12 @@ export const JRPGHUD: FC<HUDProps> = ({ onInput, playerPos }) => {
       <div className={styles.statusFrame}>
         <div className={styles.portrait}>
           {/* Procedural Avatar: Stylized character icon */}
-          <div
-            style={{
-              width: '100%',
-              height: '100%',
-              background: 'linear-gradient(135deg, #00ffff 0%, #000088 100%)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '2rem',
-              fontWeight: 'bold',
-              color: '#fff',
-            }}
-          >
-            K
-          </div>
+          <div style={{
+             width: '100%', height: '100%',
+             background: 'linear-gradient(135deg, #00ffff 0%, #000088 100%)',
+             display: 'flex', alignItems: 'center', justifyContent: 'center',
+             fontSize: '2rem', fontWeight: 'bold', color: '#fff'
+          }}>K</div>
         </div>
         <div className={styles.stats}>
           <div style={{ color: '#fff', fontWeight: 'bold' }}>LVL {level} KAI</div>
@@ -109,16 +99,7 @@ export const JRPGHUD: FC<HUDProps> = ({ onInput, playerPos }) => {
 
       {/* 4. Dialogue Box */}
       {dialogueNode && (
-        <button
-          type="button"
-          className={styles.dialogueBox}
-          onClick={() => player?.id && advanceDialogue(player.id)}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              player?.id && advanceDialogue(player.id);
-            }
-          }}
-        >
+        <div className={styles.dialogueBox} onClick={() => player?.id && advanceDialogue(player.id)}>
           <div className={styles.speaker}>{dialogueNode.speaker}</div>
           <div className={styles.text}>{dialogueNode.text}</div>
           <div
@@ -126,7 +107,7 @@ export const JRPGHUD: FC<HUDProps> = ({ onInput, playerPos }) => {
           >
             TAP TO CONTINUE
           </div>
-        </button>
+        </div>
       )}
 
       {/* 5. Controls (D-Pad & Actions) */}
@@ -140,7 +121,7 @@ export const JRPGHUD: FC<HUDProps> = ({ onInput, playerPos }) => {
             onTouchStart={handleTouch('left', true)}
             onTouchEnd={handleTouch('left', false)}
           >
-            <img src="/ui/dpad-left.svg" alt="Left" />
+            ←
           </div>
           {/* Right */}
           <div
@@ -149,7 +130,7 @@ export const JRPGHUD: FC<HUDProps> = ({ onInput, playerPos }) => {
             onTouchStart={handleTouch('right', true)}
             onTouchEnd={handleTouch('right', false)}
           >
-            <img src="/ui/dpad-right.svg" alt="Right" />
+            →
           </div>
           {/* Down (Slide) */}
           <div
@@ -158,41 +139,48 @@ export const JRPGHUD: FC<HUDProps> = ({ onInput, playerPos }) => {
             onTouchStart={handleTouch('slide', true)}
             onTouchEnd={handleTouch('slide', false)}
           >
-            <img src="/ui/dpad-down.svg" alt="Down" />
+            ↓
           </div>
-          {/* Up (Jump) */}
+          {/* Up (Wired to Jump or Interact for now to prevent no-op) */}
           <div
             className={styles.dpadBtn}
             style={{ top: '0', left: '50px' }}
-            onTouchStart={() => onInput('jump', true)}
-            onTouchEnd={() => onInput('jump', false)}
+            onTouchStart={handleTouch('jump', true)} // Mapping Up to Jump as alternative
+            onTouchEnd={handleTouch('jump', false)}
           >
-            <img src="/ui/dpad-up.svg" alt="Up" />
+            ↑
           </div>
         </div>
 
         {/* Actions */}
-        <div style={{ display: 'flex', alignItems: 'flex-end', gap: '16px' }}>
+        <div style={{ display: 'flex', alignItems: 'flex-end' }}>
           <div
             className={styles.actionBtn}
+            style={{ background: 'rgba(0, 255, 255, 0.2)', borderColor: '#0ff' }}
             onTouchStart={handleTouch('attack', true)}
             onTouchEnd={handleTouch('attack', false)}
           >
-            <img src="/ui/icon-attack.svg" alt="Attack" />
+            ATK
           </div>
           <div
             className={styles.actionBtn}
+            style={{
+              background: 'rgba(0, 255, 0, 0.2)',
+              borderColor: '#0f0',
+              marginBottom: '40px',
+            }}
             onTouchStart={handleTouch('jump', true)}
             onTouchEnd={handleTouch('jump', false)}
           >
-            <img src="/ui/icon-jump.svg" alt="Jump" />
+            JUMP
           </div>
           <div
             className={styles.actionBtn}
+            style={{ background: 'rgba(255, 255, 0, 0.2)', borderColor: '#ff0' }}
             onTouchStart={handleTouch('run', true)}
             onTouchEnd={handleTouch('run', false)}
           >
-            <img src="/ui/icon-run.svg" alt="Run" />
+            RUN
           </div>
         </div>
       </div>
