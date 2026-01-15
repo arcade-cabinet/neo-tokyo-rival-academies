@@ -10,9 +10,9 @@ const TARGET_DIR = path.resolve(__dirname, '../../../../game/src/content/data');
 
 export async function migrateContent() {
   console.log('Migrating Monolithic JSON to Granular Files...');
-  
+
   const sourcePath = path.resolve(__dirname, '../../../../game/src/data/generated_jrpg.json');
-  
+
   if (!fs.existsSync(sourcePath)) {
     console.error(`Source file not found: ${sourcePath}`);
     return;
@@ -43,14 +43,14 @@ export async function migrateContent() {
       // Extract Quests from Chapter if present
       if (chapter.quests) {
         for (const quest of chapter.quests) {
-           // Normalize Quest ID to filename safe
-           const questId = quest.id || `quest_${Date.now()}`;
-           const questPath = path.join(TARGET_DIR, 'quests', `${questId}.json`);
-           fs.writeFileSync(questPath, JSON.stringify(quest, null, 2));
+          // Normalize Quest ID to filename safe
+          const questId = quest.id || `quest_${Date.now()}`;
+          const questPath = path.join(TARGET_DIR, 'quests', `${questId}.json`);
+          fs.writeFileSync(questPath, JSON.stringify(quest, null, 2));
         }
         // Remove quests from chapter file to avoid duplication (store ref instead?)
         // For now, we keep them embedded or refactor later. Let's keep a sanitized version.
-        // chapter.quests = chapter.quests.map(q => ({ $ref: `quests/${q.id}.json` })); 
+        // chapter.quests = chapter.quests.map(q => ({ $ref: `quests/${q.id}.json` }));
       }
 
       const filePath = path.join(TARGET_DIR, 'chapters', `${chapter.id}.json`);
@@ -61,7 +61,7 @@ export async function migrateContent() {
   // 3. Migrate Metadata (Acts, Theme)
   const meta = {
     meta: data.meta,
-    acts: data.acts
+    acts: data.acts,
   };
   fs.writeFileSync(path.join(TARGET_DIR, 'manifest.json'), JSON.stringify(meta, null, 2));
 
