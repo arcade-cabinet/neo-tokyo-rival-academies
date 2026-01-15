@@ -1,6 +1,6 @@
 import { useFrame } from '@react-three/fiber';
-import { ECS } from '../state/ecs';
 import { updatePhysics } from '../logic/physics';
+import { ECS } from '../state/ecs';
 
 // Query dynamic entities (Player, Enemy)
 const dynamicEntities = ECS.world.with('position', 'velocity', 'characterState');
@@ -9,13 +9,7 @@ const platforms = ECS.world.with('position', 'platformData');
 
 export const PhysicsSystem = () => {
   useFrame((state, delta) => {
-    updatePhysics(
-      ECS.world,
-      dynamicEntities,
-      platforms,
-      delta,
-      state.camera.position.x
-    );
+    updatePhysics(ECS.world, dynamicEntities, platforms, delta, state.camera.position.x);
   });
 
   return null;

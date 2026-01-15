@@ -1,2 +1,2 @@
-export * from './ui/generators/assets';
 export * from './MusicSynth';
+export * from './ui/generators/assets';

@@ -1,20 +1,20 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
-import { MesoChapter, Region } from '../types/schemas';
+import type { MesoChapter, Region } from '../types/schemas';
 
 export class MesoDesigner {
   private model: any;
 
   constructor(apiKey: string) {
     const genAI = new GoogleGenerativeAI(apiKey);
-    this.model = genAI.getGenerativeModel({ 
-      model: 'gemini-2.0-flash-exp', 
-      generationConfig: { responseMimeType: "application/json" } 
+    this.model = genAI.getGenerativeModel({
+      model: 'gemini-2.0-flash-exp',
+      generationConfig: { responseMimeType: 'application/json' },
     });
   }
 
   async designChapter(chapterId: string, actContext: string, region: Region): Promise<MesoChapter> {
     console.log(`MesoDesigner: Detailing Chapter ${chapterId}...`);
-    
+
     const prompt = `
       You are the MESO DESIGNER.
       CONTEXT: Act: ${actContext}, Region: ${region.name} (${region.verticality}).

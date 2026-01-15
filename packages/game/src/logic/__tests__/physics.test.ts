@@ -13,25 +13,25 @@ class MockWorld implements PhysicsWorld {
     this.entities.add(e);
   }
 
-  remove(e: any) {
+  remove(e: PhysicsEntity) {
     this.entities.delete(e);
     this.removed.push(e);
   }
 
   // Helpers for testing
   get platforms() {
-    return Array.from(this.entities).filter(e => !!e.platformData);
+    return Array.from(this.entities).filter((e) => !!e.platformData);
   }
 
   get dynamicEntities() {
-    return Array.from(this.entities).filter(e => !!e.velocity);
+    return Array.from(this.entities).filter((e) => !!e.velocity);
   }
 }
 
 function createPlatform(x: number, length: number): PhysicsEntity {
   return {
     position: new THREE.Vector3(x, 0, 0),
-    platformData: { length, slope: 0, width: 10 }
+    platformData: { length, slope: 0, width: 10 },
   };
 }
 
@@ -40,7 +40,7 @@ function createPlayer(x: number): PhysicsEntity {
     position: new THREE.Vector3(x, 10, 0),
     velocity: new THREE.Vector3(0, 0, 0),
     characterState: 'run',
-    modelColor: 0xff0000
+    modelColor: 0xff0000,
   };
 }
 
@@ -72,7 +72,7 @@ describe('Physics Logic', () => {
 
     updatePhysics(world, world.dynamicEntities, [], 0.1, 0);
 
-    expect(player.velocity!.y).toBeLessThan(0);
+    expect(player.velocity?.y).toBeLessThan(0);
   });
 
   it('should snap to ground', () => {
@@ -89,6 +89,6 @@ describe('Physics Logic', () => {
     updatePhysics(world, world.dynamicEntities, world.platforms, 0.1, 0);
 
     expect(player.position.y).toBe(0);
-    expect(player.velocity!.y).toBe(0);
+    expect(player.velocity?.y).toBe(0);
   });
 });

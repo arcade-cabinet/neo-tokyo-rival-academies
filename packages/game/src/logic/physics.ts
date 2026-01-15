@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import type * as THREE from 'three';
 import { CONFIG } from '../utils/gameConfig';
 
 // Convert slope units to radians: slope * ~15 degrees
@@ -8,7 +8,7 @@ export interface PhysicsEntity {
   id?: string;
   position: THREE.Vector3;
   velocity?: THREE.Vector3;
-  characterState?: string;
+  characterState?: 'run' | 'sprint' | 'jump' | 'slide' | 'stun' | 'stand' | 'block' | 'attack';
   modelColor?: number;
   // For platforms
   platformData?: {
@@ -19,7 +19,7 @@ export interface PhysicsEntity {
 }
 
 export interface PhysicsWorld {
-  remove(entity: any): void;
+  remove(entity: PhysicsEntity): void;
 }
 
 export function updatePhysics(
@@ -60,27 +60,27 @@ export function updatePhysics(
     let groundHeight = NO_GROUND;
 
     for (const p of platforms) {
-        if (!p.platformData) continue;
+      if (!p.platformData) continue;
 
-        const { length, slope } = p.platformData;
-        
-        const dx = entity.position.x - p.position.x;
+      const { length, slope } = p.platformData;
 
-        // Optimization: Broad phase check (right side)
-        if (dx < -0.5) continue;
+      const dx = entity.position.x - p.position.x;
 
-        // Optimization: Broad phase check (left side) using length as upper bound
-        if (dx > length + 0.5) continue;
+      // Optimization: Broad phase check (right side)
+      if (dx < -0.5) continue;
 
-        const angle = slope * SLOPE_TO_RAD;
-        const projLen = length * Math.cos(angle);
+      // Optimization: Broad phase check (left side) using length as upper bound
+      if (dx > length + 0.5) continue;
 
-        if (dx <= projLen + 0.5) {
-          const gy = p.position.y + dx * Math.tan(angle);
-          if (gy > groundHeight) {
-            groundHeight = gy;
-          }
+      const angle = slope * SLOPE_TO_RAD;
+      const projLen = length * Math.cos(angle);
+
+      if (dx <= projLen + 0.5) {
+        const gy = p.position.y + dx * Math.tan(angle);
+        if (gy > groundHeight) {
+          groundHeight = gy;
         }
+      }
     }
 
     // Ground snapping
@@ -103,17 +103,17 @@ export function updatePhysics(
   const toRemove: PhysicsEntity[] = [];
 
   for (const p of platforms) {
-      if (!p.platformData) continue;
+    if (!p.platformData) continue;
 
-      // Calculate approximate end of platform
-      const endX = p.position.x + p.platformData.length;
+    // Calculate approximate end of platform
+    const endX = p.position.x + p.platformData.length;
 
-      if (endX < cameraX - CLEANUP_THRESHOLD) {
-          toRemove.push(p);
-      }
+    if (endX < cameraX - CLEANUP_THRESHOLD) {
+      toRemove.push(p);
+    }
   }
 
   for (const p of toRemove) {
-      world.remove(p);
+    world.remove(p);
   }
 }

@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 
 test.describe('JRPG Gameplay Verification', () => {
   test('should verify full gameplay loop: Menu -> Dialogue -> HUD', async ({ page }) => {
@@ -26,29 +26,24 @@ test.describe('JRPG Gameplay Verification', () => {
 
     // 5. Advance Dialogue
     console.log('Advancing dialogue...');
-    const introLines = [
-        'Hey Vector!',
-        'Your noise pollution',
-        'optimal path',
-        'Calculated? Hah!'
-    ];
+    const introLines = ['Hey Vector!', 'Your noise pollution', 'optimal path', 'Calculated? Hah!'];
 
     const viewport = page.viewportSize();
-    if (!viewport) throw new Error("Viewport not available");
+    if (!viewport) throw new Error('Viewport not available');
 
     for (const lineFragment of introLines) {
-        // Double click strategy to skip typewriter and advance
-        await page.waitForTimeout(600); 
-        await page.mouse.click(viewport.width / 2, viewport.height / 2); // Finish text
-        await page.waitForTimeout(300);
-        await expect(page.getByText(lineFragment)).toBeVisible({ timeout: 10000 });
-        await page.mouse.click(viewport.width / 2, viewport.height / 2); // Advance node
+      // Double click strategy to skip typewriter and advance
+      await page.waitForTimeout(600);
+      await page.mouse.click(viewport.width / 2, viewport.height / 2); // Finish text
+      await page.waitForTimeout(300);
+      await expect(page.getByText(lineFragment)).toBeVisible({ timeout: 10000 });
+      await page.mouse.click(viewport.width / 2, viewport.height / 2); // Advance node
     }
 
     // Final click to close overlay if still visible
     await page.waitForTimeout(1000);
     if (await dialogueBox.isVisible()) {
-        await page.mouse.click(viewport.width / 2, viewport.height / 2);
+      await page.mouse.click(viewport.width / 2, viewport.height / 2);
     }
 
     // 6. Verify Gameplay HUD

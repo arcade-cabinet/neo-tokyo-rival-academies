@@ -25,10 +25,11 @@ export const JRPGHUD: FC<HUDProps> = ({ onInput, playerPos }) => {
   // Dialogue State
   const dialogueNode = player?.id ? getCurrentDialogueNode(player.id) : null;
 
-  const handleTouch = (key: keyof InputState, pressed: boolean) => (e: React.TouchEvent | React.MouseEvent) => {
-    e.preventDefault();
-    onInput(key, pressed);
-  };
+  const handleTouch =
+    (key: keyof InputState, pressed: boolean) => (e: React.TouchEvent | React.MouseEvent) => {
+      e.preventDefault();
+      onInput(key, pressed);
+    };
 
   return (
     <div className={styles.container}>
@@ -36,12 +37,21 @@ export const JRPGHUD: FC<HUDProps> = ({ onInput, playerPos }) => {
       <div className={styles.statusFrame}>
         <div className={styles.portrait}>
           {/* Procedural Avatar: Stylized character icon */}
-          <div style={{
-             width: '100%', height: '100%',
-             background: 'linear-gradient(135deg, #00ffff 0%, #000088 100%)',
-             display: 'flex', alignItems: 'center', justifyContent: 'center',
-             fontSize: '2rem', fontWeight: 'bold', color: '#fff'
-          }}>K</div>
+          <div
+            style={{
+              width: '100%',
+              height: '100%',
+              background: 'linear-gradient(135deg, #00ffff 0%, #000088 100%)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '2rem',
+              fontWeight: 'bold',
+              color: '#fff',
+            }}
+          >
+            K
+          </div>
         </div>
         <div className={styles.stats}>
           <div style={{ color: '#fff', fontWeight: 'bold' }}>LVL {level} KAI</div>
@@ -99,7 +109,16 @@ export const JRPGHUD: FC<HUDProps> = ({ onInput, playerPos }) => {
 
       {/* 4. Dialogue Box */}
       {dialogueNode && (
-        <div className={styles.dialogueBox} onClick={() => player?.id && advanceDialogue(player.id)}>
+        <button
+          type="button"
+          className={styles.dialogueBox}
+          onClick={() => player?.id && advanceDialogue(player.id)}
+          onKeyDown={(e) => {
+             if (e.key === 'Enter' || e.key === ' ') {
+                 player?.id && advanceDialogue(player.id);
+             }
+          }}
+        >
           <div className={styles.speaker}>{dialogueNode.speaker}</div>
           <div className={styles.text}>{dialogueNode.text}</div>
           <div
@@ -107,7 +126,7 @@ export const JRPGHUD: FC<HUDProps> = ({ onInput, playerPos }) => {
           >
             TAP TO CONTINUE
           </div>
-        </div>
+        </button>
       )}
 
       {/* 5. Controls (D-Pad & Actions) */}
@@ -142,13 +161,13 @@ export const JRPGHUD: FC<HUDProps> = ({ onInput, playerPos }) => {
             <img src="/ui/dpad-down.svg" alt="Down" />
           </div>
           {/* Up (Jump) */}
-          <div 
-            className={styles.dpadBtn} 
+          <div
+            className={styles.dpadBtn}
             style={{ top: '0', left: '50px' }}
             onTouchStart={() => onInput('jump', true)}
             onTouchEnd={() => onInput('jump', false)}
           >
-             <img src="/ui/dpad-up.svg" alt="Up" />
+            <img src="/ui/dpad-up.svg" alt="Up" />
           </div>
         </div>
 

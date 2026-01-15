@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import * as THREE from 'three';
+import type * as THREE from 'three';
 import type { CharacterState } from '@/types/game';
 import { Character } from './Character';
 

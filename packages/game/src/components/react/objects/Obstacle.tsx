@@ -1,6 +1,6 @@
 import { useFrame } from '@react-three/fiber';
 import { useRef } from 'react';
-import * as THREE from 'three';
+import type * as THREE from 'three';
 
 interface ObstacleProps {
   position: THREE.Vector3 | [number, number, number];

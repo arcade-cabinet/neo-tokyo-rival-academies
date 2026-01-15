@@ -4,12 +4,10 @@ import { generateAssets } from './ui/generators/assets';
 
 const program = new Command();
 
-program
-  .name('content-gen')
-  .description('CLI for Neo-Tokyo Content Generation')
-  .version('0.1.0');
+program.name('content-gen').description('CLI for Neo-Tokyo Content Generation').version('0.1.0');
 
-program.command('story')
+program
+  .command('story')
   .description('Generate narrative content (A/B/C stories)')
   .action(async () => {
     console.log('Running Story Generation...');
@@ -21,7 +19,8 @@ program.command('story')
     }
   });
 
-program.command('assets')
+program
+  .command('assets')
   .description('Generate UI assets (Icons, Splash)')
   .action(async () => {
     console.log('Running Asset Generation...');
@@ -33,7 +32,8 @@ program.command('assets')
     }
   });
 
-program.command('all')
+program
+  .command('all')
   .description('Generate all content')
   .action(async () => {
     console.log('Running Story Generation...');

@@ -1,16 +1,28 @@
 import { memo } from 'react';
-import * as THREE from 'three';
+import type * as THREE from 'three';
 
 // Memoized material to prevent re-renders
-const ToonMat = memo(({ color, wireframe = false, transparent = false, opacity = 1 }: { color: THREE.ColorRepresentation, wireframe?: boolean, transparent?: boolean, opacity?: number }) => (
+const ToonMat = memo(
+  ({
+    color,
+    wireframe = false,
+    transparent = false,
+    opacity = 1,
+  }: {
+    color: THREE.ColorRepresentation;
+    wireframe?: boolean;
+    transparent?: boolean;
+    opacity?: number;
+  }) => (
     <meshToonMaterial
-        color={color}
-        wireframe={wireframe}
-        transparent={transparent}
-        opacity={opacity}
-        gradientMap={null}
+      color={color}
+      wireframe={wireframe}
+      transparent={transparent}
+      opacity={opacity}
+      gradientMap={null}
     />
-));
+  )
+);
 ToonMat.displayName = 'ToonMat';
 
 interface LimbProps {
@@ -23,15 +35,7 @@ interface LimbProps {
   isPlayer?: boolean;
 }
 
-export const Limb = ({
-  x,
-  y,
-  w,
-  h,
-  limbRef,
-  hasWeapon,
-  isPlayer,
-}: LimbProps) => (
+export const Limb = ({ x, y, w, h, limbRef, hasWeapon, isPlayer }: LimbProps) => (
   <group position={[x, y, 0]} ref={limbRef}>
     <mesh position={[0, -h / 2, 0]} castShadow>
       <boxGeometry args={[w, h, w]} />

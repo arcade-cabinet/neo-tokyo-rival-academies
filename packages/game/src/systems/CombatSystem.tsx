@@ -14,11 +14,11 @@ const obstaclesQuery = world.with('isObstacle', 'position');
 const collectiblesQuery = world.with('isCollectible', 'position');
 
 interface CombatEvent {
-    type: CombatEventType;
-    value?: number;
-    message?: string;
-    color?: string;
-    item?: string;
+  type: CombatEventType;
+  value?: number;
+  message?: string;
+  color?: string;
+  item?: string;
 }
 
 interface CombatSystemProps {
@@ -29,48 +29,54 @@ interface CombatSystemProps {
   onCombatEvent?: (event: CombatEvent) => void;
 }
 
-export const CombatSystem = ({ onGameOver, onScoreUpdate, onCameraShake, onCombatText, onCombatEvent }: CombatSystemProps) => {
+export const CombatSystem = ({
+  onGameOver,
+  onScoreUpdate,
+  onCameraShake,
+  onCombatText,
+  onCombatEvent,
+}: CombatSystemProps) => {
   useFrame((_state, _delta) => {
     // 1. Ally AI vs Enemy Combat
     for (const ally of alliesQuery) {
-       const toRemove: ECSEntity[] = [];
-       for (const enemy of enemiesQuery) {
-           if (ally.position && enemy.position) {
-               const dist = ally.position.distanceTo(enemy.position);
-               if (dist < 2.0) {
-                   const { damage, isCritical } = resolveCombat(ally, enemy);
-                   
-                   // Ensure enemy has health to be damageable
-                   if (enemy.health === undefined) {
-                       enemy.health = 1;
-                   }
-                   enemy.health -= damage;
-                   
-                   const color = isCritical ? '#ff0' : '#0ff';
-                   const text = isCritical ? `CRIT ${damage}!` : `${damage}`;
+      const toRemove: ECSEntity[] = [];
+      for (const enemy of enemiesQuery) {
+        if (ally.position && enemy.position) {
+          const dist = ally.position.distanceTo(enemy.position);
+          if (dist < 2.0) {
+            const { damage, isCritical } = resolveCombat(ally, enemy);
 
-                   // Emit typed event
-                   onCombatEvent?.({
-                       type: 'damage',
-                       value: damage,
-                       message: text,
-                       color: color
-                   });
-                   // Legacy fallback
-                   if (!onCombatEvent) onCombatText?.(text, color);
+            // Ensure enemy has health to be damageable
+            if (enemy.health === undefined) {
+              enemy.health = 1;
+            }
+            enemy.health -= damage;
 
-                   if (enemy.health <= 0) {
-                       toRemove.push(enemy);
-                       onCameraShake?.();
-                   } else {
-                       onCameraShake?.();
-                   }
-               }
-           }
-       }
-       for (const enemy of toRemove) {
-           world.remove(enemy);
-       }
+            const color = isCritical ? '#ff0' : '#0ff';
+            const text = isCritical ? `CRIT ${damage}!` : `${damage}`;
+
+            // Emit typed event
+            onCombatEvent?.({
+              type: 'damage',
+              value: damage,
+              message: text,
+              color: color,
+            });
+            // Legacy fallback
+            if (!onCombatEvent) onCombatText?.(text, color);
+
+            if (enemy.health <= 0) {
+              toRemove.push(enemy);
+              onCameraShake?.();
+            } else {
+              onCameraShake?.();
+            }
+          }
+        }
+      }
+      for (const enemy of toRemove) {
+        world.remove(enemy);
+      }
     }
 
     // 2. Player Logic
@@ -89,59 +95,64 @@ export const CombatSystem = ({ onGameOver, onScoreUpdate, onCameraShake, onComba
 
         if (dx < 1.5 && dy < 2.0 && dz < 1.0) {
           if (player.characterState === 'attack' || player.characterState === 'sprint') {
-             // Player Attacks
-             const { damage, isCritical } = resolveCombat(player, enemy);
+            // Player Attacks
+            const { damage, isCritical } = resolveCombat(player, enemy);
 
-             // Ensure enemy has health to be damageable
-             if (enemy.health === undefined) {
-                 enemy.health = 1;
-             }
-             enemy.health -= damage;
+            // Ensure enemy has health to be damageable
+            if (enemy.health === undefined) {
+              enemy.health = 1;
+            }
+            enemy.health -= damage;
 
-             const color = isCritical ? '#ff0' : '#f00';
-             const text = isCritical ? `CRIT ${damage}!` : `${damage}`;
+            const color = isCritical ? '#ff0' : '#f00';
+            const text = isCritical ? `CRIT ${damage}!` : `${damage}`;
 
-             onCombatEvent?.({
-                 type: 'damage',
-                 value: damage,
-                 message: text,
-                 color: color
-             });
-             if (!onCombatEvent) onCombatText?.(text, color);
+            onCombatEvent?.({
+              type: 'damage',
+              value: damage,
+              message: text,
+              color: color,
+            });
+            if (!onCombatEvent) onCombatText?.(text, color);
 
-             if (enemy.health <= 0) {
-                 enemiesToRemove.push(enemy);
-                 onScoreUpdate(100);
-                 onCameraShake?.();
+            if (enemy.health <= 0) {
+              enemiesToRemove.push(enemy);
+              onScoreUpdate(100);
+              onCameraShake?.();
 
-                 // Grant XP
-                 if (player.level) {
-                     player.level.xp += 20;
-                     onCombatEvent?.({ type: 'xp', value: 20, message: '+20 XP', color: '#0f0' });
-                     if (!onCombatEvent) onCombatText?.('+20 XP', '#0f0');
-                 }
-             } else {
-                 onCameraShake?.();
-             }
+              // Grant XP
+              if (player.level) {
+                player.level.xp += 20;
+                onCombatEvent?.({ type: 'xp', value: 20, message: '+20 XP', color: '#0f0' });
+                if (!onCombatEvent) onCombatText?.('+20 XP', '#0f0');
+              }
+            } else {
+              onCameraShake?.();
+            }
           } else {
             // Enemy Attacks Player
             if (player.health !== undefined && player.stats) {
-                 // Take damage instead of instant death if we have health
-                 const enemyDmg = resolveCombat(enemy, player).damage;
-                 player.health -= enemyDmg;
+              // Take damage instead of instant death if we have health
+              const enemyDmg = resolveCombat(enemy, player).damage;
+              player.health -= enemyDmg;
 
-                 onCombatEvent?.({ type: 'damage', value: enemyDmg, message: `-${enemyDmg}`, color: '#f00' });
-                 if (!onCombatEvent) onCombatText?.(`-${enemyDmg}`, '#f00');
+              onCombatEvent?.({
+                type: 'damage',
+                value: enemyDmg,
+                message: `-${enemyDmg}`,
+                color: '#f00',
+              });
+              if (!onCombatEvent) onCombatText?.(`-${enemyDmg}`, '#f00');
 
-                 onCameraShake?.();
+              onCameraShake?.();
 
-                 if (player.health <= 0) {
-                     onGameOver();
-                     return; // Break frame
-                 } else {
-                    // Knockback or stun visual
-                    enemiesToRemove.push(enemy); // "We crashed into them, they break, we take damage"
-                 }
+              if (player.health <= 0) {
+                onGameOver();
+                return; // Break frame
+              } else {
+                // Knockback or stun visual
+                enemiesToRemove.push(enemy); // "We crashed into them, they break, we take damage"
+              }
             }
           }
         }
@@ -161,8 +172,13 @@ export const CombatSystem = ({ onGameOver, onScoreUpdate, onCameraShake, onComba
         if (dx < 1.0 && dy < 1.0 && dz < 0.8) {
           const obsDmg = 10;
           player.health -= obsDmg;
-          
-          onCombatEvent?.({ type: 'damage', value: obsDmg, message: `HIT -${obsDmg}`, color: '#fa0' });
+
+          onCombatEvent?.({
+            type: 'damage',
+            value: obsDmg,
+            message: `HIT -${obsDmg}`,
+            color: '#fa0',
+          });
           if (!onCombatEvent) onCombatText?.(`HIT -${obsDmg}`, '#fa0');
 
           onCameraShake?.();
@@ -182,7 +198,12 @@ export const CombatSystem = ({ onGameOver, onScoreUpdate, onCameraShake, onComba
 
         const dist = player.position.distanceTo(item.position);
         if (dist < 1.5) {
-          onCombatEvent?.({ type: 'item', item: 'data_shard', message: 'DATA ACQUIRED', color: '#0f0' });
+          onCombatEvent?.({
+            type: 'item',
+            item: 'data_shard',
+            message: 'DATA ACQUIRED',
+            color: '#0f0',
+          });
           if (!onCombatEvent) onCombatText?.('DATA ACQUIRED', '#0f0');
           world.remove(item);
         }

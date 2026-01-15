@@ -8,31 +8,19 @@
         "id": "act_1",
         "title": "The Rivalry (Kai vs Vera)",
         "description": "Introduction to Neo-Tokyo and the academic rivalry between Kai's and Vera's academies. Seeds of transhumanism are planted, and subtle glitches begin to appear.",
-        "chapters": [
-          "ch_1",
-          "ch_2",
-          "ch_3"
-        ]
+        "chapters": ["ch_1", "ch_2", "ch_3"]
       },
       {
         "id": "act_2",
         "title": "The Glitch (Reality Breaks)",
         "description": "The glitches intensify, causing chaos and revealing the dark underbelly of Neo-Tokyo. Kai and Vera must temporarily align to survive.",
-        "chapters": [
-          "ch_4",
-          "ch_5",
-          "ch_6"
-        ]
+        "chapters": ["ch_4", "ch_5", "ch_6"]
       },
       {
         "id": "act_3",
         "title": "The Ascension (Climbing the Spire)",
         "description": "The source of the glitches is traced to the Cloud Spire. Kai and Vera race against time, facing transhumanist threats and glitch horrors to reach the top.",
-        "chapters": [
-          "ch_7",
-          "ch_8",
-          "ch_9"
-        ]
+        "chapters": ["ch_7", "ch_8", "ch_9"]
       }
     ],
     "world_atlas": [
@@ -41,12 +29,7 @@
         "name": "Shibuya Scramble",
         "verticality": "Low",
         "theme": "Bustling city center, neon lights, crowded streets",
-        "key_locations": [
-          "Kai's Academy",
-          "The Arcade",
-          "Hachiko Plaza",
-          "Sewers (Underground)"
-        ]
+        "key_locations": ["Kai's Academy", "The Arcade", "Hachiko Plaza", "Sewers (Underground)"]
       },
       {
         "id": "region_2",
@@ -65,12 +48,7 @@
         "name": "Cloud Spire Zenith",
         "verticality": "High",
         "theme": "Transhumanist research facility, sterile environment, corrupted by glitches",
-        "key_locations": [
-          "Entrance Lobby",
-          "Research Labs",
-          "Server Core",
-          "Observation Deck"
-        ]
+        "key_locations": ["Entrance Lobby", "Research Labs", "Server Core", "Observation Deck"]
       }
     ]
   },
@@ -130,22 +108,14 @@
             "Acquire Data Packet",
             "Return to Contact (Optional)"
           ],
-          "rewards": [
-            "Credits",
-            "Experience Points"
-          ]
+          "rewards": ["Credits", "Experience Points"]
         },
         {
           "id": "quest_2",
           "title": "Disable the Glitch Drones",
           "giver": "Automated System",
-          "objectives": [
-            "Locate and Disable 3 Malfunctioning Drones"
-          ],
-          "rewards": [
-            "Credits",
-            "Resource Components"
-          ]
+          "objectives": ["Locate and Disable 3 Malfunctioning Drones"],
+          "rewards": ["Credits", "Resource Components"]
         }
       ]
     },
@@ -160,37 +130,25 @@
           "id": "beat_1",
           "description": "Kai confronts a group of Vera's academy students hacking into a communication tower to spread propaganda. Combat encounter ensues.",
           "type": "Combat",
-          "required_assets": [
-            "communication_tower_mid",
-            "vera_academy_student_model"
-          ]
+          "required_assets": ["communication_tower_mid", "vera_academy_student_model"]
         },
         {
           "id": "beat_2",
           "description": "After the fight, a mysterious figure appears momentarily, leaving behind a strange data packet. Platforming challenge to reach the data packet location.",
           "type": "Platforming",
-          "required_assets": [
-            "akihabara_rooftop_platforming_assets",
-            "data_packet_model"
-          ]
+          "required_assets": ["akihabara_rooftop_platforming_assets", "data_packet_model"]
         },
         {
           "id": "beat_3",
           "description": "Kai examines the data packet. Dialogue with their AI companion reveals it contains encrypted messages hinting at transhumanist experiments.",
           "type": "Dialogue",
-          "required_assets": [
-            "ai_companion_model",
-            "encrypted_message_ui"
-          ]
+          "required_assets": ["ai_companion_model", "encrypted_message_ui"]
         },
         {
           "id": "beat_4",
           "description": "Another group of Vera's students ambushes Kai, this time augmented with cybernetic enhancements. This is a tougher combat encounter, emphasizing the growing divide between the academies.",
           "type": "Combat",
-          "required_assets": [
-            "vera_academy_student_cyborg_model",
-            "akihabara_rooftop_combat_arena"
-          ]
+          "required_assets": ["vera_academy_student_cyborg_model", "akihabara_rooftop_combat_arena"]
         }
       ],
       "quests": [
@@ -243,45 +201,31 @@
           "id": "beat_2",
           "description": "Navigating the lower levels of the Zenith Spire. Vertical platforming challenge with moving platforms and energy barriers.",
           "type": "Platforming",
-          "required_assets": [
-            "Moving Platform Asset",
-            "Energy Barrier Asset"
-          ]
+          "required_assets": ["Moving Platform Asset", "Energy Barrier Asset"]
         },
         {
           "id": "beat_3",
           "description": "Encounter a group of Vera's security drones guarding the middle levels. Engage in combat. Introduce a new enemy type: 'Vera Enforcer Drone', stronger and more agile.",
           "type": "Combat",
-          "required_assets": [
-            "Vera Enforcer Drone Asset"
-          ]
+          "required_assets": ["Vera Enforcer Drone Asset"]
         },
         {
           "id": "beat_4",
           "description": "Continue climbing, more complex platforming with wind gusts and collapsing structures.",
           "type": "Platforming",
-          "required_assets": [
-            "Wind Gust VFX",
-            "Collapsing Structure Asset"
-          ]
+          "required_assets": ["Wind Gust VFX", "Collapsing Structure Asset"]
         },
         {
           "id": "beat_5",
           "description": "Reach the antenna. A brief interaction with the communication device. The signal is heavily jammed.",
           "type": "Dialogue",
-          "required_assets": [
-            "Antenna Asset",
-            "Communication Device Asset"
-          ]
+          "required_assets": ["Antenna Asset", "Communication Device Asset"]
         },
         {
           "id": "beat_6",
           "description": "Ambush by a high-ranking Vera operative – 'Cipher'. Mini-boss fight emphasizing speed and hacking abilities.",
           "type": "Combat",
-          "required_assets": [
-            "Cipher Character Asset",
-            "Hacking VFX"
-          ]
+          "required_assets": ["Cipher Character Asset", "Hacking VFX"]
         }
       ],
       "quests": [
@@ -297,22 +241,14 @@
             "Reach the Antenna",
             "Defeat Cipher"
           ],
-          "rewards": [
-            "Data Fragment: Glitch Analysis",
-            "Improved Hacking Module"
-          ]
+          "rewards": ["Data Fragment: Glitch Analysis", "Improved Hacking Module"]
         },
         {
           "id": "quest_2",
           "title": "Scavenge Data Fragments",
           "giver": "Local Scavenger AI (Optional encounter in lower spire levels)",
-          "objectives": [
-            "Collect 5 Data Fragments from defeated drones"
-          ],
-          "rewards": [
-            "Rare Component: Energy Core",
-            "Reputation: Scavengers"
-          ]
+          "objectives": ["Collect 5 Data Fragments from defeated drones"],
+          "rewards": ["Rare Component: Energy Core", "Reputation: Scavengers"]
         }
       ]
     },
@@ -327,10 +263,7 @@
           "id": "beat_1",
           "description": "The glitches intensify. Kai and Vera are ambushed by corrupted security drones while navigating the Shibuya Scramble. Combat encounter focusing on crowd control and dodging environmental hazards caused by the glitches.",
           "type": "Combat",
-          "required_assets": [
-            "corrupted_security_drone",
-            "shibuya_scramble_glitch_environment"
-          ]
+          "required_assets": ["corrupted_security_drone", "shibuya_scramble_glitch_environment"]
         },
         {
           "id": "beat_2",
@@ -357,28 +290,19 @@
           "id": "beat_4",
           "description": "Reaching higher ground, Kai and Vera witness a group of civilians being harassed by glitch-infected thugs. A choice is presented: Intervene or bypass. This beat leads to the next, based on player's choice.",
           "type": "Dialogue",
-          "required_assets": [
-            "glitch_infected_thug",
-            "civilian_character_model"
-          ]
+          "required_assets": ["glitch_infected_thug", "civilian_character_model"]
         },
         {
           "id": "beat_5a",
           "description": "If they intervened (beat 4), this triggers another Combat scenario against the glitch infected thugs to save the civilians.",
           "type": "Combat",
-          "required_assets": [
-            "glitch_infected_thug",
-            "civilian_character_model"
-          ]
+          "required_assets": ["glitch_infected_thug", "civilian_character_model"]
         },
         {
           "id": "beat_5b",
           "description": "If they bypass (beat 4), Vera expresses her moral concern while Kai justifies his decision based on their survival. A brief dialogue exchange that affects their trust level.",
           "type": "Dialogue",
-          "required_assets": [
-            "kai_character_model",
-            "vera_character_model"
-          ]
+          "required_assets": ["kai_character_model", "vera_character_model"]
         }
       ],
       "quests": [
@@ -390,10 +314,7 @@
             "Reach the designated comms tower in Shibuya (marked on the HUD)",
             "Upload a diagnostic program to the comms tower to analyze the glitch source"
           ],
-          "rewards": [
-            "Comms Tower Access Key",
-            "1500 Credits"
-          ]
+          "rewards": ["Comms Tower Access Key", "1500 Credits"]
         },
         {
           "id": "quest_2",
@@ -403,11 +324,7 @@
             "Defeat the glitch-infected thugs",
             "Escort the civilians to a safe location (marked on HUD)"
           ],
-          "rewards": [
-            "Medkit",
-            "Enhanced Trust (Vera)",
-            "Cybernetic Arm Mod"
-          ]
+          "rewards": ["Medkit", "Enhanced Trust (Vera)", "Cybernetic Arm Mod"]
         }
       ]
     },
@@ -422,46 +339,31 @@
           "id": "beat_1",
           "description": "Initial glitch surge causes structural damage; Kai and Vera fight off corrupted security drones amidst falling debris.",
           "type": "Combat",
-          "required_assets": [
-            "corrupted_security_drone",
-            "falling_debris_effect"
-          ]
+          "required_assets": ["corrupted_security_drone", "falling_debris_effect"]
         },
         {
           "id": "beat_2",
           "description": "Vera and Kai discuss the glitch's origin and potential solutions, reluctantly agreeing to cooperate. Dialogue choices influence trust level.",
           "type": "Dialogue",
-          "required_assets": [
-            "kai_character_model",
-            "vera_character_model"
-          ]
+          "required_assets": ["kai_character_model", "vera_character_model"]
         },
         {
           "id": "beat_3",
           "description": "Vertical platforming sequence across collapsing rooftops to reach a data terminal. Glitches cause platforms to appear and disappear intermittently.",
           "type": "Platforming",
-          "required_assets": [
-            "collapsing_rooftop_platform",
-            "glitch_visual_effect"
-          ]
+          "required_assets": ["collapsing_rooftop_platform", "glitch_visual_effect"]
         },
         {
           "id": "beat_4",
           "description": "Defend the data terminal from waves of corrupted robots while Vera attempts to stabilize the connection.",
           "type": "Combat",
-          "required_assets": [
-            "data_terminal_asset",
-            "corrupted_robot_model"
-          ]
+          "required_assets": ["data_terminal_asset", "corrupted_robot_model"]
         },
         {
           "id": "beat_5",
           "description": "Dialogue revealing a clue about the glitch's source. Kai and Vera decide on their next course of action.",
           "type": "Dialogue",
-          "required_assets": [
-            "kai_character_model",
-            "vera_character_model"
-          ]
+          "required_assets": ["kai_character_model", "vera_character_model"]
         }
       ],
       "quests": [
@@ -474,23 +376,14 @@
             "Defend the terminal while Vera hacks in (3 waves)",
             "Download the preliminary data"
           ],
-          "rewards": [
-            "2500 Credits",
-            "Enhanced Hacking Module"
-          ]
+          "rewards": ["2500 Credits", "Enhanced Hacking Module"]
         },
         {
           "id": "quest_2",
           "title": "Salvage Damaged Drones",
           "giver": "Scavenger Bot (hidden)",
-          "objectives": [
-            "Collect 5 Damaged Drone Cores",
-            "Return to the Scavenger Bot"
-          ],
-          "rewards": [
-            "Rare Weapon Mod",
-            "1000 Credits"
-          ]
+          "objectives": ["Collect 5 Damaged Drone Cores", "Return to the Scavenger Bot"],
+          "rewards": ["Rare Weapon Mod", "1000 Credits"]
         }
       ]
     },
@@ -515,37 +408,25 @@
           "id": "beat_2",
           "description": "Encounter corrupted security drones guarding the relay. Fight them off to proceed.",
           "type": "Combat",
-          "required_assets": [
-            "corrupted_security_drone_asset",
-            "energy_shield_asset"
-          ]
+          "required_assets": ["corrupted_security_drone_asset", "energy_shield_asset"]
         },
         {
           "id": "beat_3",
           "description": "Reach the communications relay and attempt to stabilize the signal. Kai and Vera are forced to work together to calibrate the relay.",
           "type": "Dialogue",
-          "required_assets": [
-            "communication_relay_asset",
-            "holographic_interface_asset"
-          ]
+          "required_assets": ["communication_relay_asset", "holographic_interface_asset"]
         },
         {
           "id": "beat_4",
           "description": "While stabilizing the signal, a powerful surge of glitch energy erupts, creating temporary pathways. Use these to escape a collapsing section of the Cloud Spire.",
           "type": "Platforming (Vertical)",
-          "required_assets": [
-            "glitch_pathway_asset",
-            "collapsing_platform_asset"
-          ]
+          "required_assets": ["glitch_pathway_asset", "collapsing_platform_asset"]
         },
         {
           "id": "beat_5",
           "description": "Confront a Glitch Enforcer, a powerful enemy empowered by the chaotic energy. This fight tests Kai and Vera's uneasy alliance.",
           "type": "Combat",
-          "required_assets": [
-            "glitch_enforcer_asset",
-            "energy_barrier_asset"
-          ]
+          "required_assets": ["glitch_enforcer_asset", "energy_barrier_asset"]
         }
       ],
       "quests": [
@@ -558,22 +439,14 @@
             "Defeat Security Drones",
             "Calibrate the Signal"
           ],
-          "rewards": [
-            "Access to New Area",
-            "Data Fragment (Relay Schematics)"
-          ]
+          "rewards": ["Access to New Area", "Data Fragment (Relay Schematics)"]
         },
         {
           "id": "quest_2",
           "title": "Salvage Data Fragments",
           "giver": "Vera",
-          "objectives": [
-            "Collect 3 Data Fragments from destroyed Security Drones"
-          ],
-          "rewards": [
-            "Modified Hacking Tool",
-            "Increased relationship with Vera"
-          ]
+          "objectives": ["Collect 3 Data Fragments from destroyed Security Drones"],
+          "rewards": ["Modified Hacking Tool", "Increased relationship with Vera"]
         }
       ]
     },
@@ -588,38 +461,25 @@
           "id": "beat_1",
           "description": "Kai and Vera fight through corrupted security drones guarding the entrance to the Cloud Spire.",
           "type": "Combat",
-          "required_assets": [
-            "security_drone_corrupted",
-            "shibuya_entrance_spire"
-          ]
+          "required_assets": ["security_drone_corrupted", "shibuya_entrance_spire"]
         },
         {
           "id": "beat_2",
           "description": "The duo encounter a cryptic AI construct projecting from a defunct terminal, offering cryptic warnings and alluding to the spire's control mechanisms. Dialogue choice to trust or distrust the AI.",
           "type": "Dialogue",
-          "required_assets": [
-            "ai_construct_avatar",
-            "defunct_terminal"
-          ]
+          "required_assets": ["ai_construct_avatar", "defunct_terminal"]
         },
         {
           "id": "beat_3",
           "description": "A vertical platforming sequence through the spire's lower levels, avoiding glitching platforms and energy surges.",
           "type": "Platforming",
-          "required_assets": [
-            "glitching_platform",
-            "energy_surge_effect",
-            "spire_interior_lower"
-          ]
+          "required_assets": ["glitching_platform", "energy_surge_effect", "spire_interior_lower"]
         },
         {
           "id": "beat_4",
           "description": "Confrontation with a transhumanist zealot who has merged with the Spire's technology. He attempts to stop Kai and Vera, believing they threaten his vision of a machine-augmented future. ",
           "type": "Combat",
-          "required_assets": [
-            "transhumanist_zealot",
-            "spire_control_panel"
-          ]
+          "required_assets": ["transhumanist_zealot", "spire_control_panel"]
         }
       ],
       "quests": [
@@ -632,10 +492,7 @@
             "Navigate the Lower Levels",
             "Defeat the Transhumanist Zealot"
           ],
-          "rewards": [
-            "Access to higher levels of the Spire",
-            "Data Fragment (story relevant)"
-          ]
+          "rewards": ["Access to higher levels of the Spire", "Data Fragment (story relevant)"]
         },
         {
           "id": "quest_2",
@@ -646,10 +503,7 @@
             "Purge the corruption using Vera's tech skills",
             "Return to the AI Construct"
           ],
-          "rewards": [
-            "AI Support (temporary combat buff)",
-            "Spire Map (reveals hidden pathways)"
-          ]
+          "rewards": ["AI Support (temporary combat buff)", "Spire Map (reveals hidden pathways)"]
         }
       ]
     },
@@ -685,21 +539,13 @@
           "id": "beat_3",
           "description": "Vera hacks into the server room to gain access to the Cloud Spire's elevator. Dialogue exchange reveals more about the Transhumanists' plans and their connection to the glitches.",
           "type": "Dialogue",
-          "required_assets": [
-            "Server Room Interior",
-            "Hacking Interface",
-            "Dialogue Animations"
-          ]
+          "required_assets": ["Server Room Interior", "Hacking Interface", "Dialogue Animations"]
         },
         {
           "id": "beat_4",
           "description": "Elevator sequence is interrupted by glitching floors and enemies emerging from the walls. A frantic combat encounter inside the moving elevator shaft. Forced movement and close-quarters combat.",
           "type": "Combat",
-          "required_assets": [
-            "Elevator Model",
-            "Glitched Elevator Effects",
-            "Enemy Spawn Points"
-          ]
+          "required_assets": ["Elevator Model", "Glitched Elevator Effects", "Enemy Spawn Points"]
         },
         {
           "id": "beat_5",
@@ -722,10 +568,7 @@
             "Overcome security measures",
             "Reach the top of the Spire"
           ],
-          "rewards": [
-            "Access to Chapter 9",
-            "Experience Points"
-          ]
+          "rewards": ["Access to Chapter 9", "Experience Points"]
         },
         {
           "id": "quest_2",
@@ -735,10 +578,7 @@
             "Locate three surveillance drones in the area",
             "Hack and disable the drones to prevent detection"
           ],
-          "rewards": [
-            "Advanced Hacking Tool",
-            "Increased Stealth Proficiency"
-          ]
+          "rewards": ["Advanced Hacking Tool", "Increased Stealth Proficiency"]
         }
       ]
     },
@@ -763,29 +603,19 @@
           "id": "beat_2",
           "description": "After defeating the guards, Kai and Vera encounter a damaged maintenance bot named 'Sparky'. Sparky provides exposition about the Cloud Spire's security systems and the increasing influence of the transhumanists.",
           "type": "Dialogue",
-          "required_assets": [
-            "sparky_bot_model",
-            "dialogue_ui"
-          ]
+          "required_assets": ["sparky_bot_model", "dialogue_ui"]
         },
         {
           "id": "beat_3",
           "description": "The path forward requires navigating a vertical section of the Cloud Spire, utilizing jump pads and grappling hooks to ascend through a series of interconnected platforms. Glitch enemies appear intermittently, requiring quick reflexes and precise movement.",
           "type": "Platforming",
-          "required_assets": [
-            "jump_pad_asset",
-            "grappling_hook_asset",
-            "glitch_enemy_model"
-          ]
+          "required_assets": ["jump_pad_asset", "grappling_hook_asset", "glitch_enemy_model"]
         },
         {
           "id": "beat_4",
           "description": "At a temporary respite point, Kai and Vera overhear a conversation between two transhumanist engineers discussing a 'glitch containment protocol'. This reveals that the transhumanists are attempting to weaponize the glitches.",
           "type": "Dialogue",
-          "required_assets": [
-            "transhumanist_engineer_model",
-            "ambient_sound_assets"
-          ]
+          "required_assets": ["transhumanist_engineer_model", "ambient_sound_assets"]
         },
         {
           "id": "beat_5",
@@ -808,10 +638,7 @@
             "Overcome the Transhumanist Threat",
             "Disable the Energy Barrier"
           ],
-          "rewards": [
-            "Access to the Spire Core (Act 4)",
-            "Experience Points"
-          ]
+          "rewards": ["Access to the Spire Core (Act 4)", "Experience Points"]
         },
         {
           "id": "quest_2",
@@ -821,10 +648,7 @@
             "Collect 3 'Memory Fragments' scattered throughout the ascent",
             "Return the Memory Fragments to Sparky"
           ],
-          "rewards": [
-            "Unique Weapon Mod",
-            "Increased standing with local resistance"
-          ]
+          "rewards": ["Unique Weapon Mod", "Increased standing with local resistance"]
         }
       ]
     }
@@ -1765,10 +1589,7 @@
       "dialogues": [
         {
           "scene": "Bypass (beat 4) - Moral Justification",
-          "characters": [
-            "Kai (Rebel, Hot-headed)",
-            "Vera (Academic, Cold/Logical)"
-          ],
+          "characters": ["Kai (Rebel, Hot-headed)", "Vera (Academic, Cold/Logical)"],
           "dialogue": [
             {
               "speaker": "Vera",
@@ -2000,107 +1821,79 @@
         {
           "speaker": "Kai",
           "line": "This rust bucket is the comms relay? Seriously? We're doomed.",
-          "next_ids": [
-            "Vera1",
-            "Kai2"
-          ],
+          "next_ids": ["Vera1", "Kai2"],
           "id": "Kai1"
         },
         {
           "speaker": "Vera",
           "line": "Sentimental assessment is irrelevant. Focus. The signal instability originates from sector Gamma-7. Calibrate the phase modulator.",
-          "next_ids": [
-            "Kai3"
-          ],
+          "next_ids": ["Kai3"],
           "id": "Vera1"
         },
         {
           "speaker": "Kai",
           "line": "Phase modulator? You expect me to know what that is? Just tell me what to do, Professor.",
-          "next_ids": [
-            "Vera2",
-            "Kai4"
-          ],
+          "next_ids": ["Vera2", "Kai4"],
           "id": "Kai2"
         },
         {
           "speaker": "Kai",
           "line": "Gamma-7...right. And by 'calibrate,' you mean wave my hands and hope for the best?",
-          "next_ids": [
-            "Vera3"
-          ],
+          "next_ids": ["Vera3"],
           "id": "Kai3"
         },
         {
           "speaker": "Vera",
           "line": "The schematics are uploading to your neural interface. Adjust the frequency oscillator to match the baseline. Am I speaking slowly enough?",
-          "next_ids": [
-            "Kai5"
-          ],
+          "next_ids": ["Kai5"],
           "id": "Vera2"
         },
         {
           "speaker": "Kai",
           "line": "Hey, I got it! Input the frequency or I go boom with the rusty bucket!",
-          "next_ids": [
-            "Vera4"
-          ],
+          "next_ids": ["Vera4"],
           "id": "Kai4"
         },
         {
           "speaker": "Kai",
           "line": "Frequency oscillator... right, got it. Almost got a signal but there is a error with the resistor!",
-          "next_ids": [
-            "Vera5"
-          ],
+          "next_ids": ["Vera5"],
           "id": "Kai5"
         },
         {
           "speaker": "Vera",
           "line": "The frequency is 47.9 terahertz. Input it precisely. Deviation will result in catastrophic failure.",
-          "next_ids": [
-            "Kai6"
-          ],
+          "next_ids": ["Kai6"],
           "id": "Vera4"
         },
         {
           "speaker": "Vera",
           "line": "The resistor can be manually bypassed, rerouting energy to the primary core.",
-          "next_ids": [
-            "Kai7"
-          ],
+          "next_ids": ["Kai7"],
           "id": "Vera5"
         },
         {
           "speaker": "Kai",
           "line": "Terahertz... terawhat? Just give me the number I see! 47.9! Got it!",
-          "next_ids": [
-            "Vera6"
-          ],
+          "next_ids": ["Vera6"],
           "id": "Kai6"
         },
         {
           "speaker": "Kai",
           "line": "Bypassing Resistor... Power rerouting to the primary core. Stabilizing... Stabilized, but for how long!",
-          "next_ids": [
-            "Vera7"
-          ],
+          "next_ids": ["Vera7"],
           "id": "Kai7"
         },
         {
           "speaker": "Vera",
           "line": "Signal is... stable. For now. Do not become complacent. They will be tracking this.",
-          "next_ids": [
-            "Kai8"
-          ],
+          "next_ids": ["Kai8"],
           "id": "Vera6"
         },
         {
           "speaker": "Vera",
           "line": "Comms stable. For now. Let's report what happened",
-          "next_ids": [
-            "Kai9"
-          ],
+          "next_ids": ["Kai9"],
           "id": "Vera7"
         },
         {

@@ -1,14 +1,14 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
-import { MicroDialogue, StoryBeat } from '../types/schemas';
+import type { MicroDialogue, StoryBeat } from '../types/schemas';
 
 export class MicroWriter {
   private model: any;
 
   constructor(apiKey: string) {
     const genAI = new GoogleGenerativeAI(apiKey);
-    this.model = genAI.getGenerativeModel({ 
-      model: 'gemini-2.0-flash-exp', 
-      generationConfig: { responseMimeType: "application/json" } 
+    this.model = genAI.getGenerativeModel({
+      model: 'gemini-2.0-flash-exp',
+      generationConfig: { responseMimeType: 'application/json' },
     });
   }
 
@@ -17,7 +17,7 @@ export class MicroWriter {
     if (beat.type !== 'Dialogue') return [];
 
     console.log(`MicroWriter: Scripting beat ${beat.id}...`);
-    
+
     const prompt = `
       You are the MICRO WRITER.
       SCENE: ${beat.description}.

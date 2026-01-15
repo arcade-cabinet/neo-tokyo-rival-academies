@@ -10,7 +10,7 @@ import * as THREE from 'three';
 import { ECS, type ECSEntity, world } from '@/state/ecs';
 import { useGameStore } from '@/state/gameStore';
 import { aiSystem } from '@/systems/AISystem';
-import { CombatSystem, type CombatEventType } from '@/systems/CombatSystem';
+import { type CombatEventType, CombatSystem } from '@/systems/CombatSystem';
 import { startDialogue } from '@/systems/DialogueSystem';
 import { InputSystem } from '@/systems/InputSystem';
 import { PhysicsSystem } from '@/systems/PhysicsSystem';
@@ -201,10 +201,10 @@ export function GameWorld({
       ) {
         stageSystem.triggerEvent('ABDUCTION');
         if (onDialogue) {
-            // Trigger UI
-            onDialogue('Vera', 'You are lagging. Expected.');
+          // Trigger UI
+          onDialogue('Vera', 'You are lagging. Expected.');
         } else {
-            startDialogue('player', 'rival_encounter_1');
+          startDialogue('player', 'rival_encounter_1');
         }
       }
 
@@ -339,8 +339,8 @@ export function GameWorld({
         player.position.x > stageSystem.currentStage.length &&
         !exitSequenceActive.current
       ) {
-         // Mark stage as complete to trigger end sequence/connector spawn logic
-         stageSystem.completeStage();
+        // Mark stage as complete to trigger end sequence/connector spawn logic
+        stageSystem.completeStage();
       }
 
       // Check stage completion
@@ -397,11 +397,11 @@ export function GameWorld({
       }
 
       if (onCameraShake) {
-          const now = performance.now();
-          if (now - lastShakeTime.current > SHAKE_INTERVAL) {
-              onCameraShake();
-              lastShakeTime.current = now;
-          }
+        const now = performance.now();
+        if (now - lastShakeTime.current > SHAKE_INTERVAL) {
+          onCameraShake();
+          lastShakeTime.current = now;
+        }
       }
 
       if (stageSystem.currentStage.platforms === 'procedural' && stageSystem.state !== 'complete') {
@@ -533,12 +533,7 @@ export function GameWorld({
       </ECS.Entities>
 
       <ECS.Entities in={world.with('isObstacle', 'position', 'obstacleType')}>
-        {(entity) => (
-          <Obstacle
-            position={entity.position}
-            type={entity.obstacleType || 'low'}
-          />
-        )}
+        {(entity) => <Obstacle position={entity.position} type={entity.obstacleType || 'low'} />}
       </ECS.Entities>
 
       <ECS.Entities in={world.with('isPlatform', 'position', 'platformData')}>
