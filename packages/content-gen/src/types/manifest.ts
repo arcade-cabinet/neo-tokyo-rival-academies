@@ -47,7 +47,7 @@ export const AnimationConfigSchema = z.object({
 export const AssetManifestSchema = z.object({
   id: z.string(),
   name: z.string(),
-  type: z.enum(['character', 'background', 'prop', 'environment']),
+  type: z.enum(['character', 'background', 'prop', 'environment', 'tile']),
   description: z.string(),
   visualPrompt: z.string(),
 

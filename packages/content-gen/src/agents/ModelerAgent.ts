@@ -55,6 +55,8 @@ export class ModelerAgent {
       manifest = await this.processCharacter(manifest, assetDir);
     } else if (manifest.type === 'background') {
       manifest = await this.processBackground(manifest, assetDir);
+    } else if (manifest.type === 'tile') {
+      manifest = await this.processTile(manifest, assetDir);
     } else {
       console.log(`[Modeler] Skipping unsupported type: ${manifest.type}`);
     }
@@ -114,13 +116,30 @@ export class ModelerAgent {
     // Initialize tasks object if needed
     if (!manifest.tasks) manifest.tasks = {};
 
-    // Backgrounds only need concept art (image generation)
-    manifest = await this.ensureConceptArt(manifest, outputDir, true);
+    // Backgrounds only need concept art (image generation) - no pose, default 16:9
+    manifest = await this.ensureConceptArt(manifest, outputDir, { needsPose: false, defaultAspect: '16:9' });
 
     return manifest;
   }
 
-  private async ensureConceptArt(manifest: AssetManifest, outputDir: string, isBackground = false): Promise<AssetManifest> {
+  private async processTile(manifest: AssetManifest, outputDir: string): Promise<AssetManifest> {
+    // Initialize tasks object if needed
+    if (!manifest.tasks) manifest.tasks = {};
+
+    // 1. Concept art - no pose, 1:1 aspect ratio
+    manifest = await this.ensureConceptArt(manifest, outputDir, { needsPose: false, defaultAspect: '1:1' });
+
+    // 2. 3D Model - no pose mode (tiles aren't characters), lower polycount
+    manifest = await this.ensureModel3d(manifest, outputDir, { needsPose: false, targetPolycount: 10000 });
+
+    return manifest;
+  }
+
+  private async ensureConceptArt(
+    manifest: AssetManifest,
+    outputDir: string,
+    opts: { needsPose: boolean; defaultAspect: '1:1' | '9:16' | '16:9' | '4:3' | '3:4' } = { needsPose: true, defaultAspect: '9:16' }
+  ): Promise<AssetManifest> {
     const localPath = path.join(outputDir, 'concept.png');
 
     // Check if already done (handle both relative and absolute paths)
@@ -136,9 +155,8 @@ export class ModelerAgent {
 
     const cfg = { ...DEFAULTS.image, ...manifest.imageConfig };
 
-    // Background images don't need pose
-    const poseStr = isBackground ? '' : `, ${cfg.poseMode}`;
-    const aspectRatio = isBackground ? '16:9' : cfg.aspectRatio;
+    // Use manifest's aspect ratio if specified, otherwise use default for this asset type
+    const aspectRatio = manifest.imageConfig?.aspectRatio ?? opts.defaultAspect;
 
     console.log(`[Modeler] Generating Concept Art...`);
     console.log(`[Modeler] Config: model=${cfg.aiModel}, aspect=${aspectRatio}`);
@@ -146,7 +164,7 @@ export class ModelerAgent {
     const task = await this.client.post('/v1/text-to-image', {
       ai_model: cfg.aiModel,
       prompt: manifest.visualPrompt,
-      pose_mode: isBackground ? undefined : cfg.poseMode,
+      pose_mode: opts.needsPose ? cfg.poseMode : undefined,
       aspect_ratio: aspectRatio,
       negative_prompt: manifest.imageConfig?.negativePrompt ?? 'blurry, low quality, distorted, watermark'
     }) as any;
@@ -178,7 +196,11 @@ export class ModelerAgent {
     return manifest;
   }
 
-  private async ensureModel3d(manifest: AssetManifest, outputDir: string): Promise<AssetManifest> {
+  private async ensureModel3d(
+    manifest: AssetManifest,
+    outputDir: string,
+    opts: { needsPose?: boolean; targetPolycount?: number } = {}
+  ): Promise<AssetManifest> {
     const localPath = path.join(outputDir, 'model.glb');
 
     // Check if already done (handle both relative and absolute paths)
@@ -198,9 +220,11 @@ export class ModelerAgent {
     }
 
     const cfg = { ...DEFAULTS.model, ...manifest.modelConfig };
+    const needsPose = opts.needsPose ?? true;
+    const targetPolycount = opts.targetPolycount ?? cfg.targetPolycount;
 
     console.log(`[Modeler] Generating 3D Model (Image-to-3D)...`);
-    console.log(`[Modeler] Config: topology=${cfg.topology}, polycount=${cfg.targetPolycount}, pbr=${cfg.enablePbr}`);
+    console.log(`[Modeler] Config: topology=${cfg.topology}, polycount=${targetPolycount}, pbr=${cfg.enablePbr}, pose=${needsPose}`);
 
     const imageBuffer = fs.readFileSync(conceptPath);
     const dataUri = `data:image/png;base64,${imageBuffer.toString('base64')}`;
@@ -209,12 +233,13 @@ export class ModelerAgent {
       image_url: dataUri,
       ai_model: cfg.aiModel,
       model_type: 'standard',
-      target_polycount: cfg.targetPolycount,
+      target_polycount: targetPolycount,
       topology: cfg.topology,
       should_remesh: true,
       enable_pbr: cfg.enablePbr,
       should_texture: true,
-      pose_mode: cfg.poseMode,
+      // Only include pose_mode for characters
+      ...(needsPose && { pose_mode: cfg.poseMode }),
       symmetry_mode: cfg.symmetryMode
     }) as any;
 
