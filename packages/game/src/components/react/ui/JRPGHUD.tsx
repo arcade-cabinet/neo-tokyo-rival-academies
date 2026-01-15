@@ -1,5 +1,6 @@
+import { Haptics, ImpactStyle } from '@capacitor/haptics';
 import { useEntities } from 'miniplex-react';
-import type { FC } from 'react';
+import React, { type FC } from 'react';
 import { world } from '@/state/ecs';
 import { advanceDialogue, getCurrentDialogueNode } from '@/systems/DialogueSystem';
 import type { InputState } from '@/types/game';
@@ -11,10 +12,13 @@ interface HUDProps {
   playerPos?: { x: number; y: number };
 }
 
-export const JRPGHUD: FC<HUDProps> = ({ onInput, playerPos }) => {
+export const JRPGHUD: FC<HUDProps> = ({ inputState, onInput, playerPos }) => {
   // Use useEntities from miniplex-react directly
   const { entities } = useEntities(world.with('isPlayer'));
   const player = entities[0];
+
+  // Debug overlay toggle state
+  const [showDebugOverlay, setShowDebugOverlay] = React.useState(false);
 
   // Derive Stats
   const level = player?.level?.current ?? 1;
@@ -29,10 +33,82 @@ export const JRPGHUD: FC<HUDProps> = ({ onInput, playerPos }) => {
   const handleTouch = (key: keyof InputState, pressed: boolean) => (e: React.TouchEvent | React.MouseEvent) => {
     e.preventDefault();
     onInput(key, pressed);
+
+    // Trigger haptic feedback on touch start
+    if (pressed) {
+      // Light haptic for D-Pad, medium for actions
+      const style = ['attack', 'jump'].includes(key) ? ImpactStyle.Medium : ImpactStyle.Light;
+      Haptics.impact({ style }).catch(() => {
+        // Silently fail if haptics not available (e.g., web browser)
+      });
+    }
   };
 
   return (
     <div className={styles.container}>
+      {/* Debug Overlay Toggle Button */}
+      <button
+        type="button"
+        onClick={() => setShowDebugOverlay(!showDebugOverlay)}
+        style={{
+          position: 'absolute',
+          top: '10px',
+          right: '10px',
+          padding: '8px 16px',
+          background: 'rgba(0, 255, 255, 0.2)',
+          border: '2px solid #0ff',
+          color: '#0ff',
+          fontSize: '12px',
+          fontWeight: 'bold',
+          cursor: 'pointer',
+          borderRadius: '4px',
+          zIndex: 1000,
+          minWidth: '48px',
+          minHeight: '48px',
+        }}
+      >
+        DEBUG
+      </button>
+
+      {/* Debug Overlay Panel */}
+      {showDebugOverlay && (
+        <div
+          style={{
+            position: 'absolute',
+            top: '70px',
+            right: '10px',
+            padding: '16px',
+            background: 'rgba(0, 0, 0, 0.8)',
+            border: '2px solid #0ff',
+            borderRadius: '8px',
+            color: '#0ff',
+            fontSize: '12px',
+            fontFamily: 'monospace',
+            zIndex: 999,
+            minWidth: '200px',
+          }}
+        >
+          <div style={{ marginBottom: '8px', fontWeight: 'bold' }}>INPUT STATE:</div>
+          <div>Left: {inputState.left ? '✓' : '✗'}</div>
+          <div>Right: {inputState.right ? '✓' : '✗'}</div>
+          <div>Jump: {inputState.jump ? '✓' : '✗'}</div>
+          <div>Slide: {inputState.slide ? '✓' : '✗'}</div>
+          <div>Attack: {inputState.attack ? '✓' : '✗'}</div>
+          <div>Run: {inputState.run ? '✓' : '✗'}</div>
+          <div style={{ marginTop: '12px', fontWeight: 'bold' }}>PLAYER STATS:</div>
+          <div>Level: {level}</div>
+          <div>HP: {Math.floor(hp)}/{maxHp}</div>
+          <div>XP: {xp}/{nextXp}</div>
+          {playerPos && (
+            <>
+              <div style={{ marginTop: '12px', fontWeight: 'bold' }}>POSITION:</div>
+              <div>X: {Math.floor(playerPos.x)}</div>
+              <div>Y: {Math.floor(playerPos.y)}</div>
+            </>
+          )}
+        </div>
+      )}
+
       {/* 1. Status Frame */}
       <div className={styles.statusFrame}>
         <div className={styles.portrait}>
@@ -118,7 +194,12 @@ export const JRPGHUD: FC<HUDProps> = ({ onInput, playerPos }) => {
           {/* Left */}
           <div
             className={styles.dpadBtn}
-            style={{ top: '50px', left: '0' }}
+            style={{
+              top: '50px',
+              left: '0',
+              opacity: inputState.left ? 1 : 0.6,
+              transform: inputState.left ? 'scale(0.95)' : 'scale(1)',
+            }}
             onTouchStart={handleTouch('left', true)}
             onTouchEnd={handleTouch('left', false)}
           >
@@ -127,7 +208,12 @@ export const JRPGHUD: FC<HUDProps> = ({ onInput, playerPos }) => {
           {/* Right */}
           <div
             className={styles.dpadBtn}
-            style={{ top: '50px', right: '0' }}
+            style={{
+              top: '50px',
+              right: '0',
+              opacity: inputState.right ? 1 : 0.6,
+              transform: inputState.right ? 'scale(0.95)' : 'scale(1)',
+            }}
             onTouchStart={handleTouch('right', true)}
             onTouchEnd={handleTouch('right', false)}
           >
@@ -136,14 +222,29 @@ export const JRPGHUD: FC<HUDProps> = ({ onInput, playerPos }) => {
           {/* Down (Slide) */}
           <div
             className={styles.dpadBtn}
-            style={{ bottom: '0', left: '50px' }}
+            style={{
+              bottom: '0',
+              left: '50px',
+              opacity: inputState.slide ? 1 : 0.6,
+              transform: inputState.slide ? 'scale(0.95)' : 'scale(1)',
+            }}
             onTouchStart={handleTouch('slide', true)}
             onTouchEnd={handleTouch('slide', false)}
           >
             ↓
           </div>
-          {/* Up (Not used much but maybe interact?) */}
-          <div className={styles.dpadBtn} style={{ top: '0', left: '50px' }}>
+          {/* Up (Jump/Interact) */}
+          <div
+            className={styles.dpadBtn}
+            style={{
+              top: '0',
+              left: '50px',
+              opacity: inputState.jump ? 1 : 0.6,
+              transform: inputState.jump ? 'scale(0.95)' : 'scale(1)',
+            }}
+            onTouchStart={handleTouch('jump', true)}
+            onTouchEnd={handleTouch('jump', false)}
+          >
             ↑
           </div>
         </div>
@@ -152,7 +253,11 @@ export const JRPGHUD: FC<HUDProps> = ({ onInput, playerPos }) => {
         <div style={{ display: 'flex', alignItems: 'flex-end' }}>
           <div
             className={styles.actionBtn}
-            style={{ background: 'rgba(0, 255, 255, 0.2)', borderColor: '#0ff' }}
+            style={{
+              background: inputState.attack ? 'rgba(0, 255, 255, 0.5)' : 'rgba(0, 255, 255, 0.2)',
+              borderColor: '#0ff',
+              transform: inputState.attack ? 'scale(0.95)' : 'scale(1)',
+            }}
             onTouchStart={handleTouch('attack', true)}
             onTouchEnd={handleTouch('attack', false)}
           >
@@ -161,9 +266,10 @@ export const JRPGHUD: FC<HUDProps> = ({ onInput, playerPos }) => {
           <div
             className={styles.actionBtn}
             style={{
-              background: 'rgba(0, 255, 0, 0.2)',
+              background: inputState.jump ? 'rgba(0, 255, 0, 0.5)' : 'rgba(0, 255, 0, 0.2)',
               borderColor: '#0f0',
               marginBottom: '40px',
+              transform: inputState.jump ? 'scale(0.95)' : 'scale(1)',
             }}
             onTouchStart={handleTouch('jump', true)}
             onTouchEnd={handleTouch('jump', false)}
@@ -172,7 +278,11 @@ export const JRPGHUD: FC<HUDProps> = ({ onInput, playerPos }) => {
           </div>
           <div
             className={styles.actionBtn}
-            style={{ background: 'rgba(255, 255, 0, 0.2)', borderColor: '#ff0' }}
+            style={{
+              background: inputState.run ? 'rgba(255, 255, 0, 0.5)' : 'rgba(255, 255, 0, 0.2)',
+              borderColor: '#ff0',
+              transform: inputState.run ? 'scale(0.95)' : 'scale(1)',
+            }}
             onTouchStart={handleTouch('run', true)}
             onTouchEnd={handleTouch('run', false)}
           >

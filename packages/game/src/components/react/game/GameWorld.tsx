@@ -28,6 +28,7 @@ interface GameWorldProps {
   onScoreUpdate: (score: number) => void;
   onCombatText?: (message: string, color: string) => void;
   onCameraShake?: () => void;
+  onDialogue?: (speaker: string, text: string) => void;
 }
 
 const pickEnemyColor = () => {
@@ -57,9 +58,10 @@ export function GameWorld({
   onScoreUpdate,
   onCameraShake,
   onCombatText,
+  onDialogue,
 }: GameWorldProps) {
   const { camera } = useThree();
-  const { addItem, addXp } = useGameStore();
+  const { addItem, addXp, showDialogue } = useGameStore();
   const exitSequenceActive = useRef(false);
   const initialized = useRef(false);
   const [bossSpawned, setBossSpawned] = useState(false);
@@ -193,6 +195,10 @@ export function GameWorld({
       ) {
         stageSystem.triggerEvent('ABDUCTION');
         startDialogue('player', 'rival_encounter_1');
+
+        // Trigger UI dialogue overlay
+        showDialogue('Kai', 'What... what is that?!');
+        onDialogue?.('Kai', 'What... what is that?!');
       }
 
       // Handle Abduction Physics
@@ -213,6 +219,10 @@ export function GameWorld({
         if (player.position.y > 50) {
           console.log('Welcome to Space!');
           stageSystem.loadStage('alien_ship');
+
+          // Trigger dialogue for space transition
+          showDialogue('Vera', 'We need to work together to survive this!');
+          onDialogue?.('Vera', 'We need to work together to survive this!');
 
           player.position.set(0, 5, 0);
           player.velocity.set(0, 0, 0);
@@ -271,6 +281,10 @@ export function GameWorld({
           console.log('Alien Queen Defeated! Dropping to Mall...');
           startDialogue('player', 'victory');
           stageSystem.loadStage('mall_drop');
+
+          // Trigger victory dialogue
+          showDialogue('Kai', 'We did it! But... where are we falling to?!');
+          onDialogue?.('Kai', 'We did it! But... where are we falling to?!');
 
           player.position.set(0, 20, 0);
           player.velocity.set(0, -5, 0);
@@ -341,6 +355,10 @@ export function GameWorld({
 
           if (stageSystem.currentStageId === 'sector7_streets') {
             startDialogue('player', 'intro');
+
+            // Trigger intro dialogue
+            showDialogue('Kai', 'This is it... the final stretch!');
+            onDialogue?.('Kai', 'This is it... the final stretch!');
 
             world.add({
               isPlatform: true,
