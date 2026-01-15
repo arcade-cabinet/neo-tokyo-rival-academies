@@ -2,381 +2,277 @@
 
 Welcome, Claude! This document provides specific context and guidelines for working on the Neo-Tokyo: Rival Academies project.
 
-## 🎯 Project Context
+## Quick Reference
 
-You're working on a **3D platformer game** built with modern web technologies. The game runs in the browser and features:
-- Neon cyberpunk aesthetic
-- Fast-paced platforming action
+| Document | Purpose |
+|----------|---------|
+| [docs/DESIGN_MASTER_PLAN.md](docs/DESIGN_MASTER_PLAN.md) | Vision, architecture, player journey |
+| [docs/GENAI_PIPELINE.md](docs/GENAI_PIPELINE.md) | Asset generation workflow with Meshy AI |
+| [docs/PROTOTYPE_STRATEGY.md](docs/PROTOTYPE_STRATEGY.md) | Isometric vs Side-Scroll evaluation |
+| [docs/JRPG_TRANSFORMATION.md](docs/JRPG_TRANSFORMATION.md) | Stats, combat, progression systems |
+| [docs/TESTING_STRATEGY.md](docs/TESTING_STRATEGY.md) | Unit, component, E2E testing approach |
+| [AGENTS.md](AGENTS.md) | AI agent architecture (ModelerAgent, ArtDirectorAgent) |
+| [PROJECT-STRUCTURE.md](PROJECT-STRUCTURE.md) | Full directory layout and conventions |
+
+---
+
+## Project Context
+
+You're working on a **3D Action-JRPG** built with modern web technologies. The game runs in the browser and features:
+- Neon cyberpunk aesthetic (Neo-Tokyo setting)
+- Isometric diorama view with hex-tile system (current prototype)
+- GenAI-powered asset pipeline (Meshy AI for 3D models, animations)
 - Multiple rival academies with unique characteristics
-- Built with Astro, React, Three.js, and React Three Fiber
 
-## 🧠 Your Strengths in This Project
+**Current State**: Implementing hex-grid tile system with GenAI-generated 3D tile models.
 
-As Claude, you excel at:
-- **Architectural Planning**: Designing scalable component structures
-- **Code Quality**: Writing clean, type-safe TypeScript
-- **Documentation**: Creating comprehensive docs and comments
-- **Problem Solving**: Debugging complex 3D rendering issues
-- **Best Practices**: Following modern web development standards
-
-## 🔧 Technology Stack Overview
-
-### Core Framework: Astro
-- **Purpose**: Static site generation with partial hydration
-- **Key Concept**: Island architecture - only hydrate interactive parts
-- **Your Role**: Help structure pages and layouts efficiently
-
-### React Integration
-- **Usage**: For interactive 3D components only
-- **Directive**: Use `client:load` or `client:idle` for 3D Canvas components
-- **Best Practice**: Keep React usage minimal, Astro handles the rest
-
-### Three.js + React Three Fiber
-- **Three.js**: Low-level 3D graphics library
-- **R3F**: React renderer for Three.js (declarative 3D)
-- **Drei**: Helper components (cameras, controls, loaders)
-- **Key Skill**: Understanding the React/Three.js bridge
-
-### Biome (Not ESLint/Prettier)
-- **Important**: This project uses Biome, not ESLint or Prettier
-- **Commands**: `pnpm lint`, `pnpm format`, `pnpm check`
-- **Config**: See `biome.json` for all rules
-
-### PNPM 10
-- **Why PNPM**: Faster, more disk-efficient than npm/yarn
-- **Important**: Always use `pnpm` commands, never `npm` or `yarn`
-- **Workspaces**: Configured in `pnpm-workspace.yaml`
-
-## 📋 Common Tasks & How to Approach Them
-
-### Task: Create a New 3D Scene Component
-
-**Thought Process**:
-1. Create component in `src/components/react/scenes/`
-2. Use React Three Fiber's Canvas as root
-3. Add lighting, camera controls from Drei
-4. Implement game objects as React components
-5. Use hooks for animation (useFrame)
-6. Memoize expensive calculations
-
-**Example Structure**:
-```typescript
-import type { FC } from 'react';
-import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Environment } from '@react-three/drei';
-
-export const GameScene: FC = () => {
-  return (
-    <Canvas camera={{ position: [0, 5, 10], fov: 75 }}>
-      <ambientLight intensity={0.5} />
-      <directionalLight position={[10, 10, 5]} intensity={1} />
-
-      {/* Game objects here */}
-
-      <OrbitControls />
-      <Environment preset="city" />
-    </Canvas>
-  );
-};
-```
-
-### Task: Add a New Astro Page
-
-**Thought Process**:
-1. Create `.astro` file in `src/pages/`
-2. Import layout from `src/layouts/`
-3. Add React 3D component with proper client directive
-4. Keep metadata in frontmatter
-
-**Example**:
-```astro
----
-import Layout from '@layouts/Layout.astro';
-import { GameScene } from '@components/react/scenes/GameScene';
-
-const title = "Neo-Tokyo Academy";
 ---
 
-<Layout title={title}>
-  <GameScene client:load />
-</Layout>
+## Technology Stack
+
+### Core Framework
+| Technology | Purpose | Key Files |
+|------------|---------|-----------|
+| **Astro** | Static site generation, island architecture | `packages/game/astro.config.mjs` |
+| **React** | Interactive 3D components (islands) | `packages/game/src/components/react/` |
+| **Three.js + R3F** | 3D rendering, declarative scene graphs | `packages/game/src/components/react/scenes/` |
+| **Rapier** | Physics simulation | `@react-three/rapier` |
+| **Biome** | Linting + formatting (NOT ESLint/Prettier) | `biome.json` |
+| **PNPM 10** | Package management (NOT npm/yarn) | `pnpm-workspace.yaml` |
+
+### GenAI Pipeline
+| Technology | Purpose | Key Files |
+|------------|---------|-----------|
+| **Meshy AI** | Text-to-Image, Image-to-3D, Rigging, Animation | `packages/content-gen/src/agents/ModelerAgent.ts` |
+| **Google Imagen** | Background/storyboard generation | `packages/content-gen/src/agents/ArtDirectorAgent.ts` |
+| **Manifest System** | Declarative asset definitions | `packages/game/public/assets/**/manifest.json` |
+
+---
+
+## Monorepo Structure
+
+```
+neo-tokyo-rival-academies/
+├── packages/
+│   ├── game/                          # React Three Fiber game client
+│   │   ├── public/assets/             # GenAI-generated assets (organized)
+│   │   │   ├── characters/            # Character models + animations
+│   │   │   │   └── main/kai/          # Example: rigged.glb, animations/
+│   │   │   ├── tiles/                 # Hex tile assets (NEW)
+│   │   │   │   └── rooftop/           # base/, airvent/, pipes/, etc.
+│   │   │   └── backgrounds/           # Scene backgrounds
+│   │   │       └── sector0/           # wall_left/, wall_right/, parallax_far/
+│   │   └── src/
+│   │       ├── components/react/
+│   │       │   └── scenes/
+│   │       │       └── IsometricScene.tsx  # Main scene with hex grid
+│   │       └── utils/
+│   │           ├── hex-grid.ts        # Red Blob Games hex utilities (NEW)
+│   │           └── hex-normalizer.ts  # GLTF model normalization (NEW)
+│   │
+│   └── content-gen/                   # Node.js GenAI toolchain
+│       └── src/
+│           ├── agents/
+│           │   ├── ModelerAgent.ts    # Primary 3D asset factory
+│           │   └── ArtDirectorAgent.ts
+│           ├── types/
+│           │   └── manifest.ts        # Asset manifest schema
+│           └── cli.ts                 # `pnpm generate` entry point
+│
+├── docs/                              # Design & architecture docs
+├── CLAUDE.md                          # This file
+├── AGENTS.md                          # AI agent architecture
+└── README.md                          # Quick start guide
 ```
 
-### Task: Optimize 3D Performance
+---
 
-**Checklist**:
-- [ ] Use `useMemo` for expensive calculations
-- [ ] Implement LOD (Level of Detail) for distant objects
-- [ ] Use instanced meshes for repeated objects
-- [ ] Compress textures appropriately
-- [ ] Dispose of Three.js resources (geometries, materials, textures)
-- [ ] Use `useFrame` efficiently (avoid heavy logic)
-- [ ] Consider using `<Suspense>` for loading states
+## Key Codebase Tools
 
-### Task: Debug Build Issues
+### Hex Grid System (`packages/game/src/utils/`)
 
-**Steps**:
-1. Check Biome for linting errors: `pnpm check`
-2. Verify TypeScript compilation: `pnpm type-check`
-3. Clear cache: `rm -rf .astro node_modules/.cache`
-4. Reinstall dependencies: `pnpm install`
-5. Check Astro config for correct base path
-6. Verify Three.js SSR settings in `astro.config.mjs`
+**`hex-grid.ts`** - Comprehensive hex grid utilities based on Red Blob Games:
+- Coordinate systems: Axial (q,r), Cube (q,r,s), Offset (col,row)
+- Conversions: `hexToWorld()`, `worldToHex()`, `offsetToAxial()`
+- Grid generation: `generateRectGrid()`, `generateHexGrid()`
+- Algorithms: `hexDistance()`, `hexNeighbors()`, `hexRing()`
+- Three.js integration: `createHexMatrix()`, `generateGridPositions()`
 
-## 🎨 Design Patterns to Follow
+**`hex-normalizer.ts`** - Force-fit any GLTF model to hex constraints:
+- `normalizeToHex()` - Scale/center any model to exact hex dimensions
+- `createStandardHexGeometry()` - Generate perfect hex cylinder
+- `setupHexInstancedMesh()` - Efficient instanced rendering
+- Supports clipping modes: `scale`, `clip`, `mask`
 
-### Component Structure
-```
-src/components/react/
-├── scenes/          # Full 3D scenes with Canvas
-├── objects/         # Individual 3D objects (meshes, groups)
-├── ui/              # UI overlays (HUD, menus)
-└── game/            # Game logic (controllers, managers)
-```
+### GenAI Asset Pipeline (`packages/content-gen/`)
 
-### State Management
-- Use React hooks for local state
-- Consider Zustand for global game state (if needed later)
-- Keep 3D state separate from UI state
+**CLI Commands:**
+```bash
+# Generate all assets from manifest
+pnpm --filter @neo-tokyo/content-gen generate
 
-### Asset Management
-```
-public/
-├── models/          # .glb, .gltf files
-├── textures/        # Images for materials
-├── audio/           # Sound effects, music
-└── fonts/           # Custom fonts
+# Generate specific asset path
+pnpm --filter @neo-tokyo/content-gen generate tiles/rooftop/base
+pnpm --filter @neo-tokyo/content-gen generate characters/main/kai
 ```
 
-### Type Definitions
-- Always define prop types
-- Use TypeScript strict mode
-- Create shared types in `src/types/`
-- Avoid `any` - prefer `unknown` or proper types
+**Asset Types Supported:**
+- `character` - Full pipeline: concept → 3D → rig → animations
+- `background` - 2D concept art only (16:9 aspect)
+- `tile` - Concept + 3D model (1:1 aspect, 10K polycount)
 
-## ⚠️ Common Pitfalls to Avoid
+### Scene Components (`packages/game/src/components/react/scenes/`)
 
-### 1. Memory Leaks
-**Problem**: Not disposing Three.js objects
-**Solution**:
-```typescript
-useEffect(() => {
-  return () => {
-    geometry.dispose();
-    material.dispose();
-    texture.dispose();
-  };
-}, []);
+**`IsometricScene.tsx`** - Current main scene:
+- `HexTileFloor` - Instanced hex tiles with texture variety
+- `TileInstanceGroup` - Per-tile-type instanced meshes
+- `WallBackdrops` - FF7-style 2.5D parallax backgrounds
+- `KaiCharacter` - Animated player with physics + WASD controls
+- Leva controls for camera adjustment
+
+---
+
+## Development Workflow
+
+### Quick Commands
+```bash
+# Start game dev server
+pnpm --filter @neo-tokyo/game dev
+
+# Generate GenAI assets
+pnpm --filter @neo-tokyo/content-gen generate
+
+# Run all checks (lint + format)
+pnpm check
+
+# Run tests
+pnpm test
 ```
 
-### 2. SSR Issues
-**Problem**: Three.js code running during SSR
-**Solution**: Use `client:load` directive or check for `window`
+### Adding New Content
 
-### 3. Performance Issues
-**Problem**: Too many draw calls, unoptimized meshes
-**Solution**: Use instancing, LOD, and proper culling
+**New Tile Type:**
+1. Create `packages/game/public/assets/tiles/<category>/<type>/manifest.json`
+2. Run `pnpm --filter @neo-tokyo/content-gen generate tiles/<category>/<type>`
+3. Update `IsometricScene.tsx` to include new texture path
 
-### 4. Import Errors
-**Problem**: Wrong import paths
-**Solution**: Use path aliases: `@/`, `@components/`, etc.
+**New Character:**
+1. Create `packages/game/public/assets/characters/<faction>/<name>/manifest.json`
+2. Run `pnpm --filter @neo-tokyo/content-gen generate characters/<faction>/<name>`
+3. Outputs: `concept.png`, `model.glb`, `rigged.glb`, `animations/*.glb`
 
-## 🧪 Testing Approach
+### Manifest Schema
+```json
+{
+  "name": "Rooftop Base Tile",
+  "type": "tile",
+  "visualPrompt": "cyberpunk rooftop floor tile, industrial metal grating...",
+  "imageConfig": { "aspectRatio": "1:1" },
+  "modelConfig": { "targetPolycount": 10000 }
+}
+```
 
-### Manual Testing
-1. Run `pnpm dev` and open browser
-2. Check console for errors
-3. Monitor performance (Chrome DevTools)
-4. Test on different devices/browsers
-5. Verify 3D rendering is smooth (60 FPS target)
+---
 
-### Automated Testing (Future)
-- Unit tests for utilities
-- Component tests for React components
-- E2E tests for game flows
+## Architecture Decisions
 
-## 📝 Code Style Preferences
+### Current: Three.js + React Three Fiber
+- Mature React ecosystem
+- Strong community and documentation
+- YukaJS for AI/pathfinding (note: library is unmaintained)
+
+### Under Evaluation: Babylon.js Migration
+Research conducted on potential migration benefits:
+- Built-in RecastJS navigation mesh (replaces dead YukaJS)
+- Havok physics engine
+- `react-babylonjs` provides similar declarative API
+- `babylonjs-mcp` enables AI-assisted scene manipulation
+
+**Decision**: Pending user evaluation. Current Three.js implementation continues.
+
+---
+
+## Common Tasks
+
+### Create New 3D Scene
+1. Create `packages/game/src/components/react/scenes/YourScene.tsx`
+2. Import Three.js/R3F primitives and Drei helpers
+3. Export component
+4. Use in Astro page with `client:load` directive
+
+### Debug Rendering Issues
+1. Check browser console for Three.js warnings
+2. Verify asset paths (should be `/assets/...` not `/public/assets/...`)
+3. Check WebGL context: `gl.getError()` in console
+4. Ensure Suspense boundaries for async asset loading
+5. Monitor canvas dimensions and pixel ratio
+
+### Optimize Performance
+- Use `useMemo` for geometries and materials
+- Implement instanced meshes for repeated objects (see `TileInstanceGroup`)
+- Dispose resources on unmount
+- Use LOD for distant objects
+- Profile with Chrome DevTools Performance tab
+
+---
+
+## Code Style
 
 ### TypeScript
 ```typescript
-// ✅ Good - explicit types
-interface PlayerProps {
+// Always type props
+interface HexTileProps {
   position: [number, number, number];
-  velocity: number;
+  tileType: number;
 }
 
-// ❌ Bad - implicit any
-function movePlayer(props) { }
-
-// ✅ Good - proper typing
-function movePlayer(props: PlayerProps): void { }
-```
-
-### React Components
-```typescript
-// ✅ Good - functional component with proper types
-export const Player: FC<PlayerProps> = ({ position, velocity }) => {
-  return <mesh position={position} />;
+// Use FC for functional components
+export const HexTile: FC<HexTileProps> = ({ position, tileType }) => {
+  // ...
 };
-
-// ❌ Bad - no types
-export function Player({ position, velocity }) {
-  return <mesh position={position} />;
-}
 ```
 
 ### Imports
 ```typescript
-// ✅ Good - organized imports
+// Organize: types first, then external, then internal
 import type { FC } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { Box } from '@react-three/drei';
+import { OrbitControls } from '@react-three/drei';
 
-import { calculateVelocity } from '@utils/physics';
-
-// ❌ Bad - mixed ordering
-import { calculateVelocity } from '@utils/physics';
-import { useFrame } from '@react-three/fiber';
-import { Box } from '@react-three/drei';
-import type { FC } from 'react';
+import { hexToWorld } from '@/utils/hex-grid';
 ```
-
-## 🚀 CI/CD Workflow Understanding
-
-### CI Pipeline (Pull Requests)
-1. **Quality**: Biome check (format + lint)
-2. **Types**: TypeScript compilation
-3. **Build**: Astro build verification
-4. **Artifacts**: Store build output
-
-### CD Pipeline (Main Branch)
-1. **Build**: Production build with correct base path
-2. **Deploy**: Automatic to GitHub Pages
-3. **URL**: `https://arcade-cabinet.github.io/neo-tokyo-rival-academies`
-
-### Your Role
-- Ensure code passes all CI checks before committing
-- Run `pnpm check` locally before pushing
-- Fix any build errors immediately
-
-## 🎯 Project Goals & Priorities
-
-### Phase 1: Foundation (Current)
-- [x] Project scaffolding
-- [ ] Basic 3D scene setup
-- [ ] Character controller
-- [ ] Camera system
-- [ ] First level design
-
-### Phase 2: Core Gameplay
-- [ ] Movement mechanics
-- [ ] Collision detection
-- [ ] Academy selection system
-- [ ] Power-ups and collectibles
-- [ ] Score system
-
-### Phase 3: Polish
-- [ ] Visual effects (particles, shaders)
-- [ ] Audio integration
-- [ ] UI/UX improvements
-- [ ] Performance optimization
-- [ ] Mobile support
-
-### Phase 4: Expansion
-- [ ] Multiple levels
-- [ ] Multiplayer support
-- [ ] Leaderboards
-- [ ] Achievements
-
-## 💡 Helpful Mental Models
-
-### Astro Islands
-Think of the page as an ocean (static HTML) with islands (interactive React components). Only the islands hydrate JavaScript.
-
-### React Three Fiber
-Think of it as React, but instead of DOM elements, you're creating 3D objects. `<mesh>` is like `<div>`, `<Canvas>` is like `<body>`.
-
-### Three.js Scene Graph
-Think of it as a tree: Scene → Groups → Meshes. Parent transformations affect children.
-
-### PNPM Workspaces
-Think of it as a monorepo setup, even though we have one package. It's set up for future scalability.
-
-## 🔍 Quick Reference Commands
-
-```bash
-# Development
-pnpm dev              # Start dev server
-pnpm build            # Production build
-pnpm preview          # Preview production build
-
-# Code Quality
-pnpm check            # Run all checks
-pnpm check:fix        # Fix issues automatically
-pnpm lint             # Lint only
-pnpm format           # Format only
-pnpm type-check       # TypeScript check only
-
-# Package Management
-pnpm add <pkg>        # Add dependency
-pnpm add -D <pkg>     # Add dev dependency
-pnpm remove <pkg>     # Remove dependency
-pnpm install          # Install all dependencies
-```
-
-## 📚 Resources for Deep Dives
-
-- **Astro Docs**: https://docs.astro.build/
-- **R3F Docs**: https://docs.pmnd.rs/react-three-fiber/
-- **Three.js Fundamentals**: https://threejs.org/manual/
-- **Drei Helpers**: https://github.com/pmndrs/drei#readme
-- **Biome Rules**: https://biomejs.dev/linter/rules/
-- **PNPM Workspace**: https://pnpm.io/workspaces
-
-## 🤝 Working with the Team
-
-### Communication
-- Document major decisions
-- Explain complex 3D logic with comments
-- Update AGENTS.md when patterns change
-- Keep README.md current
-
-### Code Reviews
-- Focus on performance implications
-- Check for memory leaks
-- Verify TypeScript types
-- Ensure Biome passes
 
 ---
 
-## 🎮 Game-Specific Context
+## Testing
 
-### Setting: Neo-Tokyo
-- Futuristic cyberpunk city
-- Neon lights, holographic displays
-- Vertical architecture (skyscrapers, platforms)
-- Rain effects, reflective surfaces
+| Level | Tool | Location |
+|-------|------|----------|
+| Unit | Vitest | `packages/game/src/**/__tests__/` |
+| Component | RTL | `packages/game/src/components/__tests__/` |
+| E2E | Playwright | `test/` |
 
-### Rival Academies Theme
-- Multiple competing schools
-- Each with unique visual style
-- Different abilities/characteristics
-- Team-based competition
-
-### Gameplay Feel
-- Fast and fluid movement
-- Precise platforming
-- Competitive edge
-- Skill-based progression
+Run: `pnpm test` (unit), `pnpm test:e2e` (end-to-end)
 
 ---
 
-Claude, you're ready to contribute to Neo-Tokyo: Rival Academies! Remember:
-- Prioritize code quality and performance
-- Think about the 3D rendering pipeline
-- Use Biome, not ESLint/Prettier
-- Always use PNPM, not npm/yarn
-- Keep components small and focused
-- Document complex 3D logic
+## CI/CD
 
-Happy coding! 🚀
+- **PR Checks**: Biome lint, TypeScript compilation, Astro build
+- **Deploy**: Automatic to GitHub Pages on merge to `main`
+- **URL**: `https://arcade-cabinet.github.io/neo-tokyo-rival-academies`
+
+---
+
+## Key Reminders
+
+1. **Use PNPM** - Never npm or yarn
+2. **Use Biome** - Never ESLint or Prettier
+3. **Asset paths** - Use `/assets/...` (public folder root)
+4. **Client directives** - Always `client:load` for 3D components
+5. **Dispose resources** - Clean up Three.js objects in useEffect cleanup
+6. **Check docs/** - Detailed design docs live there
+
+---
+
+*Last Updated: 2025-01-15*
