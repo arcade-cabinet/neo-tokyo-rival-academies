@@ -1,7 +1,12 @@
 import { Command } from 'commander';
 import { generateFullStory } from './game/generators/story';
-import * as assetsModule from './ui/generators/assets';
+import * as assetsModule from './ui/generators/file-assets';
 import { migrateContent } from './utils/migration';
+import { ModelerAgent } from './agents/ModelerAgent';
+import path from 'node:path';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const generateAssets = (assetsModule as any).generateAssets ?? (assetsModule as any).default;
 
@@ -33,6 +38,37 @@ program
       console.error('Asset generation failed:', error);
       process.exit(1);
     }
+  });
+
+program
+  .command('character')
+  .description('Generate a fully rigged and animated 3D character')
+  .argument('<name>', 'Name of the character (e.g., "hero_kai")')
+  .argument('<prompt>', 'Visual description prompt')
+  .option('-s, --style <style>', 'Art style', 'cartoon')
+  .action(async (name, prompt, options) => {
+      const apiKey = process.env.MESHY_API_KEY;
+      if (!apiKey) {
+          console.error("Error: MESHY_API_KEY is not set in .env");
+          process.exit(1);
+      }
+
+      // Output to public/models/generated
+      const outputDir = path.resolve(process.cwd(), '../../packages/game/public/models/generated');
+      const fs = await import('node:fs');
+      if (!fs.existsSync(outputDir)) {
+          fs.mkdirSync(outputDir, { recursive: true });
+      }
+
+      const agent = new ModelerAgent(apiKey);
+      try {
+          const result = await agent.generateCharacter(name, prompt, outputDir, options.style);
+          console.log("Character Generation Complete!");
+          console.log(JSON.stringify(result, null, 2));
+      } catch (e) {
+          console.error("Character Generation Failed:", e);
+          process.exit(1);
+      }
   });
 
 program
