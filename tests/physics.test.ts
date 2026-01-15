@@ -28,7 +28,6 @@ class MockWorld implements PhysicsWorld {
 function createPlatform(x: number, length: number): PhysicsEntity {
   return {
     position: { x, y: 0, z: 0 },
-    velocity: { x: 0, y: 0, z: 0 }, // platforms usually don't have velocity but we can omit
     platformData: { length, slope: 0, width: 10 }
   };
 }
