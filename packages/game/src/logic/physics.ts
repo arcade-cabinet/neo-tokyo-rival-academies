@@ -1,3 +1,4 @@
+import * as THREE from 'three';
 import { CONFIG } from '../utils/gameConfig';
 
 // Convert slope units to radians: slope * ~15 degrees
@@ -5,8 +6,8 @@ const SLOPE_TO_RAD = 0.26;
 
 export interface PhysicsEntity {
   id?: string;
-  position: { x: number; y: number; z: number };
-  velocity?: { x: number; y: number; z: number };
+  position: THREE.Vector3;
+  velocity?: THREE.Vector3;
   characterState?: string;
   modelColor?: number;
   // For platforms
@@ -18,7 +19,7 @@ export interface PhysicsEntity {
 }
 
 export interface PhysicsWorld {
-  remove(entity: PhysicsEntity): void;
+  remove(entity: any): void;
 }
 
 export function updatePhysics(

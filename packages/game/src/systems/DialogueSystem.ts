@@ -1,5 +1,6 @@
 import { world } from '../state/ecs';
 import storyDataRaw from '../data/story.json';
+import generatedDataRaw from '../data/generated_jrpg.json';
 
 interface DialogueNode {
   id: string;
@@ -15,6 +16,27 @@ interface StoryData {
 }
 
 const storyData = storyDataRaw as StoryData;
+
+// Merge Generated Data
+// Map "beatId" or specific IDs to dialogue sequences
+// The generated data structure is: scripts: { chapterId, beatId, dialogues: [] }[]
+// We will map 'chapterId_beatId' -> dialogues
+const genData = generatedDataRaw as any;
+if (genData.scripts) {
+    for (const script of genData.scripts) {
+        const key = `${script.chapterId}_${script.beatId}`; // e.g. ch_1_beat_1
+        // Convert micro-dialogue format to DialogueNode format if needed
+        // Micro: { id, speaker, text, next, options }
+        // Node: { id, speaker, text, next }
+        // They are compatible enough for now, assuming simple linear for next.
+        storyData.dialogues[key] = script.dialogues.map((d: any) => ({
+            id: d.id || 'unknown',
+            speaker: d.speaker,
+            text: d.line || d.text, // Handle both formats
+            next: d.next
+        }));
+    }
+}
 
 /**
  * Starts a dialogue sequence for an entity.

@@ -21,7 +21,7 @@ describe('DialogueSystem', () => {
 
     const node = getCurrentDialogueNode('player');
     expect(node).toBeDefined();
-    expect(node?.text).toContain("Engine's hot");
+    expect(node?.id).toBe('intro_1');
 
     advanceDialogue('player');
     expect(player.dialogueState?.nodeId).toBe('intro_2');

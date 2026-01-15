@@ -119,6 +119,7 @@ export const NarrativeOverlay: FC<NarrativeOverlayProps> = ({ script, onComplete
 
       {/* Dialogue Box */}
       <div
+        data-testid="dialogue-box"
         style={{
           position: 'absolute',
           bottom: '10%',

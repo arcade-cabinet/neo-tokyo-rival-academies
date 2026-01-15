@@ -12,15 +12,16 @@ Neo-Tokyo: Rival Academies combines high-speed runner mechanics with deep RPG pr
 
 ## 🚀 Tech Stack
 
-- **Framework**: [Vite](https://vitejs.dev/) v5.x
+- **Framework**: [Vite](https://vitejs.dev/) v6.x
 - **3D Engine**: [Three.js](https://threejs.org/) v0.182
-- **React Integration**: [@astrojs/react](https://docs.astro.build/en/guides/integrations-guide/react/)
+- **UI Library**: [React](https://react.dev/) v19
 - **3D React Components**: [React Three Fiber](https://docs.pmnd.rs/react-three-fiber/) & [Drei](https://github.com/pmndrs/drei)
 - **ECS**: [Miniplex](https://github.com/hmans/miniplex)
 - **Package Manager**: [PNPM](https://pnpm.io/) v10
-- **Linter/Formatter**: [Biome](https://biomejs.dev/) v1.9.4
-- **Language**: TypeScript v5.7
-- **Testing**: Vitest
+- **Linter/Formatter**: [Biome](https://biomejs.dev/) v2.3
+- **Language**: [TypeScript](https://www.typescriptlang.org/) v5.9
+- **Testing**: [Vitest](https://vitest.dev/)
+- **Mobile Runtime**: [Capacitor](https://capacitorjs.com/) v8
 
 ## 📋 Prerequisites
 

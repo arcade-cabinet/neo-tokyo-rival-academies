@@ -137,7 +137,11 @@ export default function NeoTokyoGame() {
   return (
     <div style={{ width: '100vw', height: '100vh', position: 'relative' }}>
       {/* 3D Canvas */}
-      <Canvas shadows style={{ background: 'linear-gradient(135deg, #020205 0%, #0a0510 100%)' }}>
+      <Canvas 
+        data-testid="scene-ready"
+        shadows 
+        style={{ background: 'linear-gradient(135deg, #020205 0%, #0a0510 100%)' }}
+      >
         <Suspense fallback={null}>
           <PerspectiveCamera makeDefault position={[-8, 6, 15]} fov={50} />
 

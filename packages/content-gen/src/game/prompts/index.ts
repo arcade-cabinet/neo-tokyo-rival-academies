@@ -74,29 +74,12 @@ The content should be cryptic logs, error reports, or panicked messages from "Ad
 `;
 
 export const STORY_C_PROMPT = `
-You are the Narrative Designer.
-Generate the "C-Story" Arc (Chaotic Interruptions).
-Context: Random events disrupt the race (Alien Abduction, Giant Cat Attack, Mall Sale).
-
-Task: Generate 3 Dialogue Scenes for these interruptions:
-1. "event_aliens": Aliens beam them up.
-2. "event_cat": A giant cat blocks the road.
-3. "event_mall": They accidentally crash into a shopping mall.
-
-Output Format: JSON ONLY. Adhere strictly to this schema:
-${DIALOGUE_SCHEMA}
-
-Example Output:
-{
-  "dialogues": {
-    "event_aliens": [
-      { "id": "alien_1", "speaker": "Kai", "text": "Why am I floating?", "next": null }
-    ]
-  }
-}
-
-Keep it humorous and absurd. Generate 3-5 nodes per scene.
+Generate the "C-Story" (Event Disruptors) arc.
+Focus: Alien Abduction and Mall Drop.
+Output: JSON list of Event Triggers and specialized Dialogue.
 `;
+
+export * from './backgrounds';
 
 export const SVG_ICON_PROMPT = (itemName: string, type: string) => `
 You are an expert SVG artist specializing in Cyberpunk, Neo-Tokyo, and Anime aesthetic vector art.

@@ -1,3 +1,4 @@
+import * as THREE from 'three';
 import { describe, expect, it } from 'vitest';
 import type { PhysicsEntity, PhysicsWorld } from '../physics';
 import { updatePhysics } from '../physics';
@@ -12,7 +13,7 @@ class MockWorld implements PhysicsWorld {
     this.entities.add(e);
   }
 
-  remove(e: PhysicsEntity) {
+  remove(e: any) {
     this.entities.delete(e);
     this.removed.push(e);
   }
@@ -29,15 +30,15 @@ class MockWorld implements PhysicsWorld {
 
 function createPlatform(x: number, length: number): PhysicsEntity {
   return {
-    position: { x, y: 0, z: 0 },
+    position: new THREE.Vector3(x, 0, 0),
     platformData: { length, slope: 0, width: 10 }
   };
 }
 
 function createPlayer(x: number): PhysicsEntity {
   return {
-    position: { x, y: 10, z: 0 },
-    velocity: { x: 0, y: 0, z: 0 },
+    position: new THREE.Vector3(x, 10, 0),
+    velocity: new THREE.Vector3(0, 0, 0),
     characterState: 'run',
     modelColor: 0xff0000
   };

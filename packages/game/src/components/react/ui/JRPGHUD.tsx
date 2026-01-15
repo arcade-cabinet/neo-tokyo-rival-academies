@@ -121,7 +121,7 @@ export const JRPGHUD: FC<HUDProps> = ({ onInput, playerPos }) => {
             onTouchStart={handleTouch('left', true)}
             onTouchEnd={handleTouch('left', false)}
           >
-            ←
+            <img src="/ui/dpad-left.svg" alt="Left" />
           </div>
           {/* Right */}
           <div
@@ -130,7 +130,7 @@ export const JRPGHUD: FC<HUDProps> = ({ onInput, playerPos }) => {
             onTouchStart={handleTouch('right', true)}
             onTouchEnd={handleTouch('right', false)}
           >
-            →
+            <img src="/ui/dpad-right.svg" alt="Right" />
           </div>
           {/* Down (Slide) */}
           <div
@@ -139,48 +139,41 @@ export const JRPGHUD: FC<HUDProps> = ({ onInput, playerPos }) => {
             onTouchStart={handleTouch('slide', true)}
             onTouchEnd={handleTouch('slide', false)}
           >
-            ↓
+            <img src="/ui/dpad-down.svg" alt="Down" />
           </div>
-          {/* Up (Wired to Jump or Interact for now to prevent no-op) */}
-          <div
-            className={styles.dpadBtn}
+          {/* Up (Jump) */}
+          <div 
+            className={styles.dpadBtn} 
             style={{ top: '0', left: '50px' }}
-            onTouchStart={handleTouch('jump', true)} // Mapping Up to Jump as alternative
-            onTouchEnd={handleTouch('jump', false)}
+            onTouchStart={() => onInput('jump', true)}
+            onTouchEnd={() => onInput('jump', false)}
           >
-            ↑
+             <img src="/ui/dpad-up.svg" alt="Up" />
           </div>
         </div>
 
         {/* Actions */}
-        <div style={{ display: 'flex', alignItems: 'flex-end' }}>
+        <div style={{ display: 'flex', alignItems: 'flex-end', gap: '16px' }}>
           <div
             className={styles.actionBtn}
-            style={{ background: 'rgba(0, 255, 255, 0.2)', borderColor: '#0ff' }}
             onTouchStart={handleTouch('attack', true)}
             onTouchEnd={handleTouch('attack', false)}
           >
-            ATK
+            <img src="/ui/icon-attack.svg" alt="Attack" />
           </div>
           <div
             className={styles.actionBtn}
-            style={{
-              background: 'rgba(0, 255, 0, 0.2)',
-              borderColor: '#0f0',
-              marginBottom: '40px',
-            }}
             onTouchStart={handleTouch('jump', true)}
             onTouchEnd={handleTouch('jump', false)}
           >
-            JUMP
+            <img src="/ui/icon-jump.svg" alt="Jump" />
           </div>
           <div
             className={styles.actionBtn}
-            style={{ background: 'rgba(255, 255, 0, 0.2)', borderColor: '#ff0' }}
             onTouchStart={handleTouch('run', true)}
             onTouchEnd={handleTouch('run', false)}
           >
-            RUN
+            <img src="/ui/icon-run.svg" alt="Run" />
           </div>
         </div>
       </div>
