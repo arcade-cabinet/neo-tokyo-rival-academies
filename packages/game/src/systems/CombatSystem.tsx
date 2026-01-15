@@ -3,11 +3,23 @@ import type { ECSEntity } from '../state/ecs';
 import { ECS, world } from '../state/ecs';
 import { resolveCombat } from './CombatLogic';
 
+// Define event types for combat events
+export type CombatEventType = 'damage' | 'heal' | 'xp' | 'item';
+
+interface CombatEvent {
+    type: CombatEventType;
+    value?: number;
+    message?: string;
+    color?: string;
+    item?: string;
+}
+
 interface CombatSystemProps {
   onGameOver: () => void;
   onScoreUpdate: (score: number) => void;
   onCameraShake?: () => void;
   onCombatText?: (message: string, color: string) => void;
+  onCombatEvent?: (event: CombatEvent) => void;
 }
 
 const playersQuery = ECS.world.with('isPlayer', 'position', 'characterState');
@@ -16,7 +28,7 @@ const enemiesQuery = ECS.world.with('isEnemy', 'position');
 const obstaclesQuery = ECS.world.with('isObstacle', 'position', 'obstacleType');
 const collectiblesQuery = ECS.world.with('isCollectible', 'position');
 
-export const CombatSystem = ({ onGameOver, onScoreUpdate, onCameraShake, onCombatText }: CombatSystemProps) => {
+export const CombatSystem = ({ onGameOver, onScoreUpdate, onCameraShake, onCombatText, onCombatEvent }: CombatSystemProps) => {
   useFrame(() => {
     // 1. Allies vs Enemies
     for (const ally of alliesQuery) {
@@ -37,7 +49,16 @@ export const CombatSystem = ({ onGameOver, onScoreUpdate, onCameraShake, onComba
                        enemy.health -= damage;
                        const color = isCritical ? '#ff0' : '#0ff';
                        const text = isCritical ? `CRIT ${damage}!` : `${damage}`;
-                       onCombatText?.(text, color);
+
+                       // Emit typed event
+                       onCombatEvent?.({
+                           type: 'damage',
+                           value: damage,
+                           message: text,
+                           color: color
+                       });
+                       // Legacy fallback
+                       if (!onCombatEvent) onCombatText?.(text, color);
 
                        if (enemy.health <= 0) {
                            toRemove.push(enemy);
@@ -57,7 +78,7 @@ export const CombatSystem = ({ onGameOver, onScoreUpdate, onCameraShake, onComba
     // 2. Player Logic
     for (const player of playersQuery) {
       if (!player.position) continue;
-      let isGameOver = false;
+      // let isGameOver = false; // Removed logic-breaking break
 
       // --- ENEMY COLLISION ---
       const toRemove: ECSEntity[] = [];
@@ -78,7 +99,14 @@ export const CombatSystem = ({ onGameOver, onScoreUpdate, onCameraShake, onComba
                  enemy.health -= damage;
                  const color = isCritical ? '#ff0' : '#f00';
                  const text = isCritical ? `CRIT ${damage}!` : `${damage}`;
-                 onCombatText?.(text, color);
+
+                 onCombatEvent?.({
+                     type: 'damage',
+                     value: damage,
+                     message: text,
+                     color: color
+                 });
+                 if (!onCombatEvent) onCombatText?.(text, color);
 
                  if (enemy.health <= 0) {
                      toRemove.push(enemy);
@@ -88,45 +116,41 @@ export const CombatSystem = ({ onGameOver, onScoreUpdate, onCameraShake, onComba
                      // Grant XP
                      if (player.level) {
                          player.level.xp += 20;
-                         onCombatText?.('+20 XP', '#0f0');
+                         onCombatEvent?.({ type: 'xp', value: 20, message: '+20 XP', color: '#0f0' });
+                         if (!onCombatEvent) onCombatText?.('+20 XP', '#0f0');
                      }
                  } else {
                      onCameraShake?.();
                  }
              }
           } else {
-            // Enemy Attacks Player (Game Over or Damage?)
-            // For now, classic runner style: Contact = Death unless attacking
-            // Ideally we'd calculate damage to player too, but let's keep the runner stakes high for now
-            // or maybe deduct health?
+            // Enemy Attacks Player
             if (player.health !== undefined && player.stats) {
                  // Take damage instead of instant death if we have health
                  const enemyDmg = resolveCombat(enemy, player).damage;
                  player.health -= enemyDmg;
-                 onCombatText?.(`-${enemyDmg}`, '#f00');
+
+                 onCombatEvent?.({ type: 'damage', value: enemyDmg, message: `-${enemyDmg}`, color: '#f00' });
+                 if (!onCombatEvent) onCombatText?.(`-${enemyDmg}`, '#f00');
+
                  onCameraShake?.();
 
                  if (player.health <= 0) {
                      onGameOver();
-                     isGameOver = true;
-                     break;
+                     // isGameOver = true;
+                     return; // Break frame
                  } else {
-                    // Knockback or I-frames?
-                    // For now, just a push back to avoid multi-frame hits?
-                    // Simplified: remove enemy so we don't die instantly next frame
-                    // Or set a "stunned" state.
+                    // Knockback or stun visual
                     toRemove.push(enemy); // "We crashed into them, they break, we take damage"
                  }
             } else {
+                // Should not happen with typed entities, but fallback
                 onGameOver();
-                isGameOver = true;
-                break;
+                return;
             }
           }
         }
       }
-
-      if (isGameOver) break;
 
       // Process removals
       for (const enemy of toRemove) {
@@ -142,7 +166,10 @@ export const CombatSystem = ({ onGameOver, onScoreUpdate, onCameraShake, onComba
 
           if (dx < 1.0 && dy < 1.0) {
               collectiblesToRemove.push(collectible);
-              onCombatText?.('DATA ACQUIRED', '#0f0');
+
+              onCombatEvent?.({ type: 'item', item: 'data_shard', message: 'DATA ACQUIRED', color: '#0f0' });
+              if (!onCombatEvent) onCombatText?.('DATA ACQUIRED', '#0f0');
+
               if (player.level) {
                   player.level.xp += 10;
               }
@@ -168,29 +195,32 @@ export const CombatSystem = ({ onGameOver, onScoreUpdate, onCameraShake, onComba
           const obsTop = obstacle.position.y + obsHeight;
 
           if (effectivePlayerTop > obsBottom && playerBottom < obsTop) {
+             // Fixed: Remove unconditional break/game over
              // Obstacles deal damage now too
              if (player.health !== undefined) {
                  const obsDmg = 20;
                  player.health -= obsDmg;
-                 onCombatText?.(`HIT -${obsDmg}`, '#fa0');
+
+                 onCombatEvent?.({ type: 'damage', value: obsDmg, message: `HIT -${obsDmg}`, color: '#fa0' });
+                 if (!onCombatEvent) onCombatText?.(`HIT -${obsDmg}`, '#fa0');
+
                  onCameraShake?.();
+
+                 // Remove obstacle to prevent multi-hit (essential for simple collision logic)
+                 world.remove(obstacle);
+
                  if (player.health <= 0) {
                      onGameOver();
-                     isGameOver = true;
-                     break;
+                     return;
                  }
-                 // Remove obstacle to prevent multi-hit - Optional, but keeping safe for now
              } else {
                  // Fallback for entities without health
                  onGameOver();
-                 isGameOver = true;
-                 break;
+                 return;
              }
           }
         }
       }
-
-      if (isGameOver) break;
     }
   });
 

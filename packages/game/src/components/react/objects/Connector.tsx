@@ -1,4 +1,3 @@
-import { useRef } from 'react';
 import * as THREE from 'three';
 
 export function Connector({
@@ -8,10 +7,8 @@ export function Connector({
   position: [number, number, number];
   type?: 'bridge' | 'gate';
 }) {
-  const group = useRef<THREE.Group>(null);
-
   return (
-    <group ref={group} position={new THREE.Vector3(...position)}>
+    <group position={position}>
       {/* Visuals for a connector that goes 'into' the Z depth */}
 
       {type === 'bridge' && (

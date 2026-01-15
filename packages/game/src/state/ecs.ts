@@ -2,6 +2,32 @@ import { World } from 'miniplex';
 import { createReactAPI } from 'miniplex-react';
 import type * as THREE from 'three';
 
+export interface RPGStats {
+  structure: number; // Max Health
+  ignition: number; // Attack
+  logic: number; // Tech/Ranged
+  flow: number; // Speed/Evasion
+}
+
+export interface LevelProgress {
+  current: number;
+  xp: number;
+  nextLevelXp: number;
+  statPoints: number;
+}
+
+export interface Equipment {
+  weapon: string; // Item ID
+  armor: string; // Item ID
+  accessory: string; // Item ID
+}
+
+export interface DialogueState {
+  isInteracting: boolean;
+  currentDialogueId: string;
+  nodeId: string;
+}
+
 // Define the components that entities can have
 export type ECSEntity = {
   id?: string;
@@ -33,37 +59,19 @@ export type ECSEntity = {
   };
 
   // Visuals
-  modelColor?: number;
+  modelColor?: number; // Optional color property
 
   // RPG Stats
-  stats?: {
-    structure: number; // Max Health
-    ignition: number; // Attack
-    logic: number; // Tech/Ranged
-    flow: number; // Speed/Evasion
-  };
+  stats?: RPGStats;
 
   // Progression
-  level?: {
-    current: number;
-    xp: number;
-    nextLevelXp: number;
-    statPoints: number;
-  };
+  level?: LevelProgress;
 
   // Equipment
-  equipment?: {
-    weapon: string; // Item ID
-    armor: string; // Item ID
-    accessory: string; // Item ID
-  };
+  equipment?: Equipment;
 
   // Dialogue
-  dialogueState?: {
-    isInteracting: boolean;
-    currentDialogueId: string;
-    nodeId: string;
-  };
+  dialogueState?: DialogueState;
 };
 
 // Create the ECS world

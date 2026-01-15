@@ -29,8 +29,8 @@ export const PhysicsSystem = () => {
       // If 'stand' or 'block', damp velocity.
       if (entity.characterState === 'stand' || entity.characterState === 'block') {
         // Friction
-        entity.velocity.x *= 0.8;
-        if (Math.abs(entity.velocity.x) < 0.1) entity.velocity.x = 0;
+        entity.velocity.x *= CONFIG.FRICTION_MULTIPLIER;
+        if (Math.abs(entity.velocity.x) < CONFIG.VELOCITY_THRESHOLD) entity.velocity.x = 0;
       }
 
       // Integrate Position (Physics movement)

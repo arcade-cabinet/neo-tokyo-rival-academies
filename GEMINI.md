@@ -176,22 +176,22 @@ export const MainGameScene: FC = () => {
     >
       {/* Lighting */}
       <ambientLight intensity={0.3} />
-      <directionalLight 
-        position={[10, 10, 5]} 
-        intensity={1} 
-        castShadow 
+      <directionalLight
+        position={[10, 10, 5]}
+        intensity={1}
+        castShadow
       />
-      
+
       {/* Environment */}
       <Sky sunPosition={[100, 10, 100]} />
       <Environment preset="city" />
-      
+
       {/* Game Objects */}
       <mesh position={[0, 0, 0]}>
         <boxGeometry args={[1, 1, 1]} />
         <meshStandardMaterial color="cyan" />
       </mesh>
-      
+
       {/* Controls */}
       <OrbitControls />
     </Canvas>
@@ -236,14 +236,14 @@ import type { Mesh } from 'three';
 
 export function RotatingCube() {
   const meshRef = useRef<Mesh>(null);
-  
+
   // Animation loop (60 FPS)
   useFrame((state, delta) => {
     if (meshRef.current) {
       meshRef.current.rotation.y += delta;
     }
   });
-  
+
   return (
     <mesh ref={meshRef}>
       <boxGeometry args={[2, 2, 2]} />
@@ -261,7 +261,7 @@ import { useGLTF } from '@react-three/drei';
 
 export function CharacterModel() {
   const { scene } = useGLTF('/models/character.glb');
-  
+
   return <primitive object={scene} scale={0.5} />;
 }
 
@@ -333,7 +333,7 @@ export function checkSphereCollision(
 useEffect(() => {
   const geometry = new THREE.BoxGeometry();
   const material = new THREE.MeshBasicMaterial();
-  
+
   return () => {
     // Cleanup
     geometry.dispose();
@@ -546,7 +546,7 @@ Your immediate tasks might involve:
 
 ## Ready to Contribute!
 
-Gemini, you're now equipped to contribute effectively to Neo-Tokyo: Rival Academies! 
+Gemini, you're now equipped to contribute effectively to Neo-Tokyo: Rival Academies!
 
 **Remember**:
 - Use PNPM, not npm/yarn

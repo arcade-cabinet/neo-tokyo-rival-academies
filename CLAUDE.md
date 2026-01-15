@@ -70,9 +70,9 @@ export const GameScene: FC = () => {
     <Canvas camera={{ position: [0, 5, 10], fov: 75 }}>
       <ambientLight intensity={0.5} />
       <directionalLight position={[10, 10, 5]} intensity={1} />
-      
+
       {/* Game objects here */}
-      
+
       <OrbitControls />
       <Environment preset="city" />
     </Canvas>
@@ -158,7 +158,7 @@ public/
 
 ### 1. Memory Leaks
 **Problem**: Not disposing Three.js objects
-**Solution**: 
+**Solution**:
 ```typescript
 useEffect(() => {
   return () => {
