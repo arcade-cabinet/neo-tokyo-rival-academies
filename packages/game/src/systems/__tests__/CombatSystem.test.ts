@@ -15,7 +15,7 @@ describe('CombatLogic', () => {
     const rng = () => 0.9;
 
     const attacker: Combatant = { stats: { ignition: 20, structure: 100, logic: 10, flow: 10 } };
-    const defender: Combatant = { stats: { ignition: 10, structure: 10, logic: 10, flow: 10 } };
+    const defender: Combatant = { stats: { ignition: 10, structure: 50, logic: 10, flow: 10 } };
     // Damage = 20 - (10 / 2) = 15
 
     const { damage, isCritical } = resolveCombat(attacker as ECSEntity, defender as ECSEntity, rng);
@@ -29,7 +29,7 @@ describe('CombatLogic', () => {
     const rng = () => 0;
 
     const attacker: Combatant = { stats: { ignition: 20, structure: 100, logic: 10, flow: 10 } };
-    const defender: Combatant = { stats: { ignition: 10, structure: 10, logic: 10, flow: 10 } };
+    const defender: Combatant = { stats: { ignition: 10, structure: 50, logic: 10, flow: 10 } };
     // Base = 15
     // Crit = 15 * 1.5 = 22.5 -> floor(22)
 
