@@ -4,557 +4,694 @@ Welcome, Gemini! This document provides specific context and guidelines for work
 
 ## 🎯 Project Context
 
-You're contributing to **Neo-Tokyo: Rival Academies**, a browser-based 3D platformer game featuring:
-- Cyberpunk aesthetic with neon-lit Neo-Tokyo setting
-- Real-time 3D graphics using Three.js and React Three Fiber
-- Fast-paced competitive platforming gameplay
-- Built with modern web technologies: Astro, React, TypeScript, PNPM 10, Biome
+You're contributing to **Neo-Tokyo: Rival Academies**, a **3D Action JRPG** (NOT a platformer) built as a **Capacitor-first mobile game**. The game features:
+- **FF7-style isometric diorama perspective** with cel-shaded 3D graphics
+- **3-hour JRPG experience** with A/B/C story arcs and branching narrative
+- **Real-time Action RPG combat** with Structure/Ignition/Logic/Flow stats
+- **Capacitor-first mobile architecture** (Android/iOS native + PWA)
+- **Touch-first UX** (48×48 dp minimum touch targets)
+- **GenAI content generation pipeline** (Gemini Flash 3 + Imagen 4) - **YOUR PRIMARY CONTRIBUTION AREA**
+- Built with **Vite, React, Three.js, React Three Fiber, Miniplex ECS** in a **PNPM monorepo**
 
 ## 🧠 Your Strengths in This Project
 
 As Gemini, you bring unique capabilities:
-- **Multi-modal Understanding**: Processing code, documentation, and visual concepts
-- **Pattern Recognition**: Identifying code patterns and best practices quickly
-- **Integration Skills**: Connecting different technologies seamlessly
-- **Rapid Learning**: Quickly adapting to new frameworks and libraries
-- **Creative Problem-Solving**: Finding innovative solutions to complex challenges
+- **Multi-modal Understanding**: Processing code, documentation, visual concepts, and narrative structures
+- **Pattern Recognition**: Identifying code patterns, story arcs, and dialogue flow quickly
+- **Creative Content Generation**: **PRIMARY ROLE** - Generating narrative content (dialogue, quests, lore) via Gemini Flash 3 API
+- **Image Generation Support**: Assisting with Imagen 4 API integration for background asset generation
+- **Integration Skills**: Connecting GenAI systems with game data structures seamlessly
+- **Rapid Learning**: Quickly adapting to project patterns and story structure
+- **Narrative Design**: Understanding A/B/C story arcs and character development
 
 ## 🏗️ Technology Stack
 
-### Astro 4.x - Static Site Generator
-**What it is**: Modern static site builder with "Islands Architecture"
-**Key concept**: Ship minimal JavaScript, hydrate only interactive parts
-**Your focus**: Structure pages efficiently, minimize JavaScript payload
-
-**Example**:
-```astro
----
-// Frontmatter (runs at build time)
-import Layout from '@layouts/Layout.astro';
-import { GameScene } from '@components/react/GameScene';
----
-
-<Layout title="Neo-Tokyo">
-  <!-- This React component only hydrates on client -->
-  <GameScene client:load />
-</Layout>
+### Monorepo Structure (PNPM Workspaces)
+The project is organized as a **PNPM workspace monorepo** with three packages:
+```
+packages/
+├── game/              # Main game (Vite + React + Three.js + Capacitor)
+│   ├── src/data/      # story.json (dialogue, quests, lore)
+│   └── public/        # Textures, portraits, models
+├── content-gen/       # GenAI content generation (YOUR PRIMARY WORKSPACE)
+│   ├── src/
+│   │   ├── api/       # Gemini + Imagen API clients
+│   │   ├── generators/# Story, dialogue, background generators
+│   │   ├── prompts/   # A/B/C story prompt templates
+│   │   └── validators/# Content structure validation
+│   └── output/        # Generated content (before game integration)
+└── e2e/               # E2E tests (Playwright)
 ```
 
-### React 18.3 - UI Library
-**What it is**: JavaScript library for building user interfaces
-**Usage**: ONLY for interactive 3D components, not for static content
-**Your focus**: Create efficient React components for 3D scenes and game UI
+### Your Primary Workspace: `packages/content-gen`
+This is where you'll spend most of your time. The content-gen package is designed to:
+1. Generate narrative content (dialogue, quests, lore) using Gemini Flash 3 API
+2. Generate background assets using Imagen 4 API
+3. Validate generated content structure before game integration
+4. Export validated content to `packages/game/src/data/story.json`
 
-### Three.js 0.170 - 3D Graphics
-**What it is**: Low-level 3D graphics library for the web
-**Core concepts**: Scene, Camera, Renderer, Geometries, Materials, Lights
-**Your focus**: Understanding the 3D rendering pipeline
+### Vite Build System
+- **Fast HMR**: Instant hot module replacement for dev workflow
+- **ESM-based**: Modern JavaScript module system
+- **Optimized Builds**: Tree-shaking and code-splitting for production
 
-### React Three Fiber (R3F) 8.x - React Renderer for Three.js
-**What it is**: Bridges React and Three.js, making 3D declarative
-**Key feature**: Use React components instead of imperative Three.js code
-**Your focus**: Writing declarative 3D code
+### React 19
+- **UI Framework**: Used for all game UI and ECS rendering
+- **Functional Components**: Use hooks and TypeScript
+- **Concurrent Features**: Automatic batching and improved performance
 
-**Example**:
-```tsx
-// Instead of imperative Three.js:
-const geometry = new THREE.BoxGeometry(1, 1, 1);
-const material = new THREE.MeshStandardMaterial({ color: 0x00ff00 });
-const cube = new THREE.Mesh(geometry, material);
-scene.add(cube);
+### Three.js + React Three Fiber
+- **3D Graphics**: Cel-shaded isometric perspective
+- **Declarative 3D**: R3F makes Three.js React-friendly
+- **Performance**: Target 60 FPS on mid-range mobile devices
 
-// Use declarative R3F:
-<mesh>
-  <boxGeometry args={[1, 1, 1]} />
-  <meshStandardMaterial color="green" />
-</mesh>
+### Miniplex ECS (Entity Component System)
+- **Game Architecture**: Separates data (components) from logic (systems)
+- **State Management**: ECS entities represent game state
+- **Systems**: CombatSystem, ProgressionSystem, DialogueSystem, etc.
+
+### Capacitor 8 (PRIMARY Platform)
+- **Native Mobile**: Build Android/iOS apps from web codebase
+- **Touch-First**: ALL interactions must work with touch (48×48 dp minimum)
+- **Native Plugins**: Haptics, storage, status bar, etc.
+
+### Biome (Linter/Formatter)
+- **Not ESLint/Prettier**: Use Biome exclusively
+- **Commands**: `pnpm check`, `pnpm check:fix`
+
+### PNPM 10 (Workspaces)
+- **Package Manager**: Always use `pnpm`, never `npm` or `yarn`
+- **Workspaces**: Each package has its own `package.json`
+- **Commands**: `pnpm --filter <package> <command>`
+
+## 🎨 Your Primary Role: GenAI Content Generation
+
+### Gemini Flash 3 API Integration
+You are responsible for generating **narrative content** using Gemini Flash 3. This includes:
+1. **Dialogue Sequences**: Character conversations with branching paths
+2. **Quest Descriptions**: Main quests (A-Story), side quests (B-Story), events (C-Story)
+3. **Lore Entries**: Data Shard collectibles revealing backstory
+4. **Character Descriptions**: Personality traits, motivations, relationships
+
+### Story Structure (A/B/C Arcs)
+All generated content must align with the three-arc narrative structure:
+
+#### **A-Story: Main Rivalry (Kai vs Vera)**
+- **Focus**: Primary conflict between Neon Academy (Kai) and Shadow Syndicate (Vera)
+- **Goal**: Compete for control of the Data Core
+- **Tone**: Action-driven, competitive, high stakes
+- **Structure**: Linear progression through stages with escalating confrontations
+- **Culmination**: Final showdown at Data Core Tower
+
+**Example Dialogue Prompt**:
+```
+Generate a confrontational dialogue between Kai and Vera at the Neon District stage entrance.
+- Kai is confident but respectful of Vera's skills
+- Vera is competitive and dismissive of Kai's academy
+- Dialogue should have 4-6 exchanges
+- Include one branching point where player chooses Kai's response (calm vs assertive)
+- Tone: Tense but not hostile
 ```
 
-### React Three Drei 9.x - R3F Helpers
-**What it is**: Collection of useful helpers and abstractions for R3F
-**Provides**: Camera controls, loaders, environments, effects, and more
-**Your focus**: Leveraging these helpers to avoid reinventing the wheel
+#### **B-Story: Character Development & Mystery**
+- **Focus**: Character backstories, relationships, personal growth
+- **Mystery Elements**: Who controls the Data Core? What are the academies hiding?
+- **Tone**: Introspective, mysterious, emotional depth
+- **Structure**: Revealed through collectibles (Data Shards) and optional dialogue
+- **Payoff**: Unlocks true ending conditions
 
-### Biome 1.9.4 - Linter & Formatter
-**Important**: NOT using ESLint or Prettier
-**Why Biome**: Faster, simpler, all-in-one tool
-**Commands**: `pnpm lint`, `pnpm format`, `pnpm check`
-
-### PNPM 10 - Package Manager
-**Important**: Always use `pnpm`, never `npm` or `yarn`
-**Why PNPM**: Fast, disk-efficient, strict dependency resolution
-**Key file**: `pnpm-lock.yaml` (always commit this)
-
-### TypeScript 5.7
-**Usage**: Strict mode enabled for maximum type safety
-**Your focus**: Proper typing, avoiding `any`, using utility types
-
-## 📁 Project Structure
-
+**Example Lore Prompt**:
 ```
-neo-tokyo-rival-academies/
-├── .github/
-│   ├── workflows/
-│   │   ├── ci.yml           # CI pipeline (lint, build, test)
-│   │   └── deploy.yml       # CD pipeline (GitHub Pages)
-│   └── copilot-instructions.md
-├── public/                   # Static assets (served as-is)
-│   ├── models/              # 3D models (.glb, .gltf)
-│   ├── textures/            # Texture images
-│   └── audio/               # Sound files
-├── src/
-│   ├── components/
-│   │   └── react/           # React components
-│   │       ├── scenes/      # Full 3D scenes (with Canvas)
-│   │       ├── objects/     # 3D objects (meshes, groups)
-│   │       ├── ui/          # UI overlays (HUD, menus)
-│   │       └── game/        # Game logic components
-│   ├── layouts/             # Astro layouts (wrappers)
-│   ├── pages/               # Astro pages (routes)
-│   │   └── index.astro      # Home page
-│   ├── assets/              # Assets processed by Astro
-│   └── utils/               # Utility functions
-├── astro.config.mjs         # Astro configuration
-├── biome.json               # Biome configuration
-├── tsconfig.json            # TypeScript configuration
-├── package.json             # Dependencies and scripts
-├── pnpm-workspace.yaml      # PNPM workspace config
-└── .npmrc                   # PNPM settings
+Generate a Data Shard lore entry revealing Kai's motivation for joining Neon Academy.
+- Mention a past event involving Kai's sibling
+- Connect to the larger mystery of the Data Core
+- Tone: Personal and reflective
+- Length: 150-200 words
+- End with a question that hints at future revelations
 ```
 
-## 🛠️ Development Workflow
+#### **C-Story: Event Disruptors (Forcing Team-Ups)**
+- **Focus**: External threats forcing Kai and Vera to cooperate
+- **Examples**: Alien Abduction stage, Mall Drop incident, rogue AI outbreak
+- **Tone**: Urgent, cooperative, character bonding
+- **Gameplay Impact**: Unlocks combo abilities and team moves
+- **Narrative Function**: Builds chemistry between rivals
 
-### Starting Development
+**Example Event Dialogue Prompt**:
+```
+Generate dialogue for the Alien Abduction stage where Kai and Vera must work together to escape.
+- Initial reluctance to cooperate
+- Gradual realization they need each other
+- Include one moment of humor to break tension
+- End with mutual respect (not full friendship yet)
+- Tone: Urgent but with character development
+```
+
+### Dialogue Generation Workflow
+1. **Define Context**: Understand which story arc (A/B/C), stage, and character relationships
+2. **Create Prompt**: Use structured prompts in `packages/content-gen/src/prompts/`
+3. **Call Gemini API**: Via `packages/content-gen/src/api/gemini.ts`
+4. **Validate Structure**: Ensure dialogue nodes have proper format (id, speaker, text, choices, nextNodeId)
+5. **Export to story.json**: Integrate with existing dialogue sequences
+
+### Dialogue Node Structure
+Every dialogue node must follow this JSON structure:
+```json
+{
+  "id": "unique_node_id",
+  "speaker": "Kai" | "Vera" | "NPC_Name",
+  "portrait": "kai_neutral" | "vera_smirk" | "portrait_filename",
+  "text": "The dialogue text here.",
+  "choices": [
+    {
+      "text": "Player choice text",
+      "nextNodeId": "next_node_id"
+    }
+  ],
+  "nextNodeId": "default_next_node_id" // If no choices
+}
+```
+
+### Quest Generation Workflow
+1. **Define Quest Type**: Main quest (A-Story), side quest (B-Story), or event (C-Story)
+2. **Create Prompt**: Specify quest objective, rewards, and narrative integration
+3. **Call Gemini API**: Generate quest description and objectives
+4. **Validate Structure**: Ensure quest has title, description, objectives[], rewards{}
+5. **Export to story.json**: Add to quests section
+
+### Quest Structure
+```json
+{
+  "id": "unique_quest_id",
+  "title": "Quest Title",
+  "description": "Brief description of the quest",
+  "type": "main" | "side" | "event",
+  "storyArc": "A" | "B" | "C",
+  "objectives": [
+    {
+      "id": "objective_1",
+      "description": "Objective description",
+      "completed": false
+    }
+  ],
+  "rewards": {
+    "xp": 100,
+    "items": ["item_id_1"],
+    "reputation": 50
+  }
+}
+```
+
+### Imagen 4 API Integration
+You assist with generating **background assets** using Imagen 4:
+1. **Stage Backgrounds**: Isometric cyberpunk environments (Neon District, Data Core Tower, Shopping Mall)
+2. **Character Portraits**: Dialogue portrait variations (neutral, smirk, angry, surprised)
+3. **UI Textures**: HUD elements, menu backgrounds
+
+**Example Background Prompt**:
+```
+Generate an isometric view of a neon-lit cyberpunk district in Neo-Tokyo.
+- Style: Cel-shaded, anime aesthetic
+- Colors: Cyan, magenta, yellow neon lights
+- Elements: Skyscrapers, holographic billboards, elevated train tracks
+- Perspective: 45° isometric angle (FF7-style)
+- Mood: Futuristic, vibrant, slightly rainy
+- Resolution: 2048x2048
+```
+
+## 📋 Common Tasks & How to Approach Them
+
+### Task: Generate Dialogue for A-Story Stage
+
+**Thought Process**:
+1. Review stage context (which stage, where in story progression)
+2. Identify characters involved (Kai, Vera, NPCs)
+3. Define emotional tone (competitive, tense, respectful)
+4. Create structured prompt in `packages/content-gen/src/prompts/a-story/`
+5. Call Gemini API with prompt
+6. Validate response structure (ensure all nodes have required fields)
+7. Export to `packages/game/src/data/story.json`
+
+**Example Command**:
 ```bash
-# Install dependencies (first time only)
-pnpm install
-
-# Start dev server (with hot reload)
-pnpm dev
-# Opens at http://localhost:4321
+cd packages/content-gen
+pnpm generate:dialogue --arc A --stage neon-district --characters kai,vera
 ```
 
-### Making Changes
-1. Edit files in `src/`
-2. Browser auto-reloads (Astro HMR)
-3. Check console for errors
-4. Save often, test frequently
+### Task: Generate Data Shard Lore Entry (B-Story)
 
-### Before Committing
+**Thought Process**:
+1. Identify mystery element to reveal (character backstory, Data Core origin, academy secrets)
+2. Ensure lore connects to larger narrative threads
+3. Create prompt with 150-200 word target
+4. Call Gemini API
+5. Validate content quality and narrative consistency
+6. Export to story.json lore section
+
+**Example Command**:
 ```bash
-# Run all checks
-pnpm check
-
-# Or individually:
-pnpm format        # Format code
-pnpm lint          # Check for errors
-pnpm type-check    # TypeScript validation
-pnpm build         # Test production build
+cd packages/content-gen
+pnpm generate:lore --arc B --topic kai-backstory --word-count 150-200
 ```
 
-### Building for Production
+### Task: Generate Event Dialogue (C-Story)
+
+**Thought Process**:
+1. Review event stage mechanics (Alien Abduction tentacles, Mall Drop weapons)
+2. Define team-up dynamic (reluctant cooperation → mutual respect)
+3. Include character bonding moments
+4. Create prompt with urgency and humor balance
+5. Call Gemini API
+6. Validate dialogue flow and branching options
+7. Export to story.json
+
+**Example Command**:
 ```bash
-pnpm build         # Creates dist/ folder
-pnpm preview       # Preview production build locally
+cd packages/content-gen
+pnpm generate:dialogue --arc C --event alien-abduction --focus team-up
+```
+
+### Task: Generate Stage Background with Imagen
+
+**Thought Process**:
+1. Review stage design requirements (isometric, cel-shaded, cyberpunk)
+2. Define key visual elements (buildings, lighting, props)
+3. Create structured Imagen prompt with style parameters
+4. Call Imagen API via `packages/content-gen/src/api/imagen.ts`
+5. Post-process image (resize, optimize, format conversion)
+6. Save to `packages/game/public/textures/backgrounds/`
+
+**Example Command**:
+```bash
+cd packages/content-gen
+pnpm generate:background --stage neon-district --style isometric-cyberpunk
+```
+
+### Task: Validate Generated Content
+
+**Thought Process**:
+1. Read generated content from `packages/content-gen/output/`
+2. Run validator: `pnpm validate:dialogue` or `pnpm validate:quests`
+3. Check for required fields (id, speaker, text, etc.)
+4. Verify narrative consistency (character voices, story arc alignment)
+5. Fix validation errors
+6. Re-run until validation passes
+
+**Example Command**:
+```bash
+cd packages/content-gen
+pnpm validate:all  # Validates all generated content
 ```
 
 ## 🎨 Coding Patterns & Best Practices
 
-### Pattern 1: Creating a 3D Scene Component
-
+### Pattern 1: Gemini API Call Structure
 ```typescript
-// src/components/react/scenes/MainGameScene.tsx
-import type { FC } from 'react';
-import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Sky, Environment } from '@react-three/drei';
+// packages/content-gen/src/api/gemini.ts
+import { GoogleGenerativeAI } from '@google/generative-ai';
 
-export const MainGameScene: FC = () => {
-  return (
-    <Canvas
-      camera={{ position: [0, 5, 10], fov: 75 }}
-      shadows
-    >
-      {/* Lighting */}
-      <ambientLight intensity={0.3} />
-      <directionalLight 
-        position={[10, 10, 5]} 
-        intensity={1} 
-        castShadow 
-      />
-      
-      {/* Environment */}
-      <Sky sunPosition={[100, 10, 100]} />
-      <Environment preset="city" />
-      
-      {/* Game Objects */}
-      <mesh position={[0, 0, 0]}>
-        <boxGeometry args={[1, 1, 1]} />
-        <meshStandardMaterial color="cyan" />
-      </mesh>
-      
-      {/* Controls */}
-      <OrbitControls />
-    </Canvas>
-  );
-};
-```
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-### Pattern 2: Using the Scene in an Astro Page
+export async function generateDialogue(prompt: string): Promise<string> {
+  const model = genAI.getGenerativeModel({ model: 'gemini-flash-3' });
 
-```astro
----
-// src/pages/game.astro
-import Layout from '@layouts/Layout.astro';
-import { MainGameScene } from '@components/react/scenes/MainGameScene';
-
-const pageTitle = "Play Neo-Tokyo";
----
-
-<Layout title={pageTitle}>
-  <div class="game-container">
-    <MainGameScene client:load />
-  </div>
-</Layout>
-
-<style>
-  .game-container {
-    width: 100vw;
-    height: 100vh;
-    margin: 0;
-    padding: 0;
-  }
-</style>
-```
-
-### Pattern 3: Animated 3D Object
-
-```typescript
-// src/components/react/objects/RotatingCube.tsx
-import { useRef } from 'react';
-import { useFrame } from '@react-three/fiber';
-import type { Mesh } from 'three';
-
-export function RotatingCube() {
-  const meshRef = useRef<Mesh>(null);
-  
-  // Animation loop (60 FPS)
-  useFrame((state, delta) => {
-    if (meshRef.current) {
-      meshRef.current.rotation.y += delta;
-    }
+  const result = await model.generateContent({
+    contents: [{ role: 'user', parts: [{ text: prompt }] }],
+    generationConfig: {
+      temperature: 0.8, // Creative but controlled
+      topK: 40,
+      topP: 0.95,
+      maxOutputTokens: 2048,
+    },
   });
-  
-  return (
-    <mesh ref={meshRef}>
-      <boxGeometry args={[2, 2, 2]} />
-      <meshStandardMaterial color="magenta" />
-    </mesh>
-  );
+
+  const response = await result.response;
+  return response.text();
 }
 ```
 
-### Pattern 4: Loading 3D Models
-
+### Pattern 2: Prompt Template Structure
 ```typescript
-// src/components/react/objects/CharacterModel.tsx
-import { useGLTF } from '@react-three/drei';
+// packages/content-gen/src/prompts/a-story/confrontation.ts
+export function generateConfrontationPrompt(
+  character1: string,
+  character2: string,
+  stage: string,
+  emotionalTone: string
+): string {
+  return `
+Generate a confrontational dialogue between ${character1} and ${character2} at the ${stage} stage.
 
-export function CharacterModel() {
-  const { scene } = useGLTF('/models/character.glb');
-  
-  return <primitive object={scene} scale={0.5} />;
+Context:
+- ${character1} and ${character2} are rivals competing for the Data Core
+- This is an A-Story (main rivalry) dialogue
+- Emotional tone: ${emotionalTone}
+
+Requirements:
+- 4-6 exchanges between characters
+- Include ONE branching point where the player chooses ${character1}'s response
+- Provide 2-3 response options (e.g., calm, assertive, dismissive)
+- Maintain character voices (${character1} is confident, ${character2} is competitive)
+- End with tension unresolved (save escalation for later stages)
+
+Output Format:
+Return a JSON array of dialogue nodes with this structure:
+[
+  {
+    "id": "node_id",
+    "speaker": "character_name",
+    "portrait": "character_neutral",
+    "text": "Dialogue text",
+    "choices": [], // Empty if no player choice
+    "nextNodeId": "next_node_id"
+  }
+]
+  `.trim();
 }
-
-// Preload for better performance
-useGLTF.preload('/models/character.glb');
 ```
 
-### Pattern 5: Utility Function with Proper Types
-
+### Pattern 3: Content Validator
 ```typescript
-// src/utils/physics.ts
+// packages/content-gen/src/validators/dialogue.ts
+import type { DialogueNode } from '../types';
 
-/**
- * Calculate velocity based on acceleration and time
- */
-export function calculateVelocity(
-  initialVelocity: number,
-  acceleration: number,
-  deltaTime: number
-): number {
-  return initialVelocity + acceleration * deltaTime;
-}
+export function validateDialogueNodes(nodes: DialogueNode[]): { valid: boolean; errors: string[] } {
+  const errors: string[] = [];
 
-/**
- * Check if two spheres are colliding
- */
-export function checkSphereCollision(
-  pos1: [number, number, number],
-  radius1: number,
-  pos2: [number, number, number],
-  radius2: number
-): boolean {
-  const dx = pos1[0] - pos2[0];
-  const dy = pos1[1] - pos2[1];
-  const dz = pos1[2] - pos2[2];
-  const distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
-  return distance < radius1 + radius2;
+  for (const node of nodes) {
+    if (!node.id) errors.push(`Node missing id: ${JSON.stringify(node)}`);
+    if (!node.speaker) errors.push(`Node ${node.id} missing speaker`);
+    if (!node.text) errors.push(`Node ${node.id} missing text`);
+    if (!node.portrait) errors.push(`Node ${node.id} missing portrait`);
+
+    // If node has choices, validate them
+    if (node.choices && node.choices.length > 0) {
+      for (const choice of node.choices) {
+        if (!choice.text) errors.push(`Choice in node ${node.id} missing text`);
+        if (!choice.nextNodeId) errors.push(`Choice in node ${node.id} missing nextNodeId`);
+      }
+    } else if (!node.nextNodeId) {
+      // If no choices, must have nextNodeId
+      errors.push(`Node ${node.id} has no choices but also no nextNodeId`);
+    }
+  }
+
+  return { valid: errors.length === 0, errors };
 }
 ```
 
-## ⚠️ Common Issues & Solutions
-
-### Issue 1: "window is not defined" Error
-**Cause**: Three.js code running during Server-Side Rendering (SSR)
-**Solution**: Use `client:load` directive on React component in Astro
-
-```astro
-<!-- ✅ Correct -->
-<GameScene client:load />
-
-<!-- ❌ Wrong -->
-<GameScene />
-```
-
-### Issue 2: Poor Performance / Low FPS
-**Causes**: Too many objects, unoptimized meshes, heavy computations in useFrame
-**Solutions**:
-- Use instanced meshes for repeated objects
-- Implement Level of Detail (LOD)
-- Memoize expensive calculations
-- Use `useMemo` and `useCallback` appropriately
-- Profile with Chrome DevTools
-
-### Issue 3: Memory Leaks
-**Cause**: Not disposing Three.js objects
-**Solution**: Clean up in useEffect
-
+### Pattern 4: Exporting to story.json
 ```typescript
-useEffect(() => {
-  const geometry = new THREE.BoxGeometry();
-  const material = new THREE.MeshBasicMaterial();
-  
-  return () => {
-    // Cleanup
-    geometry.dispose();
-    material.dispose();
-  };
-}, []);
+// packages/content-gen/src/exporters/story.ts
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import type { DialogueSequence } from '../types';
+
+export async function exportDialogueToStory(
+  sequenceId: string,
+  nodes: DialogueNode[]
+): Promise<void> {
+  const storyPath = path.join(__dirname, '../../../game/src/data/story.json');
+
+  // Read existing story.json
+  const storyContent = await fs.readFile(storyPath, 'utf-8');
+  const story = JSON.parse(storyContent);
+
+  // Add or update dialogue sequence
+  if (!story.dialogueSequences) {
+    story.dialogueSequences = {};
+  }
+
+  story.dialogueSequences[sequenceId] = { nodes };
+
+  // Write back to file
+  await fs.writeFile(storyPath, JSON.stringify(story, null, 2));
+
+  console.log(`Exported dialogue sequence "${sequenceId}" to story.json`);
+}
 ```
 
-### Issue 4: Biome Errors
-**Cause**: Code doesn't match Biome rules
-**Solution**: Run auto-fix
+## ⚠️ Common Pitfalls to Avoid
+
+### 1. Inconsistent Character Voices
+**Problem**: Generated dialogue doesn't match established character personalities
+**Solution**: Always review character profiles before generating dialogue. Include character traits in prompts.
+
+### 2. Story Arc Misalignment
+**Problem**: Generated content doesn't fit A/B/C story arc structure
+**Solution**: Explicitly specify story arc in prompts. Validate arc alignment before export.
+
+### 3. Missing Validation
+**Problem**: Generated content exported without structure validation
+**Solution**: ALWAYS run validators before exporting. Use `pnpm validate:all`.
+
+### 4. Overly Creative Output
+**Problem**: Gemini generates content that's too creative and breaks game lore
+**Solution**: Use lower temperature (0.6-0.8) and provide strict constraints in prompts.
+
+### 5. Broken Node References
+**Problem**: Dialogue nodes reference nextNodeId that doesn't exist
+**Solution**: Validate all node references. Use validator to check for orphaned nodes.
+
+## 🧪 Testing Generated Content
+
+### Manual Testing
+1. Generate content: `pnpm generate:dialogue --arc A`
+2. Validate: `pnpm validate:dialogue`
+3. Export to game: `pnpm export:dialogue --sequence-id intro_kai_vera`
+4. Run game: `cd ../game && pnpm dev`
+5. Trigger dialogue in-game and verify flow
+
+### Automated Validation
+```bash
+cd packages/content-gen
+
+# Validate all generated content
+pnpm validate:all
+
+# Validate specific content type
+pnpm validate:dialogue
+pnpm validate:quests
+pnpm validate:lore
+```
+
+### Integration Testing
+```bash
+cd packages/e2e
+pnpm test:e2e -- dialogue.spec.ts
+```
+
+## 📝 Code Style Preferences
+
+### TypeScript
+```typescript
+// ✅ Good - explicit types
+interface DialogueGenerationParams {
+  arc: 'A' | 'B' | 'C';
+  stage: string;
+  characters: string[];
+  tone: string;
+}
+
+// ❌ Bad - implicit any
+function generateDialogue(params) { }
+
+// ✅ Good - proper typing
+async function generateDialogue(params: DialogueGenerationParams): Promise<DialogueNode[]> { }
+```
+
+### Prompt Engineering
+```typescript
+// ✅ Good - structured prompt with clear requirements
+const prompt = `
+Generate dialogue for ${context}.
+
+Requirements:
+- ${requirement1}
+- ${requirement2}
+
+Output Format:
+${formatSpecification}
+`.trim();
+
+// ❌ Bad - vague prompt
+const prompt = "Generate some dialogue for Kai and Vera";
+```
+
+## 🚀 Development Workflow
+
+### Starting Content Generation
+```bash
+# Navigate to content-gen package
+cd packages/content-gen
+
+# Install dependencies (if first time)
+pnpm install
+
+# Set up API keys (create .env file)
+echo "GEMINI_API_KEY=your_key_here" > .env
+echo "IMAGEN_API_KEY=your_key_here" >> .env
+
+# Generate dialogue
+pnpm generate:dialogue --arc A --stage neon-district
+
+# Validate generated content
+pnpm validate:all
+
+# Export to game
+pnpm export:all
+```
+
+### CI/CD Integration
+- Content generation runs on-demand, not in CI
+- Generated content is committed to git after validation
+- E2E tests verify dialogue flow in-game
+
+## 🎯 JRPG Gameplay Context
+
+### Core Pillars
+1. **Action Combat**: Real-time battles with RPG stat calculations
+2. **Narrative Depth**: 3-hour story with branching dialogue (YOUR PRIMARY FOCUS)
+3. **RPG Progression**: Level-up, stat points, XP overflow
+4. **Immersive 3D**: Cel-shaded isometric graphics
+5. **Mobile-First**: Touch controls, Capacitor-native features
+
+### RPG Stats (Structure/Ignition/Logic/Flow)
+- **Structure**: Health, defense, survivability
+- **Ignition**: Melee damage, critical hits
+- **Logic**: Tech damage, hacking speed
+- **Flow**: Speed, evasion, boost duration
+
+### Special Event Stages (C-Story Focus)
+
+#### Alien Abduction
+- **Mechanics**: Vertical tentacle grab escapes, corrupted enemies
+- **Boss**: Alien Queen (multi-phase)
+- **Narrative**: Forces team-up between Kai and Vera
+- **YOUR ROLE**: Generate urgent, cooperative dialogue with character bonding
+
+#### Mall Drop
+- **Mechanics**: Weapon switching (scissors, mops, mannequin arms)
+- **Enemies**: Security drones, rogue shoppers, Yakuza
+- **Narrative**: Comic relief, character bonding
+- **YOUR ROLE**: Generate humorous dialogue with action comedy tone
+
+### Isometric Diorama Perspective (FF7-Style)
+When generating stage backgrounds with Imagen:
+- **Camera**: Fixed 45° isometric angle
+- **Depth**: Parallax scrolling for depth perception
+- **Style**: Cel-shaded, anime aesthetic
+- **Colors**: Neon cyan, magenta, yellow for cyberpunk vibe
+
+## 🔍 Quick Reference Commands
 
 ```bash
-pnpm check:fix
+# Content Generation (from packages/content-gen)
+pnpm generate:dialogue --arc A --stage <stage_name>  # Generate A-Story dialogue
+pnpm generate:dialogue --arc B --topic <topic>        # Generate B-Story lore/dialogue
+pnpm generate:dialogue --arc C --event <event_name>   # Generate C-Story event dialogue
+pnpm generate:quests --arc <A|B|C>                    # Generate quests
+pnpm generate:lore --topic <topic>                    # Generate Data Shard lore
+pnpm generate:background --stage <stage_name>         # Generate stage background
+
+# Validation
+pnpm validate:all                    # Validate all generated content
+pnpm validate:dialogue               # Validate dialogue nodes
+pnpm validate:quests                 # Validate quest structure
+pnpm validate:lore                   # Validate lore entries
+
+# Export to Game
+pnpm export:all                      # Export all validated content to game
+pnpm export:dialogue --id <seq_id>   # Export specific dialogue sequence
+pnpm export:quests                   # Export quests to story.json
+
+# Development
+pnpm dev                             # Start content-gen CLI
+pnpm test                            # Run unit tests
+pnpm check                           # Run Biome checks
 ```
 
-### Issue 5: Build Fails
-**Common causes**:
-1. TypeScript errors → `pnpm type-check`
-2. Missing dependencies → `pnpm install`
-3. Cache issues → `rm -rf .astro node_modules/.cache && pnpm install`
+## 📚 Resources for Deep Dives
 
-## 🎯 Game Development Context
-
-### Visual Style: Neo-Tokyo Cyberpunk
-- **Colors**: Neon cyan, magenta, yellow, purple
-- **Lighting**: High contrast, colorful point lights
-- **Architecture**: Vertical platforms, skyscrapers, holographic elements
-- **Weather**: Optional rain, fog effects
-- **UI**: Futuristic HUD, glowing elements
-
-### Gameplay Mechanics to Implement
-1. **Character Movement**: WASD controls, jumping, dashing
-2. **Camera System**: Third-person follow camera
-3. **Platforming**: Precise jumping, wall-running
-4. **Collectibles**: Points, power-ups
-5. **Obstacles**: Moving platforms, hazards
-6. **Academy System**: Choose academy, unlock abilities
-
-### Performance Targets
-- **FPS**: Maintain 60 FPS on mid-range hardware
-- **Load Time**: < 3 seconds initial load
-- **Bundle Size**: < 500 KB JavaScript (excluding 3D assets)
-
-## 🧪 Testing Strategy
-
-### Manual Testing Checklist
-- [ ] Dev server starts without errors
-- [ ] Page loads in browser
-- [ ] 3D scene renders correctly
-- [ ] No console errors or warnings
-- [ ] Frame rate is smooth (check FPS)
-- [ ] Controls work as expected
-- [ ] Build completes successfully
-- [ ] Production preview works
-
-### Browser Testing
-- Chrome (primary)
-- Firefox
-- Safari (WebGL compatibility)
-- Edge
-
-### Performance Testing
-```typescript
-// Add to scene for debugging
-import { Stats } from '@react-three/drei';
-
-<Canvas>
-  <Stats />
-  {/* rest of scene */}
-</Canvas>
-```
-
-## 🚀 CI/CD Pipeline
-
-### Continuous Integration (.github/workflows/ci.yml)
-Runs on: Pull requests, pushes to main/develop
-
-**Steps**:
-1. Install PNPM 10
-2. Install dependencies
-3. Run Biome checks (format, lint)
-4. Run TypeScript type check
-5. Build project
-6. Upload build artifacts
-
-### Continuous Deployment (.github/workflows/deploy.yml)
-Runs on: Pushes to main branch
-
-**Steps**:
-1. Build project with correct base path
-2. Deploy to GitHub Pages
-3. Site available at: `https://arcade-cabinet.github.io/neo-tokyo-rival-academies`
-
-### Your Responsibility
-- Ensure all CI checks pass before merging
-- Fix any build errors immediately
-- Test locally before pushing
-
-## 📚 Learning Resources
-
-### Essential Documentation
-- **Astro**: https://docs.astro.build/
-- **React Three Fiber**: https://docs.pmnd.rs/react-three-fiber/
-- **Drei**: https://github.com/pmndrs/drei
-- **Three.js**: https://threejs.org/docs/
+- **Gemini API**: https://ai.google.dev/docs
+- **Imagen 4 API**: https://cloud.google.com/vertex-ai/docs/generative-ai/image/overview
+- **Prompt Engineering**: https://ai.google.dev/docs/prompt_best_practices
+- **Story Structure**: `docs/JRPG_TRANSFORMATION.md`
+- **Character Profiles**: `packages/game/src/data/characters.json`
+- **Vite**: https://vitejs.dev/
+- **TypeScript**: https://www.typescriptlang.org/docs/
 - **Biome**: https://biomejs.dev/
+- **PNPM Workspaces**: https://pnpm.io/workspaces
 
-### Tutorials & Guides
-- **Three.js Fundamentals**: https://threejs.org/manual/
-- **R3F Journey**: https://docs.pmnd.rs/react-three-fiber/getting-started/examples
-- **Astro Tutorial**: https://docs.astro.build/en/tutorial/0-introduction/
+## 🤝 Working with Other Agents
 
-### Community Resources
-- **Poimandres Discord**: R3F community
-- **Astro Discord**: Astro community
-- **Three.js Discourse**: Three.js community
+### Agent Coordination
+- **Claude**: Handles codebase architecture, ECS systems, and documentation
+- **Jules**: Handles CI/CD, deployments, and elevated access operations
+- **Gemini (YOU)**: Handles GenAI content generation (dialogue, quests, lore, backgrounds)
+- **Copilot**: Provides inline code suggestions following project conventions
 
-## 🤝 Collaboration Guidelines
+### Communication Patterns
+- Document content generation patterns in this file (GEMINI.md)
+- Update AGENTS.md when adding new content types or generation workflows
+- Cross-reference CLAUDE.md for game architecture context
+- Keep README.md user-facing and up-to-date
 
-### Code Review Focus
-- Performance implications of changes
-- Memory leak prevention
+### Code Review Focus (for content-gen package)
+- Prompt quality and structure
+- Generated content validation
+- API error handling
+- Content consistency with story arcs
 - TypeScript type safety
 - Biome compliance
-- Documentation clarity
-
-### Documentation Standards
-- Document complex 3D logic
-- Add JSDoc comments for utility functions
-- Update AGENTS.md for new patterns
-- Keep README.md current
-
-### Commit Message Format
-```
-type(scope): description
-
-[optional body]
-
-[optional footer]
-```
-
-**Types**: feat, fix, docs, style, refactor, perf, test, chore
-
-**Example**:
-```
-feat(player): add double jump mechanic
-
-Implemented double jump ability for player character.
-Includes animation and particle effects.
-
-Closes #42
-```
-
-## 🎮 Quick Command Reference
-
-```bash
-# Development
-pnpm dev              # Start dev server
-pnpm build            # Build for production
-pnpm preview          # Preview production build
-
-# Code Quality
-pnpm check            # Run all checks
-pnpm check:fix        # Auto-fix issues
-pnpm lint             # Lint only
-pnpm format           # Format only
-pnpm type-check       # TypeScript only
-
-# Dependencies
-pnpm add <package>    # Add dependency
-pnpm add -D <package> # Add dev dependency
-pnpm remove <package> # Remove dependency
-pnpm install          # Install all deps
-```
-
-## 💡 Pro Tips for Gemini
-
-1. **Visual Understanding**: Use your multi-modal capabilities to understand 3D concepts better
-2. **Pattern Matching**: Look for similar patterns in Drei examples when building features
-3. **Integration**: Think about how Astro, React, and Three.js work together
-4. **Performance**: Always consider the rendering pipeline impact
-5. **Types**: Leverage TypeScript's type system for safer code
-6. **Documentation**: Your natural language skills make you great at documentation
-
-## 🎯 Current Project Phase
-
-**Phase 1: Foundation** (Current)
-- [x] Repository scaffolding ✅
-- [ ] Basic 3D scene setup
-- [ ] Character controller
-- [ ] Camera system
-- [ ] First level design
-
-Your immediate tasks might involve:
-- Setting up the basic game scene
-- Creating the character controller
-- Implementing camera controls
-- Designing the first platform level
-
-## 🔐 Security & Best Practices
-
-- Never commit sensitive data (API keys, tokens)
-- Use environment variables for config
-- Validate user input in game mechanics
-- Keep dependencies updated
-- Follow OWASP guidelines
 
 ---
 
-## Ready to Contribute!
+## 🎭 Narrative Guidelines
 
-Gemini, you're now equipped to contribute effectively to Neo-Tokyo: Rival Academies! 
+### Character Voices
 
-**Remember**:
-- Use PNPM, not npm/yarn
-- Use Biome, not ESLint/Prettier
-- Think about 3D performance
-- Write type-safe TypeScript
-- Keep React usage minimal (Astro for static content)
-- Document complex logic
-- Test thoroughly before committing
+#### Kai (Neon Academy)
+- **Personality**: Confident but not arrogant, respectful, determined
+- **Speech Style**: Direct, clear, occasionally playful
+- **Motivation**: Prove Neon Academy's worth, protect friends
+- **Growth Arc**: Learns to respect rivals, discovers academy secrets (B-Story)
 
-Let's build an amazing 3D platformer! 🎮✨
+#### Vera (Shadow Syndicate)
+- **Personality**: Competitive, strategic, dismissive of "weak" opponents
+- **Speech Style**: Sharp, witty, occasionally condescending
+- **Motivation**: Claim Data Core for Shadow Syndicate, surpass expectations
+- **Growth Arc**: Learns teamwork value, questions academy's true goals (B-Story)
+
+### Tone Guidelines by Story Arc
+
+#### A-Story Tone
+- Competitive, action-driven, high stakes
+- Dialogue should escalate tension between Kai and Vera
+- Respect between rivals, but clear opposition
+- End scenes with unresolved tension (escalation later)
+
+#### B-Story Tone
+- Introspective, mysterious, emotionally deep
+- Dialogue reveals character vulnerabilities and backstories
+- Use Data Shards for exposition (show, don't tell)
+- End scenes with questions, not answers
+
+#### C-Story Tone
+- Urgent, cooperative, character bonding
+- Dialogue shows reluctant teamwork → mutual respect
+- Include moments of humor to break tension
+- End scenes with strengthened relationships
+
+---
+
+Gemini, you're ready to generate compelling narrative content for Neo-Tokyo: Rival Academies! Remember:
+- **PRIMARY ROLE**: Generate dialogue, quests, lore, and backgrounds using Gemini Flash 3 + Imagen 4
+- **Story Arcs**: Always align content with A/B/C structure
+- **Character Voices**: Maintain consistent personalities for Kai, Vera, and NPCs
+- **Validation**: ALWAYS validate generated content before exporting
+- **Monorepo**: Work in `packages/content-gen`, export to `packages/game/src/data/story.json`
+- **PNPM**: Use `pnpm --filter content-gen <command>`
+- **Biome**: Run `pnpm check` before committing
+
+Let's create an amazing 3-hour JRPG narrative! 🎭✨
