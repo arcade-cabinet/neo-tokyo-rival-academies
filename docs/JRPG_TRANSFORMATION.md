@@ -6,6 +6,7 @@ Transform the "Neo-Tokyo: Rival Academies" runner into a depth-filled Action JRP
 ## Core Mechanics
 
 ### 1. Stats System
+
 Entities will possess the following stats:
 - **Structure (STR)**: Max Health and resistance to stagger.
 - **Ignition (IGN)**: Melee damage and critical hit chance.
@@ -13,21 +14,25 @@ Entities will possess the following stats:
 - **Flow (FLW)**: Movement speed, evasion, and boost duration.
 
 ### 2. Progression
+
 - **Experience (XP)**: Gained by defeating enemies (Yakuza, Drones) and collecting Data Shards.
 - **Leveling**: Reaching an XP threshold increments Level, restoring Health and granting Stat Points.
 - **Reputation (REP)**: A secondary currency for unlocking Academy tiers.
 
 ### 3. Combat
+
 - **Formula**: `Damage = (Attacker.AttackPower * StatMultiplier) - (Defender.Defense / 2)`
 - **Floating Numbers**: Damage numbers must appear on hit.
 - **Break System**: Enemies have a "Stability" gauge. Depleting it stuns them for a critical strike.
 
 ### 4. Narrative System
+
 - **Dialogue**: A visual novel style overlay for conversations between Kai and Vera (or allies).
 - **Triggers**: Dialogue triggers on specific distance markers or boss encounters.
 - **Data Shards**: Collectibles that unlock lore entries in the "Database".
 
 ## Implementation Guidelines
+
 - **Zero Stubs**: All systems must be fully functional.
 - **Modularity**: Use Miniplex ECS for all game logic.
 - **State**: Use Zustand for UI state (Inventory, Pause Menu).
