@@ -3,6 +3,7 @@ import { generateFullStory } from './game/generators/story';
 import * as assetsModule from './ui/generators/file-assets';
 import { migrateContent } from './utils/migration';
 import { ModelerAgent } from './agents/ModelerAgent';
+import { ArtDirectorAgent } from './agents/ArtDirectorAgent';
 import path from 'node:path';
 import dotenv from 'dotenv';
 
@@ -42,31 +43,48 @@ program
 
 program
   .command('character')
-  .description('Generate a fully rigged and animated 3D character')
+  .description('Generate a fully rigged and animated 3D character from Image Concept')
   .argument('<name>', 'Name of the character (e.g., "hero_kai")')
   .argument('<prompt>', 'Visual description prompt')
   .option('-s, --style <style>', 'Art style', 'cartoon')
   .action(async (name, prompt, options) => {
-      const apiKey = process.env.MESHY_API_KEY;
-      if (!apiKey) {
+      const meshyKey = process.env.MESHY_API_KEY;
+      const googleKey = process.env.GOOGLE_GENAI_API_KEY;
+
+      if (!meshyKey) {
           console.error("Error: MESHY_API_KEY is not set in .env");
           process.exit(1);
       }
-
-      // Output to public/models/generated
-      const outputDir = path.resolve(process.cwd(), '../../packages/game/public/models/generated');
-      const fs = await import('node:fs');
-      if (!fs.existsSync(outputDir)) {
-          fs.mkdirSync(outputDir, { recursive: true });
+      if (!googleKey) {
+          console.error("Error: GOOGLE_GENAI_API_KEY is not set in .env");
+          process.exit(1);
       }
 
-      const agent = new ModelerAgent(apiKey);
+      // Output dirs
+      const baseDir = path.resolve(process.cwd(), '../../packages/game/public');
+      const modelsDir = path.join(baseDir, 'models/generated');
+      const conceptsDir = path.join(baseDir, 'assets/concepts');
+
+      const fs = await import('node:fs');
+      if (!fs.existsSync(modelsDir)) fs.mkdirSync(modelsDir, { recursive: true });
+      if (!fs.existsSync(conceptsDir)) fs.mkdirSync(conceptsDir, { recursive: true });
+
+      const artDirector = new ArtDirectorAgent(googleKey);
+      const modeler = new ModelerAgent(meshyKey);
+
       try {
-          const result = await agent.generateCharacter(name, prompt, outputDir, options.style);
-          console.log("Character Generation Complete!");
+          // 1. Generate Concept Art
+          console.log("=== Step 1: Generating Concept Art (Imagen) ===");
+          const conceptPath = await artDirector.generateConceptArt(name, prompt, conceptsDir);
+          
+          // 2. Generate 3D Model from Image
+          console.log("=== Step 2: Generating 3D Model & Animation (Meshy) ===");
+          const result = await modeler.generateCharacterFromImage(name, conceptPath, modelsDir);
+          
+          console.log("=== Character Generation Complete! ===");
           console.log(JSON.stringify(result, null, 2));
       } catch (e) {
-          console.error("Character Generation Failed:", e);
+          console.error("CRITICAL FAILURE in Character Generation Pipeline:", e);
           process.exit(1);
       }
   });

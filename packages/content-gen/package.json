@@ -18,9 +18,10 @@
     "gen:assets": "tsx src/cli.ts assets"
   },
   "devDependencies": {
-    "@google/generative-ai": "^0.2.1",
+    "@google/generative-ai": "^0.24.1",
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^20.11.24",
+    "@types/three": "^0.182.0",
     "three": "^0.182.0",
     "tsx": "^4.7.1",
     "typescript": "^5.9.3"
@@ -29,6 +30,7 @@
     "three": "^0.182.0"
   },
   "dependencies": {
+    "@google/genai": "^1.36.0",
     "commander": "^14.0.2",
     "dotenv": "^17.2.3",
     "fs-extra": "^11.3.3",
