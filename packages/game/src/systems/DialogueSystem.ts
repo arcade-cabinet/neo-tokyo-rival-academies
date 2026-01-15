@@ -41,7 +41,7 @@ export const startDialogue = (entityId: string, dialogueId: string) => {
 export const advanceDialogue = (entityId: string) => {
   const entity = world.with('dialogueState').where((e) => e.id === entityId).first;
 
-  if (entity && entity.dialogueState && entity.dialogueState.isInteracting) {
+  if (entity?.dialogueState?.isInteracting) {
     const dialogueSequence = storyData.dialogues[entity.dialogueState.currentDialogueId];
     if (!dialogueSequence) return;
 
