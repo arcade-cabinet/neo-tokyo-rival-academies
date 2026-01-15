@@ -23,6 +23,61 @@ interface CharacterPropsWithSpeed extends CharacterProps {
   isPlayer?: boolean;
 }
 
+const Limb = ({
+  x,
+  y,
+  w,
+  h,
+  limbRef,
+  hasWeapon,
+  isPlayer,
+}: {
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+  limbRef: React.RefObject<THREE.Group | null>;
+  hasWeapon?: boolean;
+  isPlayer?: boolean;
+}) => (
+  <group position={[x, y, 0]} ref={limbRef}>
+    <mesh position={[0, -h / 2, 0]} castShadow>
+      <boxGeometry args={[w, h, w]} />
+      <meshToonMaterial color={0x111111} />
+    </mesh>
+    {hasWeapon && isPlayer && (
+      // THE REDLINE PISTON (Hammer)
+      <group position={[0, -h, 0]} rotation={[0, 0, -Math.PI / 2]}>
+        <mesh position={[0, 0.5, 0]}>
+          <boxGeometry args={[0.3, 1.2, 0.3]} />
+          <meshToonMaterial color="#333" />
+        </mesh>
+        <mesh position={[0, 1.2, 0]}>
+          <boxGeometry args={[0.8, 0.6, 0.8]} />
+          <meshToonMaterial color="#a00" />
+        </mesh>
+        {/* Engine block detail */}
+        <mesh position={[0, 1.2, 0.45]}>
+          <boxGeometry args={[0.6, 0.4, 0.2]} />
+          <meshToonMaterial color="#ffd700" />
+        </mesh>
+      </group>
+    )}
+    {hasWeapon && !isPlayer && (
+      // THE NULL SET (Lance)
+      <group position={[0, -h, 0]} rotation={[0, 0, -Math.PI / 2]}>
+        <mesh position={[0, 1.0, 0]}>
+          <cylinderGeometry args={[0.05, 0.1, 2.5, 8]} />
+          <meshToonMaterial color="#0ff" transparent opacity={0.8} />
+        </mesh>
+        <mesh position={[0, 1.0, 0]} rotation={[0, 0, Math.PI / 4]}>
+          <boxGeometry args={[0.4, 0.4, 0.4]} />
+          <meshToonMaterial color="#fff" wireframe />
+        </mesh>
+      </group>
+    )}
+  </group>
+);
 export function Character({
   color,
   position = [0, 0, 0],
@@ -153,60 +208,6 @@ export function Character({
     }
   });
 
-  const Limb = ({
-    x,
-    y,
-    w,
-    h,
-    limbRef,
-    hasWeapon,
-  }: {
-    x: number;
-    y: number;
-    w: number;
-    h: number;
-    limbRef: React.RefObject<THREE.Group | null>;
-    hasWeapon?: boolean;
-  }) => (
-    <group position={[x, y, 0]} ref={limbRef}>
-      <mesh position={[0, -h / 2, 0]} castShadow>
-        <boxGeometry args={[w, h, w]} />
-        <meshToonMaterial color={0x111111} />
-      </mesh>
-      {hasWeapon && isPlayer && (
-        // THE REDLINE PISTON (Hammer)
-        <group position={[0, -h, 0]} rotation={[0, 0, -Math.PI / 2]}>
-          <mesh position={[0, 0.5, 0]}>
-            <boxGeometry args={[0.3, 1.2, 0.3]} />
-            <meshToonMaterial color="#333" />
-          </mesh>
-          <mesh position={[0, 1.2, 0]}>
-            <boxGeometry args={[0.8, 0.6, 0.8]} />
-            <meshToonMaterial color="#a00" />
-          </mesh>
-          {/* Engine block detail */}
-          <mesh position={[0, 1.2, 0.45]}>
-            <boxGeometry args={[0.6, 0.4, 0.2]} />
-            <meshToonMaterial color="#ffd700" />
-          </mesh>
-        </group>
-      )}
-      {hasWeapon && !isPlayer && (
-        // THE NULL SET (Lance)
-        <group position={[0, -h, 0]} rotation={[0, 0, -Math.PI / 2]}>
-          <mesh position={[0, 1.0, 0]}>
-            <cylinderGeometry args={[0.05, 0.1, 2.5, 8]} />
-            <meshToonMaterial color="#0ff" transparent opacity={0.8} />
-          </mesh>
-          <mesh position={[0, 1.0, 0]} rotation={[0, 0, Math.PI / 4]}>
-            <boxGeometry args={[0.4, 0.4, 0.4]} />
-            <meshToonMaterial color="#fff" wireframe />
-          </mesh>
-        </group>
-      )}
-    </group>
-  );
-
   return (
     <group position={position}>
       <group ref={pivotRef}>
@@ -252,10 +253,39 @@ export function Character({
         </group>
 
         {/* Limbs */}
-        <Limb x={0.35} y={1.1} w={0.12} h={0.6} limbRef={limbsRef.current.armR} hasWeapon={true} />
-        <Limb x={-0.35} y={1.1} w={0.12} h={0.6} limbRef={limbsRef.current.armL} />
-        <Limb x={0.15} y={0.5} w={0.18} h={0.7} limbRef={limbsRef.current.legR} />
-        <Limb x={-0.15} y={0.5} w={0.18} h={0.7} limbRef={limbsRef.current.legL} />
+        <Limb
+          x={0.35}
+          y={1.1}
+          w={0.12}
+          h={0.6}
+          limbRef={limbsRef.current.armR}
+          hasWeapon={true}
+          isPlayer={isPlayer}
+        />
+        <Limb
+          x={-0.35}
+          y={1.1}
+          w={0.12}
+          h={0.6}
+          limbRef={limbsRef.current.armL}
+          isPlayer={isPlayer}
+        />
+        <Limb
+          x={0.15}
+          y={0.5}
+          w={0.18}
+          h={0.7}
+          limbRef={limbsRef.current.legR}
+          isPlayer={isPlayer}
+        />
+        <Limb
+          x={-0.15}
+          y={0.5}
+          w={0.18}
+          h={0.7}
+          limbRef={limbsRef.current.legL}
+          isPlayer={isPlayer}
+        />
       </group>
     </group>
   );
