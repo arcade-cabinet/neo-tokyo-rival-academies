@@ -8,7 +8,7 @@ The game delivers **~3 hours of content** across three acts plus prologue/epilog
 
 ## Act Structure
 
-```
+```text
 Prologue (10 min) → Act 1 (30-45 min) → Act 2 (45-60 min) → Act 3 (30-45 min) → Epilogue (5 min)
 ```
 

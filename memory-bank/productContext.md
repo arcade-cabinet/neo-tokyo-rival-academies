@@ -70,4 +70,4 @@ Neo-Tokyo: Rival Academies proves that **browser-based JRPGs** can achieve AAA-q
 
 ---
 
-*Last Updated: 2026-01-15*
+Last Updated: 2026-01-16

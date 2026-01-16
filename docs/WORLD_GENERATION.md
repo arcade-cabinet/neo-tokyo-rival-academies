@@ -13,7 +13,7 @@ This ensures **idempotent generation**: same seed = same world, every time.
 
 ## Seed Hierarchy
 
-```
+```text
 Master Seed: "Jon-NeoTokyo-2026-v1"
     │
     ├── District Seeds (derived)

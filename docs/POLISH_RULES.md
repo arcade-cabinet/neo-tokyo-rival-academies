@@ -196,7 +196,8 @@ const triggerHaptic = async (intensity: keyof typeof hapticMap) => {
 ### Responsive Layouts
 
 #### Phone Mode (< 768px)
-```
+
+```text
 ┌─────────────────┐
 │   Alignment     │ ← Top center
 ├─────────────────┤
@@ -208,8 +209,9 @@ const triggerHaptic = async (intensity: keyof typeof hapticMap) => {
 └────────┴────────┘
 ```
 
-#### Tablet Mode (≥ 768px)
-```
+#### Tablet Mode (>= 768px)
+
+```text
 ┌───────────────────────────────┐
 │  Stats  │ Alignment │ Quests │ ← Top bar
 ├─────────┼───────────┼────────┤

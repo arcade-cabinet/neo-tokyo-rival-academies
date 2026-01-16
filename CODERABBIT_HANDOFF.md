@@ -57,7 +57,8 @@ The current UI uses "jarring cyberpunk styling" (cyan glows, red accents) that n
 ### 4. Asset Management
 
 **Generated Assets** (should all be in Git LFS):
-```
+
+```text
 packages/game/public/assets/
 ├── characters/
 │   ├── main/kai/          # Hero - 7 animations

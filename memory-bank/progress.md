@@ -4,7 +4,7 @@
 
 | Milestone | Status | Target | Notes |
 |-----------|--------|--------|-------|
-| Project Setup | Complete | Jan 13 | Monorepo, Astro, R3F |
+| Project Setup | Complete | Jan 13 | Monorepo, Vite, R3F |
 | GenAI Pipeline | Complete | Jan 15 | All 9 characters |
 | Isometric Prototype | Complete | Jan 14 | Hex grid, scene |
 | Combat System | In Progress | Jan 20 | Stats framework done |
@@ -62,7 +62,7 @@
 - [x] Monorepo setup (pnpm workspaces)
 - [x] packages/game/ - React Three Fiber client
 - [x] packages/content-gen/ - GenAI toolchain
-- [x] Astro integration
+- [x] Vite build setup
 - [x] Biome configuration
 - [x] Initial character manifests
 
@@ -118,4 +118,4 @@
 
 ---
 
-*Last Updated: 2026-01-15*
+Last Updated: 2026-01-16

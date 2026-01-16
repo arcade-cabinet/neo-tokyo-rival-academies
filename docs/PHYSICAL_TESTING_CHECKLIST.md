@@ -208,7 +208,8 @@
 ## Test Device Setup
 
 ### Pixel 8a Configuration
-```
+
+```text
 - Android 14+
 - Developer options: ON
 - USB debugging: ON
@@ -218,7 +219,8 @@
 ```
 
 ### OnePlus Open Configuration
-```
+
+```text
 - Same as Pixel 8a
 - Fold animation speed: Default
 - Inner/outer screen: Both tested

@@ -6,7 +6,7 @@ This document captures the **chronological evolution** of Neo-Tokyo: Rival Acade
 
 ## Timeline Overview
 
-```
+```text
 Jan 13, 2026    POC.html → 3D Platformer scaffold
     │
     ├── Android/Capacitor mobile wrapper
@@ -323,7 +323,7 @@ Implemented comprehensive hex utilities from Red Blob Games research:
 
 | Layer | Technology | Status |
 |-------|------------|--------|
-| **Build** | Astro 5.x | Working |
+| **Build** | Vite 6.x | Working |
 | **3D Engine** | Three.js 0.182 | Working |
 | **React Binding** | React Three Fiber 9.x | Working |
 | **Physics** | Rapier (react-three-rapier) | Working |
@@ -369,5 +369,6 @@ Implemented comprehensive hex utilities from Red Blob Games research:
 
 ---
 
-*This document was generated from Jules AI session history on 2026-01-15.*
-*Last Updated: 2026-01-15*
+This document was generated from Jules AI session history on 2026-01-15.
+
+Last Updated: 2026-01-16

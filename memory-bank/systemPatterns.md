@@ -2,13 +2,13 @@
 
 ## Architecture Overview
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────────┐
 │                         Browser                                  │
 ├─────────────────────────────────────────────────────────────────┤
 │  ┌──────────────┐  ┌──────────────┐  ┌────────────────────────┐ │
-│  │    React     │  │   Three.js   │  │     Astro Islands      │ │
-│  │   (UI/HUD)   │  │   (3D/R3F)   │  │   (Static Content)     │ │
+│  │    React     │  │   Three.js   │  │         Vite           │ │
+│  │   (UI/HUD)   │  │   (3D/R3F)   │  │   (Build/Dev Server)   │ │
 │  └──────┬───────┘  └──────┬───────┘  └────────────┬───────────┘ │
 │         │                 │                       │              │
 │         └─────────────────┼───────────────────────┘              │
@@ -54,7 +54,8 @@ interface Entity {
 ```
 
 ### System Organization
-```
+
+```text
 src/systems/
 ├── PhysicsSystem.tsx     # Movement, collision
 ├── CombatSystem.tsx      # Damage, combat flow
@@ -78,7 +79,7 @@ const items = world.with('isCollectible', 'position');
 
 ## Component Hierarchy
 
-```
+```text
 <Canvas>
   <Scene>
     <IsometricCamera />
@@ -147,7 +148,8 @@ interface GameStore {
 ```
 
 ### Pipeline Flow
-```
+
+```text
 manifest.json
     ↓
 [concept] text-to-image → imageUrls[]
@@ -188,4 +190,4 @@ const dist = hexDistance(hex1, hex2);
 
 ---
 
-*Last Updated: 2026-01-15*
+Last Updated: 2026-01-16

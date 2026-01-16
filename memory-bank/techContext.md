@@ -9,7 +9,7 @@
 - **Drei**: Essential R3F helpers (useGLTF, OrbitControls, etc.)
 - **Miniplex**: Entity Component System (ECS) for game logic
 - **Zustand**: Lightweight state management
-- **Astro 5.x**: Static site generation with island architecture
+- **Vite 6.x**: Fast build toolchain and dev server
 - **Capacitor 8**: Native mobile wrapper (iOS/Android)
 
 ## Specialized Libraries
@@ -48,11 +48,10 @@
 - **Performance**: 60 FPS target, instanced meshes for hex tiles
 - **Memory**: Dispose Three.js resources on unmount
 - **Asset Paths**: Use `/assets/...` (public folder root)
-- **Client Directives**: Always `client:load` for 3D components
 
 ## Monorepo Structure
 
-```
+```text
 packages/
 ├── game/           # Main game client (React + R3F)
 ├── content-gen/    # GenAI asset pipeline (Node.js CLI)
@@ -68,4 +67,4 @@ Babylon.js + Reactylon is under evaluation for:
 
 ---
 
-*Last Updated: 2026-01-15*
+Last Updated: 2026-01-16

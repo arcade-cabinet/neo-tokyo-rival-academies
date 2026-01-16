@@ -190,7 +190,7 @@ Agents are invoked via the `content-gen` CLI. They do not run autonomously in th
 
 ### Workflow
 
-```
+```text
 manifest.json  →  ModelerAgent  →  Generated Assets
                        ↓
               Meshy AI API Calls
@@ -229,4 +229,4 @@ See [docs/BABYLON_MIGRATION_PLAN.md](docs/BABYLON_MIGRATION_PLAN.md) for full im
 
 ---
 
-*Last Updated: 2025-01-15*
+Last Updated: 2026-01-16

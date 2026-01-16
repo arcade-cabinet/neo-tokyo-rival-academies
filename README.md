@@ -55,7 +55,7 @@ pnpm check
 
 ### Monorepo Structure
 
-```
+```text
 packages/
 ├── game/           # React Three Fiber game client
 ├── content-gen/    # GenAI asset pipeline (Meshy AI)
@@ -67,7 +67,7 @@ packages/
 | Layer | Technology |
 |-------|------------|
 | **Frontend** | React 19, Three.js 0.182, React Three Fiber 9.x |
-| **Build** | Astro 5.x, Vite |
+| **Build** | Vite 6.x |
 | **State** | Miniplex (ECS), Zustand |
 | **Physics** | Rapier (@react-three/rapier) |
 | **GenAI** | Meshy AI |

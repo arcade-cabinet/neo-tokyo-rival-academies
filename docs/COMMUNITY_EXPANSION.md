@@ -9,12 +9,13 @@ Every playthrough is deterministic from a master seed. Players can share their w
 
 ### Seed URL Format
 
-```
+```text
 https://neotokyo.game/?seed=<base64-encoded-seed>
 ```
 
 **Example**:
-```
+
+```text
 https://neotokyo.game/?seed=Sm9uLU5lb1Rva3lvLTIwMjYtdjE=
 // Decodes to: "Jon-NeoTokyo-2026-v1"
 ```

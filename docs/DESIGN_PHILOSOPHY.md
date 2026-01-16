@@ -1,7 +1,7 @@
 # Neo-Tokyo: Rival Academies - Design Philosophy & Core Pillars
 
 **Purpose**: Define the foundational design principles that guide Neo-Tokyo's development
-**Last Updated**: 2026-01-15
+**Last Updated**: 2026-01-16
 
 ---
 
@@ -128,7 +128,7 @@
 
 The player's choices shift alignment between the two philosophies:
 
-```
+```text
 -1.0 ←——— Kurenai ——— 0 ——— Azure ———→ +1.0
           Passion       Neutral      Logic
 ```
@@ -235,4 +235,4 @@ To maintain focus, we explicitly exclude:
 
 ---
 
-*Last Updated: 2026-01-15*
+Last Updated: 2026-01-16

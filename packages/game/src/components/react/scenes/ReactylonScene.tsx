@@ -12,7 +12,7 @@
  */
 import { Engine } from 'reactylon/web';
 import { Scene, useScene, useModel } from 'reactylon';
-import { Suspense, useState, useRef, useEffect, useMemo } from 'react';
+import { Suspense, useRef, useEffect, useMemo } from 'react';
 import type { FC } from 'react';
 import { Vector3 } from '@babylonjs/core/Maths/math.vector';
 import { Color3, Color4 } from '@babylonjs/core/Maths/math.color';
@@ -37,26 +37,26 @@ function hexToWorld(col: number, row: number, size: number): Vector3 {
   return new Vector3(x, 0, z);
 }
 
-// Keyboard input hook
+// Keyboard input hook - uses ref to avoid re-renders
 function useKeyboard() {
-  const [keys, setKeys] = useState({ w: false, a: false, s: false, d: false, space: false });
+  const keysRef = useRef({ w: false, a: false, s: false, d: false, space: false });
 
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
       const key = e.key.toLowerCase();
-      if (key === 'w' || key === 'arrowup') setKeys(k => ({ ...k, w: true }));
-      if (key === 'a' || key === 'arrowleft') setKeys(k => ({ ...k, a: true }));
-      if (key === 's' || key === 'arrowdown') setKeys(k => ({ ...k, s: true }));
-      if (key === 'd' || key === 'arrowright') setKeys(k => ({ ...k, d: true }));
-      if (key === ' ') setKeys(k => ({ ...k, space: true }));
+      if (key === 'w' || key === 'arrowup') keysRef.current.w = true;
+      if (key === 'a' || key === 'arrowleft') keysRef.current.a = true;
+      if (key === 's' || key === 'arrowdown') keysRef.current.s = true;
+      if (key === 'd' || key === 'arrowright') keysRef.current.d = true;
+      if (key === ' ') keysRef.current.space = true;
     };
     const up = (e: KeyboardEvent) => {
       const key = e.key.toLowerCase();
-      if (key === 'w' || key === 'arrowup') setKeys(k => ({ ...k, w: false }));
-      if (key === 'a' || key === 'arrowleft') setKeys(k => ({ ...k, a: false }));
-      if (key === 's' || key === 'arrowdown') setKeys(k => ({ ...k, s: false }));
-      if (key === 'd' || key === 'arrowright') setKeys(k => ({ ...k, d: false }));
-      if (key === ' ') setKeys(k => ({ ...k, space: false }));
+      if (key === 'w' || key === 'arrowup') keysRef.current.w = false;
+      if (key === 'a' || key === 'arrowleft') keysRef.current.a = false;
+      if (key === 's' || key === 'arrowdown') keysRef.current.s = false;
+      if (key === 'd' || key === 'arrowright') keysRef.current.d = false;
+      if (key === ' ') keysRef.current.space = false;
     };
     window.addEventListener('keydown', down);
     window.addEventListener('keyup', up);
@@ -66,7 +66,7 @@ function useKeyboard() {
     };
   }, []);
 
-  return keys;
+  return keysRef;
 }
 
 // Tile texture paths
@@ -129,8 +129,8 @@ const HexTileGroup: FC<{ positions: Vector3[]; texturePath: string; index: numbe
     const mesh = meshRef.current;
     if (!mesh || !scene || positions.length === 0) return;
 
-    // Set first position directly
-    mesh.position = positions[0];
+    // Copy first position (avoid reference sharing)
+    mesh.position.copyFrom(positions[0]);
 
     // Add remaining as thin instances
     for (let i = 1; i < positions.length; i++) {
@@ -188,34 +188,43 @@ const WallBackdrops: FC = () => {
   useEffect(() => {
     if (!scene) return;
 
+    // Store references for cleanup
+    type Disposable = { dispose: () => void };
+    let farBackdrop: Disposable | null = null;
+    let farMat: Disposable | null = null;
+    let leftWall: Disposable | null = null;
+    let leftMat: Disposable | null = null;
+    let rightWall: Disposable | null = null;
+    let rightMat: Disposable | null = null;
+
     // Import required classes dynamically to avoid type conflicts
     import('@babylonjs/core/Meshes/Builders/planeBuilder').then(({ CreatePlane }) => {
       import('@babylonjs/core/Materials/standardMaterial').then(({ StandardMaterial }) => {
         import('@babylonjs/core/Materials/Textures/texture').then(({ Texture }) => {
           // Far background
-          const farBackdrop = CreatePlane('far-backdrop', { width: gridWidth + 20, height: wallHeight }, scene);
+          farBackdrop = CreatePlane('far-backdrop', { width: gridWidth + 20, height: wallHeight }, scene);
           farBackdrop.position = new Vector3(0, wallHeight / 2 - 2, -10);
-          const farMat = new StandardMaterial('far-mat', scene);
+          farMat = new StandardMaterial('far-mat', scene);
           farMat.disableLighting = true;
           farMat.emissiveColor = new Color3(0.3, 0.3, 0.3);
           farMat.diffuseTexture = new Texture('/assets/backgrounds/sector0/parallax_far/concept.png', scene);
           farBackdrop.material = farMat;
 
           // Left wall
-          const leftWall = CreatePlane('left-wall', { width: wallWidth, height: wallHeight }, scene);
+          leftWall = CreatePlane('left-wall', { width: wallWidth, height: wallHeight }, scene);
           leftWall.position = new Vector3(-wallOffset, wallHeight / 2 - 2, 0);
           leftWall.rotation = new Vector3(0, Math.PI / 4, 0);
-          const leftMat = new StandardMaterial('left-mat', scene);
+          leftMat = new StandardMaterial('left-mat', scene);
           leftMat.disableLighting = true;
           leftMat.emissiveColor = new Color3(0.3, 0.3, 0.3);
           leftMat.diffuseTexture = new Texture('/assets/backgrounds/sector0/wall_left/concept.png', scene);
           leftWall.material = leftMat;
 
           // Right wall
-          const rightWall = CreatePlane('right-wall', { width: wallWidth, height: wallHeight }, scene);
+          rightWall = CreatePlane('right-wall', { width: wallWidth, height: wallHeight }, scene);
           rightWall.position = new Vector3(wallOffset, wallHeight / 2 - 2, 0);
           rightWall.rotation = new Vector3(0, -Math.PI / 4, 0);
-          const rightMat = new StandardMaterial('right-mat', scene);
+          rightMat = new StandardMaterial('right-mat', scene);
           rightMat.disableLighting = true;
           rightMat.emissiveColor = new Color3(0.3, 0.3, 0.3);
           rightMat.diffuseTexture = new Texture('/assets/backgrounds/sector0/wall_right/concept.png', scene);
@@ -224,8 +233,14 @@ const WallBackdrops: FC = () => {
       });
     });
 
+    // Cleanup meshes and materials on unmount
     return () => {
-      // Cleanup will be handled by scene disposal
+      farMat?.dispose();
+      leftMat?.dispose();
+      rightMat?.dispose();
+      farBackdrop?.dispose();
+      leftWall?.dispose();
+      rightWall?.dispose();
     };
   }, [scene, gridWidth, wallOffset, wallHeight, wallWidth]);
 
@@ -238,9 +253,13 @@ const KaiModel: FC = () => {
     '/assets/characters/main/kai/rigged.glb',
     {},
     (result) => {
-      // Play idle animation if available
+      // Play idle animation if available - search by name first, fallback to first
       if (result.animationGroups && result.animationGroups.length > 0) {
-        result.animationGroups[0].start(true);
+        const idleAnim = result.animationGroups.find(
+          (anim) => anim.name.toLowerCase().includes('idle')
+        );
+        const animToPlay = idleAnim ?? result.animationGroups[0];
+        animToPlay.start(true);
       }
     }
   );
@@ -251,7 +270,7 @@ const KaiModel: FC = () => {
 // Kai character with movement
 const KaiCharacter: FC = () => {
   const scene = useScene();
-  const keys = useKeyboard();
+  const keysRef = useKeyboard();
   const positionRef = useRef(new Vector3(0, 1, 0));
   const rotationRef = useRef(0);
   const meshRef = useRef<Mesh>(null);
@@ -261,6 +280,7 @@ const KaiCharacter: FC = () => {
   const maxZ = (GRID_DEPTH * Math.sqrt(3) * HEX_SIZE) / 2 - HEX_SIZE;
 
   // Movement update using scene.registerBeforeRender
+  // Only depends on scene - reads from keysRef.current for stable callback
   useEffect(() => {
     if (!scene) return;
 
@@ -268,6 +288,7 @@ const KaiCharacter: FC = () => {
       const mesh = meshRef.current;
       if (!mesh) return;
 
+      const keys = keysRef.current;
       let velX = 0;
       let velZ = 0;
 
@@ -282,7 +303,7 @@ const KaiCharacter: FC = () => {
       if (newX >= -maxX && newX <= maxX) positionRef.current.x = newX;
       if (newZ >= -maxZ && newZ <= maxZ) positionRef.current.z = newZ;
 
-      mesh.position = positionRef.current;
+      mesh.position.copyFrom(positionRef.current);
 
       if (velX !== 0 || velZ !== 0) {
         rotationRef.current = Math.atan2(velX, velZ);
@@ -292,7 +313,7 @@ const KaiCharacter: FC = () => {
 
     scene.registerBeforeRender(update);
     return () => scene.unregisterBeforeRender(update);
-  }, [scene, keys, maxX, maxZ]);
+  }, [scene, maxX, maxZ]);
 
   return (
     <Suspense fallback={
@@ -335,6 +356,14 @@ const SceneLighting: FC = () => {
   useEffect(() => {
     if (!scene) return;
 
+    // Store light references for cleanup
+    type Light = { dispose: () => void };
+    let ambient: Light | null = null;
+    let sun: Light | null = null;
+    let neonMagenta: Light | null = null;
+    let neonCyan: Light | null = null;
+    let neonOrange: Light | null = null;
+
     // Import light classes
     Promise.all([
       import('@babylonjs/core/Lights/hemisphericLight'),
@@ -342,27 +371,36 @@ const SceneLighting: FC = () => {
       import('@babylonjs/core/Lights/pointLight'),
     ]).then(([{ HemisphericLight }, { DirectionalLight }, { PointLight }]) => {
       // Ambient light
-      const ambient = new HemisphericLight('ambient', new Vector3(0, 1, 0), scene);
+      ambient = new HemisphericLight('ambient', new Vector3(0, 1, 0), scene);
       ambient.intensity = 0.5;
 
       // Sun/directional light
-      const sun = new DirectionalLight('sun', new Vector3(-0.5, -1, -0.3), scene);
+      sun = new DirectionalLight('sun', new Vector3(-0.5, -1, -0.3), scene);
       sun.position = new Vector3(15, 25, 10);
       sun.intensity = 1.2;
 
       // Neon accent lights
-      const neonMagenta = new PointLight('neon-magenta', new Vector3(-6, 4, -6), scene);
+      neonMagenta = new PointLight('neon-magenta', new Vector3(-6, 4, -6), scene);
       neonMagenta.diffuse = new Color3(1, 0, 1);
       neonMagenta.intensity = 3;
 
-      const neonCyan = new PointLight('neon-cyan', new Vector3(6, 4, 6), scene);
+      neonCyan = new PointLight('neon-cyan', new Vector3(6, 4, 6), scene);
       neonCyan.diffuse = new Color3(0, 1, 1);
       neonCyan.intensity = 3;
 
-      const neonOrange = new PointLight('neon-orange', new Vector3(0, 2, -8), scene);
+      neonOrange = new PointLight('neon-orange', new Vector3(0, 2, -8), scene);
       neonOrange.diffuse = new Color3(1, 0.4, 0);
       neonOrange.intensity = 2;
     });
+
+    // Cleanup lights on unmount
+    return () => {
+      ambient?.dispose();
+      sun?.dispose();
+      neonMagenta?.dispose();
+      neonCyan?.dispose();
+      neonOrange?.dispose();
+    };
   }, [scene]);
 
   return null;

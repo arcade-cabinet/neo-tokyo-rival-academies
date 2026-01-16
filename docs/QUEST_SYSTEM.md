@@ -10,7 +10,7 @@ Quests are generated using **noun-verb-adjective grammars** with alignment bias.
 
 ### Template Patterns
 
-```
+```text
 Main Quest:  "[Verb] the [Adjective] [Noun] at [Landmark] to [Outcome]."
 Side Quest:  "[Verb] the [Adjective] [Noun] near [Landmark]."
 Secret:      "Discover the hidden [Adjective] [Noun] that reveals [Outcome]."

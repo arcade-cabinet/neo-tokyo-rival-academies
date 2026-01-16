@@ -2,7 +2,7 @@
 
 ## Target Scope
 
-**Playtime**: ~3 hours if playing through ALL required and optional storyline content
+**Playtime**: ~3-hour session if playing through ALL required and optional storyline content
 **Structure**: 3-Act, Multi-Chapter JRPG with A/B/C story tiers
 **Inspiration**: Traditional Japanese JRPG anime structure (Persona, Kill La Kill, Final Fantasy)
 
@@ -75,7 +75,7 @@ Runs ALONGSIDE the A Story like a typical Japanese JRPG anime structure.
 
 ### Main Flow (A Story)
 
-```
+```text
 intro_cutscene
        │
        ▼
@@ -611,4 +611,4 @@ Every year, the two top academies compete in an illegal, high-speed race across 
 
 ---
 
-*Last Updated: 2026-01-15*
+Last Updated: 2026-01-16

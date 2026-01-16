@@ -4,7 +4,7 @@
 
 ## The Alignment Scale
 
-```
+```text
 -1.0 ←——————— Kurenai ———————— 0 ———————— Azure ——————→ +1.0
               Passion          Neutral        Logic
 ```

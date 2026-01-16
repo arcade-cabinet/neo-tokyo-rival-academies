@@ -77,7 +77,7 @@ See [docs/BABYLON_MIGRATION_PLAN.md](docs/BABYLON_MIGRATION_PLAN.md) for impleme
 
 ## Monorepo Structure
 
-```
+```text
 neo-tokyo-rival-academies/
 ├── packages/
 │   ├── game/                          # React game client (Vite)
@@ -212,7 +212,8 @@ pnpm --filter @neo-tokyo/content-gen generate tiles/rooftop/base
 - **C Story**: Disruptor events forcing team-ups (alien_ship, mall_drop)
 
 ### Stage System
-```
+
+```text
 intro_cutscene → sector7_streets → boss_ambush → rooftop_chase → summit_climb → final_battle → epilogue
                         ↓
                   [C-Story Triggers]
@@ -313,4 +314,4 @@ Run: `pnpm test` (unit), `pnpm test:e2e` (end-to-end)
 
 ---
 
-*Last Updated: 2026-01-15*
+Last Updated: 2026-01-16

@@ -15,7 +15,7 @@ This document tracks pull request history and notable changes.
 Comprehensive architectural transformation from 3D platformer to Action JRPG.
 
 #### Key Changes
-- **Architecture**: Astro Islands → ECS (Miniplex) driven design
+- **Architecture**: Vite/React SPA → ECS (Miniplex) driven design
 - **Game Type**: Platformer → JRPG with stats system
 - **Assets**: Placeholder → GenAI-generated characters (9 total)
 - **Grid System**: None → Hex tile isometric diorama
@@ -44,11 +44,11 @@ Comprehensive architectural transformation from 3D platformer to Action JRPG.
 **Branch**: `initial-setup`
 
 #### Summary
-Initial monorepo setup with Astro, React Three Fiber, and GenAI toolchain foundation.
+Initial monorepo setup with Vite, React Three Fiber, and GenAI toolchain foundation.
 
 #### Key Changes
 - Monorepo structure with pnpm workspaces
-- Astro 5.x with React integration
+- Vite 6.x with React integration
 - Biome configuration for linting/formatting
 - Initial character manifest structure
 - CI/CD pipeline for GitHub Pages
@@ -102,7 +102,8 @@ Initial monorepo setup with Astro, React Three Fiber, and GenAI toolchain founda
 - `refactor/description` - Code refactoring
 
 ### Commit Messages
-```
+
+```text
 type(scope): subject
 
 body
@@ -121,4 +122,4 @@ Types: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `chore`
 
 ---
 
-*Last Updated: 2026-01-15*
+Last Updated: 2026-01-16

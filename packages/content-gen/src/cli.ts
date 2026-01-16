@@ -4,6 +4,16 @@ import { generateAssets } from './ui/generators/assets';
 
 const program = new Command();
 
+async function runGenerator(name: string, generator: () => Promise<void>): Promise<void> {
+  console.log(`Running ${name}...`);
+  try {
+    await generator();
+  } catch (error) {
+    console.error(`${name} failed:`, error);
+    process.exit(1);
+  }
+}
+
 program
   .name('content-gen')
   .description('CLI for Neo-Tokyo Content Generation')
@@ -11,46 +21,17 @@ program
 
 program.command('story')
   .description('Generate narrative content (A/B/C stories)')
-  .action(async () => {
-    console.log('Running Story Generation...');
-    try {
-      await generateFullStory();
-    } catch (error) {
-      console.error('Story generation failed:', error);
-      process.exit(1);
-    }
-  });
+  .action(() => runGenerator('Story Generation', generateFullStory));
 
 program.command('assets')
   .description('Generate UI assets (Icons, Splash)')
-  .action(async () => {
-    console.log('Running Asset Generation...');
-    try {
-      await generateAssets();
-    } catch (error) {
-      console.error('Asset generation failed:', error);
-      process.exit(1);
-    }
-  });
+  .action(() => runGenerator('Asset Generation', generateAssets));
 
 program.command('all')
   .description('Generate all content')
   .action(async () => {
-    console.log('Running Story Generation...');
-    try {
-      await generateFullStory();
-    } catch (error) {
-      console.error('Story generation failed:', error);
-      process.exit(1);
-    }
-
-    console.log('Running Asset Generation...');
-    try {
-      await generateAssets();
-    } catch (error) {
-      console.error('Asset generation failed:', error);
-      process.exit(1);
-    }
+    await runGenerator('Story Generation', generateFullStory);
+    await runGenerator('Asset Generation', generateAssets);
   });
 
 program.parse();

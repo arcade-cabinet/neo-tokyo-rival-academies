@@ -23,7 +23,7 @@ Neo-Tokyo: Rival Academies is a **~3 hour Action JRPG** built with modern web te
 - **State**: Miniplex (ECS) + Zustand
 - **Physics**: Rapier (via @react-three/rapier)
 - **GenAI**: Meshy AI (text-to-image, image-to-3D, rigging, animations)
-- **Build**: Astro 5.x, Vite, PNPM 10
+- **Build**: Vite 6.x, PNPM 10
 - **Quality**: Biome (lint/format), Vitest (unit), Playwright (E2E)
 
 ## Key Goals
@@ -60,4 +60,4 @@ Neo-Tokyo: Rival Academies is a **~3 hour Action JRPG** built with modern web te
 
 ---
 
-*Last Updated: 2026-01-15*
+Last Updated: 2026-01-16

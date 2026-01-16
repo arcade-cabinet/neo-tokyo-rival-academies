@@ -156,7 +156,12 @@ const App = () => {
   );
 };
 
-createRoot(document.getElementById('root')!).render(
+const rootElement = document.getElementById('root');
+if (!rootElement) {
+  throw new Error('Root element "#root" not found. Ensure index.html contains <div id="root"></div>');
+}
+
+createRoot(rootElement).render(
   <StrictMode>
     <App />
   </StrictMode>
