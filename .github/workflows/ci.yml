@@ -47,13 +47,10 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Run Biome check
-        run: pnpm --filter @neo-tokyo/game check
-
-      - name: Build content-gen (required for type check)
-        run: pnpm --filter @neo-tokyo/content-gen build
+        run: pnpm biome check .
 
       - name: Run TypeScript type check
-        run: pnpm --filter @neo-tokyo/game exec tsc --noEmit
+        run: pnpm type-check
 
   build:
     name: Build

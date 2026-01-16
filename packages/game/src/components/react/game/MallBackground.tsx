@@ -62,12 +62,7 @@ function ShopLayer({
   return (
     <group ref={group}>
       {shops.map((s) => (
-        <NeonSign
-          key={s.id}
-          position={[s.x, s.y, depth]}
-          color={s.color}
-          size={[s.width, s.height]}
-        />
+        <NeonSign key={s.id} position={[s.x, s.y, depth]} color={s.color} size={[s.width, s.height]} />
       ))}
     </group>
   );

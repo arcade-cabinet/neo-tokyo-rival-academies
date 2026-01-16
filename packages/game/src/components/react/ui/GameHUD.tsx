@@ -44,9 +44,7 @@ export const GameHUD: FC<GameHUDProps> = ({ score, biome, inputState, onInput, d
       {/* In-Game Dialogue Toast */}
       {dialogue && (
         <div className={styles.dialogueToast}>
-          <div
-            className={`${styles.dialogueSpeaker} ${dialogue.speaker === 'Rival' ? styles.dialogueSpeakerRival : styles.dialogueSpeakerOther}`}
-          >
+          <div className={`${styles.dialogueSpeaker} ${dialogue.speaker === 'Rival' ? styles.dialogueSpeakerRival : styles.dialogueSpeakerOther}`}>
             {dialogue.speaker}
           </div>
           <div className={styles.dialogueText}>{dialogue.text}</div>

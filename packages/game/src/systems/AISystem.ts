@@ -1,6 +1,6 @@
-import type * as THREE from 'three';
 import { EntityManager, GameEntity, State, StateMachine } from 'yuka';
-import { ECS, type ECSEntity, world } from '@/state/ecs';
+import * as THREE from 'three';
+import { ECS, world, type ECSEntity } from '@/state/ecs';
 
 // --- Helper ---
 const toYukaVector = (v: THREE.Vector3): import('yuka').Vector3 => {
@@ -249,7 +249,8 @@ class AISystem {
       }
 
       agent = new YukaAgent(ecsEntity.id, faction);
-      if (ecsEntity.position) agent.position.copy(toYukaVector(ecsEntity.position));
+      if (ecsEntity.position)
+        agent.position.copy(toYukaVector(ecsEntity.position));
 
       this.entityManager.add(agent);
       this.entityMap.set(ecsEntity.id, agent);
@@ -263,7 +264,7 @@ class AISystem {
     }
   }
 
-  writeBackVelocity(ecsEntities: Iterable<{ id?: string; velocity?: { x: number; y: number } }>) {
+  writeBackVelocity(ecsEntities: any) {
     for (const e of ecsEntities) {
       if (!e.id) continue;
       const agent = this.entityMap.get(e.id);

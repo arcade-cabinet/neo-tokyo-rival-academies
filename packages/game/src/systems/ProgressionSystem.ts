@@ -3,7 +3,7 @@ import { useGameStore } from '../state/gameStore';
 
 // Logger interface placeholder (can be replaced with a real logger later)
 const logger = {
-  info: (msg: string, data?: unknown) => console.log(`[Progression] ${msg}`, data || ''),
+  info: (msg: string, data?: any) => console.log(`[Progression] ${msg}`, data || ''),
 };
 
 /**
@@ -17,10 +17,8 @@ export const updateProgression = () => {
   for (const entity of entities) {
     // Safety guard for invalid nextLevelXp to prevent infinite loop
     if (entity.level.nextLevelXp <= 0) {
-      logger.info('Invalid nextLevelXp detected, resetting to safe default.', {
-        entityId: entity.id,
-      });
-      entity.level.nextLevelXp = 100;
+        logger.info('Invalid nextLevelXp detected, resetting to safe default.', { entityId: entity.id });
+        entity.level.nextLevelXp = 100;
     }
 
     // Multi-level up logic via while loop with safety counter
@@ -48,7 +46,7 @@ export const updateProgression = () => {
 
       // Notify UI via GameStore if it's the player
       if (entity.isPlayer) {
-        gameStore.onCombatText?.(`LEVEL UP! ${entity.level.current}`, '#ff00ff');
+          gameStore.onCombatText?.(`LEVEL UP! ${entity.level.current}`, '#ff00ff');
       }
 
       // Structured logging
@@ -56,7 +54,7 @@ export const updateProgression = () => {
     }
 
     if (loopGuard >= 100) {
-      logger.info('Level Up loop guard hit, stopping progression update.', { entityId: entity.id });
+        logger.info('Level Up loop guard hit, stopping progression update.', { entityId: entity.id });
     }
   }
 };

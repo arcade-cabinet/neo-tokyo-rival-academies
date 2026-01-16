@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import type { ECSEntity } from '../../state/ecs';
 import { resolveCombat } from '../CombatLogic';
+import type { ECSEntity } from '../../state/ecs';
 
 // Define typed fixture
 type Combatant = Pick<ECSEntity, 'stats'>;

@@ -1,7 +1,7 @@
-import { musicSynth } from '@neo-tokyo/content-gen';
 import { useFrame } from '@react-three/fiber';
 import type { InputState } from '@/types/game';
 import { ECS } from '../state/ecs';
+import { musicSynth } from '@neo-tokyo/content-gen';
 import { CONFIG } from '../utils/gameConfig';
 
 interface InputSystemProps {

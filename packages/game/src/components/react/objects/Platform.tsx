@@ -1,5 +1,5 @@
-import { asphalt } from '@neo-tokyo/content-gen';
 import { useFrame } from '@react-three/fiber';
+import { asphalt } from '@neo-tokyo/content-gen';
 import { useMemo, useRef } from 'react';
 import * as THREE from 'three';
 
