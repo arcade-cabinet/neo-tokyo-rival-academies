@@ -15,6 +15,7 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "@neo-tokyo/core": "workspace:*",
     "@babylonjs/addons": "^8.46.2",
     "@babylonjs/core": "^8.46.2",
     "@babylonjs/gui": "^8.46.2",

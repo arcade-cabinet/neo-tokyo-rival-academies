@@ -1,40 +1,47 @@
 import type { AbstractMesh, Vector3 } from '@babylonjs/core';
+import type {
+  CharacterState,
+  DialogueState,
+  Equipment,
+  Faction,
+  LevelProgress,
+  ObstacleType,
+  PlatformData,
+  RPGStats,
+} from '@neo-tokyo/core';
 import { World } from 'miniplex';
 import { createReactAPI } from 'miniplex-react';
+
+// Import game-specific types that differ from core
 import type { BreakState, StabilityState } from '../systems/BreakSystem';
 import type { InvincibilityState } from '../systems/HitDetection';
 import type { ReputationState } from '../systems/ReputationSystem';
 
-export interface RPGStats {
-  structure: number; // Max Health
-  ignition: number; // Attack
-  logic: number; // Tech/Ranged
-  flow: number; // Speed/Evasion
-}
+// Re-export core types for convenience
+export type {
+  CharacterState,
+  DialogueState,
+  Equipment,
+  Faction,
+  LevelProgress,
+  ObstacleType,
+  PlatformData,
+  RPGStats,
+} from '@neo-tokyo/core';
 
-export interface LevelProgress {
-  current: number;
-  xp: number;
-  nextLevelXp: number;
-  statPoints: number;
-}
+// Re-export game-specific types
+export type { BreakState, StabilityState } from '../systems/BreakSystem';
+export type { InvincibilityState } from '../systems/HitDetection';
+export type { ReputationState } from '../systems/ReputationSystem';
 
-export interface Equipment {
-  weapon: string; // Item ID
-  armor: string; // Item ID
-  accessory: string; // Item ID
-}
-
-export interface DialogueState {
-  isInteracting: boolean;
-  currentDialogueId: string;
-  nodeId: string;
-}
-
-// Define the components that entities can have
+/**
+ * Babylon.js-specific ECS Entity.
+ * Extends core types with Babylon-specific rendering components.
+ */
 export type ECSEntity = {
   id?: string;
-  // Tags
+
+  // === Tags ===
   isPlayer?: boolean;
   isEnemy?: boolean;
   isBoss?: boolean;
@@ -43,42 +50,32 @@ export type ECSEntity = {
   isObstacle?: boolean;
   isCollectible?: boolean;
 
-  // Physics & Transform
+  // === Physics & Transform (Babylon-specific) ===
   position?: Vector3;
   velocity?: Vector3;
   mesh?: AbstractMesh;
   isFlying?: boolean;
 
-  // Game Logic
-  faction?: 'Kurenai' | 'Azure';
-  characterState?: 'run' | 'sprint' | 'jump' | 'slide' | 'stun' | 'stand' | 'block' | 'attack';
+  // === Game Logic ===
+  faction?: Faction;
+  characterState?: CharacterState;
   health?: number;
   mana?: number;
-  obstacleType?: 'low' | 'high';
+  obstacleType?: ObstacleType;
+  platformData?: PlatformData;
 
-  // Platform specifics
-  platformData?: {
-    length: number;
-    slope: number;
-    width: number;
-  };
+  // === Visuals ===
+  modelColor?: number;
 
-  // Visuals
-  modelColor?: number; // Optional color property
-
-  // RPG Stats
+  // === RPG Systems ===
   stats?: RPGStats;
-
-  // Progression
   level?: LevelProgress;
-
-  // Equipment
   equipment?: Equipment;
 
-  // Dialogue
+  // === Interaction ===
   dialogueState?: DialogueState;
 
-  // Combat Systems
+  // === Combat Systems ===
   invincibility?: InvincibilityState;
   stability?: StabilityState;
   breakState?: BreakState;
