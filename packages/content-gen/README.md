@@ -4,7 +4,7 @@ GenAI asset generation pipeline for Neo-Tokyo: Rival Academies.
 
 ## Architecture
 
-```
+```text
 src/
 ├── api/                    # Meshy API client
 │   └── meshy-client.ts     # HTTP client with streaming support

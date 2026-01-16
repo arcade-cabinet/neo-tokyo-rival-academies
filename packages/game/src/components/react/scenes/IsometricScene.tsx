@@ -279,7 +279,8 @@ function KaiCharacter() {
     if (moving !== isMoving) {
       setIsMoving(moving);
       // Use name-based lookup instead of index
-      const idleAction = findActionByPattern(actions, 'combat') || findActionByPattern(actions, 'stance');
+      const idleAction =
+        findActionByPattern(actions, 'combat') || findActionByPattern(actions, 'stance');
       const runAction = findActionByPattern(actions, 'run');
       if (moving && runAction) {
         idleAction?.fadeOut(0.2);

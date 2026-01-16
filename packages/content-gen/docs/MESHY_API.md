@@ -307,7 +307,7 @@ Common animation IDs used in our pipeline:
 
 | ID | Name | Description |
 |----|------|-------------|
-| 92 | IDLE_COMBAT | Combat ready stance |
+| 92 | IDLE_COMBAT | Combat-ready stance |
 | 93 | IDLE_NEUTRAL | Relaxed standing |
 | 1 | WALK | Walking forward |
 | 2 | RUN | Running forward |
@@ -337,8 +337,10 @@ All image parameters accept:
 - `CANCELED` - Cancelled by user
 
 ### Streaming (SSE)
+
 All `/stream` endpoints use Server-Sent Events:
-```
+
+```text
 event: message
 data: {"id": "...", "progress": 50, "status": "IN_PROGRESS"}
 
@@ -358,7 +360,7 @@ data: {"id": "...", "progress": 100, "status": "SUCCEEDED", ...full object...}
 
 ## Pipeline Flow
 
-```
+```text
 text-to-image (multi-view)
     │
     ▼ image_urls[3]
@@ -376,4 +378,6 @@ animations (rig_task_id + action_id)
 ---
 
 *Last Updated: 2025-01-15*
-*Source: https://docs.meshy.ai/en/api/*
+
+*Source: [Meshy API Documentation](https://docs.meshy.ai/en/api/)*
+
