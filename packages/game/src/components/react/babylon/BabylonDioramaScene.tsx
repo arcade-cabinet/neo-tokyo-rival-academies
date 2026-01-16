@@ -1,13 +1,15 @@
 /**
  * BabylonDioramaScene Component
  *
- * Complete isometric diorama scene with camera, lighting, and ground plane.
+ * Complete isometric diorama scene with camera, lighting, hex floor, and background panels.
  */
 
-import { Color3, HemisphericLight, MeshBuilder, Vector3 } from '@babylonjs/core';
+import { Color3, HemisphericLight, Vector3 } from '@babylonjs/core';
 import type { ReactNode } from 'react';
 import { useScene } from 'reactylon';
 import { BabylonCanvas } from './BabylonCanvas';
+import { BackgroundPanels } from './BackgroundPanels';
+import { HexTileFloor } from './HexTileFloor';
 import { IsometricCamera } from './IsometricCamera';
 
 export interface BabylonDioramaSceneProps {
@@ -24,20 +26,19 @@ function SceneContent({ children }: { children?: ReactNode }) {
     light.intensity = 1.2;
     light.diffuse = new Color3(1, 1, 1);
     light.specular = new Color3(0, 0, 0); // No specular for flat look
-
-    // Ground plane for reference with toon material
-    const ground = MeshBuilder.CreateGround('ground', { width: 50, height: 50 }, scene);
-    const groundMaterial = createEnvironmentMaterial(
-      'groundMaterial',
-      scene,
-      new Color3(0.2, 0.2, 0.25)
-    );
-    ground.material = groundMaterial;
   }
 
   return (
     <>
       <IsometricCamera target={new Vector3(0, 0, 0)} radius={30} orthoSize={21} />
+      <HexTileFloor
+        seed="neo-tokyo-default"
+        cols={10}
+        rows={10}
+        bounds={{ minX: -20, maxX: 20, minZ: -20, maxZ: 20 }}
+        debug={false}
+      />
+      <BackgroundPanels minX={-20} maxX={20} height={30} theme="neon" />
       {children}
     </>
   );

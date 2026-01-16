@@ -34,6 +34,7 @@
     "react-dom": "^19.2.3",
     "reactylon": "^3.5.2",
     "recast-detour": "^1.6.4",
+    "seedrandom": "^3.0.5",
     "yuka": "^0.7.8",
     "zustand": "^5.0.10"
   },
@@ -42,6 +43,7 @@
     "@capacitor/cli": "^8.0.1",
     "@types/react": "^19.2.8",
     "@types/react-dom": "^19.2.3",
+    "@types/seedrandom": "^3.0.8",
     "@types/three": "^0.182.0",
     "@types/yuka": "^0.7.4",
     "@vitejs/plugin-react": "^4.3.1",
