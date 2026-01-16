@@ -39,6 +39,9 @@ importers:
       '@types/node':
         specifier: ^20.11.24
         version: 20.19.29
+      '@types/three':
+        specifier: ^0.182.0
+        version: 0.182.0
       three:
         specifier: ^0.182.0
         version: 0.182.0
