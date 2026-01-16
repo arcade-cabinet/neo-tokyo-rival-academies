@@ -62,31 +62,31 @@ describe('ProgressionSystem', () => {
   });
 
   it('should not level up if xp is insufficient', () => {
-      const entity = world.add({
-          id: 'player',
-          health: 50,
-          stats: { structure: 100, ignition: 10, logic: 10, flow: 10 },
-          level: { current: 1, xp: 50, nextLevelXp: 100, statPoints: 0 },
-      });
+    const entity = world.add({
+      id: 'player',
+      health: 50,
+      stats: { structure: 100, ignition: 10, logic: 10, flow: 10 },
+      level: { current: 1, xp: 50, nextLevelXp: 100, statPoints: 0 },
+    });
 
-      updateProgression();
+    updateProgression();
 
-      expect(entity.level?.current).toBe(1);
-      expect(entity.level?.xp).toBe(50);
-      expect(entity.level?.statPoints).toBe(0);
+    expect(entity.level?.current).toBe(1);
+    expect(entity.level?.xp).toBe(50);
+    expect(entity.level?.statPoints).toBe(0);
   });
 
   it('should handle entity without health property correctly', () => {
-      // Entity has level/stats but no current health (e.g. data shard with XP?)
-      const entity = world.add({
-          id: 'shard',
-          stats: { structure: 100, ignition: 10, logic: 10, flow: 10 },
-          level: { current: 1, xp: 100, nextLevelXp: 100, statPoints: 0 },
-      });
+    // Entity has level/stats but no current health (e.g. data shard with XP?)
+    const entity = world.add({
+      id: 'shard',
+      stats: { structure: 100, ignition: 10, logic: 10, flow: 10 },
+      level: { current: 1, xp: 100, nextLevelXp: 100, statPoints: 0 },
+    });
 
-      updateProgression();
+    updateProgression();
 
-      expect(entity.level?.current).toBe(2);
-      expect(entity.health).toBeUndefined(); // Should remain undefined
+    expect(entity.level?.current).toBe(2);
+    expect(entity.health).toBeUndefined(); // Should remain undefined
   });
 });

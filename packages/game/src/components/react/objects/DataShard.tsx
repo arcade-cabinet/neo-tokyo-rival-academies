@@ -1,7 +1,7 @@
 import { Float, Sparkles } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import { useRef } from 'react';
-import * as THREE from 'three';
+import type * as THREE from 'three';
 
 export function DataShard({ position }: { position: [number, number, number] }) {
   const meshRef = useRef<THREE.Mesh>(null);

@@ -1,6 +1,6 @@
 import { Motion } from '@capacitor/motion';
-import { useFrame, useThree } from '@react-three/fiber';
 import { building } from '@neo-tokyo/content-gen';
+import { useFrame, useThree } from '@react-three/fiber';
 import { useEffect, useMemo, useRef } from 'react';
 import * as THREE from 'three';
 

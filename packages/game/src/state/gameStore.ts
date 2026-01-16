@@ -78,7 +78,7 @@ export const useGameStore = create<GameStore>((set) => ({
   startQuest: (quest) =>
     set((state) => ({
       activeQuest: quest,
-      questLog: [...state.questLog, quest]
+      questLog: [...state.questLog, quest],
     })),
 
   completeQuest: (questId) =>
