@@ -49,6 +49,9 @@ jobs:
       - name: Run Biome check
         run: pnpm --filter @neo-tokyo/game check
 
+      - name: Build content-gen (required for type check)
+        run: pnpm --filter @neo-tokyo/content-gen build
+
       - name: Run TypeScript type check
         run: pnpm --filter @neo-tokyo/game exec tsc --noEmit
 
