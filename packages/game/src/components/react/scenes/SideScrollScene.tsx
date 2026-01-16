@@ -1,10 +1,16 @@
+import {
+  Environment,
+  PerspectiveCamera,
+  useAnimations,
+  useGLTF,
+  useTexture,
+} from '@react-three/drei';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { PerspectiveCamera, Environment, useGLTF, useAnimations, useTexture } from '@react-three/drei';
-import { Physics, RigidBody, type RapierRigidBody } from '@react-three/rapier';
-import { Suspense, useRef, useEffect, useState } from 'react';
+import { Physics, type RapierRigidBody, RigidBody } from '@react-three/rapier';
 import { Leva, useControls } from 'leva';
+import { Suspense, useEffect, useRef, useState } from 'react';
+import type * as THREE from 'three';
 import type { Group, Mesh } from 'three';
-import * as THREE from 'three';
 
 function useKeyboard() {
   const [keys, setKeys] = useState({ left: false, right: false, jump: false });
@@ -12,25 +18,36 @@ function useKeyboard() {
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
       const key = e.key.toLowerCase();
-      if (key === 'a' || key === 'arrowleft') setKeys(k => ({ ...k, left: true }));
-      if (key === 'd' || key === 'arrowright') setKeys(k => ({ ...k, right: true }));
-      if (key === ' ' || key === 'w' || key === 'arrowup') setKeys(k => ({ ...k, jump: true }));
+      if (key === 'a' || key === 'arrowleft') setKeys((k) => ({ ...k, left: true }));
+      if (key === 'd' || key === 'arrowright') setKeys((k) => ({ ...k, right: true }));
+      if (key === ' ' || key === 'w' || key === 'arrowup') setKeys((k) => ({ ...k, jump: true }));
     };
     const up = (e: KeyboardEvent) => {
       const key = e.key.toLowerCase();
-      if (key === 'a' || key === 'arrowleft') setKeys(k => ({ ...k, left: false }));
-      if (key === 'd' || key === 'arrowright') setKeys(k => ({ ...k, right: false }));
-      if (key === ' ' || key === 'w' || key === 'arrowup') setKeys(k => ({ ...k, jump: false }));
+      if (key === 'a' || key === 'arrowleft') setKeys((k) => ({ ...k, left: false }));
+      if (key === 'd' || key === 'arrowright') setKeys((k) => ({ ...k, right: false }));
+      if (key === ' ' || key === 'w' || key === 'arrowup') setKeys((k) => ({ ...k, jump: false }));
     };
     window.addEventListener('keydown', down);
     window.addEventListener('keyup', up);
-    return () => { window.removeEventListener('keydown', down); window.removeEventListener('keyup', up); };
+    return () => {
+      window.removeEventListener('keydown', down);
+      window.removeEventListener('keyup', up);
+    };
   }, []);
 
   return keys;
 }
 
-function ParallaxLayer({ z, texture, playerX }: { z: number, texture: THREE.Texture, playerX: React.MutableRefObject<number> }) {
+function ParallaxLayer({
+  z,
+  texture,
+  playerX,
+}: {
+  z: number;
+  texture: THREE.Texture;
+  playerX: React.MutableRefObject<number>;
+}) {
   const ref = useRef<Mesh>(null);
   const parallaxFactor = Math.abs(z) / 50;
 
@@ -49,9 +66,12 @@ function ParallaxLayer({ z, texture, playerX }: { z: number, texture: THREE.Text
 }
 
 // Helper to find animation action by name pattern
-function findActionByPattern(actions: Record<string, THREE.AnimationAction | null>, pattern: string) {
+function findActionByPattern(
+  actions: Record<string, THREE.AnimationAction | null>,
+  pattern: string
+) {
   const actionNames = Object.keys(actions);
-  const match = actionNames.find(name => name.toLowerCase().includes(pattern.toLowerCase()));
+  const match = actionNames.find((name) => name.toLowerCase().includes(pattern.toLowerCase()));
   return match ? actions[match] : null;
 }
 
@@ -63,7 +83,10 @@ function KaiCharacter({ playerX }: { playerX: React.MutableRefObject<number> }) 
   const idleAnim = useGLTF('/assets/characters/main/kai/animations/combat_stance.glb');
   const runAnim = useGLTF('/assets/characters/main/kai/animations/runfast.glb');
   const jumpAnim = useGLTF('/assets/characters/main/kai/animations/basic_jump.glb');
-  const { actions } = useAnimations([...idleAnim.animations, ...runAnim.animations, ...jumpAnim.animations], group);
+  const { actions } = useAnimations(
+    [...idleAnim.animations, ...runAnim.animations, ...jumpAnim.animations],
+    group
+  );
   const keys = useKeyboard();
   const [currentAnim, setCurrentAnim] = useState('idle');
   const canJump = useRef(true);
@@ -103,7 +126,9 @@ function KaiCharacter({ playerX }: { playerX: React.MutableRefObject<number> }) 
       canJump.current = false;
       // Clear any existing timeout before setting new one
       if (jumpTimeoutRef.current) clearTimeout(jumpTimeoutRef.current);
-      jumpTimeoutRef.current = setTimeout(() => { canJump.current = true; }, 300);
+      jumpTimeoutRef.current = setTimeout(() => {
+        canJump.current = true;
+      }, 300);
     } else {
       rigidBody.current.setLinvel({ x: vx, y: vel.y, z: 0 }, true);
     }
@@ -129,7 +154,13 @@ function KaiCharacter({ playerX }: { playerX: React.MutableRefObject<number> }) 
   });
 
   return (
-    <RigidBody ref={rigidBody} position={[0, 3, 0]} enabledRotations={[false, false, false]} lockRotations friction={0.5}>
+    <RigidBody
+      ref={rigidBody}
+      position={[0, 3, 0]}
+      enabledRotations={[false, false, false]}
+      lockRotations
+      friction={0.5}
+    >
       <group ref={group} rotation={[0, Math.PI / 2, 0]}>
         <primitive object={scene} scale={1} castShadow />
       </group>
@@ -154,7 +185,7 @@ function ParallaxBackgrounds({ playerX }: { playerX: React.MutableRefObject<numb
 function SceneContent({ playerX }: { playerX: React.MutableRefObject<number> }) {
   const { fov, camPos } = useControls('Camera', {
     fov: { value: 50, min: 10, max: 90 },
-    camPos: { value: [0, 4, 18] }
+    camPos: { value: [0, 4, 18] },
   });
 
   return (

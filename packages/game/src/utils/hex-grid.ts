@@ -172,7 +172,10 @@ export function hexToWorld(hex: HexAxial, layout: HexLayout = DEFAULT_HEX_LAYOUT
  * Convert offset coordinates directly to world position
  * Convenience function for grid-based iteration
  */
-export function offsetToWorld(offset: HexOffset, layout: HexLayout = DEFAULT_HEX_LAYOUT): WorldPosition {
+export function offsetToWorld(
+  offset: HexOffset,
+  layout: HexLayout = DEFAULT_HEX_LAYOUT
+): WorldPosition {
   const axial = offsetToAxial(offset, layout.orientation);
   return hexToWorld(axial, layout);
 }
@@ -367,7 +370,7 @@ export function hexCorners(
   for (let i = 0; i < 6; i++) {
     const angle =
       orientation === 'pointy'
-        ? (Math.PI / 6) + i * HEX_GEOMETRY.VERTEX_ANGLE // Start at 30 degrees
+        ? Math.PI / 6 + i * HEX_GEOMETRY.VERTEX_ANGLE // Start at 30 degrees
         : i * HEX_GEOMETRY.VERTEX_ANGLE; // Start at 0 degrees
 
     corners.push([size * Math.cos(angle), height, size * Math.sin(angle)]);
@@ -380,7 +383,10 @@ export function hexCorners(
  * Get the bounding box dimensions for a hex
  * Returns [width, height] in world units
  */
-export function hexBoundingBox(size: number, orientation: HexOrientation = 'pointy'): [number, number] {
+export function hexBoundingBox(
+  size: number,
+  orientation: HexOrientation = 'pointy'
+): [number, number] {
   if (orientation === 'pointy') {
     // Pointy-top: width = sqrt(3) * size, height = 2 * size
     return [Math.sqrt(3) * size, 2 * size];
@@ -413,10 +419,22 @@ export function createHexMatrix(
   // Column-major 4x4 matrix (as flat array for Three.js)
   // This is a combined translation, rotation (Y-axis), and uniform scale
   return [
-    scale * cosR, 0, scale * -sinR, 0, // Column 0
-    0, scale, 0, 0, // Column 1
-    scale * sinR, 0, scale * cosR, 0, // Column 2
-    pos.x, pos.y, pos.z, 1, // Column 3 (translation)
+    scale * cosR,
+    0,
+    scale * -sinR,
+    0, // Column 0
+    0,
+    scale,
+    0,
+    0, // Column 1
+    scale * sinR,
+    0,
+    scale * cosR,
+    0, // Column 2
+    pos.x,
+    pos.y,
+    pos.z,
+    1, // Column 3 (translation)
   ];
 }
 

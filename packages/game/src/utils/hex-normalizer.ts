@@ -13,7 +13,7 @@
 
 import * as THREE from 'three';
 import type { GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import { hexInnerRadius, type HexOrientation } from './hex-grid';
+import { type HexOrientation, hexInnerRadius } from './hex-grid';
 
 // ============================================================================
 // TYPES
@@ -258,10 +258,7 @@ function applyHexClipping(scene: THREE.Group, config: HexNormalizerConfig): bool
  * Clip a BufferGeometry to fit within hex bounds
  * Modifies geometry in place
  */
-function clipGeometryToHex(
-  geometry: THREE.BufferGeometry,
-  config: HexNormalizerConfig
-): boolean {
+function clipGeometryToHex(geometry: THREE.BufferGeometry, config: HexNormalizerConfig): boolean {
   const positionAttr = geometry.getAttribute('position');
   if (!positionAttr) return false;
 
@@ -278,12 +275,18 @@ function clipGeometryToHex(
 
     if (config.orientation === 'pointy') {
       // Pointy-top hex boundary check
-      return absX <= innerRadius && absZ <= effectiveHexSize &&
-        absX + absZ * (effectiveHexSize / innerRadius) <= effectiveHexSize * 2;
+      return (
+        absX <= innerRadius &&
+        absZ <= effectiveHexSize &&
+        absX + absZ * (effectiveHexSize / innerRadius) <= effectiveHexSize * 2
+      );
     } else {
       // Flat-top hex boundary check
-      return absZ <= innerRadius && absX <= effectiveHexSize &&
-        absZ + absX * (effectiveHexSize / innerRadius) <= effectiveHexSize * 2;
+      return (
+        absZ <= innerRadius &&
+        absX <= effectiveHexSize &&
+        absZ + absX * (effectiveHexSize / innerRadius) <= effectiveHexSize * 2
+      );
     }
   };
 
@@ -328,7 +331,7 @@ function projectToHexBoundary(
   // Calculate the distance to hex edge at this angle
   const startAngle = orientation === 'pointy' ? Math.PI / 6 : 0;
   const sectorAngle = (angle - startAngle + Math.PI * 2) % (Math.PI / 3);
-  const edgeDist = hexSize * Math.cos(Math.PI / 6) / Math.cos(sectorAngle - Math.PI / 6);
+  const edgeDist = (hexSize * Math.cos(Math.PI / 6)) / Math.cos(sectorAngle - Math.PI / 6);
 
   // Clamp distance to edge
   const clampedDist = Math.min(dist, edgeDist);
@@ -445,9 +448,7 @@ export function createHexClipMaterial(
   const innerRadius = hexInnerRadius(hexSize);
 
   for (let i = 0; i < 6; i++) {
-    const angle = orientation === 'pointy'
-      ? (Math.PI / 6) + i * (Math.PI / 3)
-      : i * (Math.PI / 3);
+    const angle = orientation === 'pointy' ? Math.PI / 6 + i * (Math.PI / 3) : i * (Math.PI / 3);
 
     const normal = new THREE.Vector3(Math.cos(angle), 0, Math.sin(angle));
     const plane = new THREE.Plane(normal, innerRadius);

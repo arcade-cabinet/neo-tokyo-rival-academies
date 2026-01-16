@@ -10,17 +10,17 @@
  * @see docs/BABYLON_MIGRATION_PLAN.md for migration guide
  * @see https://reactylon.com/docs for API reference
  */
-import { Engine } from 'reactylon/web';
-import { Scene, useScene, useModel } from 'reactylon';
-import { Suspense, useRef, useEffect, useMemo } from 'react';
-import type { FC } from 'react';
-import { Vector3 } from '@babylonjs/core/Maths/math.vector';
-import { Color3, Color4 } from '@babylonjs/core/Maths/math.color';
-import { Matrix } from '@babylonjs/core/Maths/math.vector';
-import { Camera } from '@babylonjs/core/Cameras/camera';
-import type { Scene as BabylonScene } from '@babylonjs/core/scene';
-import type { Mesh } from '@babylonjs/core/Meshes/mesh';
+
 import type { ArcRotateCamera } from '@babylonjs/core/Cameras/arcRotateCamera';
+import { Camera } from '@babylonjs/core/Cameras/camera';
+import { Color3, Color4 } from '@babylonjs/core/Maths/math.color';
+import { Matrix, Vector3 } from '@babylonjs/core/Maths/math.vector';
+import type { Mesh } from '@babylonjs/core/Meshes/mesh';
+import type { Scene as BabylonScene } from '@babylonjs/core/scene';
+import type { FC } from 'react';
+import { Suspense, useEffect, useMemo, useRef } from 'react';
+import { Scene, useModel, useScene } from 'reactylon';
+import { Engine } from 'reactylon/web';
 import '@babylonjs/loaders/glTF';
 
 // Hex grid constants
@@ -82,8 +82,8 @@ const TILE_TEXTURES = [
 // Generate tile positions by type
 function generateTilePositions(): Vector3[][] {
   const byType: Vector3[][] = [[], [], [], [], [], []];
-  const offsetX = -(GRID_WIDTH - 1) * HEX_SIZE * 1.5 / 2;
-  const offsetZ = -(GRID_DEPTH - 1) * Math.sqrt(3) * HEX_SIZE / 2;
+  const offsetX = (-(GRID_WIDTH - 1) * HEX_SIZE * 1.5) / 2;
+  const offsetZ = (-(GRID_DEPTH - 1) * Math.sqrt(3) * HEX_SIZE) / 2;
 
   let seed = 12345;
   const seededRandom = () => {
@@ -94,11 +94,7 @@ function generateTilePositions(): Vector3[][] {
   for (let col = 0; col < GRID_WIDTH; col++) {
     for (let row = 0; row < GRID_DEPTH; row++) {
       const worldPos = hexToWorld(col, row, HEX_SIZE);
-      const position = new Vector3(
-        worldPos.x + offsetX,
-        0.05,
-        worldPos.z + offsetZ
-      );
+      const position = new Vector3(worldPos.x + offsetX, 0.05, worldPos.z + offsetZ);
 
       const rand = seededRandom();
       let tileType: number;
@@ -197,34 +193,55 @@ const WallBackdrops: FC = () => {
           if (cancelled) return;
 
           // Far background
-          const farBackdrop = CreatePlane('far-backdrop', { width: gridWidth + 20, height: wallHeight }, scene);
+          const farBackdrop = CreatePlane(
+            'far-backdrop',
+            { width: gridWidth + 20, height: wallHeight },
+            scene
+          );
           farBackdrop.position = new Vector3(0, wallHeight / 2 - 2, -10);
           const farMat = new StandardMaterial('far-mat', scene);
           farMat.disableLighting = true;
           farMat.emissiveColor = new Color3(0.3, 0.3, 0.3);
-          farMat.diffuseTexture = new Texture('/assets/backgrounds/sector0/parallax_far/concept.png', scene);
+          farMat.diffuseTexture = new Texture(
+            '/assets/backgrounds/sector0/parallax_far/concept.png',
+            scene
+          );
           farBackdrop.material = farMat;
           disposables.push(farBackdrop, farMat);
 
           // Left wall
-          const leftWall = CreatePlane('left-wall', { width: wallWidth, height: wallHeight }, scene);
+          const leftWall = CreatePlane(
+            'left-wall',
+            { width: wallWidth, height: wallHeight },
+            scene
+          );
           leftWall.position = new Vector3(-wallOffset, wallHeight / 2 - 2, 0);
           leftWall.rotation = new Vector3(0, Math.PI / 4, 0);
           const leftMat = new StandardMaterial('left-mat', scene);
           leftMat.disableLighting = true;
           leftMat.emissiveColor = new Color3(0.3, 0.3, 0.3);
-          leftMat.diffuseTexture = new Texture('/assets/backgrounds/sector0/wall_left/concept.png', scene);
+          leftMat.diffuseTexture = new Texture(
+            '/assets/backgrounds/sector0/wall_left/concept.png',
+            scene
+          );
           leftWall.material = leftMat;
           disposables.push(leftWall, leftMat);
 
           // Right wall
-          const rightWall = CreatePlane('right-wall', { width: wallWidth, height: wallHeight }, scene);
+          const rightWall = CreatePlane(
+            'right-wall',
+            { width: wallWidth, height: wallHeight },
+            scene
+          );
           rightWall.position = new Vector3(wallOffset, wallHeight / 2 - 2, 0);
           rightWall.rotation = new Vector3(0, -Math.PI / 4, 0);
           const rightMat = new StandardMaterial('right-mat', scene);
           rightMat.disableLighting = true;
           rightMat.emissiveColor = new Color3(0.3, 0.3, 0.3);
-          rightMat.diffuseTexture = new Texture('/assets/backgrounds/sector0/wall_right/concept.png', scene);
+          rightMat.diffuseTexture = new Texture(
+            '/assets/backgrounds/sector0/wall_right/concept.png',
+            scene
+          );
           rightWall.material = rightMat;
           disposables.push(rightWall, rightMat);
         });
@@ -233,26 +250,22 @@ const WallBackdrops: FC = () => {
 
     return () => {
       cancelled = true;
-      disposables.forEach((d) => d.dispose());
+      for (const d of disposables) d.dispose();
     };
-  }, [scene, gridWidth, wallOffset, wallHeight, wallWidth]);
+  }, [scene, gridWidth, wallOffset]);
 
   return null;
 };
 
 // Kai character model component - uses combat_stance.glb which contains rigged mesh + idle animation
 const KaiModel: FC = () => {
-  const model = useModel(
-    '/assets/characters/main/kai/animations/combat_stance.glb',
-    {},
-    (result) => {
-      // Play the animation (combat_stance serves as idle)
-      if (result.animationGroups && result.animationGroups.length > 0) {
-        const animToPlay = result.animationGroups[0];
-        animToPlay.start(true);
-      }
+  useModel('/assets/characters/main/kai/animations/combat_stance.glb', {}, (result) => {
+    // Play the animation (combat_stance serves as idle)
+    if (result.animationGroups && result.animationGroups.length > 0) {
+      const animToPlay = result.animationGroups[0];
+      animToPlay.start(true);
     }
-  );
+  });
 
   return null; // Model is added to scene by useModel
 };
@@ -306,16 +319,18 @@ const KaiCharacter: FC = () => {
   }, [scene, maxX, maxZ]);
 
   return (
-    <Suspense fallback={
-      <box
-        ref={meshRef}
-        name="loading-placeholder"
-        options={{ size: 1 }}
-        position={new Vector3(0, 1, 0)}
-      >
-        <standardMaterial name="loading-mat" diffuseColor={new Color3(0.5, 0.5, 0.5)} />
-      </box>
-    }>
+    <Suspense
+      fallback={
+        <box
+          ref={meshRef}
+          name="loading-placeholder"
+          options={{ size: 1 }}
+          position={new Vector3(0, 1, 0)}
+        >
+          <standardMaterial name="loading-mat" diffuseColor={new Color3(0.5, 0.5, 0.5)} />
+        </box>
+      }
+    >
       <transformNode ref={meshRef} name="kai-root" position={positionRef.current}>
         <KaiModel />
       </transformNode>
@@ -386,7 +401,7 @@ const SceneLighting: FC = () => {
 
     return () => {
       cancelled = true;
-      disposables.forEach((d) => d.dispose());
+      for (const d of disposables) d.dispose();
     };
   }, [scene]);
 

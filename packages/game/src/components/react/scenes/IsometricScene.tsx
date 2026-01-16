@@ -1,8 +1,14 @@
+import {
+  OrbitControls,
+  OrthographicCamera,
+  useAnimations,
+  useGLTF,
+  useTexture,
+} from '@react-three/drei';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, OrthographicCamera, useGLTF, useAnimations, useTexture } from '@react-three/drei';
-import { Physics, RigidBody, type RapierRigidBody } from '@react-three/rapier';
-import { Suspense, useRef, useEffect, useState, useMemo } from 'react';
+import { Physics, type RapierRigidBody, RigidBody } from '@react-three/rapier';
 import { Leva, useControls } from 'leva';
+import { Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import type { Group } from 'three';
 import * as THREE from 'three';
 
@@ -26,23 +32,26 @@ function useKeyboard() {
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
       const key = e.key.toLowerCase();
-      if (key === 'w' || key === 'arrowup') setKeys(k => ({ ...k, w: true }));
-      if (key === 'a' || key === 'arrowleft') setKeys(k => ({ ...k, a: true }));
-      if (key === 's' || key === 'arrowdown') setKeys(k => ({ ...k, s: true }));
-      if (key === 'd' || key === 'arrowright') setKeys(k => ({ ...k, d: true }));
-      if (key === ' ') setKeys(k => ({ ...k, space: true }));
+      if (key === 'w' || key === 'arrowup') setKeys((k) => ({ ...k, w: true }));
+      if (key === 'a' || key === 'arrowleft') setKeys((k) => ({ ...k, a: true }));
+      if (key === 's' || key === 'arrowdown') setKeys((k) => ({ ...k, s: true }));
+      if (key === 'd' || key === 'arrowright') setKeys((k) => ({ ...k, d: true }));
+      if (key === ' ') setKeys((k) => ({ ...k, space: true }));
     };
     const up = (e: KeyboardEvent) => {
       const key = e.key.toLowerCase();
-      if (key === 'w' || key === 'arrowup') setKeys(k => ({ ...k, w: false }));
-      if (key === 'a' || key === 'arrowleft') setKeys(k => ({ ...k, a: false }));
-      if (key === 's' || key === 'arrowdown') setKeys(k => ({ ...k, s: false }));
-      if (key === 'd' || key === 'arrowright') setKeys(k => ({ ...k, d: false }));
-      if (key === ' ') setKeys(k => ({ ...k, space: false }));
+      if (key === 'w' || key === 'arrowup') setKeys((k) => ({ ...k, w: false }));
+      if (key === 'a' || key === 'arrowleft') setKeys((k) => ({ ...k, a: false }));
+      if (key === 's' || key === 'arrowdown') setKeys((k) => ({ ...k, s: false }));
+      if (key === 'd' || key === 'arrowright') setKeys((k) => ({ ...k, d: false }));
+      if (key === ' ') setKeys((k) => ({ ...k, space: false }));
     };
     window.addEventListener('keydown', down);
     window.addEventListener('keyup', up);
-    return () => { window.removeEventListener('keydown', down); window.removeEventListener('keyup', up); };
+    return () => {
+      window.removeEventListener('keydown', down);
+      window.removeEventListener('keyup', up);
+    };
   }, []);
 
   return keys;
@@ -65,7 +74,7 @@ function HexTileFloor() {
 
   // Configure textures
   useEffect(() => {
-    textures.forEach(tex => {
+    textures.forEach((tex) => {
       tex.colorSpace = THREE.SRGBColorSpace;
       tex.wrapS = THREE.ClampToEdgeWrapping;
       tex.wrapT = THREE.ClampToEdgeWrapping;
@@ -73,21 +82,26 @@ function HexTileFloor() {
   }, [textures]);
 
   // Create materials for each tile type
-  const materials = useMemo(() =>
-    textures.map(tex => new THREE.MeshStandardMaterial({
-      map: tex,
-      roughness: 0.7,
-      metalness: 0.2,
-    })),
-  [textures]);
+  const materials = useMemo(
+    () =>
+      textures.map(
+        (tex) =>
+          new THREE.MeshStandardMaterial({
+            map: tex,
+            roughness: 0.7,
+            metalness: 0.2,
+          })
+      ),
+    [textures]
+  );
 
   // Generate hex grid with seeded random tile types
   const tilesByType = useMemo(() => {
     const byType: [number, number, number][][] = [[], [], [], [], [], []];
 
     // Center the grid
-    const offsetX = -(GRID_WIDTH - 1) * HEX_SIZE * 1.5 / 2;
-    const offsetZ = -(GRID_DEPTH - 1) * Math.sqrt(3) * HEX_SIZE / 2;
+    const offsetX = (-(GRID_WIDTH - 1) * HEX_SIZE * 1.5) / 2;
+    const offsetZ = (-(GRID_DEPTH - 1) * Math.sqrt(3) * HEX_SIZE) / 2;
 
     // Seeded random for consistent tile placement
     let seed = 12345;
@@ -104,11 +118,16 @@ function HexTileFloor() {
         // Weighted random tile assignment
         const rand = seededRandom();
         let tileType: number;
-        if (rand < 0.5) tileType = 0; // 50% base
-        else if (rand < 0.65) tileType = 1; // 15% airvent
-        else if (rand < 0.75) tileType = 2; // 10% pipes
-        else if (rand < 0.85) tileType = 3; // 10% glass
-        else if (rand < 0.93) tileType = 4; // 8% tarpaper
+        if (rand < 0.5)
+          tileType = 0; // 50% base
+        else if (rand < 0.65)
+          tileType = 1; // 15% airvent
+        else if (rand < 0.75)
+          tileType = 2; // 10% pipes
+        else if (rand < 0.85)
+          tileType = 3; // 10% glass
+        else if (rand < 0.93)
+          tileType = 4; // 8% tarpaper
         else tileType = 5; // 7% grate
 
         byType[tileType].push(position);
@@ -120,18 +139,20 @@ function HexTileFloor() {
   return (
     <group>
       {tilesByType.map((positions, typeIdx) => (
-        <TileInstanceGroup
-          key={typeIdx}
-          positions={positions}
-          material={materials[typeIdx]}
-        />
+        <TileInstanceGroup key={typeIdx} positions={positions} material={materials[typeIdx]} />
       ))}
     </group>
   );
 }
 
 // Instanced mesh for a single tile type
-function TileInstanceGroup({ positions, material }: { positions: [number, number, number][]; material: THREE.Material }) {
+function TileInstanceGroup({
+  positions,
+  material,
+}: {
+  positions: [number, number, number][];
+  material: THREE.Material;
+}) {
   const meshRef = useRef<THREE.InstancedMesh>(null);
 
   // Create geometry inside component to ensure Three.js is initialized
@@ -187,7 +208,7 @@ function WallBackdrops() {
   const farTex = useTexture('/assets/backgrounds/sector0/parallax_far/concept.png');
 
   // Configure textures
-  [leftTex, rightTex, farTex].forEach(tex => {
+  [leftTex, rightTex, farTex].forEach((tex) => {
     tex.colorSpace = THREE.SRGBColorSpace;
   });
 
@@ -285,7 +306,12 @@ function KaiCharacter() {
   });
 
   return (
-    <RigidBody ref={rigidBody} position={[0, 1, 0]} enabledRotations={[false, false, false]} lockRotations>
+    <RigidBody
+      ref={rigidBody}
+      position={[0, 1, 0]}
+      enabledRotations={[false, false, false]}
+      lockRotations
+    >
       <group ref={group}>
         <primitive object={scene} scale={1} castShadow />
       </group>
@@ -298,12 +324,18 @@ function SceneContent() {
     zoom: { value: 40, min: 10, max: 100 },
     camX: { value: 10, min: -30, max: 30 },
     camY: { value: 10, min: 0, max: 30 },
-    camZ: { value: 10, min: -30, max: 30 }
+    camZ: { value: 10, min: -30, max: 30 },
   });
 
   return (
     <>
-      <OrthographicCamera makeDefault position={[camX, camY, camZ]} zoom={zoom} near={-100} far={200} />
+      <OrthographicCamera
+        makeDefault
+        position={[camX, camY, camZ]}
+        zoom={zoom}
+        near={-100}
+        far={200}
+      />
 
       {/* Lighting */}
       <ambientLight intensity={0.5} />
@@ -363,7 +395,7 @@ useGLTF.preload('/assets/characters/main/kai/rigged.glb');
 useGLTF.preload('/assets/characters/main/kai/animations/idle_combat.glb');
 useGLTF.preload('/assets/characters/main/kai/animations/run_in_place.glb');
 // Tile textures (applied to standardized hex geometry)
-TILE_TEXTURES.forEach(t => useTexture.preload(t));
+for (const t of TILE_TEXTURES) useTexture.preload(t);
 // Background textures
 useTexture.preload('/assets/backgrounds/sector0/wall_left/concept.png');
 useTexture.preload('/assets/backgrounds/sector0/wall_right/concept.png');
