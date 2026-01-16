@@ -11,7 +11,11 @@ import type { ECSEntity } from '../state/ecs';
  *
  * Crit Chance = Ignition * 1% (critChance = atk * 0.01)
  */
-export const resolveCombat = (attacker: ECSEntity, defender: ECSEntity, rng: () => number = Math.random) => {
+export const resolveCombat = (
+  attacker: ECSEntity,
+  defender: ECSEntity,
+  rng: () => number = Math.random
+) => {
   // Default stats if missing (use nullish coalescing for zero values)
   const atk = attacker.stats?.ignition ?? 10;
 

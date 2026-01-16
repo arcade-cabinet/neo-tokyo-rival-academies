@@ -6,6 +6,7 @@ import { JRPGHUD } from '@components/react/ui/JRPGHUD';
 import { MainMenu } from '@components/react/ui/MainMenu';
 import { NarrativeOverlay } from '@components/react/ui/NarrativeOverlay';
 import { SplashScreen } from '@components/react/ui/SplashScreen';
+import { musicSynth } from '@neo-tokyo/content-gen';
 import {
   CameraShake,
   ContactShadows,
@@ -15,7 +16,6 @@ import {
 } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import { Bloom, ChromaticAberration, EffectComposer } from '@react-three/postprocessing';
-import { musicSynth } from '@neo-tokyo/content-gen';
 import { initialGameState, initialInputState } from '@utils/gameConfig';
 import { Suspense, useCallback, useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
@@ -271,4 +271,4 @@ export default function NeoTokyoGame() {
       />
     </div>
   );
-};
+}

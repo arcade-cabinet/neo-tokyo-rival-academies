@@ -24,15 +24,27 @@ interface CharacterPropsWithSpeed extends CharacterProps {
 }
 
 // Extracted Toon Material for Cel Shading to avoid re-renders
-const ToonMat = memo(({ color, wireframe = false, transparent = false, opacity = 1 }: { color: THREE.ColorRepresentation, wireframe?: boolean, transparent?: boolean, opacity?: number }) => (
+const ToonMat = memo(
+  ({
+    color,
+    wireframe = false,
+    transparent = false,
+    opacity = 1,
+  }: {
+    color: THREE.ColorRepresentation;
+    wireframe?: boolean;
+    transparent?: boolean;
+    opacity?: number;
+  }) => (
     <meshToonMaterial
-        color={color}
-        wireframe={wireframe}
-        transparent={transparent}
-        opacity={opacity}
-        gradientMap={null} // Default gradient
+      color={color}
+      wireframe={wireframe}
+      transparent={transparent}
+      opacity={opacity}
+      gradientMap={null} // Default gradient
     />
-));
+  )
+);
 ToonMat.displayName = 'ToonMat';
 
 export function Character({

@@ -1,5 +1,5 @@
-import { world } from '../state/ecs';
 import storyDataRaw from '../data/story.json';
+import { world } from '../state/ecs';
 
 interface DialogueNode {
   id: string;
@@ -65,13 +65,13 @@ export const advanceDialogue = (entityId: string) => {
  * Gets the current dialogue node data.
  */
 export const getCurrentDialogueNode = (entityId: string) => {
-    const entity = world.with('dialogueState').where((e) => e.id === entityId).first;
-    if (entity?.dialogueState?.isInteracting) {
-        const dialogueSequence = storyData.dialogues[entity.dialogueState.currentDialogueId];
-        if (!dialogueSequence) return null;
+  const entity = world.with('dialogueState').where((e) => e.id === entityId).first;
+  if (entity?.dialogueState?.isInteracting) {
+    const dialogueSequence = storyData.dialogues[entity.dialogueState.currentDialogueId];
+    if (!dialogueSequence) return null;
 
-        // Optional chaining fix
-        return dialogueSequence.find((n) => n.id === entity.dialogueState?.nodeId) || null;
-    }
-    return null;
-}
+    // Optional chaining fix
+    return dialogueSequence.find((n) => n.id === entity.dialogueState?.nodeId) || null;
+  }
+  return null;
+};
