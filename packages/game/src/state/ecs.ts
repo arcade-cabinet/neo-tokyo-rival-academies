@@ -1,6 +1,5 @@
 import { World } from 'miniplex';
 import { createReactAPI } from 'miniplex-react';
-import type * as THREE from 'three';
 
 export interface RPGStats {
   structure: number; // Max Health
@@ -41,8 +40,9 @@ export type ECSEntity = {
   isCollectible?: boolean;
 
   // Physics & Transform
-  position?: THREE.Vector3;
-  velocity?: THREE.Vector3;
+  position?: Vector3;
+  velocity?: Vector3;
+  mesh?: AbstractMesh;
   isFlying?: boolean;
 
   // Game Logic
