@@ -1,6 +1,8 @@
 import fc from 'fast-check';
 import { describe, expect, it } from 'vitest';
+
 import type { Faction, ReputationChange, ReputationState } from '../ReputationSystem';
+
 import {
   applyReputationChange,
   getAggressionLevel,
@@ -82,15 +84,17 @@ describe('ReputationSystem', () => {
   });
 
   describe('Reputation Levels', () => {
-    it('should return correct reputation levels', () => {
-      expect(getReputationLevel(0)).toBe('Hated');
-      expect(getReputationLevel(10)).toBe('Hated');
-      expect(getReputationLevel(20)).toBe('Hostile');
-      expect(getReputationLevel(35)).toBe('Unfriendly');
-      expect(getReputationLevel(50)).toBe('Neutral');
-      expect(getReputationLevel(70)).toBe('Friendly');
-      expect(getReputationLevel(85)).toBe('Honored');
-      expect(getReputationLevel(95)).toBe('Revered');
+    it.each([
+      { value: 0, expected: 'Hated' },
+      { value: 10, expected: 'Hated' },
+      { value: 20, expected: 'Hostile' },
+      { value: 35, expected: 'Unfriendly' },
+      { value: 50, expected: 'Neutral' },
+      { value: 70, expected: 'Friendly' },
+      { value: 85, expected: 'Honored' },
+      { value: 95, expected: 'Revered' },
+    ])('should return "$expected" for reputation value $value', ({ value, expected }) => {
+      expect(getReputationLevel(value)).toBe(expected);
     });
   });
 
@@ -153,7 +157,7 @@ describe('ReputationSystem', () => {
     });
   });
 
-  describe('Property 27: Reputation clamping', () => {
+  describe('Property-based test: Reputation clamping', () => {
     it('should always clamp reputation to [0, 100]', () => {
       fc.assert(
         fc.property(

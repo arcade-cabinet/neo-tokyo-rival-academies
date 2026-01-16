@@ -1,0 +1,13 @@
+{
+  "name": "@neo-tokyo/web",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Vite + Reactylon web app (development fallback)",
+  "type": "module",
+  "scripts": {
+    "dev": "echo 'Web app uses packages/game for now - see docs/ARCHITECTURE_PIVOT_NATIVE.md'"
+  },
+  "dependencies": {
+    "@neo-tokyo/core": "workspace:*"
+  }
+}

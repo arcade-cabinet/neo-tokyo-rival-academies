@@ -61,18 +61,30 @@ export function applyReputationChange(
 }
 
 /**
+ * Reputation level thresholds (data-driven).
+ * Each entry is [level, maxThreshold] - value <= threshold returns the level.
+ */
+const REPUTATION_LEVEL_THRESHOLDS: readonly [ReputationLevel, number][] = [
+  ['Hated', 10],
+  ['Hostile', 25],
+  ['Unfriendly', 40],
+  ['Neutral', 60],
+  ['Friendly', 75],
+  ['Honored', 90],
+];
+
+/**
  * Get reputation level based on numeric value (0-100).
  *
  * @param value - Reputation value (0 to 100)
  * @returns Reputation level
  */
 export function getReputationLevel(value: number): ReputationLevel {
-  if (value <= 10) return 'Hated';
-  if (value <= 25) return 'Hostile';
-  if (value <= 40) return 'Unfriendly';
-  if (value <= 60) return 'Neutral';
-  if (value <= 75) return 'Friendly';
-  if (value <= 90) return 'Honored';
+  for (const [level, threshold] of REPUTATION_LEVEL_THRESHOLDS) {
+    if (value <= threshold) {
+      return level;
+    }
+  }
   return 'Revered';
 }
 
@@ -97,6 +109,17 @@ export function isQuestUnlocked(
 }
 
 /**
+ * Extra dialogue options by reputation level (data-driven).
+ */
+const DIALOGUE_OPTIONS_BY_LEVEL: Partial<Record<ReputationLevel, string[]>> = {
+  Hated: ['Threaten'],
+  Hostile: ['Threaten'],
+  Friendly: ['Ask for Help', 'Trade'],
+  Honored: ['Ask for Help', 'Trade'],
+  Revered: ['Ask for Help', 'Trade'],
+};
+
+/**
  * Get dialogue options based on reputation.
  *
  * @param reputation - Current reputation state
@@ -108,17 +131,21 @@ export function getDialogueOptions(reputation: ReputationState, faction: Faction
   const level = getReputationLevel(value);
 
   const baseOptions = ['Talk', 'Leave'];
+  const extraOptions = DIALOGUE_OPTIONS_BY_LEVEL[level] ?? [];
 
-  if (level === 'Hated' || level === 'Hostile') {
-    return [...baseOptions, 'Threaten'];
-  }
-
-  if (level === 'Friendly' || level === 'Honored' || level === 'Revered') {
-    return [...baseOptions, 'Ask for Help', 'Trade'];
-  }
-
-  return baseOptions;
+  return [...baseOptions, ...extraOptions];
 }
+
+/**
+ * Aggression thresholds (data-driven).
+ * Each entry is [reputationThreshold, aggressionMultiplier].
+ */
+const AGGRESSION_THRESHOLDS: readonly [number, number][] = [
+  [25, 2.0], // Hated/Hostile
+  [40, 1.5], // Unfriendly
+  [60, 1.0], // Neutral
+  [75, 0.75], // Friendly
+];
 
 /**
  * Calculate enemy aggression level based on reputation.
@@ -130,17 +157,11 @@ export function getDialogueOptions(reputation: ReputationState, faction: Faction
 export function getAggressionLevel(reputation: ReputationState, faction: Faction): number {
   const value = reputation[faction];
 
-  // Hated/Hostile: 2.0x aggression
-  if (value <= 25) return 2.0;
-
-  // Unfriendly: 1.5x aggression
-  if (value <= 40) return 1.5;
-
-  // Neutral: 1.0x aggression
-  if (value <= 60) return 1.0;
-
-  // Friendly: 0.75x aggression
-  if (value <= 75) return 0.75;
+  for (const [threshold, aggression] of AGGRESSION_THRESHOLDS) {
+    if (value <= threshold) {
+      return aggression;
+    }
+  }
 
   // Honored/Revered: 0.5x aggression
   return 0.5;

@@ -2,8 +2,11 @@
   "name": "@neo-tokyo/config",
   "version": "0.1.0",
   "private": true,
-  "main": "index.js",
-  "dependencies": {
+  "description": "Shared configuration for Neo-Tokyo monorepo",
+  "exports": {
+    ".": "./index.js"
+  },
+  "devDependencies": {
     "typescript": "^5.9.3"
   }
 }

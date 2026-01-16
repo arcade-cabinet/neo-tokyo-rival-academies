@@ -1,11 +1,13 @@
 import fc from 'fast-check';
 import { describe, expect, it } from 'vitest';
+
 import type { ECSEntity } from '../../state/ecs';
+import type { StatAllocation } from '../StatAllocation';
+
 import {
   applyStatAllocation,
   getRecommendedAllocation,
   resetStatAllocation,
-  type StatAllocation,
   validateAllocation,
 } from '../StatAllocation';
 

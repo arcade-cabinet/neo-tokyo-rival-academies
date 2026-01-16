@@ -1,8 +1,8 @@
 {
-  "name": "@neo-tokyo/types",
+  "name": "@neo-tokyo/core",
   "version": "0.1.0",
   "private": true,
-  "description": "Shared TypeScript types for Neo-Tokyo game",
+  "description": "Platform-agnostic game logic for Neo-Tokyo",
   "type": "module",
   "exports": {
     ".": {
@@ -13,6 +13,9 @@
   "files": [
     "src"
   ],
+  "dependencies": {
+    "@neo-tokyo/types": "workspace:*"
+  },
   "devDependencies": {
     "typescript": "^5.9.3"
   }
