@@ -4,9 +4,6 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.biome": "explicit"
   },
-  "[astro]": {
-    "editor.defaultFormatter": "astro-build.astro-vscode"
-  },
   "[javascript]": {
     "editor.defaultFormatter": "biomejs.biome"
   },
@@ -34,17 +31,12 @@
     "**/.git": true,
     "**/.DS_Store": true,
     "**/node_modules": true,
-    "**/.astro": true,
     "**/dist": true
   },
   "search.exclude": {
     "**/node_modules": true,
     "**/dist": true,
-    "**/.astro": true,
     "**/pnpm-lock.yaml": true
-  },
-  "emmet.includeLanguages": {
-    "astro": "html"
   },
   "tailwindCSS.experimental.classRegex": [
     ["class:\\s*?[\"'`]([^\"'`]*).*?[\"'`]", "[\"'`]([^\"'`]*).*?[\"'`]"]

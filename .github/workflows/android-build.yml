@@ -1,0 +1,65 @@
+name: Android Debug Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-android:
+    name: Build Android APK
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '21'
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build Web Assets
+        run: pnpm build
+
+      - name: Add Android Platform
+        run: |
+          if [ ! -d "android" ]; then
+            npx cap add android
+          fi
+        working-directory: packages/game
+
+      - name: Sync Capacitor
+        run: npx cap sync android
+        working-directory: packages/game
+
+      - name: Build Debug APK
+        run: ./gradlew assembleDebug
+        working-directory: packages/game/android
+
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-debug.apk
+          path: packages/game/android/app/build/outputs/apk/debug/app-debug.apk
+          retention-days: 5

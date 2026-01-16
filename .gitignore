@@ -168,3 +168,6 @@ test-results/
 playwright-report/
 packages/e2e/test-results/
 packages/e2e/playwright-report/
+
+# Auto Claude data directory
+.auto-claude/

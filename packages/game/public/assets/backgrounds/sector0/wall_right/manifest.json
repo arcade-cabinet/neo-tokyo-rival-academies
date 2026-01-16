@@ -1,0 +1,20 @@
+{
+  "id": "sector0_wall_right",
+  "name": "Sector 0 Right Wall",
+  "type": "background",
+  "description": "Right boundary wall for isometric diorama - Neo-Tokyo building facade.",
+  "visualPrompt": "Side view of Neo-Tokyo cyberpunk building facade, different building than left wall, industrial warehouse style with metal shutters, cargo loading dock, exposed ventilation ducts, flickering neon bar signs, graffiti tags, rain puddles on ledges reflecting magenta and cyan lights, dark gritty aesthetic, night scene, vertical composition, anime cel-shaded style, no characters, dramatic lighting from left side.",
+  "imageConfig": {
+    "aiModel": "nano-banana-pro",
+    "aspectRatio": "9:16",
+    "poseMode": "t-pose"
+  },
+  "tasks": {
+    "conceptArt": {
+      "taskId": "019bc121-86ed-729f-bc01-9d4134ccdf7e",
+      "status": "SUCCEEDED",
+      "resultUrl": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/uploads/image_019bc121-86ed-729f-bc01-9d4134ccdf7e_0.png?Expires=1768730974&Signature=N~Y691LVPo3lfK0HUP1Se3w874fOS8F2WB2~QOybazdxIb169nAzo0xmfpO01A234Su4wUipg7YDfh3Ac6BTN2lDZbBTL7E8GmlokeYyQ1VlAi7X5ATqKvKyeXgkBb8gohe29UdiqkksQsZXfchV05PTPRMRxXp1MeekAWLDBL0J5N9bTcl2c6GnUnH1XtXm9udHZS0DWrH19VGc1THHLbJWt0fimwXvcpnseJXr7NUKx9v2jSAEtTqVCc6sYzLqeZ3Mk1IaUrzJ77r6aZ-MBYluV4IayxUc9AKoRckHoqVv6Df-Htanqx391Rb5Q7Jrmhhqb1-5kWbf6VKSo-471A__&Key-Pair-Id=KL5I0C8H7HX83",
+      "localPath": "./concept.png"
+    }
+  }
+}

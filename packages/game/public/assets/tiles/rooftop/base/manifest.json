@@ -1,0 +1,26 @@
+{
+  "id": "rooftop_base",
+  "name": "Rooftop Base Tile",
+  "type": "tile",
+  "description": "Standard Neo-Tokyo rooftop surface tile for hex grid floor.",
+  "visualPrompt": "Top-down orthographic view of weathered industrial rooftop surface, dark gray concrete with subtle cracks, rain-stained texture, small puddles reflecting faint neon glow, Neo-Tokyo cyberpunk aesthetic, hexagonal tile format, seamless tileable texture, no objects, no characters, flat even lighting, 4k texture, anime cel-shaded style.",
+  "imageConfig": {
+    "aiModel": "nano-banana-pro",
+    "aspectRatio": "1:1",
+    "poseMode": "t-pose"
+  },
+  "tasks": {
+    "conceptArt": {
+      "taskId": "019bc120-dc97-726e-a533-1a975e824559",
+      "status": "SUCCEEDED",
+      "resultUrl": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/uploads/image_019bc120-dc97-726e-a533-1a975e824559_0.png?Expires=1768730933&Signature=FWX7EpsnAQnkMgZa-CyUhZ-jDjkdvcRvM-uv5bYneNutNDXfzutrS7UKdtrCLipn8dvuGVIZXBGYduBBBKEhmTgn3qAjK933j~JHBDwF5tFwdMVItfON3pSR1ZSr7NIajnmd6OKVUMKuLrshzLLXF0MqXK2Alt8t8mcpXkalu4iSmMkL~3ecQWS7fU4XG-vP22k0WCg1GZEiHCLkGpbKIsjq~TS4APFpV9ArN6b0aLggQ4dLAN7Ie4nbvPk2GCsR9xJ7LcOz8M59aXGChb2Qo1iomXbxW8q5z-Zf~cxfmZjyo0s0x8~z6y3Ueemm1tpa7sX8cduiympb8TFKD-1H8Q__&Key-Pair-Id=KL5I0C8H7HX83",
+      "localPath": "./concept.png"
+    },
+    "model3d": {
+      "taskId": "019bc123-55c0-7b64-953a-5b6fd6c117c0",
+      "status": "SUCCEEDED",
+      "resultUrl": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019bc123-55c0-7b64-953a-5b6fd6c117c0/output/model.glb?Expires=1768731268&Signature=ddMeC3BijSkPEDLTeUKflBvmHHSyshkmSEj3u6py~OO8e9q0Tngg0C~Eug7UlozZY9IDL70O0-izObeTtcmqzzvYlpKV7MlfYwJTvR8SoFcRAHnOeVLQbKcByH1ZIyEMS78Qy~4HTWpC5Hjyil0XrafiSmK2haZk2s~kMCmZ7umDHvHgjvx~KFThWbYNOB1GyhMqnVG3AlzSzlL7tAW9SImfQjc7bt8ocbxf4O5VtAop55iX199SNeqC7HoawRP~vRxSNj994s~sIlPZG0KXSescGn4qVkuy~FEy5qO94pCvDso6aosF7StOWUMYbPfyyzTtXdANwJavrT3CmQotkQ__&Key-Pair-Id=KL5I0C8H7HX83",
+      "localPath": "./model.glb"
+    }
+  }
+}

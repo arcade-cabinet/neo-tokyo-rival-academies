@@ -4,15 +4,18 @@ This file provides context for GitHub Copilot when suggesting code for the Neo-T
 
 ## Project Overview
 
-Neo-Tokyo: Rival Academies is a 3D platformer game built with:
-- **Astro 5.x (5.16.9)**: Static site generation with Islands Architecture
-- **React 18.3**: For interactive 3D components only
-- **Three.js 0.170**: 3D graphics engine
-- **React Three Fiber 8.x**: Declarative 3D with React
+Neo-Tokyo: Rival Academies is a 3D Action JRPG built with:
+- **Vite 6.x**: Fast build tooling with HMR
+- **React 19**: UI library for 3D components
+- **Three.js 0.182**: 3D graphics engine (current stack)
+- **Babylon.js**: 3D engine (migration target via Reactylon)
+- **React Three Fiber 9.x**: Declarative 3D with React
 - **React Three Drei 9.x**: R3F helper components
+- **Miniplex**: Entity Component System (ECS)
+- **Zustand**: State management
 - **PNPM 10**: Package manager (NOT npm or yarn)
-- **Biome 1.9.4**: Linter and formatter (NOT ESLint or Prettier)
-- **TypeScript 5.9 (5.9.3)**: Strict mode enabled
+- **Biome 2.3**: Linter and formatter (NOT ESLint or Prettier)
+- **TypeScript 5.9**: Strict mode enabled
 
 ## Code Style & Conventions
 
@@ -42,17 +45,21 @@ Neo-Tokyo: Rival Academies is a 3D platformer game built with:
 - Line width: 100 characters
 - Use Biome's formatting rules (see biome.json)
 
-### File Structure
+### File Structure (Monorepo)
 ```
-src/
-├── components/react/
-│   ├── scenes/         # Full 3D scenes with <Canvas>
-│   ├── objects/        # Individual 3D objects
-│   ├── ui/             # UI overlays
-│   └── game/           # Game logic
-├── layouts/            # Astro layouts
-├── pages/              # Astro pages (routing)
-└── utils/              # Utility functions
+packages/
+├── game/                 # Main game (Vite + React)
+│   └── src/
+│       ├── components/react/
+│       │   ├── scenes/   # 3D scenes with <Canvas>
+│       │   ├── objects/  # Individual 3D objects
+│       │   ├── ui/       # UI overlays
+│       │   └── game/     # Game logic components
+│       ├── systems/      # ECS systems (Physics, Combat, AI)
+│       ├── state/        # Global state (ECS, Zustand)
+│       └── utils/        # Utility functions
+├── content-gen/          # GenAI content pipeline
+└── e2e/                  # Playwright E2E tests
 ```
 
 ## Common Patterns
@@ -78,16 +85,16 @@ export const GameScene: FC = () => {
 };
 ```
 
-### Using Scene in Astro Page
-```astro
----
-import Layout from '@layouts/Layout.astro';
-import { GameScene } from '@components/react/scenes/GameScene';
----
+### Using Scene in Main App
+```typescript
+// packages/game/src/App.tsx
+import NeoTokyoGame from '@components/react/scenes/NeoTokyoGame';
 
-<Layout title="Game">
-  <GameScene client:load />
-</Layout>
+function App() {
+  return <NeoTokyoGame />;
+}
+
+export default App;
 ```
 
 ### Animated 3D Object

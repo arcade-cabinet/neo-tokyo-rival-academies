@@ -4,11 +4,11 @@ This document provides guidelines and context for AI coding agents working on th
 
 ## 🎯 Project Overview
 
-**Neo-Tokyo: Rival Academies** is a **3D Action JRPG** built with modern web technologies. The game features immersive 3D cel-shaded graphics powered by Three.js and React Three Fiber, delivered through a performant Astro-based architecture.
+**Neo-Tokyo: Rival Academies** is a **3D Action JRPG** built with modern web technologies. The game features immersive 3D cel-shaded graphics powered by Three.js and React Three Fiber, delivered through a performant Vite-based SPA architecture.
 
 ### Core Technologies
 
-- **Astro 5.x**: Static site generator with partial hydration
+- **Vite 6.x**: Fast build tooling with HMR
 - **React 19**: For interactive 3D components
 - **Three.js 0.182**: Core 3D graphics library
 - **React Three Fiber 9.x**: React renderer for Three.js

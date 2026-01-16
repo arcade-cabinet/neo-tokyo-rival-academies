@@ -1,0 +1,116 @@
+{
+  "id": "alien-humanoid",
+  "name": "Tentacle Alien Humanoid",
+  "type": "character",
+  "description": "Humanoid alien invader with tentacle features.",
+  "textToImageTask": {
+    "prompt": "Humanoid alien creature, tall slender build with elongated limbs and thin torso, smooth rubbery purple-grey skin with iridescent sheen and subtle texture patterns. HANDS: two hands with four elongated fingers each, proper finger proportions with defined joints, natural finger spacing. FACE: no external ears just smooth head sides, small slit nostrils, thin lipless mouth, oversized solid black almond-shaped eyes reflecting light. Large bulbous head with no hair. Sleek form-fitting dark purple biomechanical suit covering torso with organic ribbed patterns, suit material draping close to body with wet-look texture, bare feet with elongated toes and normal proportions. Emotionless predatory expression, alert hunting stance. Anime cel-shaded art style with sci-fi horror aesthetic and anatomically correct extremities.",
+    "generateMultiView": true,
+    "poseMode": "a-pose"
+  },
+  "multiImageTo3DTask": {
+    "topology": "quad",
+    "targetPolycount": 25000,
+    "symmetryMode": "auto",
+    "shouldRemesh": true,
+    "shouldTexture": true,
+    "enablePbr": false,
+    "poseMode": "a-pose"
+  },
+  "riggingTask": {
+    "heightMeters": 2
+  },
+  "animationTask": {
+    "preset": "enemy"
+  },
+  "tasks": {
+    "concept": {
+      "taskId": "019bc460-dc4a-7893-84d7-7c3e21e26d86",
+      "status": "SUCCEEDED",
+      "completedAt": 1768526286019,
+      "outputs": {
+        "taskId": "019bc460-dc4a-7893-84d7-7c3e21e26d86",
+        "imageUrls": [
+          "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/uploads/multi_view_image_019bc461-8a35-74ab-8795-70ac134b346e_part_0.png?Expires=1768785486&Signature=mNIKid2wHM9dX0R4Xn2XQnjg1Oc~wLR1bjETEAj0iavT2D8iQE-lQ9ruSLAxE4LHN~2OuVfyo3rdGodk5qxRy5gQHnThP4UIRTX75Gd4EA8E5yPvHxvfPlzaXYu4kCREO-PPeFKBNjw-IR02D7lfqbxeN~0Nmw41fR7eeScbr3fA~3SIj1Bsm19Ts0~TgLAA7xPaEjqXpZP182QHZSwnmWUvEE9~PUyY8SZ6PxCexT4DHpv1Ws10jNtK-6UwNhNZvHF6-r-y4reHhgh1~kq4pTMFelXsSC6mV5xl~M6~7gRgptvpKsxdWV~gws2m5y8wpvyBOSKVgyoXGjyQkNgR9w__&Key-Pair-Id=KL5I0C8H7HX83",
+          "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/uploads/multi_view_image_019bc461-8a35-74ab-8795-70ac134b346e_part_1.png?Expires=1768785486&Signature=KsfmgmzJn~4O4Duf0mA~qTodgI~VhqeUyPSOnk7FfeMY-aXfMJ8g3TVOQtlJBBarMefCxGUbXF6ePHFarnSctai9l~NVCMYMBA9iAFKIVpr5UvCs7S8NVvcvbcEV9E7yO1AsedBv~9Q9ZCmUUHkuOH8hKAdee04fgxoFry8B13o4Dl1vxbIYqvxfap~v~WwGA-zdAe69cDzQw7jSemNvXqassw1bd3DygoaS9Q0~4BWAIQhZ301CuNvbpz8kzFAEhw0UbJwJEzT7MGupuywQd3RdhF3FnIQA3v~wMpe1ajvboqTWU~TS7LT-TqmijHvDxPdyYLGG12RI6BCE23JXng__&Key-Pair-Id=KL5I0C8H7HX83",
+          "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/uploads/multi_view_image_019bc461-8a35-74ab-8795-70ac134b346e_part_2.png?Expires=1768785486&Signature=MX7jjG~HXfLEJkvtTyCdrCjdWXIqQgKjFXoegvuLyv27BTYEpnFY-aAY8HxALDE57Tp02mrP1K3Kr45vHr3vwWpI9oHVRUjnjiTBCD2WYvFIg~hiThmy8qMhVTd4rVwaIxhhf2UQQoores~7w3Bw83Jb2P7wmJ23XRoyz4p2T2wNk1S0eypoAvBei1VKiSaQlYQXohT6smBe-NASnr4OpmZk7iD4QRbHl232RLYzgVsbF8li0Kh4laVeAgu9inR~oLAyoWCfHGae6y84im88Zaw9fi4g-KE6fxj7CHwEfVyLu8w27fo9iYWFGG71jQ6El3JjTHB5uIjFayWtwtZXSA__&Key-Pair-Id=KL5I0C8H7HX83"
+        ]
+      },
+      "artifacts": {}
+    },
+    "model": {
+      "taskId": "019bc461-8d84-7aa2-b2cf-de23d3299cc2",
+      "status": "SUCCEEDED",
+      "completedAt": 1768526435288,
+      "outputs": {
+        "taskId": "019bc461-8d84-7aa2-b2cf-de23d3299cc2",
+        "model": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019bc461-8d84-7aa2-b2cf-de23d3299cc2/output/model.glb?Expires=1768785635&Signature=VCakTLYWy2lmGPEADyIlFic-DoOZqq57bCGlhkcBmfYajyyGsQDMtYupcac6ErocZ5X305G-BcbamlAlBBJWoAE-d9c6fxNwLq9n1H9mRvD-nbCKIVgh45ln1e3Nx04hVABeAyP-9~4dHWHyW0xXxmVpYLPj1mMxfmfczCH8xPnVrKhlUP6WZHXfWhJ2URl6wrVT8enHgDZihPxOpgy3cZCINJe1Mzyv4F3OnT29oASOSWHq9egPvL6m3ivF2MWh8HC4g7BpCpHvCw8gaMKU-b8P03nW0rY7wfavSQ1mDuDZFlcXziWOYpkMDgkJRl3Ut5BqvwOTQ4HWlw7wLPXMKA__&Key-Pair-Id=KL5I0C8H7HX83",
+        "textures": [
+          {
+            "base_color": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019bc461-8d84-7aa2-b2cf-de23d3299cc2/output/texture_0.png?Expires=1768785635&Signature=EvEr4Krc1K2sjx0S3EkVLOe0geWf2AVbFLOBUsa1Zy2Aie9SyokxeFmVkGncRSihC83OZaQaSaQNL0cOrmp5hUznHj4r9WMMPlgdauAOsyKCbEBZrXaJQra731ncod0rSrXwICjg0hvVqln5ERZ6Hehylr2q8wi4Ab-rVrTspXNjh96T5HOaUYLovMkGeSYO5bu0TxQMGx0QBqhafLteqNgBAuzAbJWybsROXC2gmX3LFRZ4rU4Jd3YU99zjcLqlq~enQaanbKCuab3kLzBQ4~iUe7D7PBIgqzhLGtt~d6Eo~BkSo8qZOpEsyEDllwU0AcdBufCkha2oTtZXWnW68w__&Key-Pair-Id=KL5I0C8H7HX83"
+          }
+        ],
+        "textureUrl": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019bc461-8d84-7aa2-b2cf-de23d3299cc2/output/texture_0.png?Expires=1768785635&Signature=EvEr4Krc1K2sjx0S3EkVLOe0geWf2AVbFLOBUsa1Zy2Aie9SyokxeFmVkGncRSihC83OZaQaSaQNL0cOrmp5hUznHj4r9WMMPlgdauAOsyKCbEBZrXaJQra731ncod0rSrXwICjg0hvVqln5ERZ6Hehylr2q8wi4Ab-rVrTspXNjh96T5HOaUYLovMkGeSYO5bu0TxQMGx0QBqhafLteqNgBAuzAbJWybsROXC2gmX3LFRZ4rU4Jd3YU99zjcLqlq~enQaanbKCuab3kLzBQ4~iUe7D7PBIgqzhLGtt~d6Eo~BkSo8qZOpEsyEDllwU0AcdBufCkha2oTtZXWnW68w__&Key-Pair-Id=KL5I0C8H7HX83"
+      },
+      "artifacts": {}
+    },
+    "rigging": {
+      "taskId": "019bc463-d497-7411-8ab2-71d10a658849",
+      "status": "SUCCEEDED",
+      "completedAt": 1768526458679,
+      "outputs": {
+        "taskId": "019bc463-d497-7411-8ab2-71d10a658849",
+        "riggedModel": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019bc463-d497-7411-8ab2-71d10a658849/output/Character_output.glb?Expires=1768785658&Signature=qcJx9hM44i8O3zD28iffqrcwzfheVY6AyR1gCvnaVpPBSY7Q36yPO9t~1AwhdKQG7f1iPTHCs5jcyq0mbN1cCC39rxl5jVxpw2TgeC2DYlLDOj4TLCHp-RI5Q44APOu7YCQcsyjUtcwVJdxO-28ObkSXcDq72fbjIliXKIxxKXBZWbtniWXrJNrv5waH~rkuuNUhoGW851PT1Mp3yA~PupQ3xD4oQWDMme3io3OhwXrqBP14gmMvKsrfHsdXGlgXrISELXab5DwU5bFA5L34v2i-gxQ2T1ac~ViGcVUKJxE2vN2~NFsXxPODqvgXcf87TLnuBC9mN1NpI6vy1wVTLw__&Key-Pair-Id=KL5I0C8H7HX83"
+      },
+      "artifacts": {}
+    },
+    "animations": [
+      {
+        "taskId": "019bc464-3012-7b08-a8a5-1a1989640461",
+        "status": "SUCCEEDED",
+        "animationName": "COMBAT_STANCE",
+        "completedAt": 1768526480170,
+        "outputs": {
+          "animations/combat_stance.glb": "animations/combat_stance.glb"
+        }
+      },
+      {
+        "taskId": "019bc464-83e4-741d-9927-4a9f96b07b1c",
+        "status": "SUCCEEDED",
+        "animationName": "RUNFAST",
+        "completedAt": 1768526489563,
+        "outputs": {
+          "animations/runfast.glb": "animations/runfast.glb"
+        }
+      },
+      {
+        "taskId": "019bc464-a897-741d-a753-fc1272e40823",
+        "status": "SUCCEEDED",
+        "animationName": "DOUBLE_COMBO_ATTACK",
+        "completedAt": 1768526507691,
+        "outputs": {
+          "animations/double_combo_attack.glb": "animations/double_combo_attack.glb"
+        }
+      },
+      {
+        "taskId": "019bc464-ef6e-77f6-a046-1b5491f4d186",
+        "status": "SUCCEEDED",
+        "animationName": "BEHIT_FLYUP",
+        "completedAt": 1768526516857,
+        "outputs": {
+          "animations/behit_flyup.glb": "animations/behit_flyup.glb"
+        }
+      },
+      {
+        "taskId": "019bc465-1333-741f-9cae-3c10d2623c18",
+        "status": "SUCCEEDED",
+        "animationName": "DEAD",
+        "completedAt": 1768526535349,
+        "outputs": {
+          "animations/dead.glb": "animations/dead.glb"
+        }
+      }
+    ]
+  },
+  "seed": 1891033420
+}
