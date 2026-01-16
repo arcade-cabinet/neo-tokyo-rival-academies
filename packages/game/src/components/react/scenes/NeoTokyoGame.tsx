@@ -131,9 +131,6 @@ export default function NeoTokyoGame() {
       if (shakeTimeoutRef.current) {
         clearTimeout(shakeTimeoutRef.current);
       }
-      if (dialogueTimeoutRef.current) {
-        clearTimeout(dialogueTimeoutRef.current);
-      }
     };
   }, []);
 

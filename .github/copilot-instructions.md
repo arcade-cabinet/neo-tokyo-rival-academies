@@ -2,183 +2,218 @@
 
 This file provides context for GitHub Copilot when suggesting code for the Neo-Tokyo: Rival Academies project.
 
-## Essential Reading (Before Touching Code)
-
-| Document | Purpose |
-|----------|---------|
-| [docs/GENAI_PIPELINE.md](../docs/GENAI_PIPELINE.md) | **CRITICAL**: Asset generation with Meshy AI |
-| [docs/NARRATIVE_DESIGN.md](../docs/NARRATIVE_DESIGN.md) | A/B/C story architecture, 3-hour JRPG |
-| [docs/JRPG_TRANSFORMATION.md](../docs/JRPG_TRANSFORMATION.md) | Stats, combat, progression |
-| [docs/BABYLON_MIGRATION_PLAN.md](../docs/BABYLON_MIGRATION_PLAN.md) | Upcoming Babylon.js migration |
-| [docs/UI_DESIGN_SYSTEM.md](../docs/UI_DESIGN_SYSTEM.md) | Faction-themed UI design tokens |
-
-## Memory Bank (AI Context)
-
-| Document | Purpose |
-|----------|---------|
-| [memory-bank/projectbrief.md](../memory-bank/projectbrief.md) | Core project summary |
-| [memory-bank/techContext.md](../memory-bank/techContext.md) | Technical stack details |
-| [memory-bank/activeContext.md](../memory-bank/activeContext.md) | Current work focus |
-| [memory-bank/systemPatterns.md](../memory-bank/systemPatterns.md) | Architecture patterns |
-
----
-
 ## Project Overview
 
-**Neo-Tokyo: Rival Academies** is a **~3 hour Action JRPG** built with:
-- **Vite** - Build toolchain (NOT Astro - migrated)
-- **React 19** - UI and 3D components
-- **Three.js 0.182 + R3F 9.x** - 3D rendering
-- **Miniplex** - Entity Component System
-- **Zustand** - UI state management
-- **PNPM 10** - Package manager (NOT npm/yarn)
-- **Biome** - Linter/formatter (NOT ESLint/Prettier)
-- **TypeScript 5.x** - Strict mode enabled
-
----
-
-## GenAI Asset Pipeline (CRITICAL)
-
-### Before Working on Assets
-
-1. **Read** [docs/GENAI_PIPELINE.md](../docs/GENAI_PIPELINE.md)
-2. **Read** existing manifests (e.g., `packages/game/public/assets/characters/main/kai/manifest.json`)
-3. **Follow** the exact manifest schema
-4. **Never** invent new fields
-
-### Manifest Schema
-
-```json
-{
-  "id": "kai",
-  "name": "Kai",
-  "type": "character",
-  "description": "Protagonist from Crimson Academy",
-  "textToImageTask": {
-    "prompt": "...",
-    "generateMultiView": true,
-    "poseMode": "a-pose"
-  },
-  "multiImageTo3DTask": {
-    "topology": "quad",
-    "targetPolycount": 30000,
-    "symmetryMode": "auto",
-    "shouldRemesh": true,
-    "shouldTexture": true,
-    "enablePbr": false,
-    "poseMode": "a-pose"
-  },
-  "riggingTask": {
-    "heightMeters": 1.78
-  },
-  "animationTask": {
-    "preset": "hero"
-  },
-  "tasks": {},
-  "seed": 2902765030
-}
-```
-
-### NEVER Invent Manifest Fields
-
-Do NOT add fields like:
-- ❌ `artStyle`
-- ❌ `visualPrompt`
-- ❌ `imageConfig`
-- ❌ `modelConfig`
-
-Use ONLY: `textToImageTask`, `multiImageTo3DTask`, `riggingTask`, `animationTask`.
-
-### CLI Commands
-
-```bash
-pnpm --filter @neo-tokyo/content-gen generate characters/main/kai
-pnpm --filter @neo-tokyo/content-gen generate tiles/rooftop/base
-```
-
----
-
-## Monorepo Structure
-
-```
-neo-tokyo-rival-academies/
-├── packages/
-│   ├── game/                       # React game client (Vite)
-│   │   ├── public/assets/          # GenAI-generated assets
-│   │   └── src/
-│   │       ├── components/react/   # Scenes, Objects, UI
-│   │       ├── state/              # Miniplex ECS + Zustand
-│   │       └── utils/              # Hex grid, helpers
-│   │
-│   ├── content-gen/                # GenAI toolchain
-│   │   ├── README.md               # Content-gen documentation
-│   │   └── src/
-│   │       ├── api/                # Meshy AI client
-│   │       ├── pipelines/          # Pipeline definitions
-│   │       ├── tasks/              # Animation presets
-│   │       └── types/              # Manifest Zod schemas
-│   │
-│   └── e2e/                        # Playwright E2E tests
-│
-├── docs/                           # Design & architecture docs
-├── memory-bank/                    # AI context files
-└── README.md
-```
-
----
+Neo-Tokyo: Rival Academies is a 3D platformer game built with:
+- **Astro 5.x (5.16.9)**: Static site generation with Islands Architecture
+- **React 18.3**: For interactive 3D components only
+- **Three.js 0.170**: 3D graphics engine
+- **React Three Fiber 8.x**: Declarative 3D with React
+- **React Three Drei 9.x**: R3F helper components
+- **PNPM 10**: Package manager (NOT npm or yarn)
+- **Biome 1.9.4**: Linter and formatter (NOT ESLint or Prettier)
+- **TypeScript 5.9 (5.9.3)**: Strict mode enabled
 
 ## Code Style & Conventions
 
-### Critical Rules
-- **Use PNPM** - Never npm or yarn
-- **Use Biome** - Never ESLint or Prettier
-- **Use Vite** - NOT Astro (migrated)
-- **Use Miniplex** - For ECS game logic
-- **Dispose resources** - Clean up Three.js objects
-
-### TypeScript
-```typescript
-import type { FC } from 'react';
-import { useFrame } from '@react-three/fiber';
-import { hexToWorld } from '@/utils/hex-grid';
-
-interface CharacterProps {
-  position: [number, number, number];
-}
-
-export const Character: FC<CharacterProps> = ({ position }) => {
-  // ...
-};
-```
+### Language & Types
+- Use TypeScript for all new files
+- Enable strict mode checks
+- Avoid `any` type - use `unknown` or proper types
+- Use `type` for object shapes, `interface` for extensible contracts
+- Always define prop types for React components
 
 ### Imports
 - Use ES6 imports
-- Use path aliases: `@/`, `@components/`, `@utils/`
-- Type-only imports: `import type { FC } from 'react';`
+- Use path aliases: `@/`, `@components/`, `@layouts/`, `@utils/`, `@assets/`
+- Organize imports: types first, then external libraries, then local imports
+- Use type-only imports: `import type { FC } from 'react';`
+
+### React Components
+- Use functional components with TypeScript
+- Prefer named exports over default exports
+- Use hooks (useState, useEffect, useRef, useMemo, useCallback)
+- For 3D: Use R3F hooks (useFrame, useThree, useLoader)
 
 ### Formatting
 - Single quotes for strings
 - Semicolons required
 - 2 space indentation
-- Use Biome's rules (see `biome.json`)
+- Line width: 100 characters
+- Use Biome's formatting rules (see biome.json)
 
+### File Structure
+```
+src/
+├── components/react/
+│   ├── scenes/         # Full 3D scenes with <Canvas>
+│   ├── objects/        # Individual 3D objects
+│   ├── ui/             # UI overlays
+│   └── game/           # Game logic
+├── layouts/            # Astro layouts
+├── pages/              # Astro pages (routing)
+└── utils/              # Utility functions
+```
+
+## Common Patterns
+
+### Creating a 3D Scene Component
+```typescript
+import type { FC } from 'react';
+import { Canvas } from '@react-three/fiber';
+import { OrbitControls, Environment } from '@react-three/drei';
+
+export const GameScene: FC = () => {
+  return (
+    <Canvas camera={{ position: [0, 5, 10], fov: 75 }}>
+      <ambientLight intensity={0.5} />
+      <directionalLight position={[10, 10, 5]} intensity={1} />
+
+      {/* 3D content here */}
+
+      <OrbitControls />
+      <Environment preset="city" />
+    </Canvas>
+  );
+};
+```
+
+### Using Scene in Astro Page
+```astro
+---
+import Layout from '@layouts/Layout.astro';
+import { GameScene } from '@components/react/scenes/GameScene';
 ---
 
-## Game Architecture
+<Layout title="Game">
+  <GameScene client:load />
+</Layout>
+```
 
-### Story Tiers (A/B/C)
-- **A Story**: Kai vs Vera rivalry (8-10 major beats)
-- **B Story**: Parallel character development
-- **C Story**: Disruptor events (alien_ship, mall_drop)
+### Animated 3D Object
+```typescript
+import { useRef } from 'react';
+import { useFrame } from '@react-three/fiber';
+import type { Mesh } from 'three';
 
-### 9 Characters
-| Tier | Characters | Preset |
-|------|------------|--------|
-| A-Story | Kai, Vera | hero (7 animations) |
-| B-Story | Yakuza Grunt/Boss, Biker Grunt/Boss | enemy/boss |
-| C-Story | Mall Guard, Alien Humanoid, Tentacle | enemy/prop |
+export function RotatingCube() {
+  const meshRef = useRef<Mesh>(null);
 
----
+  useFrame((state, delta) => {
+    if (meshRef.current) {
+      meshRef.current.rotation.y += delta;
+    }
+  });
+
+  return (
+    <mesh ref={meshRef}>
+      <boxGeometry args={[1, 1, 1]} />
+      <meshStandardMaterial color="cyan" />
+    </mesh>
+  );
+}
+```
+
+### Loading 3D Models
+```typescript
+import { useGLTF } from '@react-three/drei';
+
+export function Model() {
+  const { scene } = useGLTF('/models/character.glb');
+  return <primitive object={scene} />;
+}
+
+useGLTF.preload('/models/character.glb');
+```
+
+### Utility Function
+```typescript
+/**
+ * Calculate velocity based on acceleration and time
+ */
+export function calculateVelocity(
+  initialVelocity: number,
+  acceleration: number,
+  deltaTime: number
+): number {
+  return initialVelocity + acceleration * deltaTime;
+}
+```
+
+## Important Rules
+
+### DO
+- ✅ Use PNPM commands (`pnpm add`, `pnpm install`)
+- ✅ Use Biome for linting/formatting (`pnpm check`)
+- ✅ Use TypeScript with proper types
+- ✅ Use path aliases (@/, @components/, etc.)
+- ✅ Use React Three Fiber for 3D content
+- ✅ Use Astro for static content
+- ✅ Dispose Three.js resources (geometries, materials, textures)
+- ✅ Use `client:load` directive for React components in Astro
+- ✅ Memoize expensive calculations
+- ✅ Add JSDoc comments for complex functions
+
+### DON'T
+- ❌ Don't use npm or yarn commands
+- ❌ Don't use ESLint or Prettier configs
+- ❌ Don't use `any` type
+- ❌ Don't create memory leaks (dispose Three.js objects)
+- ❌ Don't use default exports (prefer named exports)
+- ❌ Don't use React for static content (use Astro)
+- ❌ Don't forget `client:` directives on React components
+- ❌ Don't do heavy computations in useFrame without memoization
+
+## Performance Considerations
+
+- Minimize JavaScript bundle size
+- Use Astro for static content, React only for interactivity
+- Implement Level of Detail (LOD) for 3D objects
+- Use instanced meshes for repeated objects
+- Compress textures appropriately
+- Lazy load heavy assets
+- Profile with Chrome DevTools
+- Target 60 FPS for gameplay
+
+## Dependencies
+
+### Adding Dependencies
+```bash
+# Production dependency
+pnpm add <package-name>
+
+# Development dependency
+pnpm add -D <package-name>
+```
+
+### Core Dependencies (already installed)
+- @astrojs/react
+- @react-three/fiber
+- @react-three/drei
+- three
+- react
+- react-dom
+- astro
+
+### Dev Dependencies
+- @biomejs/biome
+- typescript
+- @astrojs/check
+
+## Game-Specific Context
+
+### Visual Style
+- Neon cyberpunk aesthetic (cyan, magenta, yellow)
+- Neo-Tokyo setting with skyscrapers and platforms
+- Holographic UI elements
+- Particle effects and dynamic lighting
+
+### Core Gameplay
+- 3D platformer mechanics
+- Character movement and jumping
+- Multiple rival academies
+- Collectibles and power-ups
+- Competitive gameplay modes
 
 ## Commands Reference
 
@@ -186,40 +221,24 @@ export const Character: FC<CharacterProps> = ({ position }) => {
 # Development
 pnpm dev              # Start dev server
 pnpm build            # Build for production
+pnpm preview          # Preview production build
 
 # Code Quality
 pnpm check            # Run Biome checks
-
-# Tests
-pnpm test             # Unit tests (Vitest)
-pnpm test:e2e         # E2E tests (Playwright)
-
-# GenAI
-pnpm --filter @neo-tokyo/content-gen generate <path>
+pnpm check:fix        # Auto-fix issues
+pnpm lint             # Lint only
+pnpm format           # Format only
+pnpm type-check       # TypeScript check
 ```
 
----
+## Additional Resources
 
-## DO / DON'T
-
-### DO
-- ✅ Read docs/GENAI_PIPELINE.md before touching assets
-- ✅ Read memory-bank/ for project context
-- ✅ Use PNPM commands
-- ✅ Use Biome for linting/formatting
-- ✅ Use TypeScript with proper types
-- ✅ Use Miniplex for ECS game logic
-- ✅ Dispose Three.js resources
-- ✅ Follow existing manifest schema exactly
-
-### DON'T
-- ❌ Use npm or yarn
-- ❌ Use ESLint or Prettier
-- ❌ Use `any` type
-- ❌ Invent new manifest fields
-- ❌ Create memory leaks
-- ❌ Skip reading the docs
+- **Astro**: https://docs.astro.build/
+- **R3F**: https://docs.pmnd.rs/react-three-fiber/
+- **Drei**: https://github.com/pmndrs/drei
+- **Three.js**: https://threejs.org/docs/
+- **Biome**: https://biomejs.dev/
 
 ---
 
-*Last Updated: 2026-01-15*
+When suggesting code, follow these patterns and conventions to maintain consistency across the codebase.

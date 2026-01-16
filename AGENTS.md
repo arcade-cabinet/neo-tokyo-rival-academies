@@ -1,232 +1,63 @@
-# AI Agents Architecture
+# AI Agent Documentation
 
-This document describes the specialized agents and utilities operating within the Neo-Tokyo project.
+This document provides guidelines and context for AI coding agents working on the Neo-Tokyo: Rival Academies project.
 
-## Essential Reading (Before Touching Code)
+## 🎯 Project Overview
 
-| Document | Purpose |
-|----------|---------|
-| [docs/GENAI_PIPELINE.md](docs/GENAI_PIPELINE.md) | **CRITICAL**: Asset generation with Meshy AI |
-| [docs/NARRATIVE_DESIGN.md](docs/NARRATIVE_DESIGN.md) | A/B/C story architecture, 3-hour JRPG |
-| [docs/BABYLON_MIGRATION_PLAN.md](docs/BABYLON_MIGRATION_PLAN.md) | Reactylon migration roadmap |
+**Neo-Tokyo: Rival Academies** is a **3D Action JRPG** built with modern web technologies. The game features immersive 3D cel-shaded graphics powered by Three.js and React Three Fiber, delivered through a performant Astro-based architecture.
 
-## Memory Bank (AI Context)
+### Core Technologies
 
-| Document | Purpose |
-|----------|---------|
-| [memory-bank/projectbrief.md](memory-bank/projectbrief.md) | Core project summary |
-| [memory-bank/techContext.md](memory-bank/techContext.md) | Technical stack details |
-| [memory-bank/activeContext.md](memory-bank/activeContext.md) | Current work focus |
-| [memory-bank/systemPatterns.md](memory-bank/systemPatterns.md) | Architecture patterns |
+- **Astro 5.x**: Static site generator with partial hydration
+- **React 19**: For interactive 3D components
+- **Three.js 0.182**: Core 3D graphics library
+- **React Three Fiber 9.x**: React renderer for Three.js
+- **Miniplex**: Entity Component System (ECS) for game logic
+- **PNPM 10**: Package manager (Strictly use `pnpm`)
+- **Biome 2.3**: Linter and formatter (Strictly use `pnpm check`)
+- **Vitest**: Unit testing framework
+- **Capacitor 8**: Native mobile wrapper
 
-## Related Documentation
+## 🚨 CRITICAL RULES FOR AGENTS
 
-- [CLAUDE.md](CLAUDE.md) - Claude AI assistant guidelines and quick reference
-- [docs/DESIGN_MASTER_PLAN.md](docs/DESIGN_MASTER_PLAN.md) - Overall architecture vision
+1.  **ZERO STUBS POLICY**: Do not write `// TODO` or empty functions. If a feature is in the plan, implement it fully. If it is too complex, break it down, but do not leave broken code.
+2.  **PRODUCTION QUALITY**: Code must be modular, strictly typed (TypeScript, no `any`, no `@ts-ignore`), and commented.
+3.  **VERIFY EVERYTHING**: After every file change, read the file back to ensure correctness. After every feature, run tests.
+4.  **TEST DRIVEN**: Write tests for logic systems *before* or *during* implementation.
+5.  **VISUAL STYLE**: Use `meshToonMaterial` for characters and assets to maintain the cel-shaded anime aesthetic.
 
----
+## 🏗️ Architecture Principles
 
-## 1. ModelerAgent
+### 1. ECS Architecture (Miniplex)
+- Game logic lives in `src/systems/`.
+- State lives in `src/state/ecs.ts`.
+- React components in `src/components/react/game/` should primarily render based on ECS state.
 
-**Role**: 3D Asset Factory
-
-**Responsibility**: Converting text/image concepts into fully rigged and animated GLB files.
-
-**Location**: `packages/content-gen/src/agents/ModelerAgent.ts`
-
-**Tools**: Meshy AI API
-- `POST /v1/text-to-image` - Concept art generation
-- `POST /v1/image-to-3d` - 3D model from image
-- `POST /v1/rigging` - Auto-rigging for characters
-- `POST /v1/animations` - Animation generation
-
-**Capabilities**:
-
-| Asset Type | Concept Art | 3D Model | Rigging | Animations |
-|------------|-------------|----------|---------|------------|
-| `character` | 9:16, T-pose | 50K poly | Yes | IDLE, RUN, ATTACK, etc. |
-| `tile` | 1:1 | 10K poly | No | No |
-| `background` | 16:9 | No | No | No |
-
-**Usage**:
-```bash
-# Full manifest processing
-pnpm --filter @neo-tokyo/content-gen generate
-
-# Specific asset
-pnpm --filter @neo-tokyo/content-gen generate tiles/rooftop/base
-pnpm --filter @neo-tokyo/content-gen generate characters/main/kai
-```
-
-**Manifest Schema** (CRITICAL - Do NOT invent fields):
-```json
-{
-  "id": "kai",
-  "name": "Kai",
-  "type": "character",
-  "description": "Protagonist from Crimson Academy",
-  "textToImageTask": { "prompt": "...", "generateMultiView": true, "poseMode": "a-pose" },
-  "multiImageTo3DTask": { "topology": "quad", "targetPolycount": 30000, "shouldRemesh": true },
-  "riggingTask": { "heightMeters": 1.78 },
-  "animationTask": { "preset": "hero" },
-  "tasks": {},
-  "seed": 2902765030
-}
-```
-
-**NEVER add fields like**: `artStyle`, `visualPrompt`, `imageConfig`, `modelConfig`.
-
-**Key Configuration** (`packages/content-gen/src/agents/ModelerAgent.ts`):
-```typescript
-const DEFAULTS = {
-  image: { aiModel: 'nano-banana-pro', aspectRatio: '9:16', poseMode: 't-pose' },
-  model: { aiModel: 'latest', topology: 'quad', targetPolycount: 50000, enablePbr: true },
-  rigging: { heightMeters: 1.7 },
-  animations: ['IDLE_COMBAT', 'RUN_IN_PLACE', 'ATTACK_MELEE_1', 'HIT_REACTION', 'DEATH']
-};
-```
-
----
-
-## 2. ArtDirectorAgent
-
-**Role**: 2D Concept & Background Artist
-
-**Responsibility**: Generating high-fidelity 2D assets for backgrounds and storyboards.
-
-**Location**: `packages/content-gen/src/agents/ArtDirectorAgent.ts`
-
-**Tools**: Google Imagen (via `@google/genai`)
-
-**Note**: Character concept art is now primarily handled by `ModelerAgent` via Meshy for tighter 3D pipeline integration. ArtDirector remains useful for:
-- Scene backgrounds
-- Storyboard frames
-- UI concept art
-- Marketing materials
-
----
-
-## 3. NarrativeAgent (Planned)
-
-**Role**: Storyteller
-
-**Responsibility**: Generating quest text, dialogue, and flavor text.
-
-**Tools**: LLM (Gemini/Claude)
-
-**Status**: Not yet implemented
-
----
-
-## 4. Hex Grid Utilities (NEW)
-
-**Role**: Procedural Grid System
-
-**Location**: `packages/game/src/utils/hex-grid.ts`
-
-**Based On**: [Red Blob Games Hexagonal Grids](https://www.redblobgames.com/grids/hexagons/)
-
-**Key Functions**:
-```typescript
-// Coordinate conversions
-hexToWorld(hex: HexAxial, layout: HexLayout): WorldPosition
-worldToHex(world: WorldPosition, layout: HexLayout): HexAxial
-offsetToAxial(offset: HexOffset, orientation: HexOrientation): HexAxial
-
-// Grid generation
-generateRectGrid(width: number, height: number, layout: HexLayout): HexAxial[]
-generateHexGrid(radius: number): HexAxial[]
-
-// Algorithms
-hexDistance(a: HexAxial, b: HexAxial): number
-hexNeighbors(hex: HexAxial): HexAxial[]
-hexRing(center: HexAxial, radius: number): HexAxial[]
-
-// Three.js integration
-createHexMatrix(hex: HexAxial, layout: HexLayout, rotation: number, scale: number): number[]
-generateGridPositions(width: number, height: number, layout: HexLayout): [number, number, number][]
-```
-
----
-
-## 5. Hex Normalizer (NEW)
-
-**Role**: GLTF Model Constraint System
-
-**Location**: `packages/game/src/utils/hex-normalizer.ts`
-
-**Purpose**: Force any 3D model to fit within exact hex tile dimensions regardless of original geometry.
-
-**Key Functions**:
-```typescript
-// Main normalizer
-normalizeToHex(gltf: GLTF, config: HexNormalizerConfig): NormalizedModel
-
-// Geometry helpers
-createStandardHexGeometry(hexSize: number, height: number, orientation: HexOrientation): CylinderGeometry
-
-// Instanced mesh setup
-setupHexInstancedMesh(mesh: InstancedMesh, positions: [number, number, number][], rotations?: number[], scales?: number[]): void
-```
-
-**Configuration**:
-```typescript
-interface HexNormalizerConfig {
-  hexSize: number;           // Target hex outer radius
-  orientation: 'pointy' | 'flat';
-  targetHeight: number;      // Y-axis height
-  overflowMode: 'scale' | 'clip' | 'mask';
-  centerModel: boolean;
-  alignToGround: boolean;
-  padding: number;           // 0-1, percentage of hex size
-}
-```
-
----
-
-## Agent Orchestration
-
-Agents are invoked via the `content-gen` CLI. They do not run autonomously in the background but are triggered by build/generate commands to ensure human-in-the-loop verification.
-
-### Workflow
-
+### 2. Directory Structure
 ```text
-manifest.json  →  ModelerAgent  →  Generated Assets
-                       ↓
-              Meshy AI API Calls
-                       ↓
-              concept.png, model.glb, rigged.glb, animations/
+src/
+├── components/react/   # React components
+│   ├── objects/       # 3D Objects (Character, Enemy)
+│   ├── ui/            # HUD, Menus
+│   └── game/          # Game World & Managers
+├── systems/           # ECS Systems (Logic: Physics, Combat, AI)
+├── state/             # Global State (ECS, Zustand)
+├── data/              # Static Data (JSON)
+└── utils/             # Helpers
 ```
 
-### Error Handling
+## 🧪 Testing Strategy
 
-The manifest tracks task status for resumability:
-```json
-{
-  "tasks": {
-    "conceptArt": { "taskId": "...", "status": "SUCCEEDED", "localPath": "concept.png" },
-    "model3d": { "taskId": "...", "status": "SUCCEEDED", "localPath": "model.glb" },
-    "rigging": { "taskId": "...", "status": "IN_PROGRESS" }
-  }
-}
-```
+- Run unit tests: `pnpm test`
+- Lint code: `pnpm check`
+- E2E Verification: `pnpm test:e2e` (Playwright)
 
-Re-running `pnpm generate` skips completed tasks automatically.
+## 🎮 Game Context (JRPG)
 
----
+The game is a high-speed Action JRPG.
+- **Stats**: Structure, Ignition, Logic, Flow.
+- **Combat**: Real-time with RPG damage calculations.
+- **Story**: Data-driven Visual Novel style dialogue overlay (`src/data/story.json`).
+- **Visuals**: Cel-shaded characters with animated physics.
 
-## Future Considerations
-
-### Reactylon Migration (ACTIVE)
-
-Migration to **Reactylon** (custom React renderer for Babylon.js) is underway:
-- **Navigation Mesh**: Built-in RecastJS plugin (replaces unmaintained YukaJS)
-- **Physics**: Havok integration
-- **React Binding**: [Reactylon](https://www.reactylon.com/docs) - newer, auto-disposal, XR support
-- **MCP Tooling**: `babylonjs-mcp` for AI-assisted scene manipulation
-
-See [docs/BABYLON_MIGRATION_PLAN.md](docs/BABYLON_MIGRATION_PLAN.md) for full implementation guide.
-
----
-
-Last Updated: 2026-01-16
+Always refer to `docs/JRPG_TRANSFORMATION.md` for design details.
