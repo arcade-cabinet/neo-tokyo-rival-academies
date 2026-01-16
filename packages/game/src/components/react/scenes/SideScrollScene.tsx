@@ -65,7 +65,8 @@ function KaiCharacter({ playerX }: { playerX: React.MutableRefObject<number> }) 
 
   useEffect(() => {
     const actionNames = Object.keys(actions);
-    if (actions[actionNames[0]]) actions[actionNames[0]].reset().fadeIn(0.5).play();
+    const firstAction = actionNames[0] ? actions[actionNames[0]] : null;
+    if (firstAction) firstAction.reset().fadeIn(0.5).play();
   }, [actions]);
 
   useFrame(() => {

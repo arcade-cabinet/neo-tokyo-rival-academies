@@ -15,6 +15,8 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "@babylonjs/core": "^8.46.2",
+    "@babylonjs/loaders": "^8.46.2",
     "@capacitor/android": "^8.0.1",
     "@capacitor/core": "^8.0.1",
     "@capacitor/haptics": "^8.0.0",
@@ -24,10 +26,13 @@
     "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.5.0",
     "@react-three/postprocessing": "^3.0.4",
+    "@react-three/rapier": "^2.2.0",
+    "leva": "^0.10.1",
     "miniplex": "^2.0.0",
     "miniplex-react": "^2.0.1",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
+    "reactylon": "^3.5.2",
     "three": "^0.182.0",
     "yuka": "^0.7.8",
     "zustand": "^5.0.10"

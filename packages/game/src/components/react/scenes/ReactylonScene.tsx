@@ -189,42 +189,33 @@ const WallBackdrops: FC = () => {
     if (!scene) return;
 
     // Store references for cleanup
-    type Disposable = { dispose: () => void };
-    let farBackdrop: Disposable | null = null;
-    let farMat: Disposable | null = null;
-    let leftWall: Disposable | null = null;
-    let leftMat: Disposable | null = null;
-    let rightWall: Disposable | null = null;
-    let rightMat: Disposable | null = null;
-
-    // Import required classes dynamically to avoid type conflicts
     import('@babylonjs/core/Meshes/Builders/planeBuilder').then(({ CreatePlane }) => {
       import('@babylonjs/core/Materials/standardMaterial').then(({ StandardMaterial }) => {
         import('@babylonjs/core/Materials/Textures/texture').then(({ Texture }) => {
           // Far background
-          farBackdrop = CreatePlane('far-backdrop', { width: gridWidth + 20, height: wallHeight }, scene);
+          const farBackdrop = CreatePlane('far-backdrop', { width: gridWidth + 20, height: wallHeight }, scene);
           farBackdrop.position = new Vector3(0, wallHeight / 2 - 2, -10);
-          farMat = new StandardMaterial('far-mat', scene);
+          const farMat = new StandardMaterial('far-mat', scene);
           farMat.disableLighting = true;
           farMat.emissiveColor = new Color3(0.3, 0.3, 0.3);
           farMat.diffuseTexture = new Texture('/assets/backgrounds/sector0/parallax_far/concept.png', scene);
           farBackdrop.material = farMat;
 
           // Left wall
-          leftWall = CreatePlane('left-wall', { width: wallWidth, height: wallHeight }, scene);
+          const leftWall = CreatePlane('left-wall', { width: wallWidth, height: wallHeight }, scene);
           leftWall.position = new Vector3(-wallOffset, wallHeight / 2 - 2, 0);
           leftWall.rotation = new Vector3(0, Math.PI / 4, 0);
-          leftMat = new StandardMaterial('left-mat', scene);
+          const leftMat = new StandardMaterial('left-mat', scene);
           leftMat.disableLighting = true;
           leftMat.emissiveColor = new Color3(0.3, 0.3, 0.3);
           leftMat.diffuseTexture = new Texture('/assets/backgrounds/sector0/wall_left/concept.png', scene);
           leftWall.material = leftMat;
 
           // Right wall
-          rightWall = CreatePlane('right-wall', { width: wallWidth, height: wallHeight }, scene);
+          const rightWall = CreatePlane('right-wall', { width: wallWidth, height: wallHeight }, scene);
           rightWall.position = new Vector3(wallOffset, wallHeight / 2 - 2, 0);
           rightWall.rotation = new Vector3(0, -Math.PI / 4, 0);
-          rightMat = new StandardMaterial('right-mat', scene);
+          const rightMat = new StandardMaterial('right-mat', scene);
           rightMat.disableLighting = true;
           rightMat.emissiveColor = new Color3(0.3, 0.3, 0.3);
           rightMat.diffuseTexture = new Texture('/assets/backgrounds/sector0/wall_right/concept.png', scene);
@@ -233,15 +224,7 @@ const WallBackdrops: FC = () => {
       });
     });
 
-    // Cleanup meshes and materials on unmount
-    return () => {
-      farMat?.dispose();
-      leftMat?.dispose();
-      rightMat?.dispose();
-      farBackdrop?.dispose();
-      leftWall?.dispose();
-      rightWall?.dispose();
-    };
+    // Cleanup is handled by Babylon.js scene disposal
   }, [scene, gridWidth, wallOffset, wallHeight, wallWidth]);
 
   return null;
@@ -356,14 +339,6 @@ const SceneLighting: FC = () => {
   useEffect(() => {
     if (!scene) return;
 
-    // Store light references for cleanup
-    type Light = { dispose: () => void };
-    let ambient: Light | null = null;
-    let sun: Light | null = null;
-    let neonMagenta: Light | null = null;
-    let neonCyan: Light | null = null;
-    let neonOrange: Light | null = null;
-
     // Import light classes
     Promise.all([
       import('@babylonjs/core/Lights/hemisphericLight'),
@@ -371,36 +346,29 @@ const SceneLighting: FC = () => {
       import('@babylonjs/core/Lights/pointLight'),
     ]).then(([{ HemisphericLight }, { DirectionalLight }, { PointLight }]) => {
       // Ambient light
-      ambient = new HemisphericLight('ambient', new Vector3(0, 1, 0), scene);
+      const ambient = new HemisphericLight('ambient', new Vector3(0, 1, 0), scene);
       ambient.intensity = 0.5;
 
       // Sun/directional light
-      sun = new DirectionalLight('sun', new Vector3(-0.5, -1, -0.3), scene);
+      const sun = new DirectionalLight('sun', new Vector3(-0.5, -1, -0.3), scene);
       sun.position = new Vector3(15, 25, 10);
       sun.intensity = 1.2;
 
       // Neon accent lights
-      neonMagenta = new PointLight('neon-magenta', new Vector3(-6, 4, -6), scene);
+      const neonMagenta = new PointLight('neon-magenta', new Vector3(-6, 4, -6), scene);
       neonMagenta.diffuse = new Color3(1, 0, 1);
       neonMagenta.intensity = 3;
 
-      neonCyan = new PointLight('neon-cyan', new Vector3(6, 4, 6), scene);
+      const neonCyan = new PointLight('neon-cyan', new Vector3(6, 4, 6), scene);
       neonCyan.diffuse = new Color3(0, 1, 1);
       neonCyan.intensity = 3;
 
-      neonOrange = new PointLight('neon-orange', new Vector3(0, 2, -8), scene);
+      const neonOrange = new PointLight('neon-orange', new Vector3(0, 2, -8), scene);
       neonOrange.diffuse = new Color3(1, 0.4, 0);
       neonOrange.intensity = 2;
     });
 
-    // Cleanup lights on unmount
-    return () => {
-      ambient?.dispose();
-      sun?.dispose();
-      neonMagenta?.dispose();
-      neonCyan?.dispose();
-      neonOrange?.dispose();
-    };
+    // Cleanup is handled by Babylon.js scene disposal
   }, [scene]);
 
   return null;

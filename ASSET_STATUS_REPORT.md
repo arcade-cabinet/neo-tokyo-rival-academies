@@ -1,7 +1,7 @@
 # Asset Status Report
 
-**Generated**: 2026-01-15
-**Branch**: jrpg-transformation-107803072628449215
+**Generated**: 2026-01-16
+**Branch**: fix/restore-deleted-assets-1768547201
 
 ---
 
@@ -10,12 +10,12 @@
 | Category | Total | Complete | Partial | Missing |
 |----------|-------|----------|---------|---------|
 | **Main Characters** | 2 | 0 | 2 | 0 |
-| **B-Story Characters** | 4 | 0 | 0 | 4 |
-| **C-Story Characters** | 3 | 0 | 0 | 3 |
+| **B-Story Characters** | 4 | 4 | 0 | 0 |
+| **C-Story Characters** | 3 | 2 | 1 | 0 |
 | **Tiles** | 6 | 5 | 1 | 0 |
 | **Backgrounds** | 6 | 6 | 0 | 0 |
 
-**Overall Status**: 🟡 Partial - Main characters have animations but missing rigged models
+**Overall Status**: 🟢 Good - All characters have animations, main chars need rigged.glb regeneration
 
 ---
 
@@ -96,61 +96,45 @@ pnpm --filter @neo-tokyo/content-gen generate characters/main/vera
 
 ## B-Story Characters (Enemy/Boss Presets)
 
-### Status: ❌ **MISSING ENTIRELY**
+### Status: ✅ **COMPLETE**
 
-**Expected Characters** (from NARRATIVE_DESIGN.md):
-1. **Yakuza Grunt** (Enemy - 5 animations)
-2. **Yakuza Boss** (Boss - 7 animations)
-3. **Biker Grunt** (Enemy - 5 animations)
-4. **Biker Boss** (Boss - 7 animations)
+**Characters** (from NARRATIVE_DESIGN.md):
+1. **Yakuza Grunt** (Enemy - 5 animations) ✅
+2. **Yakuza Boss** (Boss - 7 animations) ✅
+3. **Biker Grunt** (Enemy - 5 animations) ✅
+4. **Biker Boss** (Boss - 7 animations) ✅
 
 **Current State**:
-- Directory structure exists: `characters/b-story/yakuza/`, `characters/b-story/bikers/`
-- **No manifests, no models, no animations**
+- ✅ All directories have manifests and animation GLBs
+- ✅ Yakuza Boss: 7 animations (behit_flyup, block1, combat_stance, dead, double_combo_attack, kung_fu_punch, runfast)
+- ✅ Yakuza Grunt: 5 animations
+- ✅ Biker Boss: 7 animations
+- ✅ Biker Grunt: 5 animations
 
 **Notes**:
-- B-Story characters are **optional** for core gameplay
-- Can be generated later if time permits
-- Priority: **LOW** (focus on main characters and C-story first)
-
-**Action Required** (if time permits):
-```bash
-# Create manifests first, then generate
-pnpm --filter @neo-tokyo/content-gen generate characters/bstory/yakuza-grunt
-pnpm --filter @neo-tokyo/content-gen generate characters/bstory/yakuza-boss
-pnpm --filter @neo-tokyo/content-gen generate characters/bstory/biker-grunt
-pnpm --filter @neo-tokyo/content-gen generate characters/bstory/biker-boss
-```
+- All B-Story character animations are present and tracked in Git LFS
+- rigged.glb models may need regeneration via content-gen pipeline
 
 ---
 
 ## C-Story Characters (Disruptor Events)
 
-### Status: ❌ **MISSING ENTIRELY**
+### Status: ✅ **MOSTLY COMPLETE**
 
-**Expected Characters** (from NARRATIVE_DESIGN.md):
-1. **Mall Security Guard** (Enemy - 5 animations) - For Mall Drop stage
-2. **Alien Humanoid** (Enemy - 5 animations) - For Alien Ship stage
-3. **Tentacle Single** (Prop) - For Alien Queen boss (4-8 Yuka-driven tentacles)
+**Characters** (from NARRATIVE_DESIGN.md):
+1. **Mall Security Guard** (Enemy - 5 animations) ✅ - For Mall Drop stage
+2. **Alien Humanoid** (Enemy - 5 animations) ✅ - For Alien Ship stage
+3. **Tentacle Single** (Prop) ⚠️ - For Alien Queen boss (manifest only)
 
 **Current State**:
-- Directory structure exists: `characters/c-story/mall-security/`, `characters/c-story/aliens/`, `characters/c-story/tentacles/`
-- **No manifests, no models, no animations**
-
-**Priority**: **HIGH** - C-Story stages are core to 3-hour JRPG design
+- ✅ Mall Security Guard: manifest + 5 animations (behit_flyup, combat_stance, dead, double_combo_attack, runfast)
+- ✅ Alien Humanoid: manifest + 5 animations
+- ⚠️ Tentacle Single: manifest only (needs model generation)
 
 **Notes**:
 - **Alien Ship stage** requires 4-8 tentacle instances with nav mesh
-- **Mall Drop stage** requires Mall Security enemies
-- These are **critical** for A/B/C story architecture
-
-**Action Required** (HIGH PRIORITY):
-```bash
-# Create manifests first, then generate
-pnpm --filter @neo-tokyo/content-gen generate characters/cstory/mall-security-guard
-pnpm --filter @neo-tokyo/content-gen generate characters/cstory/alien-humanoid
-pnpm --filter @neo-tokyo/content-gen generate characters/cstory/tentacle-single
-```
+- Tentacle model needs to be generated via content-gen pipeline
+- All humanoid characters have complete animation sets
 
 ---
 
