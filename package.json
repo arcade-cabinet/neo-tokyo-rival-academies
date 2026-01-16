@@ -2,6 +2,7 @@
   "name": "neo-tokyo-rival-academies-root",
   "private": true,
   "scripts": {
+    "build": "pnpm --filter @neo-tokyo/content-gen build && pnpm --filter @neo-tokyo/game build",
     "test:e2e": "pnpm --filter @neo-tokyo/e2e test"
   },
   "devDependencies": {
