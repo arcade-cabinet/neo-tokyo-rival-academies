@@ -52,7 +52,6 @@ export function applyReputationChange(
 ): ReputationState {
   const newValue = reputation[change.faction] + change.amount;
   // Clamping to 0-100 as per Golden Record (Reputation Meter)
-  // Previous -100 to 100 was for Alignment (-1.0 to 1.0)
   const clampedValue = Math.max(0, Math.min(100, newValue));
 
   return {
@@ -165,19 +164,19 @@ export const REPUTATION_CHANGES = {
 
 /**
  * Apply reputation change to an entity.
+ * Updates the entity in place and returns it.
  *
  * @param entity - The entity (usually player) to apply change to
  * @param change - The reputation change
+ * @returns The updated entity
  */
 export function applyReputationToEntity(
   entity: ECSEntity,
   change: ReputationChange
-): void {
-  if (!entity.reputation) {
-    entity.reputation = initializeReputation();
-  }
-
-  entity.reputation = applyReputationChange(entity.reputation, change);
+): ECSEntity {
+  const currentReputation = entity.reputation || initializeReputation();
+  entity.reputation = applyReputationChange(currentReputation, change);
+  return entity;
 }
 
 /**
@@ -191,15 +190,9 @@ export function getFactionsAboveThreshold(
   reputation: ReputationState,
   threshold: number
 ): Faction[] {
-  const factions: Faction[] = [];
-
-  for (const [faction, value] of Object.entries(reputation)) {
-    if (value >= threshold) {
-      factions.push(faction as Faction);
-    }
-  }
-
-  return factions;
+  return (Object.entries(reputation) as [Faction, number][])
+    .filter(([_, value]) => value >= threshold)
+    .map(([faction]) => faction);
 }
 
 /**
