@@ -64,10 +64,16 @@ class TaskRegistry {
 
     const chain: string[] = [];
     const visited = new Set<string>();
+    const inStack = new Set<string>(); // Track current recursion stack for cycle detection
 
     const visit = (type: string): void => {
       if (visited.has(type)) return;
-      visited.add(type);
+
+      if (inStack.has(type)) {
+        throw new Error(`Circular dependency detected involving task: ${type}`);
+      }
+
+      inStack.add(type);
 
       const def = this.definitions.get(type);
       if (!def) {
@@ -79,6 +85,8 @@ class TaskRegistry {
         visit(dep);
       }
 
+      inStack.delete(type);
+      visited.add(type);
       chain.push(type);
     };
 

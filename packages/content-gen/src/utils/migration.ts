@@ -42,11 +42,11 @@ export async function migrateContent() {
     for (const chapter of data.chapters) {
       // Extract Quests from Chapter if present
       if (chapter.quests) {
-        for (const quest of chapter.quests) {
-           // Normalize Quest ID to filename safe
-           const questId = quest.id || `quest_${Date.now()}`;
-           const questPath = path.join(TARGET_DIR, 'quests', `${questId}.json`);
-           fs.writeFileSync(questPath, JSON.stringify(quest, null, 2));
+        for (const [questIndex, quest] of chapter.quests.entries()) {
+          // Normalize Quest ID to filename safe, use chapter-based fallback for uniqueness
+          const questId = quest.id || `${chapter.id}_quest_${questIndex}`;
+          const questPath = path.join(TARGET_DIR, 'quests', `${questId}.json`);
+          fs.writeFileSync(questPath, JSON.stringify(quest, null, 2));
         }
       }
 
