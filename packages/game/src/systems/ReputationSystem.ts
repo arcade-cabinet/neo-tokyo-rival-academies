@@ -1,4 +1,4 @@
-import type { ECSEntity } from '../state/ecs';
+import type { ECSEntity } from '@/state/ecs';
 
 /**
  * Reputation system for faction relationships.
@@ -33,8 +33,8 @@ export type ReputationLevel =
  */
 export function initializeReputation(): ReputationState {
   return {
-    Kurenai: 0,
-    Azure: 0,
+    Kurenai: 50,
+    Azure: 50,
   };
 }
 
@@ -170,7 +170,7 @@ export const REPUTATION_CHANGES = {
  * @param change - The reputation change
  */
 export function applyReputationToEntity(
-  entity: ECSEntity & { reputation?: ReputationState },
+  entity: ECSEntity,
   change: ReputationChange
 ): void {
   if (!entity.reputation) {

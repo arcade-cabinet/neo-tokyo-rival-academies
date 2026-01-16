@@ -1,14 +1,16 @@
 import fc from 'fast-check';
 import { describe, expect, it } from 'vitest';
+import type {
+  Faction,
+  ReputationChange,
+  ReputationState,
+} from '../ReputationSystem';
 import {
-    applyReputationChange,
-    getAggressionLevel,
-    getReputationLevel,
-    initializeReputation,
-    isQuestUnlocked,
-    type Faction,
-    type ReputationChange,
-    type ReputationState,
+  applyReputationChange,
+  getAggressionLevel,
+  getReputationLevel,
+  initializeReputation,
+  isQuestUnlocked,
 } from '../ReputationSystem';
 
 describe('ReputationSystem', () => {
@@ -16,8 +18,8 @@ describe('ReputationSystem', () => {
     it('should initialize with neutral reputation', () => {
       const reputation = initializeReputation();
 
-      expect(reputation.Kurenai).toBe(0);
-      expect(reputation.Azure).toBe(0);
+      expect(reputation.Kurenai).toBe(50);
+      expect(reputation.Azure).toBe(50);
     });
   });
 
@@ -32,14 +34,13 @@ describe('ReputationSystem', () => {
 
       const updated = applyReputationChange(reputation, change);
 
-      expect(updated.Kurenai).toBe(25);
-      expect(updated.Azure).toBe(0);
+      expect(updated.Kurenai).toBe(75); // 50 + 25
+      expect(updated.Azure).toBe(50);
     });
 
     it('should apply negative reputation change', () => {
       const reputation = initializeReputation();
-      // Start with some reputation so we can decrease it (clamped at 0)
-      reputation.Azure = 50;
+      // Start with default 50
       const change: ReputationChange = {
         faction: 'Azure',
         amount: -30,
