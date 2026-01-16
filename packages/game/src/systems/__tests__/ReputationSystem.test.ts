@@ -1,10 +1,6 @@
-import type {
-  Faction,
-  ReputationChange,
-  ReputationState,
-} from '../ReputationSystem';
 import fc from 'fast-check';
 import { describe, expect, it } from 'vitest';
+import type { Faction, ReputationChange, ReputationState } from '../ReputationSystem';
 import {
   applyReputationChange,
   getAggressionLevel,

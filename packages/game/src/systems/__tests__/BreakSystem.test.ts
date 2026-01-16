@@ -3,15 +3,15 @@ import { describe, expect, it } from 'vitest';
 import type { ECSEntity } from '@/state/ecs';
 import {
   applyBreakState,
+  type BreakState,
   initializeStability,
   isBroken,
   processHitWithStability,
   reduceStability,
   regenerateStability,
+  type StabilityState,
   updateBreakState,
   updateStabilityAndBreak,
-  type BreakState,
-  type StabilityState,
 } from '../BreakSystem';
 
 describe('BreakSystem', () => {

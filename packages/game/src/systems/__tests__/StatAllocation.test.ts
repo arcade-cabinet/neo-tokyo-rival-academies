@@ -2,11 +2,11 @@ import fc from 'fast-check';
 import { describe, expect, it } from 'vitest';
 import type { ECSEntity } from '../../state/ecs';
 import {
-    applyStatAllocation,
-    getRecommendedAllocation,
-    resetStatAllocation,
-    validateAllocation,
-    type StatAllocation,
+  applyStatAllocation,
+  getRecommendedAllocation,
+  resetStatAllocation,
+  type StatAllocation,
+  validateAllocation,
 } from '../StatAllocation';
 
 describe('StatAllocation', () => {

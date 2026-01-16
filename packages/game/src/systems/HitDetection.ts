@@ -94,9 +94,7 @@ export function checkHitboxOverlap(
  * @param durationMs - Duration of invincibility in milliseconds
  * @returns Invincibility state
  */
-export function applyInvincibilityFrames(
-  durationMs: number
-): InvincibilityState {
+export function applyInvincibilityFrames(durationMs: number): InvincibilityState {
   const now = Date.now();
   return {
     isInvincible: true,
@@ -146,7 +144,7 @@ export function updateInvincibilityState(
  * @returns True if the hit was registered, false if target was invincible
  */
 export function registerHit(
-  attacker: ECSEntity,
+  _attacker: ECSEntity,
   target: ECSEntity,
   damage: number,
   invincibilityDurationMs: number = 500

@@ -141,11 +141,5 @@ export const FloatingDamage: FC<FloatingDamageProps> = ({
  * Player damage variant (red color).
  */
 export const PlayerDamage: FC<Omit<FloatingDamageProps, 'isCritical' | 'color'>> = (props) => {
-  return (
-    <FloatingDamage
-      {...props}
-      isCritical={false}
-      color="#FF4444"
-    />
-  );
+  return <FloatingDamage {...props} isCritical={false} color="#FF4444" />;
 };

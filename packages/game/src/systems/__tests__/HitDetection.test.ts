@@ -2,11 +2,11 @@ import fc from 'fast-check';
 import { describe, expect, it } from 'vitest';
 import type { ECSEntity } from '@/state/ecs';
 import {
-    applyInvincibilityFrames,
-    isInvincible,
-    registerHit,
-    updateInvincibilityState,
-    type InvincibilityState,
+  applyInvincibilityFrames,
+  type InvincibilityState,
+  isInvincible,
+  registerHit,
+  updateInvincibilityState,
 } from '@/systems/HitDetection';
 
 describe('HitDetection', () => {

@@ -22,11 +22,29 @@ export interface GridConfig {
   bounds: GridBounds;
 }
 
-export class HexGridSystem {
+/**
+ * Select tile type deterministically based on position
+ */
+function selectTileType(q: number, r: number, _rng: () => number): TileType {
+  // Use position as seed for consistent results
+  const positionSeed = Math.abs(q * 1000 + r);
+  const random = (positionSeed * 9301 + 49297) % 233280;
+  const value = random / 233280.0;
+
+  // Weighted distribution
+  if (value < 0.6) return TileType.BASE; // 60% base tiles
+  if (value < 0.75) return TileType.AIRVENT; // 15% airvent
+  if (value < 0.85) return TileType.PIPES; // 10% pipes
+  if (value < 0.93) return TileType.GENERATOR; // 8% generator
+  if (value < 0.98) return TileType.ANTENNA; // 5% antenna
+  return TileType.EDGE; // 2% edge
+}
+
+export const HexGridSystem = {
   /**
    * Generate a hex grid with deterministic tile types
    */
-  static generateGrid(config: GridConfig): HexTile[] {
+  generateGrid(config: GridConfig): HexTile[] {
     const { seed, bounds } = config;
     const rng = seedrandom(seed);
 
@@ -38,7 +56,7 @@ export class HexGridSystem {
       const pos = hexToWorld(coord.q, coord.r);
 
       // Deterministic tile type based on position and RNG
-      const tileType = HexGridSystem.selectTileType(coord.q, coord.r, rng);
+      const tileType = selectTileType(coord.q, coord.r, rng);
 
       return {
         q: coord.q,
@@ -51,30 +69,12 @@ export class HexGridSystem {
 
     console.log(`Generated ${tiles.length} hex tiles within bounds`);
     return tiles;
-  }
-
-  /**
-   * Select tile type deterministically based on position
-   */
-  private static selectTileType(q: number, r: number, _rng: () => number): TileType {
-    // Use position as seed for consistent results
-    const positionSeed = Math.abs(q * 1000 + r);
-    const random = (positionSeed * 9301 + 49297) % 233280;
-    const value = random / 233280.0;
-
-    // Weighted distribution
-    if (value < 0.6) return TileType.BASE; // 60% base tiles
-    if (value < 0.75) return TileType.AIRVENT; // 15% airvent
-    if (value < 0.85) return TileType.PIPES; // 10% pipes
-    if (value < 0.93) return TileType.GENERATOR; // 8% generator
-    if (value < 0.98) return TileType.ANTENNA; // 5% antenna
-    return TileType.EDGE; // 2% edge
-  }
+  },
 
   /**
    * Get tiles at the edge of bounds (for clipping plane application)
    */
-  static getEdgeTiles(
+  getEdgeTiles(
     tiles: HexTile[],
     bounds: GridBounds
   ): {
@@ -87,5 +87,5 @@ export class HexGridSystem {
     const rightEdge = tiles.filter((tile) => Math.abs(tile.worldX - bounds.maxX) < threshold);
 
     return { leftEdge, rightEdge };
-  }
-}
+  },
+};

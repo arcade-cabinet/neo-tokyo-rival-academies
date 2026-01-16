@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { StatAllocation } from '../../../systems/StatAllocation';
 import { getRecommendedAllocation, validateAllocation } from '../../../systems/StatAllocation';
 
@@ -75,11 +75,11 @@ export const StatAllocationModal: FC<StatAllocationModalProps> = ({
       }
     };
     window.addEventListener('keydown', handleKeyDown);
-    
+
     // Focus first focusable element
     if (modalRef.current) {
-        const focusable = modalRef.current.querySelector('button');
-        focusable?.focus();
+      const focusable = modalRef.current.querySelector('button');
+      focusable?.focus();
     }
 
     return () => window.removeEventListener('keydown', handleKeyDown);
@@ -133,10 +133,7 @@ export const StatAllocationModal: FC<StatAllocationModalProps> = ({
       aria-modal="true"
       aria-labelledby="stat-allocation-title"
     >
-      <div
-        ref={modalRef}
-        style={styles.modal}
-      >
+      <div ref={modalRef} style={styles.modal}>
         <h2
           id="stat-allocation-title"
           style={{

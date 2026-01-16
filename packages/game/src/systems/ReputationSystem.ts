@@ -103,10 +103,7 @@ export function isQuestUnlocked(
  * @param faction - The faction being interacted with
  * @returns Available dialogue options
  */
-export function getDialogueOptions(
-  reputation: ReputationState,
-  faction: Faction
-): string[] {
+export function getDialogueOptions(reputation: ReputationState, faction: Faction): string[] {
   const value = reputation[faction];
   const level = getReputationLevel(value);
 
@@ -170,10 +167,7 @@ export const REPUTATION_CHANGES = {
  * @param change - The reputation change
  * @returns The updated entity
  */
-export function applyReputationToEntity(
-  entity: ECSEntity,
-  change: ReputationChange
-): ECSEntity {
+export function applyReputationToEntity(entity: ECSEntity, change: ReputationChange): ECSEntity {
   const currentReputation = entity.reputation || initializeReputation();
   entity.reputation = applyReputationChange(currentReputation, change);
   return entity;

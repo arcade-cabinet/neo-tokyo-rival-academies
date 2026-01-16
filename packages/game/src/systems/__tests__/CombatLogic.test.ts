@@ -1,7 +1,7 @@
 import fc from 'fast-check';
 import { describe, expect, it } from 'vitest';
 import type { ECSEntity } from '@/state/ecs';
-import { calculateDamage, resolveCombat, type AttackType } from '@/systems/CombatLogic';
+import { type AttackType, calculateDamage, resolveCombat } from '@/systems/CombatLogic';
 
 describe('CombatLogic', () => {
   describe('calculateDamage', () => {

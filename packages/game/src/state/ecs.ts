@@ -1,8 +1,8 @@
+import type { AbstractMesh, Vector3 } from '@babylonjs/core';
 import { World } from 'miniplex';
 import { createReactAPI } from 'miniplex-react';
-import type { Vector3, AbstractMesh } from '@babylonjs/core';
+import type { BreakState, StabilityState } from '../systems/BreakSystem';
 import type { InvincibilityState } from '../systems/HitDetection';
-import type { StabilityState, BreakState } from '../systems/BreakSystem';
 import type { ReputationState } from '../systems/ReputationSystem';
 
 export interface RPGStats {

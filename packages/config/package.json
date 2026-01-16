@@ -1,0 +1,9 @@
+{
+  "name": "@neo-tokyo/config",
+  "version": "0.1.0",
+  "private": true,
+  "main": "index.js",
+  "dependencies": {
+    "typescript": "^5.9.3"
+  }
+}
