@@ -2,11 +2,11 @@
 
 ## Project Context
 
-**Title**: NEO-TOKYO: RIVAL ACADEMIES  
-**Tech Stack**: TypeScript 5.9, Astro 5.16, React 18.3, Three.js 0.170, React Three Fiber 8.18, Drei 9.122  
-**Architecture**: Component-based with Islands Architecture (Astro + React)  
-**Build System**: PNPM 10, Biome 1.9.4 (linting/formatting)  
-**Core Mechanics**: 2.5D Infinite Runner, Custom Physics, Rock-Paper-Scissors Combat, Procedural Generation  
+**Title**: NEO-TOKYO: RIVAL ACADEMIES
+**Tech Stack**: TypeScript 5.9, Astro 5.16, React 18.3, Three.js 0.170, React Three Fiber 8.18, Drei 9.122
+**Architecture**: Component-based with Islands Architecture (Astro + React)
+**Build System**: PNPM 10, Biome 1.9.4 (linting/formatting)
+**Core Mechanics**: 2.5D Infinite Runner, Custom Physics, Rock-Paper-Scissors Combat, Procedural Generation
 
 ---
 
@@ -35,7 +35,7 @@ Your goal is to maintain the structural integrity and scalability of the Neo-Tok
    - Pass callbacks down for communication
    - Use useFrame for per-frame updates
 
-3. **Performance**: 
+3. **Performance**:
    - Memoize expensive computations with useMemo
    - Dispose Three.js resources properly
    - Use refs for values that don't need re-renders
@@ -68,14 +68,14 @@ interface PowerUp {
 // 2. Create component
 export function PowerUp({ type, position }: PowerUpProps) {
   const meshRef = useRef<THREE.Mesh>(null);
-  
+
   useFrame((state) => {
     if (meshRef.current) {
       meshRef.current.rotation.y += 0.02;
       meshRef.current.position.y += Math.sin(state.clock.elapsedTime * 2) * 0.01;
     }
   });
-  
+
   return (
     <mesh ref={meshRef} position={position}>
       <sphereGeometry args={[0.5, 32, 32]} />
@@ -118,11 +118,11 @@ You are Agent Newton, a Gameplay Physics Engineer specializing in custom physics
    ```typescript
    // Gravity application
    newVel.y += CONFIG.gravity * dt;
-   
+
    // Position update
    newPos.x += newVel.x * dt;
    newPos.y += newVel.y * dt;
-   
+
    // Ground check (needs raycasting enhancement)
    if (newPos.y <= 0 && newVel.y <= 0) {
      newPos.y = 0;
@@ -190,7 +190,7 @@ Location: `src/utils/audio/MusicSynth.ts`
 export class MusicSynth {
   private ctx: AudioContext | null = null;
   private isPlaying = false;
-  
+
   private taiko(t: number, vol: number): void {
     const o = this.ctx!.createOscillator();
     const g = this.ctx!.createGain();
@@ -255,24 +255,24 @@ Your goal is to maximize visual impact while maintaining 60 FPS.
    ```typescript
    // Use AssetGen functions
    import { asphalt, building, neonGrid } from '@utils/procedural/AssetGen';
-   
+
    const texture = useMemo(() => asphalt(), []);
    ```
 
 2. **Material Best Practices**:
    ```typescript
    // For roads/platforms
-   <meshStandardMaterial 
+   <meshStandardMaterial
      color={0x0a0a0a}
      roughness={0.9}
      metalness={0.1}
      emissive={0x050510}
      emissiveIntensity={0.1}
    />
-   
+
    // For neon elements
-   <meshBasicMaterial 
-     color={0x00ffff} 
+   <meshBasicMaterial
+     color={0x00ffff}
      toneMapped={false} // Prevents darkening
    />
    ```
@@ -281,7 +281,7 @@ Your goal is to maximize visual impact while maintaining 60 FPS.
    ```typescript
    // Ambient with tint
    <ambientLight intensity={0.2} color={0x4040ff} />
-   
+
    // Directional with shadows
    <directionalLight
      position={[20, 50, 20]}
@@ -290,7 +290,7 @@ Your goal is to maximize visual impact while maintaining 60 FPS.
      castShadow
      shadow-mapSize-width={2048}
    />
-   
+
    // Colored point lights for atmosphere
    <pointLight position={[-20, 10, -20]} intensity={2} color="#ff00ff" distance={50} />
    ```
@@ -298,7 +298,7 @@ Your goal is to maximize visual impact while maintaining 60 FPS.
 4. **Drei Helpers**:
    ```typescript
    import { Environment, ContactShadows, Sparkles } from '@react-three/drei';
-   
+
    <Environment preset="night" />
    <ContactShadows opacity={0.6} scale={20} blur={2.5} color="#00ffff" />
    <Sparkles count={200} scale={80} opacity={0.4} color="#00ffff" />
@@ -307,7 +307,7 @@ Your goal is to maximize visual impact while maintaining 60 FPS.
 5. **Animated Elements**:
    ```typescript
    const lightRef = useRef<THREE.PointLight>(null);
-   
+
    useFrame((state) => {
      if (lightRef.current) {
        const pulse = Math.sin(state.clock.elapsedTime * 2) * 0.3 + 0.7;
@@ -376,7 +376,7 @@ You are Agent Rival, a Combat Designer specializing in action games.
 
 Rock-Paper-Scissors combat system:
 - **SPRINT (Bash)** beats Standing Enemies
-- **SLIDE (Trip)** beats Blocking Enemies  
+- **SLIDE (Trip)** beats Blocking Enemies
 - **JUMP** clears Low Obstacles
 - Hitting obstacles or losing combat causes knockback + stun
 
@@ -439,7 +439,7 @@ if (dx < 1.5 && dx > -1.0 && dy < 2) {
      if (enemy.active) {
        // Simple AI: move toward player
        enemy.x -= speed * delta;
-       
+
        // Attack when in range
        if (Math.abs(enemy.x - hero.x) < 2) {
          enemy.attack();
@@ -467,21 +467,21 @@ You are a Component Developer specializing in React Three Fiber and TypeScript.
    import { useRef } from 'react';
    import { useFrame } from '@react-three/fiber';
    import * as THREE from 'three';
-   
+
    interface MyObjectProps {
      position: [number, number, number];
      color: THREE.ColorRepresentation;
    }
-   
+
    export function MyObject({ position, color }: MyObjectProps) {
      const meshRef = useRef<THREE.Mesh>(null);
-     
+
      useFrame((state, delta) => {
        if (meshRef.current) {
          meshRef.current.rotation.y += delta;
        }
      });
-     
+
      return (
        <mesh ref={meshRef} position={position} castShadow>
          <boxGeometry args={[1, 1, 1]} />
@@ -494,12 +494,12 @@ You are a Component Developer specializing in React Three Fiber and TypeScript.
 2. **UI Overlay Component**:
    ```typescript
    import type { FC } from 'react';
-   
+
    interface MyUIProps {
      score: number;
      onAction: () => void;
    }
-   
+
    export const MyUI: FC<MyUIProps> = ({ score, onAction }) => {
      return (
        <div style={{ position: 'absolute', top: 20, left: 20, zIndex: 10 }}>
@@ -516,7 +516,7 @@ You are a Component Developer specializing in React Three Fiber and TypeScript.
    import Layout from '../layouts/Layout.astro';
    import { MyGameScene } from '@components/react/scenes/MyGameScene';
    ---
-   
+
    <Layout title="My Game">
      <MyGameScene client:load />
    </Layout>
@@ -542,12 +542,12 @@ You are a Component Developer specializing in React Three Fiber and TypeScript.
    export function Rain() {
      return (
        <Points limit={1000}>
-         <PointMaterial 
-           transparent 
-           color="#88ccff" 
-           size={0.1} 
-           sizeAttenuation 
-           depthWrite={false} 
+         <PointMaterial
+           transparent
+           color="#88ccff"
+           size={0.1}
+           sizeAttenuation
+           depthWrite={false}
          />
        </Points>
      );

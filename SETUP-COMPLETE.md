@@ -34,7 +34,7 @@ This repository has been fully scaffolded with all necessary CI/CD workflows, co
   - TypeScript type checking
   - Build verification
   - Artifact uploads
-  
+
 - **.github/workflows/deploy.yml**: Continuous Deployment
   - Runs on pushes to main branch
   - Automatic deployment to GitHub Pages
@@ -47,37 +47,37 @@ This repository has been fully scaffolded with all necessary CI/CD workflows, co
   - Installation instructions
   - Development workflow
   - Deployment guide
-  
+
 - **AGENTS.md**: General AI agent documentation (8,333 chars)
   - Project architecture principles
   - Development guidelines
   - Performance best practices
   - Common tasks and patterns
-  
+
 - **CLAUDE.md**: Claude-specific instructions (10,752 chars)
   - Thought processes for common tasks
   - Code style preferences
   - Design patterns to follow
   - Mental models for the stack
-  
+
 - **GEMINI.md**: Gemini-specific instructions (15,376 chars)
   - Multi-modal understanding guidance
   - Detailed technology explanations
   - Coding patterns with examples
   - Pro tips leveraging Gemini's strengths
-  
+
 - **.github/copilot-instructions.md**: GitHub Copilot context (6,419 chars)
   - Code conventions
   - Common patterns
   - Important rules (DO/DON'T lists)
   - Quick reference
-  
+
 - **CONTRIBUTING.md**: Contribution guidelines (10,717 chars)
   - Code of conduct
   - Development workflow
   - Pull request process
   - Commit message format
-  
+
 - **PROJECT-STRUCTURE.md**: Directory structure documentation (7,124 chars)
   - Complete file tree
   - Naming conventions
@@ -90,7 +90,7 @@ This repository has been fully scaffolded with all necessary CI/CD workflows, co
   - Biome
   - Shader (for GLSL)
   - GitHub Copilot
-  
+
 - **.vscode/settings.json**: Editor configuration
   - Biome as default formatter
   - Format on save

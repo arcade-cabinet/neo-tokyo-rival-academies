@@ -6,7 +6,7 @@
     <title>NEO-TOKYO: RIVAL ACADEMIES [AKIRA EDITION]</title>
     <style>
         body { margin: 0; overflow: hidden; background: #020205; font-family: 'Segoe UI', sans-serif; touch-action: none; user-select: none; }
-        
+
         /* ANIME UI STYLE */
         #ui-layer {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
@@ -14,7 +14,7 @@
             display: flex; flex-direction: column; justify-content: space-between;
         }
 
-        .hud-top { 
+        .hud-top {
             padding: 20px; display: flex; justify-content: space-between; align-items: flex-start;
             background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
         }
@@ -28,7 +28,7 @@
             backdrop-filter: blur(5px);
             box-shadow: 0 0 15px rgba(255,0,0,0.2);
         }
-        
+
         .hud-label { font-size: 0.7rem; color: #ffba00; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 2px; }
         .hud-val { font-size: 2rem; font-weight: 900; color: #fff; text-shadow: 2px 2px #000; font-style: italic; }
 
@@ -44,7 +44,7 @@
         /* CONTROLS */
         .controls-area { height: 40%; width: 100%; display: flex; pointer-events: auto; }
         .control-zone { flex: 1; position: relative; }
-        
+
         .btn {
             position: absolute; width: 100px; height: 80px;
             background: rgba(255, 255, 255, 0.05);
@@ -68,13 +68,13 @@
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             pointer-events: auto;
         }
-        
-        h1 { 
+
+        h1 {
             color: #fff; font-size: 3.5rem; margin: 0; text-align: center; font-style: italic;
             text-shadow: 3px 3px 0px #f00, -3px -3px 0px #500;
             transform: skewX(-10deg); line-height: 0.9;
         }
-        
+
         button.start-btn {
             background: #f00; border: none; padding: 20px 50px; margin-top: 30px;
             font-size: 1.5rem; font-weight: 900; color: #fff;
@@ -106,7 +106,7 @@
                 <div class="hud-val" id="score">0m</div>
             </div>
         </div>
-        
+
         <div id="combat-text">KNOCKOUT!</div>
 
         <div class="controls-area">
@@ -149,21 +149,21 @@
         const MusicSynth = {
             ctx: null, isPlaying: false,
             beat: 0, nextTime: 0, tempo: 150, // Fast tribal tempo
-            
-            init() { 
-                this.ctx = new (window.AudioContext||window.webkitAudioContext)(); 
+
+            init() {
+                this.ctx = new (window.AudioContext||window.webkitAudioContext)();
                 // Resume logic for browser policy
                 if(this.ctx.state === 'suspended') this.ctx.resume();
             },
-            
-            start() { 
-                this.init(); 
-                if(this.isPlaying) return; 
-                this.isPlaying=true; this.nextTime=this.ctx.currentTime; this.sched(); 
+
+            start() {
+                this.init();
+                if(this.isPlaying) return;
+                this.isPlaying=true; this.nextTime=this.ctx.currentTime; this.sched();
             },
-            
+
             stop() { this.isPlaying=false; },
-            
+
             sched() {
                 if(!this.isPlaying) return;
                 while(this.nextTime < this.ctx.currentTime+0.1) {
@@ -173,7 +173,7 @@
                 }
                 setTimeout(()=>this.sched(), 25);
             },
-            
+
             playPattern(b, t) {
                 // TAIKO KICK (Deep, Resonant) - Polyrhythmic feel
                 // Pattern: X... X.X. X... X... (Tribal)
@@ -220,18 +220,18 @@
                 const b = this.ctx.createBuffer(1, bSize, this.ctx.sampleRate);
                 const d = b.getChannelData(0);
                 for(let i=0;i<bSize;i++) d[i]=Math.random()*2-1;
-                
+
                 const src = this.ctx.createBufferSource();
                 src.buffer = b;
                 const f = this.ctx.createBiquadFilter();
                 f.type = 'bandpass';
                 f.frequency.value = 400;
                 f.Q.value = 1;
-                
+
                 const g = this.ctx.createGain();
                 g.gain.setValueAtTime(0.4, t);
                 g.gain.linearRampToValueAtTime(0, t+0.15);
-                
+
                 src.connect(f); f.connect(g); g.connect(this.ctx.destination);
                 src.start(t);
             },
@@ -241,16 +241,16 @@
                 const o2 = this.ctx.createOscillator(); // FM modulator
                 const g = this.ctx.createGain();
                 const g2 = this.ctx.createGain();
-                
+
                 o.type = 'sine'; o.frequency.value = freq;
                 o2.type = 'square'; o2.frequency.value = freq * 1.5;
-                
+
                 g2.gain.value = 500; // Modulation depth
                 o2.connect(g2); g2.connect(o.frequency);
-                
+
                 g.gain.setValueAtTime(0.1, t);
                 g.gain.exponentialRampToValueAtTime(0.001, t+1.0);
-                
+
                 o.connect(g); g.connect(this.ctx.destination);
                 o.start(t); o.stop(t+1); o2.start(t); o2.stop(t+1);
             }
@@ -320,7 +320,7 @@
         // --- SCENE ---
         const scene = new THREE.Scene();
         scene.fog = new THREE.Fog(0x050510, 10, 100);
-        
+
         const camera = new THREE.PerspectiveCamera(50, window.innerWidth/window.innerHeight, 0.1, 300);
         camera.position.set(-8, 6, 15);
         camera.lookAt(0, 3, 0);
@@ -402,7 +402,7 @@
             update(dt, t, speed) {
                 this.mesh.position.copy(this.pos);
                 const run = t * speed * 1.5;
-                
+
                 // Coat Physics
                 const angle = Math.min(Math.max(speed * 0.05, 0.2), 1.5);
                 this.coatSegments[0].rotation.x = THREE.MathUtils.lerp(this.coatSegments[0].rotation.x, angle + Math.sin(t*10)*0.1, dt*5);
@@ -433,8 +433,8 @@
 
         // --- WORLD & ENTITIES ---
         const platforms = []; // Stores {mesh, box: Box3, slope: bool}
-        const entities = []; 
-        
+        const entities = [];
+
         let genState = {
             nextX: -10,
             nextY: 0,
@@ -445,37 +445,37 @@
             // slope: 0=flat, 1=up, -1=down
             // Calculate actual visual length based on slope
             // For a slope of 15 degrees (~0.26 rad)
-            const angle = slope * 0.26; 
+            const angle = slope * 0.26;
             const h = 10;
-            
+
             const mesh = new THREE.Mesh(new THREE.BoxGeometry(len, h, 8), new THREE.MeshStandardMaterial({color:0x111}));
-            
+
             // Positioning logic is tricky for rotated boxes.
             // We want the top-left corner to match x,y
             // Center X = x + len/2 * cos(angle)
             // Center Y = y - h/2 * cos(angle) + len/2 * sin(angle)
-            
+
             mesh.rotation.z = angle;
-            
+
             // Adjust position so the start of the "road" is at x,y
             // Center of box relative to start surface point:
-            const offsetX = (len/2); 
+            const offsetX = (len/2);
             const offsetY = -(h/2);
-            
+
             // Rotate offset
             const rx = offsetX * Math.cos(angle) - offsetY * Math.sin(angle);
             const ry = offsetX * Math.sin(angle) + offsetY * Math.cos(angle);
-            
+
             mesh.position.set(x + rx - (len/2)*(1-Math.cos(angle)), y + ry - (h/2), 0);
             // Wait, simplified: Just place it and rotate.
             // Pivot at start? No Threejs rotates around center.
             // Let's just place center and trig it out.
-            
+
             const cx = x + (len/2) * Math.cos(angle);
             const cy = y + (len/2) * Math.sin(angle) - (h/2); // -h/2 to put top surface at y
-            
+
             mesh.position.set(cx, cy, 0);
-            
+
             // Asphalt Top
             const top = new THREE.Mesh(new THREE.PlaneGeometry(len, 8), matAsphalt);
             top.rotation.x = -Math.PI/2; top.position.y = h/2 + 0.01;
@@ -483,14 +483,14 @@
 
             scene.add(mesh);
             platforms.push({ mesh, x, y, len, angle, slope });
-            
+
             // Entities
             if (len > 15 && Math.abs(slope) < 0.1) { // Only on flats
                 if (Math.random() > 0.6) {
                     const ex = x + 5 + Math.random() * (len - 10);
                     const enemy = new Character(0x00ffff, false);
                     enemy.pos.set(ex, y, 0);
-                    enemy.state = Math.random() > 0.5 ? 'stand' : 'block'; 
+                    enemy.state = Math.random() > 0.5 ? 'stand' : 'block';
                     scene.add(enemy.mesh);
                     entities.push({ type: 'enemy', obj: enemy, x: ex, y: y, active: true });
                 } else if (Math.random() > 0.5) {
@@ -513,7 +513,7 @@
             // Time to apex = 18/50 = 0.36s. Height = 18*0.36 - 0.5*50*0.36^2 = 6.48 - 3.24 = 3.24 units high.
             // Total air time = 0.72s. Distance = 22 * 0.72 = 15.8 units.
             // We must keep gaps smaller than 15 units and height diffs < 3 units up. Down is fine.
-            
+
             if (genState.nextX < hero.pos.x + 80) {
                 const type = Math.random();
                 let len = 15 + Math.random() * 15;
@@ -524,12 +524,12 @@
                     // GAP
                     const gap = 5 + Math.random() * 8; // Max 13 guaranteed safe
                     genState.nextX += gap;
-                    
+
                     // Possible drop in height, but cap rise
-                    const yChange = (Math.random() - 0.6) * 5; 
+                    const yChange = (Math.random() - 0.6) * 5;
                     if (yChange > 2) genState.nextY += 2;
                     else genState.nextY += yChange;
-                    
+
                 } else if (type < 0.6) {
                     // FLAT
                     slope = 0;
@@ -542,14 +542,14 @@
                     slope = -1;
                     len = 15 + Math.random() * 10;
                 }
-                
+
                 // Spawn
                 const end = spawnPlatform(genState.nextX, genState.nextY, len, slope);
                 genState.nextX = end.endX;
                 genState.nextY = end.endY;
             }
         }
-        
+
         // --- PHYSICS & COMBAT ---
         function checkGround() {
             // Raycast down
@@ -558,7 +558,7 @@
             // Collect platform meshes
             const meshes = platforms.map(p => p.mesh);
             const hits = raycaster.intersectObjects(meshes);
-            
+
             if (hits.length > 0) {
                 const hit = hits[0];
                 // Check if we are close enough to snap
@@ -615,7 +615,7 @@
                 } else {
                     const tgt = INPUT.run ? CONFIG.sprintSpeed : CONFIG.baseSpeed;
                     hero.vel.x += (tgt - hero.vel.x) * 5 * dt;
-                    
+
                     if (hero.grounded) {
                         hero.state = INPUT.slide ? 'slide' : (INPUT.run ? 'sprint' : 'run');
                         if (INPUT.jump) {

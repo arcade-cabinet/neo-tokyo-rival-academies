@@ -68,9 +68,9 @@ export const GameScene: FC = () => {
     <Canvas camera={{ position: [0, 5, 10], fov: 75 }}>
       <ambientLight intensity={0.5} />
       <directionalLight position={[10, 10, 5]} intensity={1} />
-      
+
       {/* 3D content here */}
-      
+
       <OrbitControls />
       <Environment preset="city" />
     </Canvas>
@@ -98,13 +98,13 @@ import type { Mesh } from 'three';
 
 export function RotatingCube() {
   const meshRef = useRef<Mesh>(null);
-  
+
   useFrame((state, delta) => {
     if (meshRef.current) {
       meshRef.current.rotation.y += delta;
     }
   });
-  
+
   return (
     <mesh ref={meshRef}>
       <boxGeometry args={[1, 1, 1]} />
