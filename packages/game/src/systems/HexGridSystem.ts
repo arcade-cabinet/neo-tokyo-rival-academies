@@ -4,9 +4,9 @@
  * Generates deterministic hex tile grids with bounds trimming.
  */
 
+import seedrandom from 'seedrandom';
 import { type HexTile, TileType } from '@/types/tiles';
 import { getHexesInBounds, hexToWorld } from '@/utils/hex-grid-babylon';
-import seedrandom from 'seedrandom';
 
 export interface GridBounds {
   minX: number;

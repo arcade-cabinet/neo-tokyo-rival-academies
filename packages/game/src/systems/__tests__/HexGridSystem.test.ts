@@ -7,7 +7,7 @@
  */
 
 import { describe, expect, it } from 'vitest';
-import { HexGridSystem, type GridBounds } from '../HexGridSystem';
+import { type GridBounds, HexGridSystem } from '../HexGridSystem';
 
 describe('HexGridSystem', () => {
   const defaultBounds: GridBounds = {

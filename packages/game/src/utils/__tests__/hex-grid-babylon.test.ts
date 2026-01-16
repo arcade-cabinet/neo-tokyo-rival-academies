@@ -8,14 +8,14 @@
 import { Vector3 } from '@babylonjs/core';
 import { describe, expect, it } from 'vitest';
 import {
-    HEX_SIZE,
-    axialRound,
-    axialToCube,
-    cubeToAxial,
-    hexDistance,
-    hexToWorld,
-    snapToHex,
-    worldToHex,
+  axialRound,
+  axialToCube,
+  cubeToAxial,
+  HEX_SIZE,
+  hexDistance,
+  hexToWorld,
+  snapToHex,
+  worldToHex,
 } from '../hex-grid-babylon';
 
 describe('HexGridBabylon', () => {
