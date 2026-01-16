@@ -1,165 +1,40 @@
-# Deprecations & Ignore Guide
+# Decomposition & Ignore Guide
 
-> **Purpose**: Prevent agents and developers from using deprecated patterns, dead libraries, or anti-patterns that would harm the project.
+**What to Ignore (Dead Ends / Superseded Ideas)**:
+- Pure Babylon.js (imperative, no Reactylon): Early discussions on vanilla Babylon setup, ArcRotateCamera without JSX, manual dispose/parenting, YukaJS navigation (replaced by Navigation V2), or Three.js primitives. These were exploratory**discard entirely**.
+- Non-Reactylon declarative attempts: Any react-babylonjs mentions or generic JSX without Reactylon specifics.
+- Heavy runtime GenAI: Ideas relying on live Meshy API calls during play**ignore**; we settled on build-time manifest pipeline only.
+- Open-world infinity / MMO / gacha: Explicitly excluded per pillars.
+- Early combat jank obscuring (DBZ explosions hiding limbs): Superseded by stats-driven, visible-preview system.
+- Non-seeded randomness: All Math.random() without seedrandom**replace** with deterministic RNG.
 
-## Deprecated Technologies
+**Core Canon to Preserve & Build On** (Current Truth as of Jan 15, 2026):
+- Reactylon + Babylon.js declarative composition
+- Seeded procedural generation (master/sub-seeds for world/quests/districts)
+- Meshy build-time pipeline (manifest.json + CLI generate)
+- 4 stats (Structure/Ignition/Logic/Flow)
+- Alignment rivalry axis (-1.0 Kurenai passion to +1.0 Azure logic)
+- Noun-verb-adjective grammar quests
+- 10 district profiles + strata verticality
+- Act 13 timelines + A/B/C branches
+- Combat templates, progression/XP/rewards, save/NG+
 
-### YukaJS (DEAD - DO NOT USE)
-- **Status**: Unmaintained, replaced
-- **Replacement**: BabylonJS Navigation Plugin V2 (`@babylonjs/addons`)
-- **Why**: Native RecastJS integration, crowd simulation, better performance
+**How to Decompose into docs/ (Recommended File Structure)**:
+Split for clarityeach file self-contained, dated, with version header. Place in repo root docs/ or packages/game/docs/.
 
-```typescript
-// WRONG - Don't do this
-import { SteeringBehavior } from 'yuka';
+| Content Type              | Recommended File                  | Contents to Move/Write |
+|---------------------------|-----------------------------------|-----------------------|
+| Vision & Pillars          | DESIGN_PHILOSOPHY.md             | Core pillars, anti-patterns, stats/factions, vision statement |
+| GenAI Pipeline            | GENAI_PIPELINE.md                | Manifest schema, pipeline types, animation presets, triggers |
+| World Generation          | WORLD_GENERATION.md              | Macro pipeline, strata, district profiles table, seeded rules |
+| Quest System              | QUEST_SYSTEM.md                  | Grammar tables, generator code, alignment bias logic |
+| Alignment & Rivalry       | ALIGNMENT_SYSTEM.md              | Scale, shifts, UI, reputation, Vera ties |
+| Combat & Progression      | COMBAT_PROGRESSION.md            | Formulas, encounter templates, XP curve, items/rewards |
+| Act Timelines             | STORY_ARCS.md                    | Act 13 breakdowns, clusters, moments, endings |
+| Save/Load & NG+           | PERSISTENCE.md                   | Data structure, mechanics, NG+ carry-over |
+| Phase Roadmap             | PHASE_ROADMAP.md                 | This document (below) |
+| Technical Architecture    | TECH_ARCHITECTURE.md             | Reactylon/Zustand, Navigation V2, Capacitor, etc. |
+| UI/Sound Polish           | POLISH_RULES.md                  | HUD layout, SFX rules, particle guidelines |
+| Ignore/Deprecations       | DEPRECATIONS.md                  | This guide section |
 
-// CORRECT - Use Navigation Plugin V2
-import * as ADDONS from '@babylonjs/addons';
-const navigationPlugin = await ADDONS.CreateNavigationPluginAsync();
-```
-
-### Vanilla Babylon.js (AVOID)
-- **Status**: Use Reactylon wrapper instead
-- **Replacement**: `reactylon` package
-- **Why**: Declarative React composition, auto-disposal, better DX
-
-```typescript
-// WRONG - Imperative Babylon
-const mesh = new BABYLON.MeshBuilder.CreateBox('box', {}, scene);
-
-// CORRECT - Reactylon declarative
-<box name="box" options={{ size: 1 }} />
-```
-
-### react-babylonjs (WRONG PACKAGE)
-- **Status**: Different package, wrong imports
-- **Replacement**: `reactylon` (correct package)
-- **Why**: Reactylon is the maintained custom renderer
-
-```typescript
-// WRONG - Different package
-import { Engine, Scene } from 'react-babylonjs';
-
-// CORRECT - Reactylon
-import { Engine } from 'reactylon/web';
-import { Scene, useScene } from 'reactylon';
-```
-
-## Deprecated Patterns
-
-### Runtime GenAI Calls
-- **Status**: NEVER do this
-- **Why**: Battery drain, latency, non-deterministic results
-- **Correct Pattern**: Build-time generation via `pnpm generate` CLI
-
-```typescript
-// WRONG - Runtime API call
-const model = await meshyApi.generateModel(prompt);
-
-// CORRECT - Pre-generated asset
-const { scene } = useGLTF('/assets/characters/main/kai/rigged.glb');
-```
-
-### Math.random() for Procedural Content
-- **Status**: Deprecated for world/quest generation
-- **Replacement**: `seedrandom` for deterministic RNG
-- **Why**: Reproducible playthroughs for testing and debugging
-
-```typescript
-// WRONG - Non-deterministic
-const height = Math.random() * 100;
-
-// CORRECT - Seeded
-import seedrandom from 'seedrandom';
-const rng = seedrandom('district-3-seed');
-const height = rng() * 100;
-```
-
-### ESLint / Prettier
-- **Status**: Not used in this project
-- **Replacement**: Biome
-- **Why**: Single tool, faster, consistent
-
-```bash
-# WRONG
-npm run lint
-npx eslint .
-npx prettier --write .
-
-# CORRECT
-pnpm check
-```
-
-### npm / yarn
-- **Status**: Not used
-- **Replacement**: pnpm
-- **Why**: Workspace support, faster installs, monorepo-native
-
-```bash
-# WRONG
-npm install
-yarn add
-
-# CORRECT
-pnpm install
-pnpm add
-```
-
-## Deprecated File Patterns
-
-### Direct /public/assets/ References
-- **Status**: Use /assets/ path prefix
-- **Why**: Astro/Vite serves from public root
-
-```typescript
-// WRONG
-useGLTF('/public/assets/characters/main/kai/rigged.glb');
-
-// CORRECT
-useGLTF('/assets/characters/main/kai/rigged.glb');
-```
-
-### Inline Styles for Complex Layouts
-- **Status**: Avoid for HUD/responsive elements
-- **Replacement**: CSS modules or canvas-based rendering
-- **Why**: DOM overhead on mobile
-
-## Deprecated Architecture Patterns
-
-### Three.js for New Development
-- **Status**: Existing prototype only, do not extend
-- **Why**: Migrating to Babylon.js via Reactylon for NavMesh and physics
-- **Note**: SideScrollScene.tsx and IsometricScene.tsx are legacy prototypes
-
-### Component-Level State for Game Data
-- **Status**: Use Zustand stores
-- **Why**: Cross-component access, persistence hooks
-
-```typescript
-// WRONG - Local state for global data
-const [alignment, setAlignment] = useState(0);
-
-// CORRECT - Zustand store
-const { alignment, shiftAlignment } = useQuestStore();
-```
-
-## Files to Ignore (Reference Only)
-
-| File | Status | Purpose |
-|------|--------|---------|
-| `SideScrollScene.tsx` | Prototype | Evaluation only, not production |
-| `IsometricScene.tsx` (Three.js) | Prototype | Evaluation, migrating to Reactylon |
-| `docs/Grok-*.md` | Source | Conversation archives, not executable |
-
-## Migration Checklist
-
-When encountering deprecated patterns:
-
-1. Check this document first
-2. Find the correct replacement
-3. Update the code to use modern pattern
-4. Test on Pixel 8a baseline
-
----
-
-*When in doubt, ask: "Is this the Reactylon + seedrandom + Zustand way?"*
+Agents: Always append/update with date + changelog. Reference PR #5 patterns for formatting.
