@@ -4,7 +4,7 @@
  * Complete isometric diorama scene with camera, lighting, and ground plane.
  */
 
-import { Color3, HemisphericLight, MeshBuilder, StandardMaterial, Vector3 } from '@babylonjs/core';
+import { Color3, HemisphericLight, MeshBuilder, Vector3 } from '@babylonjs/core';
 import type { ReactNode } from 'react';
 import { useScene } from 'reactylon';
 import { BabylonCanvas } from './BabylonCanvas';
@@ -25,11 +25,13 @@ function SceneContent({ children }: { children?: ReactNode }) {
     light.diffuse = new Color3(1, 1, 1);
     light.specular = new Color3(0, 0, 0); // No specular for flat look
 
-    // Ground plane for reference
+    // Ground plane for reference with toon material
     const ground = MeshBuilder.CreateGround('ground', { width: 50, height: 50 }, scene);
-    const groundMaterial = new StandardMaterial('groundMaterial', scene);
-    groundMaterial.diffuseColor = new Color3(0.2, 0.2, 0.25);
-    groundMaterial.specularColor = new Color3(0, 0, 0);
+    const groundMaterial = createEnvironmentMaterial(
+      'groundMaterial',
+      scene,
+      new Color3(0.2, 0.2, 0.25)
+    );
     ground.material = groundMaterial;
   }
 

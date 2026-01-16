@@ -5,23 +5,18 @@
  */
 
 import {
-    Color3,
-    MeshBuilder,
-    StandardMaterial,
-    Vector3,
-    type AbstractMesh,
-    type Scene,
+  type AbstractMesh,
+  Color3,
+  MeshBuilder,
+  type Scene,
+  StandardMaterial,
+  Vector3,
 } from '@babylonjs/core';
 
 /**
  * Create a simple box mesh
  */
-export function createBox(
-  name: string,
-  size: number,
-  scene: Scene,
-  color?: Color3
-): AbstractMesh {
+export function createBox(name: string, size: number, scene: Scene, color?: Color3): AbstractMesh {
   const box = MeshBuilder.CreateBox(name, { size }, scene);
 
   if (color) {
