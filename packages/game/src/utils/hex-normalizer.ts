@@ -96,17 +96,9 @@ export function normalizeToHex(
   // Depth (Z) = 2 * innerRadius = sqrt(3) * hexSize (for a regular hex)
   // For flat-top, it's swapped
 
-  let targetWidth: number;
-  let targetDepth: number;
-
-  if (cfg.orientation === 'pointy') {
-    // Inscribed circle diameter is the limiting factor
-    targetWidth = 2 * innerRadius;
-    targetDepth = 2 * innerRadius;
-  } else {
-    targetWidth = 2 * innerRadius;
-    targetDepth = 2 * innerRadius;
-  }
+  // Inscribed circle diameter is the limiting factor (same for both orientations)
+  const targetWidth = 2 * innerRadius;
+  const targetDepth = 2 * innerRadius;
 
   const targetHeight = cfg.targetHeight;
 
@@ -455,9 +447,11 @@ export function createHexClipMaterial(
     clippingPlanes.push(plane);
   }
 
-  // Apply clipping planes to material
-  (material as any).clippingPlanes = clippingPlanes;
-  (material as any).clipIntersection = false;
+  // Apply clipping planes to material (these properties exist on all Three.js materials)
+  if ('clippingPlanes' in material) {
+    (material as THREE.MeshStandardMaterial).clippingPlanes = clippingPlanes;
+    (material as THREE.MeshStandardMaterial).clipIntersection = false;
+  }
 
   return material;
 }
