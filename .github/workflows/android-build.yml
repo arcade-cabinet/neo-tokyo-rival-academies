@@ -2,10 +2,13 @@ name: Android Debug Build
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
   workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
   build-android:
@@ -40,7 +43,10 @@ jobs:
         run: pnpm build
 
       - name: Add Android Platform
-        run: npx cap add android
+        run: |
+          if [ ! -d "android" ]; then
+            npx cap add android
+          fi
         working-directory: packages/game
 
       - name: Sync Capacitor

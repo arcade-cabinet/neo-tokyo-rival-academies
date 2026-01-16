@@ -161,6 +161,9 @@ export class PipelineExecutor {
 
     // Load manifest
     const manifestPath = path.join(assetDir, 'manifest.json');
+    if (!fs.existsSync(manifestPath)) {
+      throw new Error(`Manifest not found: ${manifestPath}`);
+    }
     let manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf-8')) as AssetManifest;
 
     // Generate seed if not present (for reproducible generation)
@@ -442,12 +445,13 @@ export class PipelineExecutor {
         if (resolvedPath === 'animationTask.animations') {
           return resolveAnimations(context.manifest);
         }
-        return this.extractPath(context.manifest, resolvedPath!);
+        if (!resolvedPath) return undefined;
+        return this.extractPath(context.manifest, resolvedPath);
 
       case 'step': {
         const stepResult = context.stepResults.get(binding.step!);
-        if (!stepResult) return undefined;
-        return this.extractPath(stepResult.outputs, resolvedPath!);
+        if (!stepResult || !resolvedPath) return undefined;
+        return this.extractPath(stepResult.outputs, resolvedPath);
       }
 
       case 'lookup': {

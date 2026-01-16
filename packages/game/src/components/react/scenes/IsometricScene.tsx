@@ -241,12 +241,23 @@ function WallBackdrops() {
   );
 }
 
+// Helper to find animation by name pattern
+function findActionByPattern(
+  actions: Record<string, THREE.AnimationAction | null>,
+  pattern: string
+): THREE.AnimationAction | null {
+  const actionNames = Object.keys(actions);
+  const match = actionNames.find((name) => name.toLowerCase().includes(pattern.toLowerCase()));
+  return match ? actions[match] : null;
+}
+
 function KaiCharacter() {
   const group = useRef<Group>(null);
   const rigidBody = useRef<RapierRigidBody>(null);
-  const { scene } = useGLTF('/assets/characters/main/kai/rigged.glb');
-  const idleAnim = useGLTF('/assets/characters/main/kai/animations/idle_combat.glb');
-  const runAnim = useGLTF('/assets/characters/main/kai/animations/run_in_place.glb');
+  // Each animation GLB contains the full rigged mesh
+  const { scene } = useGLTF('/assets/characters/main/kai/animations/combat_stance.glb');
+  const idleAnim = useGLTF('/assets/characters/main/kai/animations/combat_stance.glb');
+  const runAnim = useGLTF('/assets/characters/main/kai/animations/runfast.glb');
   const { actions } = useAnimations([...idleAnim.animations, ...runAnim.animations], group);
   const keys = useKeyboard();
   const [isMoving, setIsMoving] = useState(false);
@@ -258,22 +269,24 @@ function KaiCharacter() {
   const maxZ = (GRID_DEPTH * Math.sqrt(3) * HEX_SIZE) / 2 - HEX_SIZE;
 
   useEffect(() => {
-    const actionNames = Object.keys(actions);
-    const idle = actions[actionNames[0]];
+    // Use name-based lookup instead of index
+    const idle = findActionByPattern(actions, 'combat') || findActionByPattern(actions, 'stance');
     if (idle) idle.reset().fadeIn(0.5).play();
   }, [actions]);
 
   useEffect(() => {
-    const actionNames = Object.keys(actions);
     const moving = keys.w || keys.a || keys.s || keys.d;
     if (moving !== isMoving) {
       setIsMoving(moving);
-      if (moving && actions[actionNames[1]]) {
-        actions[actionNames[0]]?.fadeOut(0.2);
-        actions[actionNames[1]]?.reset().fadeIn(0.2).play();
-      } else if (actions[actionNames[0]]) {
-        actions[actionNames[1]]?.fadeOut(0.2);
-        actions[actionNames[0]]?.reset().fadeIn(0.2).play();
+      // Use name-based lookup instead of index
+      const idleAction = findActionByPattern(actions, 'combat') || findActionByPattern(actions, 'stance');
+      const runAction = findActionByPattern(actions, 'run');
+      if (moving && runAction) {
+        idleAction?.fadeOut(0.2);
+        runAction.reset().fadeIn(0.2).play();
+      } else if (idleAction) {
+        runAction?.fadeOut(0.2);
+        idleAction.reset().fadeIn(0.2).play();
       }
     }
   }, [keys, isMoving, actions]);
@@ -390,10 +403,9 @@ export default function IsometricScene() {
   );
 }
 
-// Preload assets
-useGLTF.preload('/assets/characters/main/kai/rigged.glb');
-useGLTF.preload('/assets/characters/main/kai/animations/idle_combat.glb');
-useGLTF.preload('/assets/characters/main/kai/animations/run_in_place.glb');
+// Preload assets - each animation GLB contains the full rigged mesh
+useGLTF.preload('/assets/characters/main/kai/animations/combat_stance.glb');
+useGLTF.preload('/assets/characters/main/kai/animations/runfast.glb');
 // Tile textures (applied to standardized hex geometry)
 for (const t of TILE_TEXTURES) useTexture.preload(t);
 // Background textures
