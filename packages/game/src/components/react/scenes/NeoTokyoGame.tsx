@@ -1,24 +1,13 @@
 import { ScreenOrientation } from '@capacitor/screen-orientation';
 import { GameWorld } from '@components/react/game/GameWorld';
-import { CityBackground } from '@components/react/objects/CityBackground';
 import { CombatText } from '@components/react/ui/CombatText';
 import { JRPGHUD } from '@components/react/ui/JRPGHUD';
 import { MainMenu } from '@components/react/ui/MainMenu';
 import { NarrativeOverlay } from '@components/react/ui/NarrativeOverlay';
 import { SplashScreen } from '@components/react/ui/SplashScreen';
 import { musicSynth } from '@neo-tokyo/content-gen';
-import {
-  CameraShake,
-  ContactShadows,
-  Environment,
-  PerspectiveCamera,
-  Sparkles,
-} from '@react-three/drei';
-import { Canvas } from '@react-three/fiber';
-import { Bloom, ChromaticAberration, EffectComposer } from '@react-three/postprocessing';
 import { initialGameState, initialInputState } from '@utils/gameConfig';
-import { Suspense, useCallback, useEffect, useRef, useState } from 'react';
-import * as THREE from 'three';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { SaveSystem } from '@/systems/SaveSystem';
 import type { GameState, InputState } from '@/types/game';
 
@@ -136,39 +125,10 @@ export default function NeoTokyoGame() {
 
   return (
     <div style={{ width: '100vw', height: '100vh', position: 'relative' }}>
-      {/* 3D Canvas */}
-      <Canvas shadows style={{ background: 'linear-gradient(135deg, #020205 0%, #0a0510 100%)' }}>
-        <Suspense fallback={null}>
-          <PerspectiveCamera makeDefault position={[-8, 6, 15]} fov={50} />
-
-          {/* Lighting Setup - Enhanced Cyberpunk Style */}
-          <ambientLight intensity={0.2} color={0x4040ff} />
-          <directionalLight
-            position={[20, 50, 20]}
-            intensity={2}
-            color="#00ffff"
-            castShadow
-            shadow-mapSize-width={2048}
-            shadow-mapSize-height={2048}
-            shadow-camera-far={150}
-            shadow-camera-left={-50}
-            shadow-camera-right={50}
-            shadow-camera-top={50}
-            shadow-camera-bottom={-50}
-          />
-
-          {/* Multiple colored point lights for atmosphere */}
-          <pointLight position={[-20, 10, -20]} intensity={2} color="#ff00ff" distance={50} />
-          <pointLight position={[20, 10, -20]} intensity={2} color="#00ffff" distance={50} />
-          <pointLight position={[0, 5, 20]} intensity={1.5} color="#ffff00" distance={40} />
-
-          {/* Fog for depth - darker */}
-          <fog attach="fog" args={['#020208', 15, 120]} />
-
-          {/* City Background with parallax */}
-          <CityBackground />
-
-          {/* Game World - Only active if in game state */}
+      {/* BabylonJS Canvas */}
+      <BabylonDioramaScene>
+        {/* Game World - Only active if in game state */}
+        {viewState === 'game' && (
           <GameWorld
             gameState={gameState}
             inputState={inputState}
@@ -178,52 +138,8 @@ export default function NeoTokyoGame() {
             onCameraShake={triggerCameraShake}
             onDialogue={handleDialogue}
           />
-
-          <CameraShake
-            maxYaw={0.05}
-            maxPitch={0.05}
-            maxRoll={0.05}
-            yawFrequency={10 * shakeIntensity}
-            pitchFrequency={10 * shakeIntensity}
-            rollFrequency={10 * shakeIntensity}
-            intensity={shakeIntensity}
-            decayRate={0.65}
-          />
-
-          {/* Post Processing */}
-          <EffectComposer>
-            <Bloom luminanceThreshold={1} mipmapBlur intensity={1.5} />
-            <ChromaticAberration
-              offset={new THREE.Vector2(0.002, 0.002)}
-              radialModulation={false}
-              modulationOffset={0}
-            />
-          </EffectComposer>
-
-          {/* Enhanced Environment Effects */}
-          <Environment preset="night" />
-          <ContactShadows
-            position={[0, -0.5, 0]}
-            opacity={0.6}
-            scale={20}
-            blur={2.5}
-            far={10}
-            color="#00ffff"
-          />
-
-          {/* Enhanced atmospheric particles */}
-          <Sparkles count={200} scale={80} size={2.5} speed={0.2} opacity={0.4} color="#00ffff" />
-          <Sparkles
-            count={150}
-            scale={60}
-            size={1.5}
-            speed={0.15}
-            opacity={0.3}
-            color="#ff00ff"
-            position={[0, 10, -20]}
-          />
-        </Suspense>
-      </Canvas>
+        )}
+      </BabylonDioramaScene>
 
       {/* UI Overlays based on State */}
 
