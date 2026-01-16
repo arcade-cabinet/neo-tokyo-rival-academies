@@ -1,17 +1,32 @@
-# AI Agent Documentation
+# AI Agent Documentation & Governance
 
-This document provides guidelines and context for AI coding agents working on the Neo-Tokyo: Rival Academies project.
+**⚠️ CRITICAL UPDATE (Jan 2026): The Golden Record is Active**
+All agents MUST follow the documentation hierarchy below. Previous instructions (pure Babylon without Reactylon, unseeded GenAI) are **DEPRECATED**.
+
+## 📚 Documentation Hierarchy (Golden Record)
+
+1.  **START HERE**: [`docs/MOBILE_WEB_GUIDE.md`](docs/MOBILE_WEB_GUIDE.md) - Mobile-first constraints & Capacitor integration.
+2.  **EXECUTION PLAN**: [`docs/PHASE_ROADMAP.md`](docs/PHASE_ROADMAP.md) - Chronological milestones.
+3.  **DEPRECATIONS**: [`docs/DEPRECATIONS.md`](docs/DEPRECATIONS.md) - What to IGNORE.
+4.  **MASTER INDEX**: [`docs/GOLDEN_RECORD_MASTER.md`](docs/GOLDEN_RECORD_MASTER.md) - Full system links.
+
+## 🚨 Governance & Workflow
+
+1.  **GitHub Projects**: All tasks MUST be tracked on the GitHub Project board.
+2.  **Issues First**: No code changes without an associated Issue.
+    - Create an Issue if one doesn't exist.
+    - Link PRs to Issues.
+3.  **Governance Doc**: See [`docs/AGENT_GOVERNANCE.md`](docs/AGENT_GOVERNANCE.md) (To be created) for detailed workflow.
 
 ## 🎯 Project Overview
 
-**Neo-Tokyo: Rival Academies** is a **3D Action JRPG** built with modern web technologies. The game features immersive 3D cel-shaded graphics powered by Three.js and React Three Fiber, delivered through a performant Vite-based SPA architecture.
+**Neo-Tokyo: Rival Academies** is a **3D Action JRPG** built with modern web technologies. The game features immersive 3D cel-shaded graphics powered by Three.js and React Three Fiber (migrating to Babylon.js/Reactylon), delivered through a performant Vite-based SPA architecture.
 
 ### Core Technologies
 
 - **Vite 6.x**: Fast build tooling with HMR
 - **React 19**: For interactive 3D components
-- **Three.js 0.182**: Core 3D graphics library
-- **React Three Fiber 9.x**: React renderer for Three.js
+- **Babylon.js / Reactylon**: Core 3D engine (Replacing Three.js/R3F)
 - **Miniplex**: Entity Component System (ECS) for game logic
 - **PNPM 10**: Package manager (Strictly use `pnpm`)
 - **Biome 2.3**: Linter and formatter (Strictly use `pnpm check`)
@@ -24,7 +39,8 @@ This document provides guidelines and context for AI coding agents working on th
 2.  **PRODUCTION QUALITY**: Code must be modular, strictly typed (TypeScript, no `any`, no `@ts-ignore`), and commented.
 3.  **VERIFY EVERYTHING**: After every file change, read the file back to ensure correctness. After every feature, run tests.
 4.  **TEST DRIVEN**: Write tests for logic systems *before* or *during* implementation.
-5.  **VISUAL STYLE**: Use `meshToonMaterial` for characters and assets to maintain the cel-shaded anime aesthetic.
+5.  **VISUAL STYLE**: Use `meshToonMaterial` (or Babylon equivalent) for characters and assets to maintain the cel-shaded anime aesthetic.
+6.  **MOBILE FIRST**: All features must run at 60 FPS on Pixel 8a baseline. See `docs/MOBILE_WEB_GUIDE.md`.
 
 ## 🏗️ Architecture Principles
 
@@ -36,7 +52,7 @@ This document provides guidelines and context for AI coding agents working on th
 ### 2. Directory Structure
 ```text
 src/
-├── components/react/   # React components
+├── components/react/   # React components (Reactylon)
 │   ├── objects/       # 3D Objects (Character, Enemy)
 │   ├── ui/            # HUD, Menus
 │   └── game/          # Game World & Managers
@@ -60,4 +76,4 @@ The game is a high-speed Action JRPG.
 - **Story**: Data-driven Visual Novel style dialogue overlay (`src/data/story.json`).
 - **Visuals**: Cel-shaded characters with animated physics.
 
-Always refer to `docs/JRPG_TRANSFORMATION.md` for design details.
+Always refer to `docs/GOLDEN_RECORD_MASTER.md` for design details.

@@ -1,269 +1,115 @@
-# Quest System
+# Quest Generation System v1.0
 
-> **Purpose**: Define the procedural quest generation grammar and cluster system.
+**Philosophy**: Noun-verb-adjective grammar tables + alignment bias → seeded, reproducible quest clusters.
 
-## Overview
+## Grammar Tables
 
-Quests are generated using **noun-verb-adjective grammars** with alignment bias. This creates coherent, varied content without runtime AI—all deterministic from seeds.
+### 1. Nouns Table (Core Objects/Targets)
+| Bucket          | Nouns (examples)                          | Weight |
+|-----------------|-------------------------------------------|--------|
+| Tech/Corporate  | datavault, passcode, synth-sapphire, drone-core, holo-projector | 0.25 |
+| People/Contacts | info-broker, fixer, vendor, runner, hacker | 0.20 |
+| Locations/Items | graffiti cache, rooftop antenna, sewer grate, billboard circuit | 0.15 |
+| Mysteries       | encrypted file, cursed implant, ancient relic, glowing artifact | 0.20 |
+| Threats         | patrol drone, security bot, lurking shadow, corporate enforcer | 0.20 |
 
-## Quest Grammar Structure
+### 2. Verbs Table (Actions – Alignment-Biased)
+| Alignment Bias  | Verbs                                     | Weight (base) |
+|-----------------|-------------------------------------------|---------------|
+| Corporate (+ )  | Deliver, Negotiate, Secure, Escort, Report | 0.30 |
+| Rebel (- )      | Sabotage, Steal, Destroy, Hack, Expose    | 0.30 |
+| Mystery (neutral)| Investigate, Uncover, Eavesdrop, Trace, Decipher | 0.25 |
+| Universal       | Retrieve, Find, Defeat, Explore, Activate | 0.15 |
 
-### Template Patterns
+### 3. Adjectives Table (Flavor – District/Theme Biased)
+| Theme/District  | Adjectives                                | Weight |
+|-----------------|-------------------------------------------|--------|
+| Neon/Entertainment | glowing, overbright, flickering, holo-lit, jittery | 0.25 |
+| Corporate/Upper | encrypted, secure, elite, pristine, guarded | 0.20 |
+| Slum/Lower      | cursed, rusted, hidden, overgrown, damp   | 0.20 |
+| Industrial      | industrial, heavy, leaking, sparking, massive | 0.15 |
+| Universal       | ancient, mysterious, valuable, dangerous, forgotten | 0.20 |
 
-```text
-Main Quest:  "[Verb] the [Adjective] [Noun] at [Landmark] to [Outcome]."
-Side Quest:  "[Verb] the [Adjective] [Noun] near [Landmark]."
-Secret:      "Discover the hidden [Adjective] [Noun] that reveals [Outcome]."
-```
+### 4. Landmarks Table (Locations – Procedural Tie-Ins)
+| Type            | Landmarks (seeded from district features) | Examples |
+|-----------------|-------------------------------------------|----------|
+| Fixed/Procedural| HoloPlaza, Club Eclipse, Central Pillar, Sewer Junction, Rooftop Helipad, Abandoned Reactor | Auto-generated from city rules |
+| Dynamic         | back alley, service tunnel, neon boulevard, elevated bridge, underground vault | Placed via noise hotspots |
 
-### Grammar Tables
+### 5. Outcomes Table (Rewards/Progression Hooks)
+| Type            | Outcomes                                  | Effect |
+|-----------------|-------------------------------------------|--------|
+| Progression     | unlock the upper elevator, gain rooftop access, reveal the resistance base | Vertical gate / new district |
+| Reward          | obtain credits/XP, acquire new gear, shift alignment | Items / stats |
+| Narrative       | learn a corporate secret, expose a betrayal, uncover a hidden truth | Dialogue / branch flag |
+| Risk/Failure    | trigger alarm, attract enforcers, lose reputation | Combat / chase |
 
-#### Verbs (Action Words)
+## Quest Generator Implementation (Zustand + Seeded RNG)
 
-| Category | Universal | Azure Bias | Kurenai Bias |
-|----------|-----------|------------|--------------|
-| Primary | Retrieve, Find, Defeat, Explore, Activate | Negotiate, Secure, Hack, Report, Decipher | Sabotage, Destroy, Escort, Expose, Challenge |
-| Weight | 0.5 | +0.3 if alignment > 0.3 | +0.3 if alignment < -0.3 |
-
-#### Adjectives (Descriptors)
-
-| Theme | Options |
-|-------|---------|
-| Universal | ancient, mysterious, valuable, dangerous, hidden |
-| Neon | glowing, flickering, overbright, holo-lit, sparking |
-| Corporate | encrypted, elite, pristine, guarded, secure |
-| Slum | cursed, rusted, overgrown, damp, forgotten |
-| Industrial | heavy, sparking, massive, leaking |
-
-#### Nouns (Objects/Targets)
-
-| Category | Options |
-|----------|---------|
-| Data | datavault, passcode, data-core, chip, archive |
-| Items | synth-sapphire, trophy, badge, relic, implant |
-| People | info-broker, fixer, cadet, mentor, enforcer |
-| Tech | drone-core, antenna, reactor, simulator |
-
-#### Landmarks
-
-| District Type | Landmarks |
-|---------------|-----------|
-| Neon | HoloPlaza, Club Eclipse, Neon Boulevard, VIP Lounge |
-| Corporate | Central Pillar, Rooftop Helipad, Elite Office, Secure Vault |
-| Slum | Gate Plaza, Sewer Junction, Overgrown Alley, Graffiti Cache |
-| Industrial | Forge Core, Reactor Chamber, Service Tunnel |
-
-#### Outcomes (Rewards/Unlocks)
-
-| Type | Options |
-|------|---------|
-| Progression | unlock the elevator, access next stratum, unlock faction HQ |
-| Faction | gain faction respect, reveal alliance, trigger rivalry event |
-| Tangible | obtain credits, receive gear, discover secret |
-| Information | reveal a secret, uncover conspiracy, learn faction lore |
-
-## Quest Cluster Structure
-
-Each district/act generates a **cluster** of related quests:
-
-```typescript
-interface QuestCluster {
-  district: string;
-  act: number;
-  seed: string;
-  main: Quest;        // 1 spine quest (vertical progression)
-  sides: Quest[];     // 3-6 exploration quests (horizontal)
-  secret?: Quest;     // 0-1 hidden discovery
-}
-```
-
-## Quest Generator Implementation
-
-```typescript
-// src/systems/QuestGenerator.ts
+```ts
+// packages/game/src/systems/QuestGenerator.ts
 import seedrandom from 'seedrandom';
-import { create } from 'zustand';
+import create from 'zustand';
 
+// Alignment scale: -1.0 Kurenai (passion) to +1.0 Azure (logic)
 interface Quest {
   id: string;
   title: string;
   description: string;
   type: 'main' | 'side' | 'secret';
-  alignmentShift: number;
+  alignmentShift: number; // Applied on completion
   reward: { xp: number; item?: string; unlock?: string };
   completed: boolean;
 }
 
+interface QuestCluster {
+  district: string;
+  main: Quest;
+  sides: Quest[];
+  secret?: Quest;
+}
+
 interface QuestStore {
-  alignment: number;
+  alignment: number; // -1.0 to +1.0
   activeCluster?: QuestCluster;
   completedQuests: string[];
-  generateCluster: (seed: string, profile: DistrictProfile) => void;
+  generateCluster: (seed: string, districtProfile: DistrictProfile) => void;
   completeQuest: (questId: string) => void;
+  shiftAlignment: (amount: number) => void;
 }
 
 const useQuestStore = create<QuestStore>((set, get) => ({
   alignment: 0.0,
   completedQuests: [],
-
-  generateCluster: (seed: string, profile: DistrictProfile) => {
+  generateCluster: (seed: string, districtProfile: DistrictProfile) => {
     const rng = seedrandom(seed);
     const { alignment } = get();
 
-    // Determine bias
+    // Bias weights by alignment + district
     const bias = alignment > 0.3 ? 'azure' : alignment < -0.3 ? 'kurenai' : 'neutral';
 
-    // Grammar tables
-    const verbs = {
-      universal: ['Retrieve', 'Find', 'Defeat', 'Explore', 'Activate'],
-      azure: ['Negotiate', 'Secure', 'Hack', 'Report', 'Decipher'],
-      kurenai: ['Sabotage', 'Destroy', 'Escort', 'Expose', 'Challenge'],
-    };
+    // (Tables logic here)
+    // ...
+    // Generate main (vertical spine)
+    const mainVerb = pick(getBiasedArray(verbs.universal, bias as any));
+    const mainAdj = pick([...adjectives.universal, ...adjectives[districtProfile.themeKey]]);
+    const mainNoun = pick(nouns);
+    const mainLandmark = pick(landmarks);
+    const mainOutcome = pick(outcomes.filter(o => o.includes('unlock') || o.includes('reveal'))); // Progression focus
 
-    const adjectives = {
-      universal: ['ancient', 'mysterious', 'valuable', 'dangerous'],
-      neon: ['glowing', 'flickering', 'overbright', 'holo-lit'],
-      corporate: ['encrypted', 'elite', 'pristine', 'guarded'],
-      slum: ['cursed', 'rusted', 'overgrown', 'damp'],
-    };
-
-    const nouns = ['datavault', 'passcode', 'synth-sapphire', 'drone-core',
-                   'info-broker', 'fixer', 'graffiti cache', 'antenna'];
-
-    const landmarks = ['HoloPlaza', 'Club Eclipse', 'Gate Plaza',
-                       'Sewer Junction', 'Rooftop Helipad', 'Central Pillar'];
-
-    const outcomes = ['unlock the elevator', 'gain faction respect',
-                      'obtain credits', 'reveal a secret'];
-
-    // Helper functions
-    const pick = <T>(arr: T[]): T => arr[Math.floor(rng() * arr.length)];
-    const biasedVerbs = [...verbs.universal, ...(verbs[bias] || [])];
-    const themeAdj = [...adjectives.universal, ...(adjectives[profile.themeKey] || [])];
-
-    // Generate main quest
     const main: Quest = {
       id: `${seed}-main`,
-      title: `${pick(biasedVerbs)} the ${pick(themeAdj)} ${pick(nouns)}`,
-      description: `${pick(biasedVerbs)} the ${pick(themeAdj)} ${pick(nouns)} at ${pick(landmarks)} to ${pick(outcomes)}.`,
+      title: `${mainVerb} the ${mainAdj} ${mainNoun}`,
+      description: `${mainVerb} the ${mainAdj} ${mainNoun} at ${mainLandmark} to ${mainOutcome}.`,
       type: 'main',
-      alignmentShift: bias === 'azure' ? 0.3 : bias === 'kurenai' ? -0.3 : 0.1,
-      reward: { xp: 300, unlock: 'next-stratum' },
+      alignmentShift: alignment > 0 ? 0.3 : alignment < 0 ? -0.3 : 0.1 * (rng() > 0.5 ? 1 : -1),
+      reward: { xp: 300, unlock: 'next-stratum-elevator' },
       completed: false,
     };
-
-    // Generate sides
-    const sideCount = 3 + Math.floor(rng() * 4);
-    const sides: Quest[] = [];
-    for (let i = 0; i < sideCount; i++) {
-      sides.push({
-        id: `${seed}-side-${i}`,
-        title: `${pick(biasedVerbs)} the ${pick(themeAdj)} ${pick(nouns)}`,
-        description: `${pick(biasedVerbs)} the ${pick(themeAdj)} ${pick(nouns)} near ${pick(landmarks)}.`,
-        type: 'side',
-        alignmentShift: 0.1 * (rng() > 0.5 ? 1 : -1),
-        reward: { xp: 100 + Math.floor(rng() * 100) },
-        completed: false,
-      });
-    }
-
-    // Generate secret
-    const secret: Quest = {
-      id: `${seed}-secret`,
-      title: `Discover the hidden ${pick(themeAdj)} ${pick(nouns)}`,
-      description: `Uncover the secret that ${pick(outcomes)}.`,
-      type: 'secret',
-      alignmentShift: 0.15 * (rng() > 0.5 ? 1 : -1),
-      reward: { xp: 200, item: 'mystery-relic' },
-      completed: false,
-    };
-
-    set({ activeCluster: { district: profile.name, main, sides, secret } });
+    // Sides/Secret generation...
+    // ...
+    set({ activeCluster: cluster });
   },
-
-  completeQuest: (questId: string) => {
-    set((state) => {
-      const { activeCluster } = state;
-      if (!activeCluster) return state;
-
-      // Find and mark complete
-      const allQuests = [activeCluster.main, ...activeCluster.sides, activeCluster.secret];
-      const quest = allQuests.find(q => q?.id === questId);
-
-      if (quest && !quest.completed) {
-        quest.completed = true;
-        return {
-          ...state,
-          alignment: Math.max(-1, Math.min(1, state.alignment + quest.alignmentShift)),
-          completedQuests: [...state.completedQuests, questId],
-        };
-      }
-      return state;
-    });
-  },
+  // ...
 }));
-
-export { useQuestStore };
 ```
-
-## Cluster Examples
-
-### Academy Gate Slums (Act 1, Cluster 1)
-
-**Seed**: `"NeoTokyo-v1-district-1-act1"`
-
-**Generated Cluster**:
-- **Main**: "Investigate the flickering holo-invite at Gate Plaza to unlock the Selection Ceremony."
-- **Side 1**: "Retrieve the rusted academy badge from lurking vendor in overgrown alley."
-- **Side 2**: "Eavesdrop on the jittery runners discussing faction secrets."
-- **Side 3**: "Sabotage the corporate recruitment drone patrolling the gate."
-- **Secret**: "Discover the hidden graffiti cache that reveals a resistance contact."
-
-### Neon Spire (Act 2, Cluster 3)
-
-**Seed**: `"NeoTokyo-v1-district-2-act2"`
-
-**Generated Cluster**:
-- **Main**: "Infiltrate the overbright HoloPlaza vault to retrieve the glowing data-core."
-- **Side 1**: "Negotiate with the elite fixer at Club Eclipse for intel."
-- **Side 2**: "Sabotage the flickering security cams in the back alleys."
-- **Side 3**: "Retrieve the valuable synth-drink from jittery vendor."
-- **Side 4**: "Eavesdrop on the corporate meeting in VIP lounge."
-- **Secret**: "Discover the hidden resistance cache behind the graffiti mural."
-
-## Alignment Integration
-
-Quest generation responds to current alignment:
-
-| Alignment Range | Verb Bias | Adjective Flavor | Side Quest Ratio |
-|-----------------|-----------|------------------|------------------|
-| < -0.6 (Extreme Kurenai) | 70% passion verbs | aggressive | More sabotage/challenge |
-| -0.6 to -0.3 | 50% passion verbs | mixed | Balanced |
-| -0.3 to +0.3 (Neutral) | Universal only | neutral | Balanced |
-| +0.3 to +0.6 | 50% logic verbs | mixed | Balanced |
-| > +0.6 (Extreme Azure) | 70% logic verbs | calculated | More negotiate/secure |
-
-## UI Integration
-
-```tsx
-// In HUD component
-const QuestLog: FC = () => {
-  const { activeCluster, completeQuest } = useQuestStore();
-
-  if (!activeCluster) return null;
-
-  return (
-    <div className="quest-log">
-      <h3>Active Quests</h3>
-      <QuestItem quest={activeCluster.main} onComplete={completeQuest} />
-      {activeCluster.sides.map(q => (
-        <QuestItem key={q.id} quest={q} onComplete={completeQuest} />
-      ))}
-    </div>
-  );
-};
-```
-
----
-
-*Every quest traces to a seed. Reproducible, testable, balanced.*
