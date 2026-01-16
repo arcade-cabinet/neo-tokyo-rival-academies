@@ -32,7 +32,32 @@ We align with classic JRPG roots (Final Fantasy 7, Persona 5, Octopath Traveler)
 | **State Persistence** | Save player pos/health before spin-out; restore after. |
 | **Backgrounds** | Reuse diorama skybox/lighting but blur the hex grid or swap to "Arena" variant. |
 
-## 5. Reference Models
+## 5. Technical Architecture for Spin-Out
+To achieve seamless transitions on mobile (Pixel 8a target), we avoid full page reloads.
+
+### A. Scene Stacking
+Instead of unmounting the Diorama, we pause it and overlay the Combat Scene.
+- **DioramaScene**: Paused (no tick), rendering suspended or blurred.
+- **CombatScene**: Mounted on top, active tick.
+- **Memory**: Ensure Diorama assets aren't disposed unless memory pressure is high.
+
+### B. State Transfer Protocol
+When `Trigger` occurs, the `GameStore` must snapshot:
+1.  **Player State**: Current HP, MP, Equipment, Buffs.
+2.  **Enemy Group**: IDs of enemies engaging (allows multi-enemy pulls).
+3.  **Environment**: ID of current district (selects combat background).
+4.  **Return Callback**: Function to execute on victory/flee (e.g., `removeEntity(enemyId)`).
+
+### C. Transition Sequence (Target < 1.5s)
+1.  **Freeze**: Diorama input disabled.
+2.  **Shatter**: Shader effect applied to main canvas.
+3.  **Load**: Combat assets preload (if not resident).
+4.  **Swap**: Combat Camera activates.
+5.  **Fight**: Turn-based loop.
+6.  **Results**: XP summary overlay.
+7.  **Fade**: Return to Diorama.
+
+## 6. Reference Models
 - **Persona 5**: UI style, snappy transitions, "All-Out Attack" (Break finish).
 - **FF7 Remake**: ATB gauge integration (Ignition/Flow stats).
 - **Honkai Star Rail**: Mobile-first turn-based camera work.
