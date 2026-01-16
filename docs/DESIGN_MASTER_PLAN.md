@@ -11,27 +11,30 @@ A high-fidelity 3D Action-JRPG set in a cyberpunk Neo-Tokyo. The game combines t
 
 ## 2. The GenAI Asset Pipeline (Automated Content Factory)
 
-We have moved away from runtime procedural generation to a **Build-Time Content Factory**.
+We use a **Build-Time Content Factory** with declarative JSON pipelines.
 
 ### Architecture
-*   **Source of Truth:** `packages/game/src/content/manifest.json`. Defines all characters and backgrounds.
-*   **Orchestrator:** `ModelerAgent` (`packages/content-gen/src/agents/ModelerAgent.ts`).
-*   **Technology:** Meshy AI API.
+*   **Source of Truth:** Per-asset `manifest.json` files in `packages/game/public/assets/`
+*   **Orchestrator:** `PipelineExecutor` with JSON pipeline definitions
+*   **Technology:** Meshy AI API
 
-### Workflow (The "Happy Path")
-1.  **Concept Art (Text-to-Image):**
-    *   **Endpoint:** `POST /v1/text-to-image`
-    *   **Model:** `nano-banana-pro`
-    *   **Prompting:** Enforces `t-pose`, `white background`, `neutral lighting`.
-2.  **3D Modeling (Image-to-3D):**
-    *   **Endpoint:** `POST /v1/image-to-3d`
-    *   **Model:** `latest` (Meshy-6)
-    *   **Settings:** `pose_mode: "t-pose"`, `topology: "quad"`, `target_polycount: 50000`, `enable_pbr: true`.
-3.  **Auto-Rigging:**
-    *   **Endpoint:** `POST /v1/rigging`
-4.  **Animation:**
-    *   **Endpoint:** `POST /v1/animations`
-    *   **Library:** Mapped via `ANIMATION_IDS` (e.g., `IDLE_COMBAT: 89`).
+### Pipeline Types
+| Pipeline | Description | Steps |
+|----------|-------------|-------|
+| `character` | Full humanoid characters | concept → model → rigging → animations |
+| `prop` | Non-humanoid props/hazards | concept → model |
+| `tile` | Hex tile assets | concept → model |
+| `background` | 2D scene backgrounds | concept only |
+
+### Animation Presets
+| Preset | Description | Animation Count |
+|--------|-------------|-----------------|
+| `hero` | Playable characters | 7 animations |
+| `enemy` | Standard enemies | 5 animations |
+| `boss` | Boss characters | 7 animations |
+| `prop` | Animated props | 1 animation |
+
+See [GENAI_PIPELINE.md](GENAI_PIPELINE.md) for full technical details.
 
 ## 3. Prototype Strategy (The "Dual Prototype")
 
@@ -78,6 +81,11 @@ graph TD
 *   **Language:** TypeScript (Node.js).
 *   **CLI:** `pnpm generate` (Manifest-driven).
 *   **Persistence:** JSON Manifests + Git LFS (for binary assets).
+
+### Generated Characters (v1.0)
+*   **Main:** Kai (hero), Vera (hero)
+*   **B-Story:** Yakuza Grunt/Boss, Biker Grunt/Boss
+*   **C-Story:** Mall Security Guard, Alien Humanoid, Tentacle (prop)
 
 ---
 *Last Updated: 2026-01-15*

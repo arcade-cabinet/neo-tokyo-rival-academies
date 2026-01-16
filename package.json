@@ -2,7 +2,15 @@
   "name": "neo-tokyo-rival-academies-root",
   "private": true,
   "scripts": {
-    "test:e2e": "pnpm --filter @neo-tokyo/e2e test"
+    "test:e2e": "pnpm --filter @neo-tokyo/e2e test",
+    "gen": "pnpm --filter @neo-tokyo/content-gen cli",
+    "gen:generate": "pnpm --filter @neo-tokyo/content-gen generate",
+    "gen:init": "pnpm --filter @neo-tokyo/content-gen init",
+    "gen:status": "pnpm --filter @neo-tokyo/content-gen status",
+    "gen:pipelines": "pnpm --filter @neo-tokyo/content-gen pipelines",
+    "gen:tasks": "pnpm --filter @neo-tokyo/content-gen tasks",
+    "gen:animations": "pnpm --filter @neo-tokyo/content-gen animations",
+    "gen:sync-animations": "pnpm --filter @neo-tokyo/content-gen sync-animations"
   },
   "devDependencies": {
     "typescript": "^5.9.3",

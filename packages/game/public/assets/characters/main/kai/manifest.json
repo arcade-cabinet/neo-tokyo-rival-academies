@@ -3,103 +3,132 @@
   "name": "Kai",
   "type": "character",
   "description": "The hot-headed protagonist from the Crimson Academy.",
-  "visualPrompt": "Full body character design of Kai, a young cyberpunk academy student, male, messy spiky red hair, wearing a stylized futuristic school uniform with crimson armored plating, red and gold accents, holding a massive heavy mechanical piston-hammer, high-tops, confident stance, anime style, cel shaded, highly detailed, 8k, neo-tokyo aesthetic, isolated on solid white background.",
-  "modelConfig": {
-    "aiModel": "latest",
-    "topology": "quad",
-    "targetPolycount": 50000,
-    "symmetryMode": "auto",
-    "poseMode": "t-pose",
-    "enablePbr": true
+  "textToImageTask": {
+    "prompt": "Young adult Japanese man, athletic lean build with defined deltoids and visible arm muscles, broad shoulders tapering to narrow waist, toned chest with subtle pectoral definition, light warm-toned skin with healthy glow. HANDS: two hands with five distinct fingers each, proper finger proportions with defined knuckles, natural finger spacing, thumbs positioned correctly. FACE: small well-shaped ears with defined curves, straight nose with subtle bridge and defined tip, distinct naturally shaped lips with clear upper and lower lip separation, intense amber eyes with sharp anime styling. Messy spiky crimson red hair with angular bangs swept across forehead. Black fitted compression shirt draping close to torso showing muscle contours, crimson red open jacket with high collar hanging loose at sides, dark cargo pants with utility pockets falling straight with natural fabric weight, black combat boots with flat treaded soles, feet with normal proportions. Confident smirk expression, combat-ready stance with weight balanced. Anime cel-shaded art style with clean bold linework and anatomically correct extremities.",
+    "generateMultiView": true,
+    "poseMode": "a-pose"
   },
-  "riggingConfig": {
+  "multiImageTo3DTask": {
+    "topology": "quad",
+    "targetPolycount": 30000,
+    "symmetryMode": "auto",
+    "shouldRemesh": true,
+    "shouldTexture": true,
+    "enablePbr": false,
+    "poseMode": "a-pose"
+  },
+  "riggingTask": {
     "heightMeters": 1.78
   },
-  "animationConfig": {
-    "animations": [
-      "IDLE_COMBAT",
-      "RUN_IN_PLACE",
-      "ATTACK_MELEE_1",
-      "HIT_REACTION",
-      "DEATH",
-      "JUMP_IDLE",
-      "BLOCK"
-    ]
+  "animationTask": {
+    "preset": "hero"
   },
   "tasks": {
-    "conceptArt": {
-      "taskId": "019bc0e2-0d24-7acc-9396-bffc036b5088",
+    "concept": {
+      "taskId": "019bc441-c542-7214-8a09-efa6fa89b32a",
       "status": "SUCCEEDED",
-      "localPath": "concept.png"
+      "completedAt": 1768524224599,
+      "outputs": {
+        "taskId": "019bc441-c542-7214-8a09-efa6fa89b32a",
+        "imageUrls": [
+          "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/uploads/multi_view_image_019bc442-15bb-7748-a3f3-c285b9abe923_part_0.png?Expires=1768783424&Signature=WyPy0tRh5sOLdXORKFXYhuDbJxvMVprrtwvNaCGgNTHV3Uc2yrLiIbJV6VggPMaxBQQjZA~UbN8cYtPAvMnrCHdFFv2wPMWuxiyKqOOxgYycliGQUE4QDJvKZO3gNhRNJaLk21REpITJ9vXQ3gKtGvV4wjcvZxWs6nWJBBxiK127SAP1mS2Gza7lBWak7K3Gx2g~HmbDhjkydCluAfRfy0jMdU5ptjzyFgN19c3Pf~OgXg9u~eyvo4qPxOIpI~eU66vD5dxCXlhjY96IM-ILDvSeuY1rXe-MrI3fHEfkw3ikjgiHRyDLZ3QH0zAsoCKGTk8p0FzB~fB7gKp5juKh-g__&Key-Pair-Id=KL5I0C8H7HX83",
+          "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/uploads/multi_view_image_019bc442-15bb-7748-a3f3-c285b9abe923_part_1.png?Expires=1768783424&Signature=J88GkpTzNimN82mKH3C9UT8rjP0TPsg7aYTbg1udZqc0n0UKza73RQSvY8JLZmjFgHN223Jg1vUx~SBq6u5jfjh4jq4dNVG8vBBwJD1i-v1xCwLjHHUE0QdV1skaXcQqisZZ~1ZwqAP2PiCKOjgyWxC6xtkUqnswK-IE75JyLUZd1FN6stPz5PEEUkOSraClfG4ZjhSJ-sEaTi3KQE1~1G7sSM~sgGZH2GBrg8GkED~sR5wTctd~TTLNnRZuJErH1xCwwHeZh6wxi58O~oiqCOpao1j0PMA2jfrti617O96o9yE6QImHNegPtl4oCUpmU0trDA9gnA54qh5m-xk3uA__&Key-Pair-Id=KL5I0C8H7HX83",
+          "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/uploads/multi_view_image_019bc442-15bb-7748-a3f3-c285b9abe923_part_2.png?Expires=1768783424&Signature=h5H6R4sSE5UPqUTkkHA6PTln6jQAcDWXMgTl4X-f62FcG3bKqfk4pBZpaotAKXzL7s~-TSdpcc4IkM-XRSkUYI~iUSLkk4cNxFK61B3mUtxBVAuHE~tkksIBUqzrTcKcgGCUFsxbfyjNadqXloztZJUhP6qO3NqUARO23oueY3L4UIkVK2c91TjgkC0-~pN4k65YD8vvlWJpWHoBTJZT0qjy4Khq4NC3Ph14c95XJmvv603Yy--N-QCXJQZjuIZPfOPz9C3IGyY3~ekusMvcs63ondyRAH-tokLHGWRDD7PCyBNQZjs7R63nw54STfh7VesOEQBo1zFZ0AfG84kBjA__&Key-Pair-Id=KL5I0C8H7HX83"
+        ]
+      },
+      "artifacts": {}
     },
-    "model3d": {
-      "taskId": "019bc0e2-59e7-7ad2-a13e-92b626b6cf23",
+    "model": {
+      "taskId": "019bc442-1904-721e-ada2-22bc59d5c037",
       "status": "SUCCEEDED",
-      "localPath": "model.glb"
+      "completedAt": 1768524369402,
+      "outputs": {
+        "taskId": "019bc442-1904-721e-ada2-22bc59d5c037",
+        "model": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019bc442-1904-721e-ada2-22bc59d5c037/output/model.glb?Expires=1768783569&Signature=qegmSua97dass8P71pEHJ~cioXmz~CjTVQEo5i6usro372c-UglVQDrQFkdbtZZBAcNDdhTlWeiiDnb670TIkX38SGZg9ecdJKm~yZSLWzU82IF1yyd-Tq2XfADKTICNX96rJYTK2RmR2863~3FIi3sJsia8WsFoLvKZbBn1ePHwlewPVkJKJYG-RTj3BDmORXNPUI2cRRyhzJb8-5xKzSvVUe4zxwnXE4mmhrYEW7sSTJuzO7yNHm8CvVvhBFEhcglY~LWrjFGdmJ82r5AzfCKVyuHPnG2Y~s1xW6DYgguKdDOJj3-wmAxQCd9yZG-~5uV486iPB5vrCG3cgAumFw__&Key-Pair-Id=KL5I0C8H7HX83",
+        "textures": [
+          {
+            "base_color": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019bc442-1904-721e-ada2-22bc59d5c037/output/texture_0.png?Expires=1768783569&Signature=SKkkNgBW5j12UMSycdM6ZBch7JP-qHr6peVOEnIGWXE2PMzc5zGBSf7CZy~3mNelqfYwNVlRNJhHBR5FXs3BaTykWtNqOGn7t36xwRCS6OFHou3~PcyGIrJvvOrnP2iZ9imqkcSSfnHa6FIONMJU8onJCV-in~O0cNH450NTq-Op2CY9zTwR90smN6i0yrZc9~88LVIOpcKV5FfrLamUGK3ULnwwOIbv2dBTSQu0QTA6SQ-sozt6z2WagQoYYy5uo7OpHPW2YnSvMRm05UoyqvSvvyAVOtWBVlTDa7zMtVC75Imw07~nsRtQNbI6J~8WRpJgMINk1ZSDLBsGnWaavQ__&Key-Pair-Id=KL5I0C8H7HX83"
+          }
+        ],
+        "textureUrl": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019bc442-1904-721e-ada2-22bc59d5c037/output/texture_0.png?Expires=1768783569&Signature=SKkkNgBW5j12UMSycdM6ZBch7JP-qHr6peVOEnIGWXE2PMzc5zGBSf7CZy~3mNelqfYwNVlRNJhHBR5FXs3BaTykWtNqOGn7t36xwRCS6OFHou3~PcyGIrJvvOrnP2iZ9imqkcSSfnHa6FIONMJU8onJCV-in~O0cNH450NTq-Op2CY9zTwR90smN6i0yrZc9~88LVIOpcKV5FfrLamUGK3ULnwwOIbv2dBTSQu0QTA6SQ-sozt6z2WagQoYYy5uo7OpHPW2YnSvMRm05UoyqvSvvyAVOtWBVlTDa7zMtVC75Imw07~nsRtQNbI6J~8WRpJgMINk1ZSDLBsGnWaavQ__&Key-Pair-Id=KL5I0C8H7HX83"
+      },
+      "artifacts": {}
     },
     "rigging": {
-      "taskId": "019bc101-247f-7ef7-9b68-8a2791811dcb",
+      "taskId": "019bc444-4eb2-7895-ad53-a6c0c798de4f",
       "status": "SUCCEEDED",
-      "resultUrl": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019bc101-247f-7ef7-9b68-8a2791811dcb/output/Character_output.glb?Expires=1768728863&Signature=a1NEjtWNbGkCfrPD75s-cfozPqsBO8UgKMfii1vcyEmJBk-jhUcsS1cZL4UFakTsfRVTtY86TuUM97EudqOLh3ADWXJsqBOOwfbS8B0jYcqT0D2EE8hFp9YBxrJLE08Ob-d~43jRIGhg0eBO8vVKYkNVdcMjt3iZsRPFwzyekOFSOIf4jGgO2TGgFR7auxiHQY-b0u40xi6KVT5V-Gy8UCvTsgHZAaH3MYXWIsLsXOEDYCkDFm5geCsC4fbcJJz8-ZkPkSSMkG4hxkrw6c9UJT99Y1IoYpO2FVBF9G-GP8CD~mwxw2-DZ91R2sb4qTu2joFHVCEsWaJLebO-dpRSwQ__&Key-Pair-Id=KL5I0C8H7HX83",
-      "localPath": "/Users/jbogaty/src/arcade-cabinet/neo-tokyo-rival-academies/packages/game/public/assets/characters/main/kai/rigged.glb"
+      "completedAt": 1768524401326,
+      "outputs": {
+        "taskId": "019bc444-4eb2-7895-ad53-a6c0c798de4f",
+        "riggedModel": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019bc444-4eb2-7895-ad53-a6c0c798de4f/output/Character_output.glb?Expires=1768783601&Signature=LxJ~vFWGYK~NGE8sHeIuiDBjIDiD40YfILygdgwVEfJoL30GTqQogvTbLQg1ZyUl1t615ETsjL4YwFXS-o7z7OMSGHm4RPVAohL-EJcbtV0qsrBlpG~ZsS9FHKO2hP3xzFNE~RxN-MSOAqyd4g8FtH3dN~attkX4XSeTFOXeYb~MvK~ufoY2C1pZeY3vy0BYoTccw8B6kBOypEohi8MI58x9t6v47o644caLuQZYmzhzcrnPnSDbs~oaHVsH5Ay4C852SsX4dsOg17L3puNZjpjQF1wMGnlWqn13EKf5oIXny2wBk4~9vIByBmN0QZApD3o~dOq21RT52l4Mep-clA__&Key-Pair-Id=KL5I0C8H7HX83"
+      },
+      "artifacts": {}
     },
     "animations": [
       {
-        "taskId": "019bc101-9116-7e1d-8523-ef8afed5489b",
+        "taskId": "019bc444-cb5c-78b0-bc23-64ec7b2aa1ba",
         "status": "SUCCEEDED",
-        "animationName": "IDLE_COMBAT",
-        "actionId": 89,
-        "resultUrl": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019bc101-9116-7e1d-8523-ef8afed5489b/output/Animation_Combat_Stance_withSkin.glb?Expires=1768728885&Signature=A7L9Is2jcjLnLZzDr5TWcuuz3m1FfYJDCVNcFNA1enJ8lWiHSA0M39EBc4r1Z5GI~KWBFQk426g0dBCSy4UWEUImMjfOE3Hn2uxVVpFwpj-kFeC2DOur~~3YNCsgwdGKtKdxWLWf7KpTk11OjGAwzeHcpqzUk9WPJTiGvMg16WfANfzaosPt37~vv1eiZUucpgI3pmfI24gARghXIcn1qMp4eeRCa6SmxTwmyYV-tww8faqpJ4ngJzH78B~gsgF5Edtvw3wR~mm3FRloeS29IoA4-iZvttmkT1fLKAv1qfY1nH~U20Lzf9Cd38vMfY2TkZhoEOQjyoCK3wgDy-PyCg__&Key-Pair-Id=KL5I0C8H7HX83",
-        "localPath": "/Users/jbogaty/src/arcade-cabinet/neo-tokyo-rival-academies/packages/game/public/assets/characters/main/kai/animations/idle_combat.glb"
+        "animationName": "COMBAT_STANCE",
+        "completedAt": 1768524416817,
+        "outputs": {
+          "animations/combat_stance.glb": "animations/combat_stance.glb"
+        }
       },
       {
-        "taskId": "019bc101-e83b-75f8-b76a-6724efb9e361",
+        "taskId": "019bc445-07dd-78b8-b930-303d5b18be4c",
         "status": "SUCCEEDED",
-        "animationName": "RUN_IN_PLACE",
-        "actionId": 657,
-        "resultUrl": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019bc101-e83b-75f8-b76a-6724efb9e361/output/Animation_run_fast_10_inplace_withSkin.glb?Expires=1768728898&Signature=jYm-RyUQYEMrmZKZv10Nckjv2vqe-J9QEYwxkIo0TSwIAu52pBZsl8BN42Nyglerrazkb5a~DhQ5J-3L-zmYi-SdpyOJL2naTZXxKR-eYUC3xX2jhhA5U0Fk6mPk5i2lIlWRGOI7NYubwYLF6~IvFHOuFNbKdDBjHU-KaPoyi59RW4urmggKRdeARysNL-hE0MJymYzfZV~x3Pvhe5F-2kmioAyANDCDObj4NfnCMHCfcjgWS4RMY7OWtyc22UtHCL-Cxj-k6-c2i-NL1C2ug1fD6MQBLwK2o3~7iSZxC7LMbiELbUqT5db-3H1VCkLQOrMHhT2GcItiDUmD78D46g__&Key-Pair-Id=KL5I0C8H7HX83",
-        "localPath": "/Users/jbogaty/src/arcade-cabinet/neo-tokyo-rival-academies/packages/game/public/assets/characters/main/kai/animations/run_in_place.glb"
+        "animationName": "RUNFAST",
+        "completedAt": 1768524432391,
+        "outputs": {
+          "animations/runfast.glb": "animations/runfast.glb"
+        }
       },
       {
-        "taskId": "019bc102-1a8b-7789-bd78-800e06e09aaf",
+        "taskId": "019bc445-44ad-78b9-95ab-5018ac3e23fa",
         "status": "SUCCEEDED",
-        "animationName": "ATTACK_MELEE_1",
-        "actionId": 4,
-        "resultUrl": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019bc102-1a8b-7789-bd78-800e06e09aaf/output/Animation_Attack_withSkin.glb?Expires=1768728932&Signature=pEQ04ivgwsvuvmAj7m5gktWSPHtbvD1gTbAtLEOuNlzaHlGze4TsNkZ8J9nlCkdUvmYB49W2Fqgoww~XAm49O5qYyfeyy4kbKGhbZ0QWmAKh5Ae4VopXK4iPheP-EUAC7EZ5eJkyzGCZNROQVtMXHUZdNQsS5vdJQdeO3KuHyShRpwnbcm~46PfE7pf-zwDH37QLQ5DCvMl2dDNuhXmhG2joJguu5sc1xA7Is7T5LObdVYS-0CxUs-lH8hAsqFo9SaPa4PuWw~xuOdJ04UWitKW~6NyZxS-20vgYe4AROHhTgA6Dg2nR6b99KZSCg3zrLTLC4~lHsPd14fKdLk3EEg__&Key-Pair-Id=KL5I0C8H7HX83",
-        "localPath": "/Users/jbogaty/src/arcade-cabinet/neo-tokyo-rival-academies/packages/game/public/assets/characters/main/kai/animations/attack_melee_1.glb"
+        "animationName": "KUNG_FU_PUNCH",
+        "completedAt": 1768524452288,
+        "outputs": {
+          "animations/kung_fu_punch.glb": "animations/kung_fu_punch.glb"
+        }
       },
       {
-        "taskId": "019bc102-9fdc-7e2d-8f5c-8d12e2ac4a98",
+        "taskId": "019bc445-9267-78ba-b287-354de2cbde5b",
         "status": "SUCCEEDED",
-        "animationName": "HIT_REACTION",
-        "actionId": 178,
-        "resultUrl": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019bc102-9fdc-7e2d-8f5c-8d12e2ac4a98/output/Animation_Hit_Reaction_withSkin.glb?Expires=1768728951&Signature=GK1qxfYgcmxJmPo8MxJtouDrUwLF-L~kJKpEGTiqaWE-iMbRCqTTes-tpJo6yTA~eNtMq~o53Gz7yCtZDeI49jf5LB4ifqTy5gTgY~moy42a-PJDUvc867ajCY8pu0HxLojcJyZ34JLvEw2phLTsZNB1IwXDUPbAy3XK0NUee8VaFF-~RGFVfi1~g1FJjJyEOS9raQ5LhTAMBDhIO46rh3-1xS8AXp2MrgkxLYrR2pkH6sNJzgI3lINM-G7iC~H9G73p1OLQmruD3QE53up~UtBqK4uoLX6nSEpyvMCOUMIzt7rVn-mUExEu~H9DSDgCLf-ZF~kXI0AHlSgAtZ-gOA__&Key-Pair-Id=KL5I0C8H7HX83",
-        "localPath": "/Users/jbogaty/src/arcade-cabinet/neo-tokyo-rival-academies/packages/game/public/assets/characters/main/kai/animations/hit_reaction.glb"
+        "animationName": "BEHIT_FLYUP",
+        "completedAt": 1768524462857,
+        "outputs": {
+          "animations/behit_flyup.glb": "animations/behit_flyup.glb"
+        }
       },
       {
-        "taskId": "019bc102-e9e6-7e3c-9fa9-cefa83da406d",
+        "taskId": "019bc445-bbbb-7715-8054-5843193d6647",
         "status": "SUCCEEDED",
-        "animationName": "DEATH",
-        "actionId": 8,
-        "resultUrl": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019bc102-e9e6-7e3c-9fa9-cefa83da406d/output/Animation_Dead_withSkin.glb?Expires=1768728978&Signature=NdhXgyXm~ZViUqGLVZ6y3QD-duxCMY0lT-ScS03peFg6SelCVC8VGjWE95Q2jNlcVgNfvLToXNJBMyZ-e-0Xvp3WY3mVnjCm3b7REGG5w~-OTxyffeDCMHNWPFENBEUqB2U2n-eDev~19UyDIG0isYw13ylcRYyE80JxVuPMq1qZaOQPoUl6-J565n3Ut3AiV2PVFgSD~Y-SjFhTvLk76HtGvR-eHz4e5cHd7jADmKjqh4j7yKC7ZZB7DUUvq0FOCQcUiMuSYq28Q50xk2CKp11Id~MOQpU6A4BUYMcClAEuTyHPMlCZ19lBhtd1oX~3~dcCrQhloLhAzURkrHPdTA__&Key-Pair-Id=KL5I0C8H7HX83",
-        "localPath": "/Users/jbogaty/src/arcade-cabinet/neo-tokyo-rival-academies/packages/game/public/assets/characters/main/kai/animations/death.glb"
+        "animationName": "DEAD",
+        "completedAt": 1768524502583,
+        "outputs": {
+          "animations/dead.glb": "animations/dead.glb"
+        }
       },
       {
-        "taskId": "019bc103-542e-760c-a570-b144bb910e66",
+        "taskId": "019bc446-56e7-771f-b7a7-2a5b1697aabb",
         "status": "SUCCEEDED",
-        "animationName": "JUMP_IDLE",
-        "actionId": 86,
-        "resultUrl": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019bc103-542e-760c-a570-b144bb910e66/output/Animation_Basic_Jump_withSkin.glb?Expires=1768729053&Signature=JshytyiGyJQH1BKnvYUfpf-9~WS1gIKLGYejMZj50pu6J2tB~WJuPphGnYZ~DefR6BP8gH3tFPHWdo5bRrbdJdj~Y9v~s4sfCerV~mZdRBXEgxlFlK8jFSpA82C9W6pjHv26u19Yc3VmnbRrBNDHyBsd4hfDYJ7qS7F0u96WLDNryFtzpX9HqculFw1unv-XMfoHfsBPqTI0CG4wUQXDNWtLudCVKjCqwU20AzQ8GhHQ~s659o1KqVlZPh7Cm4YhncPh7wY-MIuAp-UjAMeIdy4uX8N3pI9t7cvajuK~dkvvHwLWb5l2HCpYFqUiXlBcyUR8siSO8AccaFJ98DSAyA__&Key-Pair-Id=KL5I0C8H7HX83",
-        "localPath": "/Users/jbogaty/src/arcade-cabinet/neo-tokyo-rival-academies/packages/game/public/assets/characters/main/kai/animations/jump_idle.glb"
+        "animationName": "BASIC_JUMP",
+        "completedAt": 1768524519989,
+        "outputs": {
+          "animations/basic_jump.glb": "animations/basic_jump.glb"
+        }
       },
       {
-        "taskId": "019bc104-7553-7f61-a474-408a15708fcd",
+        "taskId": "019bc446-9ae2-7724-966b-3318dba0ca5a",
         "status": "SUCCEEDED",
-        "animationName": "BLOCK",
-        "actionId": 138,
-        "resultUrl": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019bc104-7553-7f61-a474-408a15708fcd/output/Animation_Block1_withSkin.glb?Expires=1768729071&Signature=dCnY5EbTXENM8e1ACTBL~JrG7p~ls-9sWzEcfSWUKRLN7xqjHNuRyomT1pQhSZqcT9-A6qCyxkG16kb0Znk~YPC9X8Q6uApP6ta9gPD~K5qLnvEUj3B3BTWrDRB5Ua6jBic-C4GexP205sdinmU9-tcvlF81He4V3fQLIRwsT0DEannBHRlYvNtd1oTEe7Dpq8vVdNLE1hCLBfoZty57pwYlok5Rw8suxcDZ18891tJoGB6urXkJ8eEDOUWEW4qfiZa7lwQ6fP63aAGD7qEEKqxcBlhS0m8stBpKMQtIkJ9jIShJSp6EK-F~uNlqeTGvrlyc6dXwJEB6nvDQ6YlMyg__&Key-Pair-Id=KL5I0C8H7HX83",
-        "localPath": "/Users/jbogaty/src/arcade-cabinet/neo-tokyo-rival-academies/packages/game/public/assets/characters/main/kai/animations/block.glb"
+        "animationName": "DODGE_AND_COUNTER",
+        "completedAt": 1768524544164,
+        "outputs": {
+          "animations/dodge_and_counter.glb": "animations/dodge_and_counter.glb"
+        }
       }
     ]
-  }
+  },
+  "seed": 2902765030
 }

@@ -2,164 +2,280 @@
 
 ## Overview
 
-The **GenAI Pipeline** is a specialized subsystem responsible for autonomously creating production-ready game assets. It is designed to be **idempotent**, **resumable**, and **manifest-driven**.
+The **GenAI Pipeline** is a declarative, JSON-driven subsystem for creating production-ready game assets. It is designed to be **idempotent**, **resumable**, and **manifest-driven**.
 
 ## Related Documentation
 
 - [CLAUDE.md](../CLAUDE.md) - Quick reference and development workflow
-- [AGENTS.md](../AGENTS.md) - Agent architecture details
 - [DESIGN_MASTER_PLAN.md](DESIGN_MASTER_PLAN.md) - Overall project vision
+- [PROJECT-STRUCTURE.md](../PROJECT-STRUCTURE.md) - Directory layout
 
 ---
 
-## Core Components
+## Architecture
 
-### 1. The Manifest System
+### Declarative Pipelines
 
-Each asset folder contains a `manifest.json` that defines the desired state:
+Pipelines are defined as JSON files that describe the sequence of steps:
+
+**Location**: `packages/content-gen/src/pipelines/definitions/`
+
+| Pipeline | Description | Steps |
+|----------|-------------|-------|
+| `character.pipeline.json` | Full character workflow | concept → model → rigging → animations |
+| `prop.pipeline.json` | Non-humanoid props | concept → model (no rigging) |
+| `tile.pipeline.json` | Hex tile assets | concept → model |
+| `background.pipeline.json` | 2D backgrounds | concept only |
+
+### Key Components
+
+```
+packages/content-gen/
+├── src/
+│   ├── api/
+│   │   └── meshy-client.ts        # Meshy AI API client
+│   ├── pipelines/
+│   │   ├── definitions/           # JSON pipeline definitions
+│   │   │   ├── character.pipeline.json
+│   │   │   └── prop.pipeline.json
+│   │   └── pipeline-executor.ts   # Runtime executor
+│   ├── tasks/
+│   │   ├── registry.ts            # Task definitions & animation IDs
+│   │   └── definitions/
+│   │       └── animation-presets.json
+│   ├── types/
+│   │   └── manifest.ts            # Asset manifest schema
+│   └── cli.ts                     # Command line interface
+```
+
+---
+
+## Manifest Schema
+
+Each asset folder contains a `manifest.json`:
 
 **Location Pattern**: `packages/game/public/assets/<category>/<subcategory>/<name>/manifest.json`
 
-**Schema** (`packages/content-gen/src/types/manifest.ts`):
-```typescript
-interface AssetManifest {
-  name: string;
-  type: 'character' | 'background' | 'tile';
-  visualPrompt: string;
-  imageConfig?: {
-    aiModel?: string;
-    aspectRatio?: '1:1' | '9:16' | '16:9' | '4:3' | '3:4';
-    negativePrompt?: string;
-  };
-  modelConfig?: {
-    aiModel?: string;
-    topology?: 'quad' | 'triangle';
-    targetPolycount?: number;
-    enablePbr?: boolean;
-  };
-  riggingConfig?: {
-    heightMeters?: number;
-  };
-  animationConfig?: {
-    animations?: AnimationType[];
-  };
-  tasks?: TaskState;  // Auto-populated by agent
+### Character Manifest
+
+```json
+{
+  "id": "kai",
+  "name": "Kai",
+  "type": "character",
+  "description": "The hot-headed protagonist from the Crimson Academy.",
+  "textToImageTask": {
+    "prompt": "Young adult Japanese man, athletic lean build... HANDS: two hands with five distinct fingers each... FACE: small well-shaped ears...",
+    "generateMultiView": true,
+    "poseMode": "a-pose"
+  },
+  "multiImageTo3DTask": {
+    "topology": "quad",
+    "targetPolycount": 30000,
+    "symmetryMode": "auto",
+    "shouldRemesh": true,
+    "shouldTexture": true,
+    "enablePbr": false,
+    "poseMode": "a-pose"
+  },
+  "riggingTask": {
+    "heightMeters": 1.78
+  },
+  "animationTask": {
+    "preset": "hero"
+  },
+  "tasks": {},
+  "seed": 2902765030
 }
 ```
 
-### 2. ModelerAgent
+### Prop Manifest
 
-**Location**: `packages/content-gen/src/agents/ModelerAgent.ts`
+```json
+{
+  "id": "tentacle-single",
+  "name": "Alien Tentacle",
+  "type": "prop",
+  "description": "Environmental hazard prop.",
+  "textToImageTask": {
+    "prompt": "Single alien tentacle appendage...",
+    "generateMultiView": true,
+    "poseMode": "a-pose"
+  },
+  "multiImageTo3DTask": {
+    "topology": "quad",
+    "targetPolycount": 10000,
+    "symmetryMode": "off"
+  },
+  "tasks": {}
+}
+```
 
-The primary worker class that interfaces with the **Meshy AI API**.
+---
 
-**Capabilities by Asset Type**:
+## Animation Presets
 
-| Type | Concept Art | 3D Model | Rigging | Animations |
-|------|-------------|----------|---------|------------|
-| `character` | 9:16, t-pose | 50K poly, quad | Yes | Configurable |
-| `tile` | 1:1, no pose | 10K poly, quad | No | No |
-| `background` | 16:9, no pose | No | No | No |
+Instead of listing animations explicitly, use presets:
 
-### 3. CLI
+**Location**: `packages/content-gen/src/tasks/definitions/animation-presets.json`
 
-**Location**: `packages/content-gen/src/cli.ts`
+| Preset | Description | Animations |
+|--------|-------------|------------|
+| `hero` | Playable main characters | Combat_Stance, RunFast, Kung_Fu_Punch, BeHit_FlyUp, Dead, Basic_Jump, Dodge_and_Counter |
+| `enemy` | Standard enemy NPCs | Combat_Stance, RunFast, Double_Combo_Attack, BeHit_FlyUp, Dead |
+| `boss` | Enhanced boss characters | Combat_Stance, RunFast, Double_Combo_Attack, Kung_Fu_Punch, BeHit_FlyUp, Dead, Block1 |
+| `prop` | Animated props/hazards | Idle |
 
-**Commands**:
+Usage in manifest:
+```json
+"animationTask": {
+  "preset": "hero"
+}
+```
+
+---
+
+## Prompt Engineering
+
+### Preventing AI Deformities
+
+Character prompts must include explicit HANDS and FACE sections:
+
+```
+HANDS: two hands with five distinct fingers each, proper finger proportions
+with defined knuckles, natural finger spacing, thumbs positioned correctly.
+
+FACE: small well-shaped ears with defined curves, straight nose with defined
+bridge, distinct naturally shaped lips with clear upper and lower lip separation.
+```
+
+End prompts with: `anatomically correct extremities`
+
+---
+
+## CLI Commands
+
 ```bash
-# Process entire assets folder (recursive)
-pnpm --filter @neo-tokyo/content-gen generate
-
-# Process specific asset path
+# Generate specific asset
 pnpm --filter @neo-tokyo/content-gen generate characters/main/kai
-pnpm --filter @neo-tokyo/content-gen generate tiles/rooftop/base
-pnpm --filter @neo-tokyo/content-gen generate backgrounds/sector0/wall_left
+pnpm --filter @neo-tokyo/content-gen generate characters/c-story/tentacles/single
+
+# Generate all assets in a category
+pnpm --filter @neo-tokyo/content-gen generate characters/
+pnpm --filter @neo-tokyo/content-gen generate tiles/
 ```
 
 ---
 
-## Asset Type Workflows
-
-### Character Pipeline
-
-```
-manifest.json (character)
-    ↓
-[1] Text-to-Image (9:16, t-pose)
-    → concept.png
-    ↓
-[2] Image-to-3D (50K poly, quad)
-    → model.glb
-    ↓
-[3] Auto-Rigging (1.7m default)
-    → rigged.glb
-    ↓
-[4] Animations (IDLE, RUN, ATTACK, etc.)
-    → animations/idle_combat.glb
-    → animations/run_in_place.glb
-    → animations/attack_melee_1.glb
-    → ...
-```
-
-### Tile Pipeline
-
-```
-manifest.json (tile)
-    ↓
-[1] Text-to-Image (1:1, no pose)
-    → concept.png
-    ↓
-[2] Image-to-3D (10K poly, quad)
-    → model.glb
-```
-
-### Background Pipeline
-
-```
-manifest.json (background)
-    ↓
-[1] Text-to-Image (16:9, no pose)
-    → concept.png
-```
-
----
-
-## API Integration Details
+## API Integration
 
 ### Meshy AI Endpoints
 
 | Step | Endpoint | Key Parameters |
 |------|----------|----------------|
-| Concept Art | `POST /v1/text-to-image` | `ai_model`, `prompt`, `aspect_ratio`, `pose_mode` |
-| 3D Model | `POST /v1/image-to-3d` | `image_url` (data URI), `target_polycount`, `topology`, `enable_pbr` |
-| Rigging | `POST /v1/rigging` | `input_task_id`, `height_meters` |
+| Concept Art | `POST /v1/text-to-image` | `ai_model`, `prompt`, `generate_multi_view`, `pose_mode` |
+| 3D Model | `POST /v1/multi-image-to-3d` | `image_urls[]`, `target_polycount`, `topology`, `symmetry_mode` |
+| Rigging | `POST /v1/rigging` | `input_task_id`, `height_meters`, `texture_image_url` |
 | Animation | `POST /v1/animations` | `rig_task_id`, `action_id` |
 
 ### Animation IDs
 
-**Location**: `packages/content-gen/src/game/generators/animation-ids.ts`
+**Location**: `packages/content-gen/src/tasks/registry.ts`
 
 ```typescript
-const ANIMATION_IDS = {
-  IDLE_COMBAT: 89,
-  RUN_IN_PLACE: 68,
-  ATTACK_MELEE_1: 73,
-  HIT_REACTION: 92,
-  DEATH: 103,
-  // ... more
+export const ANIMATION_IDS: Record<string, number> = {
+  Combat_Stance: 89,
+  RunFast: 68,
+  Kung_Fu_Punch: 73,
+  Double_Combo_Attack: 74,
+  BeHit_FlyUp: 92,
+  Dead: 103,
+  Block1: 95,
+  Basic_Jump: 84,
+  Dodge_and_Counter: 96,
+  Idle: 1,
 };
 ```
 
 ---
 
-## The "White Animation" Fix
+## Pipeline Execution Flow
 
-To prevent animations from losing texture data:
+### Character Pipeline
 
-1. Generate **Textured Concept Art** first with proper lighting
-2. Feed into `Image-to-3D` with `enable_pbr: true` and `should_texture: true`
-3. Use `pose_mode: "t-pose"` to ensure rig-ready geometry
-4. Pass the *Rigged Model ID* (`rig_task_id`) to Animation endpoint
+```
+manifest.json (type: character)
+    ↓
+[1] text-to-image (multi-view, a-pose)
+    → tasks.concept.outputs.imageUrls[]
+    ↓
+[2] multi-image-to-3d (30K poly, quad)
+    → tasks.model.outputs.model (URL)
+    → tasks.model.outputs.textureUrl
+    ↓
+[3] rigging (height from manifest)
+    → tasks.rigging.outputs.riggedModel (URL)
+    ↓
+[4] animations (forEach from preset)
+    → tasks.animations[].outputs
+    → animations/*.glb (downloaded)
+```
+
+### Prop Pipeline
+
+```
+manifest.json (type: prop)
+    ↓
+[1] text-to-image (multi-view)
+    → tasks.concept.outputs.imageUrls[]
+    ↓
+[2] multi-image-to-3d
+    → tasks.model.outputs.model (URL)
+
+(No rigging or animations)
+```
+
+---
+
+## Resumability
+
+The manifest tracks task state for each step:
+
+```json
+{
+  "tasks": {
+    "concept": {
+      "taskId": "019bc441-c542-7214-8a09-efa6fa89b32a",
+      "status": "SUCCEEDED",
+      "completedAt": 1768524224599,
+      "outputs": {
+        "taskId": "...",
+        "imageUrls": ["..."]
+      },
+      "artifacts": {}
+    },
+    "model": {
+      "taskId": "019bc442-1904-721e-ada2-22bc59d5c037",
+      "status": "SUCCEEDED",
+      ...
+    },
+    "animations": [
+      {
+        "taskId": "...",
+        "status": "SUCCEEDED",
+        "animationName": "COMBAT_STANCE",
+        "outputs": {
+          "animations/combat_stance.glb": "animations/combat_stance.glb"
+        }
+      }
+    ]
+  }
+}
+```
+
+**Statuses**: `PENDING`, `IN_PROGRESS`, `SUCCEEDED`, `FAILED`
+
+Re-running the generator skips completed tasks and resumes from failures.
 
 ---
 
@@ -172,119 +288,33 @@ Create `.env` in project root:
 MESHY_API_KEY=your_key_here
 ```
 
-### Default Configuration
+### Git LFS
 
-**Location**: `packages/content-gen/src/agents/ModelerAgent.ts`
-
-```typescript
-const DEFAULTS = {
-  image: {
-    aiModel: 'nano-banana-pro',
-    aspectRatio: '9:16',
-    poseMode: 't-pose',
-  },
-  model: {
-    aiModel: 'latest',
-    topology: 'quad',
-    targetPolycount: 50000,
-    symmetryMode: 'auto',
-    poseMode: 't-pose',
-    enablePbr: true,
-  },
-  rigging: {
-    heightMeters: 1.7,
-  },
-  animations: ['IDLE_COMBAT', 'RUN_IN_PLACE', 'ATTACK_MELEE_1', 'HIT_REACTION', 'DEATH'],
-};
+Binary assets are tracked via Git LFS:
+```
+*.glb filter=lfs diff=lfs merge=lfs -text
+*.fbx filter=lfs diff=lfs merge=lfs -text
+*.png filter=lfs diff=lfs merge=lfs -text
 ```
 
 ---
 
-## Adding New Content
+## Generated Assets Summary
 
-### New Tile Type
+### Main Characters (2)
+- **Vera** - hero preset (7 animations)
+- **Kai** - hero preset (7 animations)
 
-1. Create directory: `packages/game/public/assets/tiles/<category>/<type>/`
-2. Create `manifest.json`:
-```json
-{
-  "name": "Rooftop Vent Tile",
-  "type": "tile",
-  "visualPrompt": "cyberpunk industrial air conditioning unit, metal grating, neon accent lights, top-down view, game asset, clean edges",
-  "imageConfig": {
-    "aspectRatio": "1:1"
-  },
-  "modelConfig": {
-    "targetPolycount": 10000
-  }
-}
-```
-3. Run: `pnpm --filter @neo-tokyo/content-gen generate tiles/<category>/<type>`
+### B-Story Characters (4)
+- **Yakuza Grunt** - enemy preset (5 animations)
+- **Yakuza Boss** - boss preset (7 animations)
+- **Biker Grunt** - enemy preset (5 animations)
+- **Biker Boss** - boss preset (7 animations)
 
-### New Character
-
-1. Create directory: `packages/game/public/assets/characters/<faction>/<name>/`
-2. Create `manifest.json`:
-```json
-{
-  "name": "Academy Student - Akira",
-  "type": "character",
-  "visualPrompt": "anime-style male teenage student, cyberpunk school uniform, blue hair, determined expression, t-pose, full body, white background",
-  "modelConfig": {
-    "targetPolycount": 50000
-  },
-  "riggingConfig": {
-    "heightMeters": 1.65
-  },
-  "animationConfig": {
-    "animations": ["IDLE_COMBAT", "RUN_IN_PLACE", "ATTACK_MELEE_1"]
-  }
-}
-```
-3. Run: `pnpm --filter @neo-tokyo/content-gen generate characters/<faction>/<name>`
-
-### New Background
-
-1. Create directory: `packages/game/public/assets/backgrounds/<sector>/<element>/`
-2. Create `manifest.json`:
-```json
-{
-  "name": "Sector 7 Skyline",
-  "type": "background",
-  "visualPrompt": "panoramic cyberpunk city skyline, neon signs, rain, flying vehicles, night scene, detailed architecture",
-  "imageConfig": {
-    "aspectRatio": "16:9"
-  }
-}
-```
-3. Run: `pnpm --filter @neo-tokyo/content-gen generate backgrounds/<sector>/<element>`
-
----
-
-## Resumability
-
-The manifest tracks task state for each step:
-
-```json
-{
-  "tasks": {
-    "conceptArt": {
-      "taskId": "019bc123-55c0-7b64-953a-5b6fd6c117c0",
-      "status": "SUCCEEDED",
-      "resultUrl": "https://...",
-      "localPath": "/full/path/to/concept.png"
-    },
-    "model3d": {
-      "taskId": "019bc124-...",
-      "status": "IN_PROGRESS"
-    }
-  }
-}
-```
-
-**Statuses**: `IN_PROGRESS`, `SUCCEEDED`, `FAILED`
-
-Re-running the generator skips completed tasks and resumes from failures.
+### C-Story Characters (3)
+- **Mall Security Guard** - enemy preset (5 animations)
+- **Alien Humanoid** - enemy preset (5 animations)
+- **Tentacle Single** - prop type (model only)
 
 ---
 
@@ -293,11 +323,11 @@ Re-running the generator skips completed tasks and resumes from failures.
 ### API Rate Limits
 Meshy AI has rate limits. If you hit them, wait and retry.
 
-### Failed Tasks
-Check `manifest.json` for error details in the `error` field of failed tasks.
+### Pose Estimation Failed
+Non-humanoid models (tentacles, props) cannot be rigged. Use `type: "prop"` instead.
 
 ### Missing Textures
-Ensure `enable_pbr: true` and `should_texture: true` in model config.
+Ensure `shouldTexture: true` in multiImageTo3DTask config.
 
 ### Animation Issues
 - Verify rigging completed successfully
@@ -306,4 +336,4 @@ Ensure `enable_pbr: true` and `should_texture: true` in model config.
 
 ---
 
-*Last Updated: 2025-01-15*
+*Last Updated: 2026-01-15*

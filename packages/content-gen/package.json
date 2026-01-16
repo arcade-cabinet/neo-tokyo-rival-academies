@@ -11,16 +11,27 @@
       "types": "./dist/index.d.ts"
     }
   },
+  "bin": {
+    "content-gen": "./dist/cli.js"
+  },
   "scripts": {
     "build": "tsc",
+    "cli": "tsx src/cli.ts",
     "generate": "tsx src/cli.ts generate",
-    "migrate": "tsx src/cli.ts migrate"
+    "init": "tsx src/cli.ts init",
+    "status": "tsx src/cli.ts status",
+    "pipelines": "tsx src/cli.ts pipelines",
+    "tasks": "tsx src/cli.ts tasks",
+    "animations": "tsx src/cli.ts animations",
+    "sync-animations": "tsx src/cli.ts sync-animations"
   },
   "devDependencies": {
     "@google/generative-ai": "^0.24.1",
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^20.11.24",
+    "@types/seedrandom": "^3.0.8",
     "@types/three": "^0.182.0",
+    "node-html-parser": "^7.0.2",
     "three": "^0.182.0",
     "tsx": "^4.7.1",
     "typescript": "^5.9.3"
@@ -33,6 +44,7 @@
     "commander": "^14.0.2",
     "dotenv": "^17.2.3",
     "fs-extra": "^11.3.3",
+    "seedrandom": "^3.0.5",
     "sharp": "^0.34.5",
     "zod": "^4.3.5"
   }

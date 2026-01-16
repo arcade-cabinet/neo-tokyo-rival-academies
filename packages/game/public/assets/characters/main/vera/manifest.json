@@ -3,16 +3,132 @@
   "name": "Vera",
   "type": "character",
   "description": "The cold, calculating rival from the Azure Academy.",
-  "visualPrompt": "Full body character design of Vera, a young cyberpunk academy student, female, sleek long silver hair, wearing a pristine futuristic school uniform with azure blue tactical data-suits, silver accents, floating geometric holographic lances behind her, glasses, cold expression, anime style, cel shaded, highly detailed, 8k, neo-tokyo aesthetic, isolated on solid white background.",
-  "riggingConfig": {
+  "textToImageTask": {
+    "prompt": "Young adult Japanese woman, athletic build with toned arms and defined shoulders, medium bust with natural form, golden-tan skin tone with warm undertones. HANDS: two hands with five distinct fingers each, proper finger proportions with defined knuckles, natural finger spacing, thumbs positioned correctly. FACE: small well-shaped ears with defined curves, straight nose with subtle bridge and defined tip, distinct naturally shaped lips with clear upper and lower lip separation, piercing icy blue eyes with sharp anime styling. Icy blue hair flowing past shoulders with volume and movement. Dark navy modified sailor uniform: fitted blazer draping smoothly over torso, pleated skirt falling mid-thigh with natural fabric weight, crystalline armor plates on shoulders and forearm gauntlets with hard geometric edges. Tattered red half-cape attached at one shoulder, fabric torn edges hanging loosely. Black knee-high boots with flat soles, feet with normal proportions. Determined expression, combat-ready stance. Anime cel-shaded art style with clean linework and anatomically correct extremities.",
+    "generateMultiView": true,
+    "poseMode": "a-pose"
+  },
+  "multiImageTo3DTask": {
+    "topology": "quad",
+    "targetPolycount": 30000,
+    "symmetryMode": "auto",
+    "shouldRemesh": true,
+    "shouldTexture": true,
+    "enablePbr": false,
+    "poseMode": "a-pose"
+  },
+  "riggingTask": {
     "heightMeters": 1.65
   },
-  "modelConfig": {
-    "targetPolycount": 50000,
-    "enablePbr": true
+  "animationTask": {
+    "preset": "hero"
   },
-  "animationConfig": {
-    "animations": ["IDLE_COMBAT", "RUN_IN_PLACE", "ATTACK_MELEE_1", "CAST_SPELL", "HIT_REACTION", "DEATH", "DODGE_BACK"]
+  "tasks": {
+    "concept": {
+      "taskId": "019bc43c-5494-7621-8a46-99b9cfddd233",
+      "status": "SUCCEEDED",
+      "completedAt": 1768523868871,
+      "outputs": {
+        "taskId": "019bc43c-5494-7621-8a46-99b9cfddd233",
+        "imageUrls": [
+          "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/uploads/multi_view_image_019bc43c-a7ad-7509-916a-1e4376f6dc18_part_0.png?Expires=1768783068&Signature=XVss~d77dX7keo1yIZHjGAq~-5C8bBqarA3iW0pzfrlkrwopx5YYhidcU8shjWHyRwymXFqf7dOCTZdlbl4WcDedoQTb5zA0FmMhuTcmy6wk6zBAlDkUV6L-ZG24qiqvqXFiIA9ru9tbTtfmV3KjB3jt450z1mwSdNO916zCPMaV7h1F0eREZiA6LWY3NIReuaKod~q~IMznSzCo2-XvfGxv90ua1ripm7OZOG9Abn8r8DcDe4vV-HQOUXN-tW1mAwdraaTiKf2XfZm-1ifwhZXlUgEGiynq59ayDzRZeTXg49y9Zp7f8x2lGFQA5lIrmIUG4CNdOuoPT2xEZk8YvQ__&Key-Pair-Id=KL5I0C8H7HX83",
+          "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/uploads/multi_view_image_019bc43c-a7ad-7509-916a-1e4376f6dc18_part_1.png?Expires=1768783068&Signature=liZrNoINux67~qp66hCvIMH7oOdAtJ-4ysBeww0KFNpCvjvJolcx22upRdK3wvdLlFuwFPl5jL-kGRU1Fv4a2n9ZpfQRuOj6IklIsbBN6u2aX~uQV6341ObjZSh7j0OiTT-9c55IT5svH~O6er1z1rv6gfd0TOaoY~VqGXgqemeoVZkovWrtiUMRk56UotOlG0i5oNpfzENyZr4CRnw0~O6FBlC5i0QFpGyHQ3b2Z63FyHjFxqZUtaSZTh-WHGBofF3-O6Wb7ly3NuyH7ND3HcrFD0syIPhZW04qzoe4-qW2aXeTishLmdK3EE5S1wfBazYf8i-1IQ4FGpVrT22aKg__&Key-Pair-Id=KL5I0C8H7HX83",
+          "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/uploads/multi_view_image_019bc43c-a7ad-7509-916a-1e4376f6dc18_part_2.png?Expires=1768783068&Signature=EZ~Dcc74TD3Cb1lmMCR7r~cRaUQqbZ-so2J7ynpl~HNQpbej3ElEF2AWNDxIg~UyRQCZa9VorDGeCr36bGFsYiw1D04PMFRR5u~eLfsEOCM1rNTMtSwYrWn2aggMqrZxdNULwFCeoLd84SGj-w3lAQ2EFIHNYFRLZ98x5D7F-tU8dIyvbs-YhREDSxWqCFnqOjpUbQMJR8-DP-X-1Tog1bB--5JR5bjqRUM09vNJGwVXESsbR0TfxQvwIPg-t5aQmXMSdq99jc3qtUwqeZFymNAthzAItKJzpERSXlK-sHVKyE0FEdYjjW~bbb7qtLSbVZBQAP5AIPJAAL4Xm4VU7A__&Key-Pair-Id=KL5I0C8H7HX83"
+        ]
+      },
+      "artifacts": {}
+    },
+    "model": {
+      "taskId": "019bc43c-ab76-7732-a92d-fb54ed4fd3e1",
+      "status": "SUCCEEDED",
+      "completedAt": 1768524019089,
+      "outputs": {
+        "taskId": "019bc43c-ab76-7732-a92d-fb54ed4fd3e1",
+        "model": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019bc43c-ab76-7732-a92d-fb54ed4fd3e1/output/model.glb?Expires=1768783218&Signature=JDf5t8dL3sXBWHkK-Li8o7aRPy~E92BFkfySURxA4YKDXNQunrKM9~ZDeIOcKaANWhhZrwpByskvVX2w5nroXzAP9oUEDAZQsEPw-ZiVT6mVwdS2QDIlovOEiycJ6pG4Yh4UAlyDUyuv0X-9rirp0HIhFijdzIiE5Yi6k4yWpVQibQc1fH8rDduyzH~~7BcryLMJFPLqpsPObKb04uHHQwpR6Rnnh8bvCmObsJEszBWC4gco~DUcCreXhZH62woYM1dKn2c776fufcQomlmLZv0SLhWGS4pIk54Qp-hL4V3oSRY15fBe434hfoG9w~mlARdmZCtIGhUXFaoUqE~ZJA__&Key-Pair-Id=KL5I0C8H7HX83",
+        "textures": [
+          {
+            "base_color": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019bc43c-ab76-7732-a92d-fb54ed4fd3e1/output/texture_0.png?Expires=1768783218&Signature=f-XehQ5q2G5rlg-DemOQRWRXXA40d89uiPsny9G3jokcNAWDcZEAEROvOtrhoZDLqvJ13rqGgK9H1N~7hDMtHQWjdI83tEu-lCK7XVviYRp1VCyC~whJaDAo0OhMouGBewZoqBF1vT4r50XqunW7vSrcW1kXnoizYmA~8~haqVgcvp7vEmI1neWzCnDSK6nBOwljv5ivjZ~4cfXZV0MewuqM6c2BJo~pGFdiVUHzH271yr~dHjoy6XpIc~ppWWu3ZgmSr8UiQcmK9d2HLdpY1WB4Ui19RvG~t5HoQR8NsnpLuWc7vDkFhya8vkhWsq0wR7ZppZFgZnEqPilsAdi6cg__&Key-Pair-Id=KL5I0C8H7HX83"
+          }
+        ],
+        "textureUrl": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019bc43c-ab76-7732-a92d-fb54ed4fd3e1/output/texture_0.png?Expires=1768783218&Signature=f-XehQ5q2G5rlg-DemOQRWRXXA40d89uiPsny9G3jokcNAWDcZEAEROvOtrhoZDLqvJ13rqGgK9H1N~7hDMtHQWjdI83tEu-lCK7XVviYRp1VCyC~whJaDAo0OhMouGBewZoqBF1vT4r50XqunW7vSrcW1kXnoizYmA~8~haqVgcvp7vEmI1neWzCnDSK6nBOwljv5ivjZ~4cfXZV0MewuqM6c2BJo~pGFdiVUHzH271yr~dHjoy6XpIc~ppWWu3ZgmSr8UiQcmK9d2HLdpY1WB4Ui19RvG~t5HoQR8NsnpLuWc7vDkFhya8vkhWsq0wR7ZppZFgZnEqPilsAdi6cg__&Key-Pair-Id=KL5I0C8H7HX83"
+      },
+      "artifacts": {}
+    },
+    "rigging": {
+      "taskId": "019bc43e-f63f-75fd-bc29-488910a07a74",
+      "status": "SUCCEEDED",
+      "completedAt": 1768524046819,
+      "outputs": {
+        "taskId": "019bc43e-f63f-75fd-bc29-488910a07a74",
+        "riggedModel": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019bc43e-f63f-75fd-bc29-488910a07a74/output/Character_output.glb?Expires=1768783246&Signature=Mc2zUuu20YOgxr2b709WHAb6ddYFLGgrQ-uerNZKpZOj1RUzngePiYd4gn4fdL~zcx0ZFBgxkVCx9zjvUdkxsUM2YC9s3dzIaSALMf0q3wK1u7RorrgggXEyPa5r2asnMBsIhOrtr~QRvOoO1eS5yTcZyJK~h2T2k9~NbjAOvUR7ImwvOZxsI2~w3Ac4xnFdQzGFikK6p1w2AkFnzxkvgzTUQF6ZIwpOR0rknvQr6-8UCemUB1oFTxCrXU1RAqpHq36owOltlbw0y5KFv~xn6bjoX0RR8SpxJiv3ZOpjxAjri2YheNOQMqYjTk5ZjVWPqpVxkYbsAKT7ZiKbe7l5xA__&Key-Pair-Id=KL5I0C8H7HX83"
+      },
+      "artifacts": {}
+    },
+    "animations": [
+      {
+        "taskId": "019bc43f-629d-71c4-b879-287ea27dc732",
+        "status": "SUCCEEDED",
+        "animationName": "COMBAT_STANCE",
+        "completedAt": 1768524056386,
+        "outputs": {
+          "animations/combat_stance.glb": "animations/combat_stance.glb"
+        }
+      },
+      {
+        "taskId": "019bc43f-87f0-7615-8b7b-782b01a71260",
+        "status": "SUCCEEDED",
+        "animationName": "RUNFAST",
+        "completedAt": 1768524067793,
+        "outputs": {
+          "animations/runfast.glb": "animations/runfast.glb"
+        }
+      },
+      {
+        "taskId": "019bc43f-b478-763b-9810-2facc2967108",
+        "status": "SUCCEEDED",
+        "animationName": "KUNG_FU_PUNCH",
+        "completedAt": 1768524094911,
+        "outputs": {
+          "animations/kung_fu_punch.glb": "animations/kung_fu_punch.glb"
+        }
+      },
+      {
+        "taskId": "019bc440-1e66-71e7-af6e-2e0bdaf97232",
+        "status": "SUCCEEDED",
+        "animationName": "BEHIT_FLYUP",
+        "completedAt": 1768524106980,
+        "outputs": {
+          "animations/behit_flyup.glb": "animations/behit_flyup.glb"
+        }
+      },
+      {
+        "taskId": "019bc440-4d92-71e7-8c0e-79f9f27aedc2",
+        "status": "SUCCEEDED",
+        "animationName": "DEAD",
+        "completedAt": 1768524130669,
+        "outputs": {
+          "animations/dead.glb": "animations/dead.glb"
+        }
+      },
+      {
+        "taskId": "019bc440-aa17-7655-a296-107fbbac5018",
+        "status": "SUCCEEDED",
+        "animationName": "BASIC_JUMP",
+        "completedAt": 1768524161476,
+        "outputs": {
+          "animations/basic_jump.glb": "animations/basic_jump.glb"
+        }
+      },
+      {
+        "taskId": "019bc441-227a-7822-aa10-e2395dcc5d74",
+        "status": "SUCCEEDED",
+        "animationName": "DODGE_AND_COUNTER",
+        "completedAt": 1768524185271,
+        "outputs": {
+          "animations/dodge_and_counter.glb": "animations/dodge_and_counter.glb"
+        }
+      }
+    ]
   },
-  "tasks": {}
+  "seed": 2182953328
 }
