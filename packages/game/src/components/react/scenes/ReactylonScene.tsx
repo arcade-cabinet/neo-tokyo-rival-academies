@@ -188,10 +188,14 @@ const WallBackdrops: FC = () => {
   useEffect(() => {
     if (!scene) return;
 
-    // Store references for cleanup
+    let cancelled = false;
+    const disposables: { dispose(): void }[] = [];
+
     import('@babylonjs/core/Meshes/Builders/planeBuilder').then(({ CreatePlane }) => {
       import('@babylonjs/core/Materials/standardMaterial').then(({ StandardMaterial }) => {
         import('@babylonjs/core/Materials/Textures/texture').then(({ Texture }) => {
+          if (cancelled) return;
+
           // Far background
           const farBackdrop = CreatePlane('far-backdrop', { width: gridWidth + 20, height: wallHeight }, scene);
           farBackdrop.position = new Vector3(0, wallHeight / 2 - 2, -10);
@@ -200,6 +204,7 @@ const WallBackdrops: FC = () => {
           farMat.emissiveColor = new Color3(0.3, 0.3, 0.3);
           farMat.diffuseTexture = new Texture('/assets/backgrounds/sector0/parallax_far/concept.png', scene);
           farBackdrop.material = farMat;
+          disposables.push(farBackdrop, farMat);
 
           // Left wall
           const leftWall = CreatePlane('left-wall', { width: wallWidth, height: wallHeight }, scene);
@@ -210,6 +215,7 @@ const WallBackdrops: FC = () => {
           leftMat.emissiveColor = new Color3(0.3, 0.3, 0.3);
           leftMat.diffuseTexture = new Texture('/assets/backgrounds/sector0/wall_left/concept.png', scene);
           leftWall.material = leftMat;
+          disposables.push(leftWall, leftMat);
 
           // Right wall
           const rightWall = CreatePlane('right-wall', { width: wallWidth, height: wallHeight }, scene);
@@ -220,28 +226,29 @@ const WallBackdrops: FC = () => {
           rightMat.emissiveColor = new Color3(0.3, 0.3, 0.3);
           rightMat.diffuseTexture = new Texture('/assets/backgrounds/sector0/wall_right/concept.png', scene);
           rightWall.material = rightMat;
+          disposables.push(rightWall, rightMat);
         });
       });
     });
 
-    // Cleanup is handled by Babylon.js scene disposal
+    return () => {
+      cancelled = true;
+      disposables.forEach((d) => d.dispose());
+    };
   }, [scene, gridWidth, wallOffset, wallHeight, wallWidth]);
 
   return null;
 };
 
-// Kai character model component
+// Kai character model component - uses combat_stance.glb which contains rigged mesh + idle animation
 const KaiModel: FC = () => {
   const model = useModel(
-    '/assets/characters/main/kai/rigged.glb',
+    '/assets/characters/main/kai/animations/combat_stance.glb',
     {},
     (result) => {
-      // Play idle animation if available - search by name first, fallback to first
+      // Play the animation (combat_stance serves as idle)
       if (result.animationGroups && result.animationGroups.length > 0) {
-        const idleAnim = result.animationGroups.find(
-          (anim) => anim.name.toLowerCase().includes('idle')
-        );
-        const animToPlay = idleAnim ?? result.animationGroups[0];
+        const animToPlay = result.animationGroups[0];
         animToPlay.start(true);
       }
     }
@@ -339,36 +346,48 @@ const SceneLighting: FC = () => {
   useEffect(() => {
     if (!scene) return;
 
-    // Import light classes
+    let cancelled = false;
+    const disposables: { dispose(): void }[] = [];
+
     Promise.all([
       import('@babylonjs/core/Lights/hemisphericLight'),
       import('@babylonjs/core/Lights/directionalLight'),
       import('@babylonjs/core/Lights/pointLight'),
     ]).then(([{ HemisphericLight }, { DirectionalLight }, { PointLight }]) => {
+      if (cancelled) return;
+
       // Ambient light
       const ambient = new HemisphericLight('ambient', new Vector3(0, 1, 0), scene);
       ambient.intensity = 0.5;
+      disposables.push(ambient);
 
       // Sun/directional light
       const sun = new DirectionalLight('sun', new Vector3(-0.5, -1, -0.3), scene);
       sun.position = new Vector3(15, 25, 10);
       sun.intensity = 1.2;
+      disposables.push(sun);
 
       // Neon accent lights
       const neonMagenta = new PointLight('neon-magenta', new Vector3(-6, 4, -6), scene);
       neonMagenta.diffuse = new Color3(1, 0, 1);
       neonMagenta.intensity = 3;
+      disposables.push(neonMagenta);
 
       const neonCyan = new PointLight('neon-cyan', new Vector3(6, 4, 6), scene);
       neonCyan.diffuse = new Color3(0, 1, 1);
       neonCyan.intensity = 3;
+      disposables.push(neonCyan);
 
       const neonOrange = new PointLight('neon-orange', new Vector3(0, 2, -8), scene);
       neonOrange.diffuse = new Color3(1, 0.4, 0);
       neonOrange.intensity = 2;
+      disposables.push(neonOrange);
     });
 
-    // Cleanup is handled by Babylon.js scene disposal
+    return () => {
+      cancelled = true;
+      disposables.forEach((d) => d.dispose());
+    };
   }, [scene]);
 
   return null;

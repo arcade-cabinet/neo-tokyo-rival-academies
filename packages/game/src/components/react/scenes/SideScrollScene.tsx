@@ -48,25 +48,43 @@ function ParallaxLayer({ z, texture, playerX }: { z: number, texture: THREE.Text
   );
 }
 
+// Helper to find animation action by name pattern
+function findActionByPattern(actions: Record<string, THREE.AnimationAction | null>, pattern: string) {
+  const actionNames = Object.keys(actions);
+  const match = actionNames.find(name => name.toLowerCase().includes(pattern.toLowerCase()));
+  return match ? actions[match] : null;
+}
+
 function KaiCharacter({ playerX }: { playerX: React.MutableRefObject<number> }) {
   const group = useRef<Group>(null);
   const rigidBody = useRef<RapierRigidBody>(null);
-  const { scene } = useGLTF('/assets/characters/main/kai/rigged.glb');
-  const idleAnim = useGLTF('/assets/characters/main/kai/animations/idle_combat.glb');
-  const runAnim = useGLTF('/assets/characters/main/kai/animations/run_in_place.glb');
-  const jumpAnim = useGLTF('/assets/characters/main/kai/animations/jump_idle.glb');
+  // Use combat_stance as the base model (each animation GLB contains the rigged mesh)
+  const { scene } = useGLTF('/assets/characters/main/kai/animations/combat_stance.glb');
+  const idleAnim = useGLTF('/assets/characters/main/kai/animations/combat_stance.glb');
+  const runAnim = useGLTF('/assets/characters/main/kai/animations/runfast.glb');
+  const jumpAnim = useGLTF('/assets/characters/main/kai/animations/basic_jump.glb');
   const { actions } = useAnimations([...idleAnim.animations, ...runAnim.animations, ...jumpAnim.animations], group);
   const keys = useKeyboard();
   const [currentAnim, setCurrentAnim] = useState('idle');
   const canJump = useRef(true);
+  const jumpTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const speed = 8;
   const jumpForce = 12;
 
+  // Cleanup jump timeout on unmount
   useEffect(() => {
-    const actionNames = Object.keys(actions);
-    const firstAction = actionNames[0] ? actions[actionNames[0]] : null;
-    if (firstAction) firstAction.reset().fadeIn(0.5).play();
+    return () => {
+      if (jumpTimeoutRef.current) {
+        clearTimeout(jumpTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  // Play initial idle animation by name
+  useEffect(() => {
+    const idleAction = findActionByPattern(actions, 'idle');
+    if (idleAction) idleAction.reset().fadeIn(0.5).play();
   }, [actions]);
 
   useFrame(() => {
@@ -83,7 +101,9 @@ function KaiCharacter({ playerX }: { playerX: React.MutableRefObject<number> }) 
     if (keys.jump && grounded && canJump.current) {
       rigidBody.current.setLinvel({ x: vx, y: jumpForce, z: 0 }, true);
       canJump.current = false;
-      setTimeout(() => { canJump.current = true; }, 300);
+      // Clear any existing timeout before setting new one
+      if (jumpTimeoutRef.current) clearTimeout(jumpTimeoutRef.current);
+      jumpTimeoutRef.current = setTimeout(() => { canJump.current = true; }, 300);
     } else {
       rigidBody.current.setLinvel({ x: vx, y: vel.y, z: 0 }, true);
     }
@@ -93,16 +113,17 @@ function KaiCharacter({ playerX }: { playerX: React.MutableRefObject<number> }) 
     if (vx > 0) group.current.rotation.y = Math.PI / 2;
     if (vx < 0) group.current.rotation.y = -Math.PI / 2;
 
-    const actionNames = Object.keys(actions);
+    // Determine new animation state
     let newAnim = 'idle';
     if (!grounded) newAnim = 'jump';
     else if (vx !== 0) newAnim = 'run';
 
+    // Switch animations using name-based lookup
     if (newAnim !== currentAnim) {
-      const idx = newAnim === 'idle' ? 0 : newAnim === 'run' ? 1 : 2;
-      const prevIdx = currentAnim === 'idle' ? 0 : currentAnim === 'run' ? 1 : 2;
-      actions[actionNames[prevIdx]]?.fadeOut(0.15);
-      actions[actionNames[idx]]?.reset().fadeIn(0.15).play();
+      const prevAction = findActionByPattern(actions, currentAnim);
+      const newAction = findActionByPattern(actions, newAnim);
+      prevAction?.fadeOut(0.15);
+      newAction?.reset().fadeIn(0.15).play();
       setCurrentAnim(newAnim);
     }
   });
@@ -200,10 +221,9 @@ export default function SideScrollScene() {
   );
 }
 
-useGLTF.preload('/assets/characters/main/kai/rigged.glb');
-useGLTF.preload('/assets/characters/main/kai/animations/idle_combat.glb');
-useGLTF.preload('/assets/characters/main/kai/animations/run_in_place.glb');
-useGLTF.preload('/assets/characters/main/kai/animations/jump_idle.glb');
+useGLTF.preload('/assets/characters/main/kai/animations/combat_stance.glb');
+useGLTF.preload('/assets/characters/main/kai/animations/runfast.glb');
+useGLTF.preload('/assets/characters/main/kai/animations/basic_jump.glb');
 useTexture.preload('/assets/backgrounds/sector0/parallax_far/concept.png');
 useTexture.preload('/assets/backgrounds/sector0/parallax_mid/concept.png');
 useTexture.preload('/assets/backgrounds/sector0/rooftop/concept.png');

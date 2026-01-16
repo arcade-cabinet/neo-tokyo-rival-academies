@@ -11,7 +11,6 @@
       "**",
       "!**/node_modules",
       "!**/dist",
-      "!**/.astro",
       "!**/pnpm-lock.yaml",
       "!**/package-lock.json",
       "!**/yarn.lock"
@@ -83,20 +82,5 @@
       "lineWidth": 100
     }
   },
-  "overrides": [
-    {
-      "includes": ["**/*.astro"],
-      "linter": {
-        "rules": {
-          "style": {
-            "useImportType": "off"
-          },
-          "correctness": {
-            "noUnusedVariables": "off",
-            "noUnusedImports": "off"
-          }
-        }
-      }
-    }
-  ]
+  "overrides": []
 }

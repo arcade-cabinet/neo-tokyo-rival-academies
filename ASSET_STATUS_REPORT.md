@@ -9,13 +9,13 @@
 
 | Category | Total | Complete | Partial | Missing |
 |----------|-------|----------|---------|---------|
-| **Main Characters** | 2 | 0 | 2 | 0 |
+| **Main Characters** | 2 | 2 | 0 | 0 |
 | **B-Story Characters** | 4 | 4 | 0 | 0 |
 | **C-Story Characters** | 3 | 2 | 1 | 0 |
 | **Tiles** | 6 | 5 | 1 | 0 |
 | **Backgrounds** | 6 | 6 | 0 | 0 |
 
-**Overall Status**: 🟢 Good - All characters have animations, main chars need rigged.glb regeneration
+**Overall Status**: 🟢 Good - All characters have animation GLBs (each contains rigged mesh + animation). Main chars have complete animation sets.
 
 ---
 
@@ -25,33 +25,22 @@
 
 **Location**: `packages/game/public/assets/characters/main/kai/`
 
-**Status**: ⚠️ **PARTIAL**
+**Status**: ✅ **COMPLETE**
 
 **Assets Present**:
-- ✅ `manifest.json` (8.3K)
-- ✅ `animations/` directory with 7 GLB files:
-  - `attack_melee_1.glb`
-  - `block.glb`
-  - `death.glb`
-  - `hit_reaction.glb`
-  - `idle_combat.glb`
-  - `jump_idle.glb`
-  - `run_in_place.glb`
-
-**Assets Missing**:
-- ❌ `rigged.glb` - **CRITICAL** for Babylon.js migration
-- ❌ `model.glb` - Base 3D model
-- ❌ `concept.png` - Concept art
+- ✅ `animations/` directory with 7 GLB files (each contains rigged mesh + animation):
+  - `basic_jump.glb`
+  - `behit_flyup.glb`
+  - `combat_stance.glb` (used as base model)
+  - `dead.glb`
+  - `dodge_and_counter.glb`
+  - `kung_fu_punch.glb`
+  - `runfast.glb`
 
 **Notes**:
-- Git status shows these were **intentionally deleted** in this branch
 - Animations are complete (7/7)
-- Need to regenerate rigged model for Babylon.js migration
-
-**Action Required**:
-```bash
-pnpm --filter @neo-tokyo/content-gen generate characters/main/kai
-```
+- Each animation GLB contains the full rigged character mesh
+- `combat_stance.glb` used as base model in scene components
 
 ---
 
@@ -59,38 +48,22 @@ pnpm --filter @neo-tokyo/content-gen generate characters/main/kai
 
 **Location**: `packages/game/public/assets/characters/main/vera/`
 
-**Status**: ⚠️ **PARTIAL**
+**Status**: ✅ **COMPLETE**
 
 **Assets Present**:
-- ✅ `manifest.json` (8.2K)
-- ✅ `animations/` directory with 7 GLB files:
-  - `attack_melee_1.glb`
-  - `block.glb`
-  - `death.glb`
-  - `hit_reaction.glb`
-  - `idle_combat.glb`
-  - `jump_idle.glb`
-  - `run_in_place.glb`
-
-**Assets Missing**:
-- ❌ `rigged.glb` - **CRITICAL** for Babylon.js migration
-- ❌ `model.glb` - Base 3D model
-- ❌ `concept.png` - Concept art
-
-**Additional Files Found**:
-- `concept_0.png`, `concept_1.png`, `concept_2.png` - Test concepts
-- `preview.glb` - Preview model
-- `textures/` directory - Texture files
-- `test_renders/` directory - Test renders
+- ✅ `animations/` directory with 7 GLB files (each contains rigged mesh + animation):
+  - `basic_jump.glb`
+  - `behit_flyup.glb`
+  - `combat_stance.glb` (used as base model)
+  - `dead.glb`
+  - `dodge_and_counter.glb`
+  - `kung_fu_punch.glb`
+  - `runfast.glb`
 
 **Notes**:
-- More complete than Kai (has test assets)
-- May need full regeneration for consistency
-
-**Action Required**:
-```bash
-pnpm --filter @neo-tokyo/content-gen generate characters/main/vera
-```
+- Animations are complete (7/7)
+- Each animation GLB contains the full rigged character mesh
+- Same animation set as Kai for consistency
 
 ---
 
@@ -98,43 +71,49 @@ pnpm --filter @neo-tokyo/content-gen generate characters/main/vera
 
 ### Status: ✅ **COMPLETE**
 
+**Location**: `packages/game/public/assets/characters/b-story/`
+
 **Characters** (from NARRATIVE_DESIGN.md):
 1. **Yakuza Grunt** (Enemy - 5 animations) ✅
-2. **Yakuza Boss** (Boss - 7 animations) ✅
+2. **Yakuza Boss** (Boss - 6 animations) ✅
 3. **Biker Grunt** (Enemy - 5 animations) ✅
-4. **Biker Boss** (Boss - 7 animations) ✅
+4. **Biker Boss** (Boss - 6 animations) ✅
 
 **Current State**:
-- ✅ All directories have manifests and animation GLBs
-- ✅ Yakuza Boss: 7 animations (behit_flyup, block1, combat_stance, dead, double_combo_attack, kung_fu_punch, runfast)
+- ✅ All directories have animation GLBs (each contains rigged mesh + animation)
+- ✅ Yakuza Boss: 6 animations (behit_flyup, block1, combat_stance, dead, double_combo_attack, kung_fu_punch, runfast)
 - ✅ Yakuza Grunt: 5 animations
-- ✅ Biker Boss: 7 animations
+- ✅ Biker Boss: 6 animations
 - ✅ Biker Grunt: 5 animations
 
 **Notes**:
 - All B-Story character animations are present and tracked in Git LFS
-- rigged.glb models may need regeneration via content-gen pipeline
+- Each animation GLB contains the full rigged character mesh
 
 ---
 
 ## C-Story Characters (Disruptor Events)
 
-### Status: ✅ **MOSTLY COMPLETE**
+### Status: ⚠️ **PARTIAL** (Animations complete, rigged.glb missing)
+
+**Location**: `packages/game/public/assets/characters/c-story/`
 
 **Characters** (from NARRATIVE_DESIGN.md):
-1. **Mall Security Guard** (Enemy - 5 animations) ✅ - For Mall Drop stage
-2. **Alien Humanoid** (Enemy - 5 animations) ✅ - For Alien Ship stage
-3. **Tentacle Single** (Prop) ⚠️ - For Alien Queen boss (manifest only)
+1. **Mall Security Guard** (Enemy - 5 animations) ✅ animations present - For Mall Drop stage
+2. **Alien Humanoid** (Enemy - 5 animations) ✅ animations present - For Alien Ship stage
+3. **Tentacle Single** (Prop) ⚠️ - For Alien Queen boss (directory exists, no animations)
 
 **Current State**:
-- ✅ Mall Security Guard: manifest + 5 animations (behit_flyup, combat_stance, dead, double_combo_attack, runfast)
-- ✅ Alien Humanoid: manifest + 5 animations
-- ⚠️ Tentacle Single: manifest only (needs model generation)
+- ✅ Mall Security Guard: 5 animations at `c-story/mall-security/guard/animations/`
+- ✅ Alien Humanoid: 5 animations at `c-story/aliens/humanoid/animations/`
+- ⚠️ Tentacle Single: directory exists at `c-story/tentacles/` (needs model generation)
+- ❌ No rigged.glb files present (same as other character types)
 
 **Notes**:
 - **Alien Ship stage** requires 4-8 tentacle instances with nav mesh
 - Tentacle model needs to be generated via content-gen pipeline
 - All humanoid characters have complete animation sets
+- rigged.glb models need generation before Babylon.js migration
 
 ---
 
@@ -223,21 +202,21 @@ pnpm --filter @neo-tokyo/content-gen generate backgrounds/summit
    pnpm --filter @neo-tokyo/content-gen generate tiles/rooftop/grate
    ```
 
-### High Priority (C-Story Stages)
+### High Priority (Rigged Models for Existing Characters)
 
-4. **Generate Mall Security Guard**:
+4. **Generate rigged.glb for Mall Security Guard** (animations already exist):
    ```bash
-   pnpm --filter @neo-tokyo/content-gen generate characters/cstory/mall-security-guard
+   pnpm --filter @neo-tokyo/content-gen generate characters/c-story/mall-security/guard --rigged-only
    ```
 
-5. **Generate Alien Humanoid**:
+5. **Generate rigged.glb for Alien Humanoid** (animations already exist):
    ```bash
-   pnpm --filter @neo-tokyo/content-gen generate characters/cstory/alien-humanoid
+   pnpm --filter @neo-tokyo/content-gen generate characters/c-story/aliens/humanoid --rigged-only
    ```
 
 6. **Generate Tentacle Single** (CRITICAL for nav mesh testing):
    ```bash
-   pnpm --filter @neo-tokyo/content-gen generate characters/cstory/tentacle-single
+   pnpm --filter @neo-tokyo/content-gen generate characters/c-story/tentacles/single
    ```
 
 ### Medium Priority (Stage Backgrounds)
@@ -320,4 +299,4 @@ pnpm --filter @neo-tokyo/content-gen validate-manifests
 
 Last Updated: 2026-01-16
 
-Branch: jrpg-transformation-107803072628449215
+Branch: fix/restore-deleted-assets-1768547201

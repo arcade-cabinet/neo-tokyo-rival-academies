@@ -13,7 +13,7 @@ import { fileURLToPath } from 'node:url';
 import seedrandom from 'seedrandom';
 import { MeshyClient, type TaskResult } from '../api/meshy-client';
 import { ANIMATION_IDS } from '../tasks/registry';
-import type { AssetManifest } from '../types/manifest';
+import type { AnimationTaskState, AssetManifest } from '../types/manifest';
 
 // ============================================================================
 // ANIMATION PRESETS
@@ -646,7 +646,7 @@ export class PipelineExecutor {
       };
 
       const existingIdx = manifest.tasks.animations.findIndex(
-        a => a.animationName === iterationLabel.toUpperCase()
+        (a: AnimationTaskState) => a.animationName === iterationLabel.toUpperCase()
       );
 
       if (existingIdx >= 0) {
