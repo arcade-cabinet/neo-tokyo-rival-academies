@@ -1,21 +1,20 @@
 import fc from 'fast-check';
 import { describe, expect, it } from 'vitest';
-import type { ECSEntity } from '../../state/ecs';
+import type { ECSEntity } from '@/state/ecs';
 import {
     applyInvincibilityFrames,
     isInvincible,
     registerHit,
     updateInvincibilityState,
     type InvincibilityState,
-} from '../HitDetection';
+} from '@/systems/HitDetection';
 
 describe('HitDetection', () => {
   describe('Invincibility Frames', () => {
     it('should apply invincibility frames correctly', () => {
-      const entity: ECSEntity = { health: 100 };
       const duration = 500;
 
-      const state = applyInvincibilityFrames(entity, duration);
+      const state = applyInvincibilityFrames(duration);
 
       expect(state.isInvincible).toBe(true);
       expect(state.endsAt).toBeGreaterThan(Date.now());
@@ -67,7 +66,7 @@ describe('HitDetection', () => {
 
     it('should not register hit on invincible target', () => {
       const attacker: ECSEntity = { id: 'attacker' };
-      const target: ECSEntity & { invincibility?: InvincibilityState } = {
+      const target: ECSEntity = {
         id: 'target',
         health: 100,
         invincibility: {
@@ -133,7 +132,7 @@ describe('HitDetection', () => {
           fc.integer({ min: 100, max: 1000 }), // Invincibility duration
           (initialHealth, damage, invincibilityDuration) => {
             const attacker: ECSEntity = { id: 'attacker' };
-            const target: ECSEntity & { invincibility?: InvincibilityState } = {
+            const target: ECSEntity = {
               id: 'target',
               health: initialHealth,
             };

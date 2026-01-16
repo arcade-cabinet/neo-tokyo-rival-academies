@@ -1,12 +1,12 @@
 import fc from 'fast-check';
 import { beforeEach, describe, expect, it } from 'vitest';
-import { world } from '../../state/ecs';
+import { world } from '@/state/ecs';
 import {
     awardXP,
     calculateEnemyXP,
     calculateXPRequired,
     updateProgression,
-} from '../ProgressionSystem';
+} from '@/systems/ProgressionSystem';
 
 describe('ProgressionSystem', () => {
   beforeEach(() => {
@@ -128,7 +128,7 @@ describe('ProgressionSystem', () => {
       updateProgression();
 
       expect(entity.level?.current).toBe(30);
-      expect(entity.level?.xp).toBe(100); // XP capped at nextLevelXp
+      expect(entity.level?.xp).toBe(99); // XP capped at nextLevelXp - 1
     });
 
     it('should handle entity without health property correctly', () => {
@@ -146,15 +146,7 @@ describe('ProgressionSystem', () => {
   });
 
   describe('Property 25: XP monotonicity', () => {
-    /**
-     * Feature: production-launch, Property 25: XP monotonicity
-     * Validates: Requirements 8.1, 8.2
-     *
-     * For any sequence of XP gains, total XP should never decrease.
-     * Level should never decrease.
-     * XP required should increase with level.
-     */
-    it('should never decrease total XP', () => {
+    it('should maintain non-negative XP after level ups', () => {
       fc.assert(
         fc.property(
           fc.array(fc.integer({ min: 1, max: 100 }), { minLength: 1, maxLength: 10 }),
@@ -165,20 +157,14 @@ describe('ProgressionSystem', () => {
               level: { current: 1, xp: 0, nextLevelXp: 100, statPoints: 0 },
             });
 
-            let previousTotalXP = 0;
-
             for (const xpGain of xpGains) {
               awardXP(entity, xpGain);
               updateProgression();
 
               const currentTotalXP = entity.level?.xp ?? 0;
 
-              // Total XP should never decrease (accounting for level ups)
-              // We can't directly compare because XP resets on level up
-              // Instead, verify XP is always >= 0
+              // XP should always be non-negative after level up processing
               expect(currentTotalXP).toBeGreaterThanOrEqual(0);
-
-              previousTotalXP = currentTotalXP;
             }
           }
         ),
@@ -233,4 +219,3 @@ describe('ProgressionSystem', () => {
     });
   });
 });
-

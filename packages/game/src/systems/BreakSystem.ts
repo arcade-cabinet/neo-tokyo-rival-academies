@@ -1,4 +1,4 @@
-import type { ECSEntity } from '../state/ecs';
+import type { ECSEntity } from '@/state/ecs';
 
 /**
  * Break system for combat.
@@ -50,7 +50,7 @@ export function initializeStability(entityType: 'grunt' | 'boss' | 'player'): St
     current: maxStability,
     max: maxStability,
     regenRate: regenRate,
-    lastHitTime: Date.now(),
+    lastHitTime: 0, // Allow immediate regeneration for fresh entities
   };
 }
 
@@ -90,7 +90,7 @@ export function regenerateStability(
   deltaTimeMs: number
 ): StabilityState {
   const now = Date.now();
-  const timeSinceLastHit = now - stability.lastHitTime;
+  const timeSinceLastHit = stability.lastHitTime === 0 ? Infinity : now - stability.lastHitTime;
 
   // Only regenerate if not hit recently (1 second grace period)
   if (timeSinceLastHit < 1000) {
@@ -109,11 +109,11 @@ export function regenerateStability(
 /**
  * Apply break state to an entity.
  *
- * @param entity - The entity to break
+ * @param _entity - The entity to break (unused but kept for API consistency)
  * @param durationMs - Duration of break state in milliseconds (default 5000)
  * @returns Break state
  */
-export function applyBreakState(entity: ECSEntity, durationMs: number = 5000): BreakState {
+export function applyBreakState(_entity: ECSEntity, durationMs: number = 5000): BreakState {
   const now = Date.now();
   return {
     isBroken: true,
@@ -159,7 +159,7 @@ export function updateBreakState(breakState: BreakState | undefined): BreakState
  * @returns Whether break was triggered
  */
 export function processHitWithStability(
-  entity: ECSEntity & { stability?: StabilityState; breakState?: BreakState },
+  entity: ECSEntity,
   damage: number
 ): boolean {
   if (!entity.stability) {
@@ -184,7 +184,7 @@ export function processHitWithStability(
  * @param deltaTimeMs - Time elapsed since last update in milliseconds
  */
 export function updateStabilityAndBreak(
-  entity: ECSEntity & { stability?: StabilityState; breakState?: BreakState },
+  entity: ECSEntity,
   deltaTimeMs: number
 ): void {
   // Update break state

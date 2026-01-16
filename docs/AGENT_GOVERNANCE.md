@@ -3,7 +3,9 @@
 **Purpose**: Define how AI agents and human developers coordinate using GitHub to ensure the "Golden Record" is executed accurately.
 
 ## 1. The GitHub Project Board
+
 All work MUST be tracked on the **Neo-Tokyo: Rival Academies** GitHub Project board.
+
 - **Columns**:
   - `Backlog`: New ideas/issues not yet scheduled.
   - `Ready`: Issues fully defined (spec + acceptance criteria) and prioritized.
@@ -12,6 +14,7 @@ All work MUST be tracked on the **Neo-Tokyo: Rival Academies** GitHub Project bo
   - `Done`: Merged and verified on `main`.
 
 ## 2. Issue Lifecycle
+
 **Rule**: No code changes without an associated Issue.
 
 1.  **Creation**:
@@ -30,6 +33,7 @@ All work MUST be tracked on the **Neo-Tokyo: Rival Academies** GitHub Project bo
     - Move to `Done` upon merge.
 
 ## 3. Pull Request (PR) Protocol
+
 - **Title**: Semantic Commit style (e.g., `feat(quest): implement grammar tables`).
 - **Description**:
   - Summary of changes.
@@ -40,11 +44,13 @@ All work MUST be tracked on the **Neo-Tokyo: Rival Academies** GitHub Project bo
   - No new linter errors.
 
 ## 4. Documentation First
+
 - Before writing code, check if the "Golden Record" (`docs/`) covers the feature.
 - If the feature requires a change to the design, **update the documentation first** in a separate PR or as the first commit.
 - **Never** implement "cowboy code" that contradicts `docs/`.
 
 ## 5. Agent Handoff
+
 - When finishing a session, leave a comment on the Issue or PR with:
   - Current state.
   - Next steps.
@@ -52,6 +58,7 @@ All work MUST be tracked on the **Neo-Tokyo: Rival Academies** GitHub Project bo
   - Updated context for the next agent.
 
 ## 6. Milestones (Phases)
+
 - **Phase 1: Mobile MVP** (Deadline: Mar 31, 2026)
 - **Phase 2: Story Depth** (Deadline: Jun 30, 2026)
 - **Phase 3: Polish** (Deadline: Sep 30, 2026)

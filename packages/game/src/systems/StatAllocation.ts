@@ -1,4 +1,4 @@
-import type { ECSEntity, RPGStats } from '../state/ecs';
+import type { ECSEntity, RPGStats } from '@/state/ecs';
 
 /**
  * Stat allocation system for character progression.
@@ -105,11 +105,6 @@ export function applyStatAllocation(
   // Deduct stat points
   entity.level.statPoints -= totalPoints;
 
-  // Update max health if structure increased
-  if (allocation.structure > 0 && entity.health !== undefined) {
-    entity.health += allocation.structure;
-  }
-
   return {
     success: true,
     newStats,
@@ -128,34 +123,33 @@ export function getRecommendedAllocation(
   role: 'tank' | 'melee_dps' | 'ranged_dps' | 'balanced',
   points: number
 ): StatAllocation {
-  const allocations: Record<string, StatAllocation> = {
-    tank: {
-      structure: Math.floor(points * 0.5),
-      ignition: Math.floor(points * 0.2),
-      logic: Math.floor(points * 0.1),
-      flow: Math.floor(points * 0.2),
-    },
-    melee_dps: {
-      structure: Math.floor(points * 0.2),
-      ignition: Math.floor(points * 0.5),
-      logic: Math.floor(points * 0.1),
-      flow: Math.floor(points * 0.2),
-    },
-    ranged_dps: {
-      structure: Math.floor(points * 0.2),
-      ignition: Math.floor(points * 0.1),
-      logic: Math.floor(points * 0.5),
-      flow: Math.floor(points * 0.2),
-    },
-    balanced: {
-      structure: Math.floor(points * 0.25),
-      ignition: Math.floor(points * 0.25),
-      logic: Math.floor(points * 0.25),
-      flow: Math.floor(points * 0.25),
-    },
+  const weights: Record<typeof role, [number, number, number, number]> = {
+    tank: [0.5, 0.2, 0.1, 0.2],
+    melee_dps: [0.2, 0.5, 0.1, 0.2],
+    ranged_dps: [0.2, 0.1, 0.5, 0.2],
+    balanced: [0.25, 0.25, 0.25, 0.25],
   };
 
-  return allocations[role];
+  const [sW, iW, lW, fW] = weights[role];
+  const allocation: StatAllocation = {
+    structure: Math.floor(points * sW),
+    ignition: Math.floor(points * iW),
+    logic: Math.floor(points * lW),
+    flow: Math.floor(points * fW),
+  };
+
+  // Distribute remainder to primary stat for the role
+  const total = allocation.structure + allocation.ignition + allocation.logic + allocation.flow;
+  const remainder = points - total;
+  if (remainder > 0) {
+    const primaryStat: keyof StatAllocation =
+      role === 'tank' ? 'structure' :
+      role === 'melee_dps' ? 'ignition' :
+      role === 'ranged_dps' ? 'logic' : 'structure';
+    allocation[primaryStat] += remainder;
+  }
+
+  return allocation;
 }
 
 /**
@@ -172,8 +166,7 @@ export function resetStatAllocation(entity: ECSEntity, baseStats: RPGStats): num
 
   // Calculate total points spent
   const pointsSpent =
-    entity.stats.structure -
-    baseStats.structure +
+    (entity.stats.structure - baseStats.structure) +
     (entity.stats.ignition - baseStats.ignition) +
     (entity.stats.logic - baseStats.logic) +
     (entity.stats.flow - baseStats.flow);

@@ -1,17 +1,17 @@
 import fc from 'fast-check';
 import { describe, expect, it } from 'vitest';
-import type { ECSEntity } from '../../state/ecs';
+import type { ECSEntity } from '@/state/ecs';
 import {
-    applyBreakState,
-    initializeStability,
-    isBroken,
-    processHitWithStability,
-    reduceStability,
-    regenerateStability,
-    updateBreakState,
-    updateStabilityAndBreak,
-    type BreakState,
-    type StabilityState,
+  applyBreakState,
+  initializeStability,
+  isBroken,
+  processHitWithStability,
+  reduceStability,
+  regenerateStability,
+  updateBreakState,
+  updateStabilityAndBreak,
+  type BreakState,
+  type StabilityState,
 } from '../BreakSystem';
 
 describe('BreakSystem', () => {
@@ -168,14 +168,6 @@ describe('BreakSystem', () => {
   });
 
   describe('Property 23: Break state consistency', () => {
-    /**
-     * Feature: production-launch, Property 23: Break state consistency
-     * Validates: Requirements 7.3
-     *
-     * For any enemy, stability should never go below 0.
-     * Break state should always trigger when stability depleted.
-     * All hits during break should be critical.
-     */
     it('should never allow stability below 0', () => {
       fc.assert(
         fc.property(
@@ -236,10 +228,11 @@ describe('BreakSystem', () => {
             // Should be broken immediately
             expect(isBroken(breakState)).toBe(true);
 
-            // Should still be broken before duration ends
+            // Verify the actual breakState is still valid (endsAt should be in future)
+            // Use derived time instead of hardcoded
             const almostExpired: BreakState = {
               isBroken: true,
-              endsAt: Date.now() + 100, // 100ms remaining
+              endsAt: Date.now() + duration - 50, // Just before expiry
             };
             expect(isBroken(almostExpired)).toBe(true);
           }

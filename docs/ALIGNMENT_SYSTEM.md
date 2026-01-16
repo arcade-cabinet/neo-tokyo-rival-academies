@@ -3,11 +3,13 @@
 **Alignment Scale**: -1.0 (full Kurenai / Passion) to +1.0 (full Azure / Logic), with 0.0 neutral/mystery.
 
 ## UI Representation (HUD)
+
 - **Horizontal Bar**: Top-right (crimson left ←→ cobalt right).
 - **Icon**: Flaming piston (Kurenai) vs Null Set lance (Azure).
 - **Tooltip**: "Rivalry Lean: Passionate (Kurenai) / Calculated (Azure)".
 
 ## Shift Mechanics (Per Quest/Event)
+
 | Trigger Type          | Shift Amount | Example |
 |-----------------------|--------------|---------|
 | Main quest choice     | ±0.2–0.4    | Deliver datavault (Azure +0.3) vs Sabotage it (Kurenai -0.3) |
@@ -17,6 +19,7 @@
 | Secret discovery      | ±0.1        | Uncover corporate secret → Azure shift if reported |
 
 ## Threshold Effects (Branching & Progression)
+
 | Threshold          | Effect |
 |--------------------|--------|
 | > +0.6 Azure       | Unlock Azure faction quests, Vera rivalry arc emphasizes "intellectual superiority" |
@@ -25,11 +28,13 @@
 | Near 0.0 neutral   | Mystery third-path unlocks (hidden C-branch secrets) |
 
 ## Stat Ties (Direct Pillar Integration)
+
 - **Kurenai lean**: Bonuses to Ignition/Flow.
 - **Azure lean**: Bonuses to Logic/Structure.
 - **Level-up**: Choices influenced by alignment (e.g., high Kurenai → more Ignition points).
 
 ## Reputation / Faction Progression
+
 - Dual meters: Kurenai Reputation (0–100), Azure Reputation (0–100)
 - Shifts: Quest choices + alignment (±5–20 per completion)
 - Thresholds:

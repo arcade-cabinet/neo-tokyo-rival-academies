@@ -1,9 +1,5 @@
-import type { ECSEntity } from '../state/ecs';
-
-/**
- * Ability system for combat.
- * Manages character abilities with cooldowns and effects.
- */
+import type { ECSEntity } from '@/state/ecs';
+import abilitiesData from '../data/abilities.json';
 
 export interface Ability {
   /** Unique ability ID */
@@ -38,64 +34,47 @@ export interface AbilityExecutionResult {
   failureReason?: string;
   /** Effect applied */
   effect?: {
-    type: string;
+    type: Ability['effectType'];
     value: number;
     target: ECSEntity;
   };
 }
 
-/**
- * Check if an ability is on cooldown.
- *
- * @param cooldownState - The cooldown state for the ability
- * @returns True if the ability is on cooldown
- */
-export function isOnCooldown(cooldownState: AbilityCooldownState | undefined): boolean {
-  if (!cooldownState) return false;
+// Module-scoped ability database
+const abilityDatabase: Record<string, Ability[]> = abilitiesData as Record<string, Ability[]>;
 
-  const now = Date.now();
-  return now < cooldownState.endsAt;
+/**
+ * Get abilities available to a character.
+ *
+ * @param characterId - The character ID (e.g. 'kai', 'vera')
+ * @returns Array of abilities
+ */
+export function getCharacterAbilities(characterId: string): Ability[] {
+  return abilityDatabase[characterId] || [];
 }
 
 /**
- * Get remaining cooldown time in milliseconds.
+ * Check if an ability is currently on cooldown.
  *
  * @param cooldownState - The cooldown state for the ability
- * @returns Remaining cooldown time in milliseconds, or 0 if not on cooldown
+ * @returns True if on cooldown
  */
-export function getRemainingCooldown(cooldownState: AbilityCooldownState | undefined): number {
-  if (!cooldownState) return 0;
-
-  const now = Date.now();
-  const remaining = cooldownState.endsAt - now;
-  return Math.max(0, remaining);
+export function isOnCooldown(cooldownState?: AbilityCooldownState): boolean {
+  if (!cooldownState) return false;
+  return Date.now() < cooldownState.endsAt;
 }
 
 /**
  * Apply cooldown to an ability.
  *
- * @param ability - The ability to apply cooldown to
- * @returns Cooldown state
+ * @param ability - The ability used
+ * @returns New cooldown state
  */
 export function applyCooldown(ability: Ability): AbilityCooldownState {
-  const now = Date.now();
   return {
     abilityId: ability.id,
-    endsAt: now + ability.cooldown,
+    endsAt: Date.now() + ability.cooldown,
   };
-}
-
-/**
- * Update cooldown states, removing expired cooldowns.
- *
- * @param cooldowns - Array of cooldown states
- * @returns Updated array with expired cooldowns removed
- */
-export function updateCooldowns(
-  cooldowns: AbilityCooldownState[]
-): AbilityCooldownState[] {
-  const now = Date.now();
-  return cooldowns.filter((cooldown) => now < cooldown.endsAt);
 }
 
 /**
@@ -104,8 +83,8 @@ export function updateCooldowns(
  * @param caster - The entity casting the ability
  * @param target - The target entity
  * @param ability - The ability to execute
- * @param cooldowns - Current cooldown states
- * @returns Execution result
+ * @param cooldowns - Current cooldowns for the caster
+ * @returns Result of execution
  */
 export function executeAbility(
   caster: ECSEntity,
@@ -122,15 +101,20 @@ export function executeAbility(
     };
   }
 
-  // Check if caster has enough resources (simplified - just check if cost is affordable)
-  // In a full implementation, this would check energy/mana/etc.
+  // Check resource cost
   if (ability.cost > 0) {
-    // For now, assume abilities can always be cast
-    // TODO: Implement resource system
+    if ((caster.mana ?? 0) < ability.cost) {
+      return {
+        success: false,
+        failureReason: 'Insufficient mana',
+      };
+    }
+    // Deduct cost
+    caster.mana = (caster.mana ?? 0) - ability.cost;
   }
 
   // Apply ability effect
-  let effect: { type: string; value: number; target: ECSEntity } | undefined;
+  let effect: { type: Ability['effectType']; value: number; target: ECSEntity } | undefined;
 
   switch (ability.effectType) {
     case 'damage':
@@ -141,7 +125,7 @@ export function executeAbility(
       break;
 
     case 'heal':
-      if (target.health !== undefined && target.stats?.structure) {
+      if (target.health !== undefined && target.stats?.structure !== undefined) {
         const maxHealth = target.stats.structure;
         target.health = Math.min(maxHealth, target.health + ability.effectValue);
         effect = { type: 'heal', value: ability.effectValue, target };
@@ -152,56 +136,20 @@ export function executeAbility(
     case 'debuff':
     case 'utility':
       // These would be implemented with a buff/debuff system
-      // For now, just mark as successful
+      // For now, just mark as successful and return the effect for visualization
       effect = { type: ability.effectType, value: ability.effectValue, target };
       break;
+  }
+
+  if (!effect) {
+    return {
+      success: false,
+      failureReason: 'Invalid target for ability',
+    };
   }
 
   return {
     success: true,
     effect,
   };
-}
-
-/**
- * Get all abilities for a character.
- * This would typically load from a data file or database.
- *
- * @param characterId - The character ID
- * @returns Array of abilities
- */
-export function getCharacterAbilities(characterId: string): Ability[] {
-  // This is a placeholder - in a full implementation, this would load from data files
-  const abilityDatabase: Record<string, Ability[]> = {
-    kai: [
-      {
-        id: 'kai_lightning_strike',
-        name: 'Lightning Strike',
-        description: 'A powerful melee attack that deals high damage and breaks stability',
-        cost: 20,
-        cooldown: 5000, // 5 seconds
-        effectType: 'damage',
-        effectValue: 50,
-        properties: {
-          stabilityDamage: 100,
-        },
-      },
-    ],
-    vera: [
-      {
-        id: 'vera_tech_barrier',
-        name: 'Tech Barrier',
-        description: 'Creates a temporary barrier that grants invincibility',
-        cost: 30,
-        cooldown: 10000, // 10 seconds
-        effectType: 'buff',
-        effectValue: 3000, // 3 seconds of invincibility
-        properties: {
-          invincibilityDuration: 3000,
-        },
-      },
-    ],
-  };
-
-  return abilityDatabase[characterId] || [];
 }

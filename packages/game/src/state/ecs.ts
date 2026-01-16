@@ -1,5 +1,9 @@
 import { World } from 'miniplex';
 import { createReactAPI } from 'miniplex-react';
+import type { Vector3, AbstractMesh } from '@babylonjs/core';
+import type { InvincibilityState } from '../systems/HitDetection';
+import type { StabilityState, BreakState } from '../systems/BreakSystem';
+import type { ReputationState } from '../systems/ReputationSystem';
 
 export interface RPGStats {
   structure: number; // Max Health
@@ -49,6 +53,7 @@ export type ECSEntity = {
   faction?: 'Kurenai' | 'Azure';
   characterState?: 'run' | 'sprint' | 'jump' | 'slide' | 'stun' | 'stand' | 'block' | 'attack';
   health?: number;
+  mana?: number;
   obstacleType?: 'low' | 'high';
 
   // Platform specifics
@@ -72,6 +77,12 @@ export type ECSEntity = {
 
   // Dialogue
   dialogueState?: DialogueState;
+
+  // Combat Systems
+  invincibility?: InvincibilityState;
+  stability?: StabilityState;
+  breakState?: BreakState;
+  reputation?: ReputationState;
 };
 
 // Create the ECS world

@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import type { StatAllocation } from '../../../systems/StatAllocation';
 import { getRecommendedAllocation, validateAllocation } from '../../../systems/StatAllocation';
 
@@ -14,6 +14,36 @@ interface StatAllocationModalProps {
   onConfirm: (allocation: StatAllocation) => void;
   onCancel: () => void;
 }
+
+const styles = {
+  overlay: {
+    position: 'fixed' as const,
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 10000,
+  },
+  modal: {
+    backgroundColor: '#1a1a2e',
+    border: '3px solid #00ffff',
+    borderRadius: '10px',
+    padding: '30px',
+    maxWidth: '600px',
+    width: '90%',
+    color: '#fff',
+    fontFamily: 'monospace',
+  },
+  buttonBase: {
+    cursor: 'pointer',
+    border: 'none',
+    borderRadius: '5px',
+  },
+};
 
 /**
  * Modal dialog for allocating stat points on level up.
@@ -32,10 +62,28 @@ export const StatAllocationModal: FC<StatAllocationModalProps> = ({
   });
 
   const [error, setError] = useState<string | undefined>();
+  const modalRef = useRef<HTMLDivElement>(null);
 
   const totalAllocated =
     allocation.structure + allocation.ignition + allocation.logic + allocation.flow;
   const remainingPoints = availablePoints - totalAllocated;
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onCancel();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    
+    // Focus first focusable element
+    if (modalRef.current) {
+        const focusable = modalRef.current.querySelector('button');
+        focusable?.focus();
+    }
+
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onCancel]);
 
   const handleIncrement = (stat: keyof StatAllocation) => {
     if (remainingPoints > 0) {
@@ -80,32 +128,17 @@ export const StatAllocationModal: FC<StatAllocationModalProps> = ({
 
   return (
     <div
-      style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        backgroundColor: 'rgba(0, 0, 0, 0.8)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        zIndex: 10000,
-      }}
+      style={styles.overlay}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="stat-allocation-title"
     >
       <div
-        style={{
-          backgroundColor: '#1a1a2e',
-          border: '3px solid #00ffff',
-          borderRadius: '10px',
-          padding: '30px',
-          maxWidth: '600px',
-          width: '90%',
-          color: '#fff',
-          fontFamily: 'monospace',
-        }}
+        ref={modalRef}
+        style={styles.modal}
       >
         <h2
+          id="stat-allocation-title"
           style={{
             textAlign: 'center',
             color: '#00ffff',
@@ -162,14 +195,14 @@ export const StatAllocationModal: FC<StatAllocationModalProps> = ({
                   type="button"
                   onClick={() => handleDecrement(stat)}
                   disabled={allocation[stat] === 0}
+                  aria-label={`Decrease ${stat}`}
                   style={{
+                    ...styles.buttonBase,
                     width: '40px',
                     height: '40px',
                     fontSize: '1.5rem',
                     backgroundColor: allocation[stat] === 0 ? '#333' : '#ff4444',
                     color: '#fff',
-                    border: 'none',
-                    borderRadius: '5px',
                     cursor: allocation[stat] === 0 ? 'not-allowed' : 'pointer',
                   }}
                 >
@@ -184,14 +217,14 @@ export const StatAllocationModal: FC<StatAllocationModalProps> = ({
                   type="button"
                   onClick={() => handleIncrement(stat)}
                   disabled={remainingPoints === 0}
+                  aria-label={`Increase ${stat}`}
                   style={{
+                    ...styles.buttonBase,
                     width: '40px',
                     height: '40px',
                     fontSize: '1.5rem',
                     backgroundColor: remainingPoints === 0 ? '#333' : '#00ff00',
                     color: '#fff',
-                    border: 'none',
-                    borderRadius: '5px',
                     cursor: remainingPoints === 0 ? 'not-allowed' : 'pointer',
                   }}
                 >
@@ -213,12 +246,11 @@ export const StatAllocationModal: FC<StatAllocationModalProps> = ({
                 type="button"
                 onClick={() => handleRecommended(role)}
                 style={{
+                  ...styles.buttonBase,
                   padding: '8px 15px',
                   backgroundColor: '#0f3460',
                   color: '#00ffff',
                   border: '1px solid #00ffff',
-                  borderRadius: '5px',
-                  cursor: 'pointer',
                   fontSize: '0.9rem',
                   textTransform: 'capitalize',
                 }}
@@ -234,12 +266,10 @@ export const StatAllocationModal: FC<StatAllocationModalProps> = ({
             type="button"
             onClick={handleConfirm}
             style={{
+              ...styles.buttonBase,
               padding: '15px 40px',
               backgroundColor: '#00ff00',
               color: '#000',
-              border: 'none',
-              borderRadius: '5px',
-              cursor: 'pointer',
               fontSize: '1.2rem',
               fontWeight: 'bold',
             }}
@@ -251,12 +281,10 @@ export const StatAllocationModal: FC<StatAllocationModalProps> = ({
             type="button"
             onClick={onCancel}
             style={{
+              ...styles.buttonBase,
               padding: '15px 40px',
               backgroundColor: '#ff4444',
               color: '#fff',
-              border: 'none',
-              borderRadius: '5px',
-              cursor: 'pointer',
               fontSize: '1.2rem',
               fontWeight: 'bold',
             }}

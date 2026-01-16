@@ -1,6 +1,8 @@
-import type { ECSEntity } from '../state/ecs';
+import type { ECSEntity } from '@/state/ecs';
 import { world } from '../state/ecs';
 import { useGameStore } from '../state/gameStore';
+
+export const MAX_LEVEL = 30;
 
 // Logger interface placeholder (can be replaced with a real logger later)
 const logger = {
@@ -11,8 +13,8 @@ const logger = {
  * Calculate XP required for a given level.
  * Formula: XPRequired = 100 * (level ^ 1.5)
  *
- * @param level - The level to calculate XP for
- * @returns XP required to reach the next level
+ * @param level - The target level to calculate total XP for
+ * @returns XP required to complete this level (reach level + 1)
  */
 export function calculateXPRequired(level: number): number {
   return Math.floor(100 * Math.pow(level, 1.5));
@@ -84,8 +86,8 @@ export const updateProgression = () => {
       entity.level.nextLevelXp = calculateXPRequired(entity.level.current);
     }
 
-    // Check level cap (30)
-    if (entity.level.current >= 30) {
+    // Check level cap
+    if (entity.level.current >= MAX_LEVEL) {
       continue;
     }
 
@@ -95,8 +97,8 @@ export const updateProgression = () => {
       loopGuard++;
 
       // Check level cap again
-      if (entity.level.current >= 30) {
-        entity.level.xp = entity.level.nextLevelXp; // Cap XP at max
+      if (entity.level.current >= MAX_LEVEL) {
+        entity.level.xp = Math.min(entity.level.xp, entity.level.nextLevelXp - 1); // Cap below threshold
         break;
       }
 

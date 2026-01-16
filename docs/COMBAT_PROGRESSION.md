@@ -1,6 +1,7 @@
 # Combat & Progression System v1.0
 
 ## Stats Design
+
 | Stat | Purpose | Feel |
 |------|---------|------|
 | **Structure** | HP, Defense | Tanky, durable |
@@ -8,7 +9,17 @@
 | **Logic** | Skills, Special | Tactical, calculated |
 | **Flow** | Speed, Evasion | Fluid, responsive |
 
+## Combat Mechanics (JRPG Spin-Out)
+
+- **Trigger**: Enemy contact or event on Isometric Diorama.
+- **Transition**: Screen shatter/spin effect (classic JRPG style).
+- **Combat Scene**: Separate dedicated stage (no map traversal).
+  - **Party**: Player + Rival (if allied) vs Enemy Group.
+  - **Turn-Based**: Order determined by Flow stat.
+  - **Victory**: XP/Loot screen → Fade back to Diorama (enemies cleared).
+
 ## Combat Formulas
+
 - **Damage**: `base = max(1, floor(attacker.Ignition * 2 - defender.Structure * 0.5)); total = base ± variance(10%)`
 - **Crit Chance**: `min(0.5, attacker.Ignition * 0.01 + alignmentBonus)` (Kurenai lean +0.1 crit)
 - **Hit/Evade**: `hitChance = 0.8 + (attacker.Flow - defender.Flow) * 0.05`
@@ -16,26 +27,32 @@
 - **XP Gain**: `xp = enemyLevel * 50 + bonus(alignment match)`
 
 ## Encounter Templates (Seeded)
+
 1. **Street Patrol (Common, Mid Density)**
-   - Waves: 2 (3 grunts wave 1, 2 + elite wave 2)
-   - Micro Flow: Ambush on boulevard → player positions on hex → turn-based or real-time hybrid
-   - Alignment Hook: Stealth evade (Azure +XP) vs aggressive rush (Kurenai crit bonus)
+   - **Trigger**: Random encounter or visible drone patrol.
+   - **Combat Screen**: City street background (blurred/depth).
+   - **Waves**: 1-2.
+   - **Alignment Hook**: Stealth evade (Azure +XP) vs aggressive rush (Kurenai crit bonus) BEFORE combat spin-out.
 
 2. **Boss Fight (Cluster Climax, e.g., Cyber-Yakuza Boss)**
-   - Phases: 3 (Grunt summon → Area attacks → Desperation)
-   - Rivalry Tie: Vera commentary post-fight varies by alignment
-   - Reward: Major XP + item (e.g., "Redline Piston Fragment" for Kurenai)
+   - **Trigger**: Cutscene interaction.
+   - **Combat Screen**: Unique arena (HoloPlaza Center).
+   - **Phases**: 3 (Grunt summon → Area attacks → Desperation).
+   - **Rivalry Tie**: Vera joins party or interferes.
 
 3. **Secret Ambush (Low Density, Mystery)**
-   - Waves: 1 surprise + chase
-   - Hook: Alignment extreme → unique enemy (cursed for Kurenai, encrypted for Azure)
+   - **Trigger**: Inspecting "suspicious" prop.
+   - **Combat Screen**: Dark alley/sewer.
+   - **Hook**: Unique enemy variants.
 
 ## Progression System (Zustand Store)
+
 - **XP Curve**: `xpToNext = level * 500 + 500` (linear-ish, ~15–20 levels)
 - **Level-Up**: +4 points (choice) + 1 fixed (alignment bias)
 - **Inventory**: 12 slots, equip 1 weapon + 2 accessories.
 
 ## Item System (Alignment-Biased Drops)
+
 | Type       | Example Item                  | Stat Boost                  | Special Effect                          | Alignment Lean |
 |------------|-------------------------------|-----------------------------|-----------------------------------------|----------------|
 | Weapon     | Redline Piston Hammer         | +Ignition / +Flow           | Crit chance +10%, high variance damage  | Kurenai       |

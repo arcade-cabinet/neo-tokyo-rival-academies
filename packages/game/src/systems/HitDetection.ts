@@ -1,5 +1,5 @@
 import type { AbstractMesh } from '@babylonjs/core';
-import type { ECSEntity } from '../state/ecs';
+import type { ECSEntity } from '@/state/ecs';
 
 /**
  * Hit detection system for combat.
@@ -91,12 +91,10 @@ export function checkHitboxOverlap(
 /**
  * Apply invincibility frames to an entity.
  *
- * @param entity - The entity to make invincible
  * @param durationMs - Duration of invincibility in milliseconds
  * @returns Invincibility state
  */
 export function applyInvincibilityFrames(
-  entity: ECSEntity,
   durationMs: number
 ): InvincibilityState {
   const now = Date.now();
@@ -153,12 +151,8 @@ export function registerHit(
   damage: number,
   invincibilityDurationMs: number = 500
 ): boolean {
-  // Check if target has invincibility state
-  const invincibility = (target as ECSEntity & { invincibility?: InvincibilityState })
-    .invincibility;
-
   // Don't register hit if target is invincible
-  if (isInvincible(invincibility)) {
+  if (isInvincible(target.invincibility)) {
     return false;
   }
 
@@ -168,8 +162,7 @@ export function registerHit(
   }
 
   // Apply invincibility frames
-  (target as ECSEntity & { invincibility?: InvincibilityState }).invincibility =
-    applyInvincibilityFrames(target, invincibilityDurationMs);
+  target.invincibility = applyInvincibilityFrames(invincibilityDurationMs);
 
   return true;
 }

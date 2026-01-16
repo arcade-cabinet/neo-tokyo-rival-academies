@@ -1,6 +1,6 @@
 import fc from 'fast-check';
 import { describe, expect, it } from 'vitest';
-import type { ECSEntity } from '../../state/ecs';
+import type { ECSEntity } from '@/state/ecs';
 import {
     applyCooldown,
     executeAbility,
@@ -9,7 +9,7 @@ import {
     updateCooldowns,
     type Ability,
     type AbilityCooldownState,
-} from '../AbilitySystem';
+} from '@/systems/AbilitySystem';
 
 describe('AbilitySystem', () => {
   const testAbility: Ability = {
@@ -79,7 +79,7 @@ describe('AbilitySystem', () => {
 
   describe('Ability Execution', () => {
     it('should execute damage ability successfully', () => {
-      const caster: ECSEntity = { id: 'caster' };
+      const caster: ECSEntity = { id: 'caster', mana: 100 };
       const target: ECSEntity = { id: 'target', health: 100 };
       const cooldowns: AbilityCooldownState[] = [];
 
@@ -92,7 +92,7 @@ describe('AbilitySystem', () => {
     });
 
     it('should fail if ability is on cooldown', () => {
-      const caster: ECSEntity = { id: 'caster' };
+      const caster: ECSEntity = { id: 'caster', mana: 100 };
       const target: ECSEntity = { id: 'target', health: 100 };
       const cooldowns: AbilityCooldownState[] = [
         {
@@ -119,7 +119,7 @@ describe('AbilitySystem', () => {
         effectValue: 30,
       };
 
-      const caster: ECSEntity = { id: 'caster' };
+      const caster: ECSEntity = { id: 'caster', mana: 100 };
       const target: ECSEntity = {
         id: 'target',
         health: 50,
@@ -145,7 +145,7 @@ describe('AbilitySystem', () => {
         effectValue: 100,
       };
 
-      const caster: ECSEntity = { id: 'caster' };
+      const caster: ECSEntity = { id: 'caster', mana: 100 };
       const target: ECSEntity = {
         id: 'target',
         health: 90,
@@ -161,13 +161,6 @@ describe('AbilitySystem', () => {
   });
 
   describe('Property 24: Cooldown enforcement', () => {
-    /**
-     * Feature: production-launch, Property 24: Cooldown enforcement
-     * Validates: Requirements 7.4
-     *
-     * For any ability, it should not be usable during cooldown.
-     * Cooldown should decrement correctly over time.
-     */
     it('should prevent ability use during cooldown', () => {
       fc.assert(
         fc.property(
@@ -183,12 +176,16 @@ describe('AbilitySystem', () => {
               effectValue: 50,
             };
 
-            const caster: ECSEntity = { id: 'caster' };
+            const caster: ECSEntity = { id: 'caster', mana: 100 };
             const target: ECSEntity = { id: 'target', health: 100 };
 
             // First use should succeed
             const cooldowns: AbilityCooldownState[] = [];
-            const firstResult = executeAbility(caster, target, ability, cooldowns);
+            // Use a fresh target/caster for first call or just verify state
+            // Here executeAbility mutates target.health, but we check success/failure mostly
+            // To be safe, let's use separate targets
+            const target1 = { ...target };
+            const firstResult = executeAbility(caster, target1, ability, cooldowns);
             expect(firstResult.success).toBe(true);
 
             // Add cooldown
@@ -196,7 +193,8 @@ describe('AbilitySystem', () => {
             cooldowns.push(newCooldown);
 
             // Second immediate use should fail
-            const secondResult = executeAbility(caster, target, ability, cooldowns);
+            const target2 = { ...target };
+            const secondResult = executeAbility(caster, target2, ability, cooldowns);
             expect(secondResult.success).toBe(false);
             expect(secondResult.failureReason).toBe('Ability is on cooldown');
           }
@@ -213,11 +211,11 @@ describe('AbilitySystem', () => {
             const now = Date.now();
             const expiredCooldown: AbilityCooldownState = {
               abilityId: testAbility.id,
-              endsAt: now - 100, // Expired 100ms ago
+              endsAt: now - cooldownDuration, // Expired by generated duration
             };
 
             const cooldowns = [expiredCooldown];
-            const caster: ECSEntity = { id: 'caster' };
+            const caster: ECSEntity = { id: 'caster', mana: 100 };
             const target: ECSEntity = { id: 'target', health: 100 };
 
             const result = executeAbility(caster, target, testAbility, cooldowns);

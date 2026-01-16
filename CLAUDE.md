@@ -42,5 +42,6 @@ You are working on a **3D Action JRPG** built as a **Monorepo**.
 5. **Strict Types**: No `any`. Use interfaces exported from `src/state/ecs.ts`.
 
 ## 📚 Reference
+
 - `AGENTS.md` for broader agent rules.
 - `docs/GOLDEN_RECORD_MASTER.md` for full design and architecture.

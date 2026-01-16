@@ -1,7 +1,7 @@
 # AI Agent Documentation & Governance
 
 **⚠️ CRITICAL UPDATE (Jan 2026): The Golden Record is Active**
-All agents MUST follow the documentation hierarchy below. Previous instructions (pure Babylon without Reactylon, unseeded GenAI) are **DEPRECATED**.
+All agents MUST follow the documentation hierarchy below. The project is migrating from Three.js/R3F to Babylon.js/Reactylon - follow the current stack in this document.
 
 ## 📚 Documentation Hierarchy (Golden Record)
 
@@ -16,11 +16,11 @@ All agents MUST follow the documentation hierarchy below. Previous instructions 
 2.  **Issues First**: No code changes without an associated Issue.
     - Create an Issue if one doesn't exist.
     - Link PRs to Issues.
-3.  **Governance Doc**: See [`docs/AGENT_GOVERNANCE.md`](docs/AGENT_GOVERNANCE.md) (To be created) for detailed workflow.
+3.  **Governance Doc**: See [`docs/AGENT_GOVERNANCE.md`](docs/AGENT_GOVERNANCE.md) for detailed workflow.
 
 ## 🎯 Project Overview
 
-**Neo-Tokyo: Rival Academies** is a **3D Action JRPG** built with modern web technologies. The game features immersive 3D cel-shaded graphics powered by Three.js and React Three Fiber (migrating to Babylon.js/Reactylon), delivered through a performant Vite-based SPA architecture.
+**Neo-Tokyo: Rival Academies** is a **3D Action JRPG** built with modern web technologies. The game features immersive 3D cel-shaded graphics powered by Babylon.js and Reactylon, delivered through a performant Vite-based SPA architecture.
 
 ### Core Technologies
 

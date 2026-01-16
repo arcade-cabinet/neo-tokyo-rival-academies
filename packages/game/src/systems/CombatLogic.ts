@@ -68,10 +68,15 @@ export const calculateDamage = (
  */
 function getAttackPower(entity: ECSEntity, attackType: AttackType): number {
   const baseAttack = 10;
-  const ignition = entity.stats?.ignition ?? 10;
 
-  // Attack power scales with Ignition
-  return baseAttack + (ignition * 0.5);
+  if (attackType === 'melee') {
+    const ignition = entity.stats?.ignition ?? 10;
+    return baseAttack + (ignition * 0.5);
+  }
+
+  // Ranged and tech use Logic stat
+  const logic = entity.stats?.logic ?? 10;
+  return baseAttack + (logic * 0.5);
 }
 
 /**
