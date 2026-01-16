@@ -241,7 +241,7 @@ export default function NeoTokyoGame() {
         <>
           <JRPGHUD
             onInput={handleInput}
-            // TODO: replace placeholder playerPos with actual player position from ECS/GameWorld and update JRPGHUD props
+            // TODO: Connect to live ECS player position in next Phase
             playerPos={{ x: 0, y: 0 }}
           />
           {combatText && (

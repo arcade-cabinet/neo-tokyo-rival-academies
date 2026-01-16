@@ -1,55 +1,86 @@
 # Neo-Tokyo: Rival Academies
 
-A high-fidelity 3D Action-JRPG set in a cyberpunk Neo-Tokyo, featuring a sophisticated GenAI asset pipeline.
+A futuristic **3D Action JRPG** set in the neon-lit streets of Neo-Tokyo, where rival academies compete for the Data Core. Built with modern web technologies and procedurally generated content.
 
-## 🚀 Quick Start
+## 🎮 About
 
-### 1. Setup
+Neo-Tokyo: Rival Academies combines high-speed runner mechanics with deep RPG progression.
+- **Action JRPG Combat**: Real-time combat driven by character stats (Structure, Ignition, Logic, Flow).
+- **Narrative Depth**: Visual-novel-style storytelling with rival factions, powered by GenAI.
+- **Immersive 3D**: Powered by Three.js and React Three Fiber.
+- **Cross-Platform**: Built for Web and Mobile (Capacitor).
+
+## 🚀 Tech Stack
+
+- **Architecture**: Monorepo (PNPM Workspaces)
+- **Frontend**: [Vite](https://vitejs.dev/) v5.x + [React](https://react.dev/) v19
+- **3D Engine**: [Three.js](https://threejs.org/) v0.182 + [React Three Fiber](https://docs.pmnd.rs/react-three-fiber/)
+- **Game Logic**: [Miniplex](https://github.com/hmans/miniplex) (ECS) + [Yuka](https://mugen87.github.io/yuka/) (AI)
+- **Content Gen**: Google Gemini + Node.js (Procedural Narrative/Assets)
+- **Mobile**: [Capacitor](https://capacitorjs.com/) v8
+- **Testing**: Vitest (Unit) + Playwright (E2E)
+
+## 🏗️ Project Structure
+
+```text
+neo-tokyo-rival-academies/
+├── packages/
+│   ├── game/           # Main Game Application (Vite/React)
+│   │   ├── src/systems/    # ECS Logic (Combat, Physics)
+│   │   ├── src/components/ # React 3D/UI Components
+│   │   └── src/state/      # Game State
+│   ├── content-gen/    # GenAI Tools & CLI
+│   └── e2e/            # Playwright End-to-End Tests
+├── docs/               # Project Documentation
+└── .github/            # CI/CD Workflows
+```
+
+## 🛠️ Installation
+
 ```bash
-# Install dependencies
+# Install PNPM globally
+npm install -g pnpm@10
+
+# Clone and Install
+git clone https://github.com/arcade-cabinet/neo-tokyo-rival-academies.git
+cd neo-tokyo-rival-academies
 pnpm install
-
-# Configure Environment
-cp .env.example .env
-# Add your MESHY_API_KEY to .env
 ```
 
-### 2. Generate Content
-Populate the game with AI-generated assets (Characters, Models, Animations).
-```bash
-# Generate everything defined in packages/game/src/content/manifest.json
-pnpm generate
+## 🎯 Development
 
-# Or generate a specific character
-pnpm generate --target hero_kai
-```
-
-### 3. Run the Game
+### Start Game
 ```bash
 pnpm dev
+# Opens http://localhost:4323
 ```
-Open `http://localhost:5173`.
-*   **Toggle Prototypes**: Use the UI buttons to switch between **Isometric Diorama** and **Side-Scroll** modes.
 
-## 🏗️ Architecture
+### Generate Content (GenAI)
+```bash
+# Requires GEMINI_API_KEY env var
+pnpm --filter @neo-tokyo/content-gen generate
+```
 
-### Monorepo Structure
-*   `packages/game`: The React Three Fiber game client.
-*   `packages/content-gen`: The Node.js toolchain for GenAI asset creation.
+### Run Tests
+```bash
+# Unit Tests
+pnpm test
 
-### The GenAI Pipeline
-We use a **Manifest-Driven** approach. You define characters in `manifest.json`, and the `ModelerAgent` automates the rest:
-1.  **Text-to-Image** (Concept Art)
-2.  **Image-to-3D** (High-poly Model)
-3.  **Auto-Rigging**
-4.  **Animation** (Combat/Movement loops)
+# E2E Tests (Headless)
+pnpm test:e2e
 
-See [docs/GENAI_PIPELINE.md](docs/GENAI_PIPELINE.md) for details.
+# E2E Tests (UI Mode)
+pnpm --filter @neo-tokyo/e2e test:ui
+```
 
 ## 📚 Documentation
-*   [Master Design Plan](docs/DESIGN_MASTER_PLAN.md)
-*   [Agents Architecture](AGENTS.md)
-*   [Prototype Strategy](docs/PROTOTYPE_STRATEGY.md)
 
-## 🤝 Contributing
-Please use `pnpm` for package management. Run `pnpm check` before committing to ensure Biome linting compliance.
+- [Transformation Plan](docs/JRPG_TRANSFORMATION.md)
+- [GenAI Pipeline](docs/GENAI_PIPELINE.md)
+- [Testing Strategy](docs/TESTING_STRATEGY.md)
+- [Agent Guidelines](AGENTS.md)
+- [Audit Report](docs/AUDIT_REPORT.md)
+
+## 📄 License
+
+MIT License.
