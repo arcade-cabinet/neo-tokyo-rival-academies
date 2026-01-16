@@ -5,8 +5,8 @@
  * Uses BabylonJS CellMaterial for stepped lighting.
  */
 
-import { CellMaterial, Color3, type Scene, Texture } from '@babylonjs/core';
-import '@babylonjs/materials';
+import { Color3, type Scene, Texture } from '@babylonjs/core';
+import { CellMaterial } from '@babylonjs/materials';
 
 export interface ToonMaterialOptions {
   diffuseColor?: Color3;

@@ -1,6 +1,7 @@
 import { ScreenOrientation } from '@capacitor/screen-orientation';
 // TODO: Replace with Babylon.js GameWorld after migration (see Epic #33)
 // GameWorld and ReactylonScene are temporarily disabled during architecture pivot
+import { BabylonDioramaScene } from '@components/react/babylon/BabylonDioramaScene';
 import { CombatText } from '@components/react/ui/CombatText';
 import { JRPGHUD } from '@components/react/ui/JRPGHUD';
 import { MainMenu } from '@components/react/ui/MainMenu';
