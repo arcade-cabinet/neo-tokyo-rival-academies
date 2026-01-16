@@ -14,13 +14,13 @@
       "taskId": "019bc120-e7c2-7b1f-83c3-7dc0d0d8cc29",
       "status": "SUCCEEDED",
       "resultUrl": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/uploads/image_019bc120-e7c2-7b1f-83c3-7dc0d0d8cc29_0.png?Expires=1768730935&Signature=AkYaWHXGLgtpszWUaqr-5kAd0uHsbHFWAXbSUUCdr6S1~UVh3i88SaW~6xoLWqm9a6j4S6BpBGhW0TqBKTEqyHTHz1WtxhrDF88aSQY3DTSSfYt8A1stBvaLWnDzfC7TyWgEqnyde82S-PmAtgyvXG3WN8MwckVewEzfBgTZd2YhWb-1OWVtd4Bqa7yrv6TyT76Gfa9AUqT-NmPbhkfX4Dhs7bAVuggwTzgqzORRjvERqQAqDCuS2lWlZC-Kdr1D72qG3ZRxh1nPmAtoO4LlBoNtPtskpGYyhO1MP5FlPb9KrJrgdjLXYO8gnN8YwAZZfgsoOe2R-Is5l5qtsS98KA__&Key-Pair-Id=KL5I0C8H7HX83",
-      "localPath": "/Users/jbogaty/src/arcade-cabinet/neo-tokyo-rival-academies/packages/game/public/assets/tiles/rooftop/tarpaper/concept.png"
+      "localPath": "./concept.png"
     },
     "model3d": {
       "taskId": "019bc123-5e05-7b64-8b37-07b2de3358ac",
       "status": "SUCCEEDED",
       "resultUrl": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019bc123-5e05-7b64-8b37-07b2de3358ac/output/model.glb?Expires=1768731230&Signature=W~ViXPgAMVWMzZOpJ73VNiiQlqRYnoIyb11goQyVOHZ2O0FYGdBLSbBjmijon9RQ~YYMrRt~u0pnqAMh0yRmaVfd9Tyad5TkzoFKnK-GYv4i3eQEF4jp36xyWAQIkf4kxSN3ssy7d5R~YE4TbfEvL~6-EZJ4ikgh49~bX2bDPmAyDPZQFj4Ie3IspTLRP1cbI5eCWx5QSxab5UK4pnSeDcrH6upYsRS7pcEeVHKxU~n~HG0waN9yywXv05~Dpo63lwxpBdQGHtMfmQ3y3CfKqUWqz~yc4tCFDouC6I8DlExNPGfxarwsz70yleVyBKFkL0W8N3zoY3i53MG1V7KxyQ__&Key-Pair-Id=KL5I0C8H7HX83",
-      "localPath": "/Users/jbogaty/src/arcade-cabinet/neo-tokyo-rival-academies/packages/game/public/assets/tiles/rooftop/tarpaper/model.glb"
+      "localPath": "./model.glb"
     }
   }
 }
