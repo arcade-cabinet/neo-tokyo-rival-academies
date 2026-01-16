@@ -162,3 +162,9 @@ build/
 # Temporary files
 tmp/
 temp/
+
+# Playwright
+test-results/
+playwright-report/
+packages/e2e/test-results/
+packages/e2e/playwright-report/

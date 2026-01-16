@@ -1,155 +1,86 @@
 # Neo-Tokyo: Rival Academies
 
-A futuristic 3D platformer game set in the neon-lit streets of Neo-Tokyo, where rival academies compete for supremacy.
+A futuristic **3D Action JRPG** set in the neon-lit streets of Neo-Tokyo, where rival academies compete for the Data Core. Built with modern web technologies and procedurally generated content.
 
 ## 🎮 About
 
-Neo-Tokyo: Rival Academies is an immersive 3D platformer built with modern web technologies, featuring:
-- **Stunning 3D Graphics**: Powered by Three.js and React Three Fiber
-- **Smooth Performance**: Built on Astro with React integration
-- **Modern Tooling**: PNPM 10, Biome linter/formatter, TypeScript
+Neo-Tokyo: Rival Academies combines high-speed runner mechanics with deep RPG progression.
+- **Action JRPG Combat**: Real-time combat driven by character stats (Structure, Ignition, Logic, Flow).
+- **Narrative Depth**: Visual-novel-style storytelling with rival factions, powered by GenAI.
+- **Immersive 3D**: Powered by Three.js and React Three Fiber.
+- **Cross-Platform**: Built for Web and Mobile (Capacitor).
 
 ## 🚀 Tech Stack
 
-- **Framework**: [Astro](https://astro.build/) v4.x
-- **3D Engine**: [Three.js](https://threejs.org/) v0.170
-- **React Integration**: [@astrojs/react](https://docs.astro.build/en/guides/integrations-guide/react/)
-- **3D React Components**: [React Three Fiber](https://docs.pmnd.rs/react-three-fiber/) & [Drei](https://github.com/pmndrs/drei)
-- **Package Manager**: [PNPM](https://pnpm.io/) v10
-- **Linter/Formatter**: [Biome](https://biomejs.dev/) v1.9.4
-- **Language**: TypeScript v5.7
+- **Architecture**: Monorepo (PNPM Workspaces)
+- **Frontend**: [Vite](https://vitejs.dev/) v5.x + [React](https://react.dev/) v19
+- **3D Engine**: [Three.js](https://threejs.org/) v0.182 + [React Three Fiber](https://docs.pmnd.rs/react-three-fiber/)
+- **Game Logic**: [Miniplex](https://github.com/hmans/miniplex) (ECS) + [Yuka](https://mugen87.github.io/yuka/) (AI)
+- **Content Gen**: Google Gemini + Node.js (Procedural Narrative/Assets)
+- **Mobile**: [Capacitor](https://capacitorjs.com/) v8
+- **Testing**: Vitest (Unit) + Playwright (E2E)
 
-## 📋 Prerequisites
+## 🏗️ Project Structure
 
-- Node.js >= 20.0.0
-- PNPM >= 10.0.0
+```text
+neo-tokyo-rival-academies/
+├── packages/
+│   ├── game/           # Main Game Application (Vite/React)
+│   │   ├── src/systems/    # ECS Logic (Combat, Physics)
+│   │   ├── src/components/ # React 3D/UI Components
+│   │   └── src/state/      # Game State
+│   ├── content-gen/    # GenAI Tools & CLI
+│   └── e2e/            # Playwright End-to-End Tests
+├── docs/               # Project Documentation
+└── .github/            # CI/CD Workflows
+```
 
 ## 🛠️ Installation
 
 ```bash
-# Install PNPM globally if you haven't already
+# Install PNPM globally
 npm install -g pnpm@10
 
-# Clone the repository
+# Clone and Install
 git clone https://github.com/arcade-cabinet/neo-tokyo-rival-academies.git
 cd neo-tokyo-rival-academies
-
-# Install dependencies
 pnpm install
 ```
 
 ## 🎯 Development
 
+### Start Game
 ```bash
-# Start development server
 pnpm dev
-
-# Build for production
-pnpm build
-
-# Preview production build
-pnpm preview
-
-# Run linting
-pnpm lint
-
-# Run formatting
-pnpm format
-
-# Fix linting and formatting issues
-pnpm check:fix
+# Opens http://localhost:4323
 ```
 
-## 🏗️ Project Structure
-
-```
-neo-tokyo-rival-academies/
-├── .github/
-│   ├── workflows/          # GitHub Actions CI/CD
-│   └── copilot-instructions.md
-├── public/                 # Static assets
-├── src/
-│   ├── components/
-│   │   └── react/         # React components (3D scenes)
-│   ├── layouts/           # Astro layouts
-│   ├── pages/             # Astro pages
-│   ├── assets/            # Images, models, textures
-│   └── utils/             # Utility functions
-├── astro.config.mjs       # Astro configuration
-├── biome.json             # Biome configuration
-├── tsconfig.json          # TypeScript configuration
-├── package.json           # Project dependencies
-├── pnpm-workspace.yaml    # PNPM workspace config
-└── .npmrc                 # PNPM settings
-```
-
-## 🤖 AI Development
-
-This project is designed to work seamlessly with AI coding assistants:
-
-- **GitHub Copilot**: See `.github/copilot-instructions.md`
-- **Claude**: See `CLAUDE.md`
-- **Gemini**: See `GEMINI.md`
-- **General Agents**: See `AGENTS.md`
-
-## 🚢 Deployment
-
-The project automatically deploys to GitHub Pages on push to the `main` branch.
-
-### Manual Deployment
-
+### Generate Content (GenAI)
 ```bash
-pnpm build
-# The dist/ folder can be deployed to any static hosting service
+# Requires GEMINI_API_KEY env var
+pnpm --filter @neo-tokyo/content-gen generate
 ```
 
-### GitHub Pages Setup
-
-1. Go to repository Settings > Pages
-2. Set Source to "GitHub Actions"
-3. Push to main branch to trigger deployment
-
-## 📝 Code Quality
-
-This project uses Biome for fast, modern linting and formatting:
-
+### Run Tests
 ```bash
-# Check code quality
-pnpm check
+# Unit Tests
+pnpm test
 
-# Auto-fix issues
-pnpm check:fix
+# E2E Tests (Headless)
+pnpm test:e2e
 
-# Type checking
-pnpm type-check
+# E2E Tests (UI Mode)
+pnpm --filter @neo-tokyo/e2e test:ui
 ```
 
-## 🤝 Contributing
+## 📚 Documentation
 
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
+- [Transformation Plan](docs/JRPG_TRANSFORMATION.md)
+- [GenAI Pipeline](docs/GENAI_PIPELINE.md)
+- [Testing Strategy](docs/TESTING_STRATEGY.md)
+- [Agent Guidelines](AGENTS.md)
+- [Audit Report](docs/AUDIT_REPORT.md)
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🎨 Features Coming Soon
-
-- [ ] Character selection system
-- [ ] Multiple academy environments
-- [ ] Competitive multiplayer modes
-- [ ] Leaderboards
-- [ ] Achievement system
-- [ ] Custom character skins
-- [ ] Story mode campaign
-
-## 🐛 Known Issues
-
-None currently. Please report issues on the [GitHub Issues](https://github.com/arcade-cabinet/neo-tokyo-rival-academies/issues) page.
-
-## 📞 Support
-
-For support, please open an issue or reach out to the development team.
-
----
-
-Built with ❤️ using Astro, React Three Fiber, and Three.js
+MIT License.
