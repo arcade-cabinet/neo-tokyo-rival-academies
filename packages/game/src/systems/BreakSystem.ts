@@ -158,10 +158,7 @@ export function updateBreakState(breakState: BreakState | undefined): BreakState
  * @param damage - Amount of damage dealt
  * @returns Whether break was triggered
  */
-export function processHitWithStability(
-  entity: ECSEntity,
-  damage: number
-): boolean {
+export function processHitWithStability(entity: ECSEntity, damage: number): boolean {
   if (!entity.stability) {
     return false;
   }
@@ -183,10 +180,7 @@ export function processHitWithStability(
  * @param entity - The entity to update
  * @param deltaTimeMs - Time elapsed since last update in milliseconds
  */
-export function updateStabilityAndBreak(
-  entity: ECSEntity,
-  deltaTimeMs: number
-): void {
+export function updateStabilityAndBreak(entity: ECSEntity, deltaTimeMs: number): void {
   // Update break state
   if (entity.breakState) {
     entity.breakState = updateBreakState(entity.breakState);

@@ -143,9 +143,13 @@ export function getRecommendedAllocation(
   const remainder = points - total;
   if (remainder > 0) {
     const primaryStat: keyof StatAllocation =
-      role === 'tank' ? 'structure' :
-      role === 'melee_dps' ? 'ignition' :
-      role === 'ranged_dps' ? 'logic' : 'structure';
+      role === 'tank'
+        ? 'structure'
+        : role === 'melee_dps'
+          ? 'ignition'
+          : role === 'ranged_dps'
+            ? 'logic'
+            : 'structure';
     allocation[primaryStat] += remainder;
   }
 
@@ -166,7 +170,8 @@ export function resetStatAllocation(entity: ECSEntity, baseStats: RPGStats): num
 
   // Calculate total points spent
   const pointsSpent =
-    (entity.stats.structure - baseStats.structure) +
+    entity.stats.structure -
+    baseStats.structure +
     (entity.stats.ignition - baseStats.ignition) +
     (entity.stats.logic - baseStats.logic) +
     (entity.stats.flow - baseStats.flow);

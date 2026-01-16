@@ -1,5 +1,6 @@
 import { ScreenOrientation } from '@capacitor/screen-orientation';
-import { GameWorld } from '@components/react/game/GameWorld';
+// TODO: Replace with Babylon.js GameWorld after migration (see Epic #33)
+// GameWorld and ReactylonScene are temporarily disabled during architecture pivot
 import { CombatText } from '@components/react/ui/CombatText';
 import { JRPGHUD } from '@components/react/ui/JRPGHUD';
 import { MainMenu } from '@components/react/ui/MainMenu';
@@ -127,18 +128,15 @@ export default function NeoTokyoGame() {
     <div style={{ width: '100vw', height: '100vh', position: 'relative' }}>
       {/* BabylonJS Canvas */}
       <BabylonDioramaScene>
-        {/* Game World - Only active if in game state */}
-        {viewState === 'game' && (
-          <GameWorld
-            gameState={gameState}
-            inputState={inputState}
-            onGameOver={handleGameOver}
-            onScoreUpdate={(score) => setGameState((prev) => ({ ...prev, score }))}
-            onCombatText={handleCombatText}
-            onCameraShake={triggerCameraShake}
-            onDialogue={handleDialogue}
-          />
-        )}
+        {/*
+          TODO: GameWorld migration to Babylon.js (Epic #33)
+          The R3F-based GameWorld is temporarily disabled during the
+          Three.js → Babylon.js architecture migration.
+
+          For now, the scene renders the hex floor and background panels
+          from BabylonDioramaScene. Game objects (player, enemies, etc.)
+          will be implemented in Babylon.js in Phase 1.
+        */}
       </BabylonDioramaScene>
 
       {/* UI Overlays based on State */}

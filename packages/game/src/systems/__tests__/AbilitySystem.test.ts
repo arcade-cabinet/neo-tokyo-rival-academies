@@ -2,13 +2,13 @@ import fc from 'fast-check';
 import { describe, expect, it } from 'vitest';
 import type { ECSEntity } from '@/state/ecs';
 import {
-    applyCooldown,
-    executeAbility,
-    getRemainingCooldown,
-    isOnCooldown,
-    updateCooldowns,
-    type Ability,
-    type AbilityCooldownState,
+  type Ability,
+  type AbilityCooldownState,
+  applyCooldown,
+  executeAbility,
+  getRemainingCooldown,
+  isOnCooldown,
+  updateCooldowns,
 } from '@/systems/AbilitySystem';
 
 describe('AbilitySystem', () => {

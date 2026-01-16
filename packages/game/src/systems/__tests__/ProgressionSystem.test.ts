@@ -2,10 +2,10 @@ import fc from 'fast-check';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { world } from '@/state/ecs';
 import {
-    awardXP,
-    calculateEnemyXP,
-    calculateXPRequired,
-    updateProgression,
+  awardXP,
+  calculateEnemyXP,
+  calculateXPRequired,
+  updateProgression,
 } from '@/systems/ProgressionSystem';
 
 describe('ProgressionSystem', () => {

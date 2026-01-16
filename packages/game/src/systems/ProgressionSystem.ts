@@ -17,7 +17,7 @@ const logger = {
  * @returns XP required to complete this level (reach level + 1)
  */
 export function calculateXPRequired(level: number): number {
-  return Math.floor(100 * Math.pow(level, 1.5));
+  return Math.floor(100 * level ** 1.5);
 }
 
 /**
@@ -27,11 +27,7 @@ export function calculateXPRequired(level: number): number {
  * @param xpAmount - Amount of XP to award
  * @param bonusMultiplier - Optional bonus multiplier (e.g., 1.5 for break finish)
  */
-export function awardXP(
-  entity: ECSEntity,
-  xpAmount: number,
-  bonusMultiplier: number = 1.0
-): void {
+export function awardXP(entity: ECSEntity, xpAmount: number, bonusMultiplier: number = 1.0): void {
   if (!entity.level) return;
 
   const finalXP = Math.floor(xpAmount * bonusMultiplier);

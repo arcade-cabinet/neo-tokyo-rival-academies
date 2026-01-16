@@ -18,6 +18,24 @@ importers:
         specifier: ^4.0.16
         version: 4.0.17(@types/node@25.0.8)(tsx@4.21.0)(yaml@2.8.2)
 
+  apps/mobile:
+    dependencies:
+      '@neo-tokyo/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+
+  apps/web:
+    dependencies:
+      '@neo-tokyo/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+
+  packages/config:
+    devDependencies:
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+
   packages/content-gen:
     dependencies:
       commander:
@@ -57,6 +75,16 @@ importers:
       tsx:
         specifier: ^4.7.1
         version: 4.21.0
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+
+  packages/core:
+    dependencies:
+      '@neo-tokyo/types':
+        specifier: workspace:*
+        version: link:../types
+    devDependencies:
       typescript:
         specifier: ^5.9.3
         version: 5.9.3
@@ -163,6 +191,9 @@ importers:
       '@vitejs/plugin-react':
         specifier: ^4.3.1
         version: 4.7.0(vite@5.4.21(@types/node@25.0.8))
+      fast-check:
+        specifier: ^4.5.3
+        version: 4.5.3
       typescript:
         specifier: ^5.9.3
         version: 5.9.3
@@ -172,6 +203,12 @@ importers:
       vitest:
         specifier: ^4.0.16
         version: 4.0.17(@types/node@25.0.8)(tsx@4.21.0)(yaml@2.8.2)
+
+  packages/types:
+    devDependencies:
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
 
 packages:
 
@@ -1614,6 +1651,10 @@ packages:
     resolution: {integrity: sha512-BwY5b5Ql4+qZoefgMj2NUmx+tehVTH/Kf4k1ZEtOHNFcm2wSxMRo992l6X3TIgni2eZVTZ85xMOjF31fwZAj6Q==}
     engines: {node: '>=0.10.0'}
 
+  fast-check@4.5.3:
+    resolution: {integrity: sha512-IE9csY7lnhxBnA8g/WI5eg/hygA6MGWJMSNfFRrBlXUciADEhS1EDB0SIsMSvzubzIlOBbVITSsypCsW717poA==}
+    engines: {node: '>=12.17.0'}
+
   fd-slicer@1.1.0:
     resolution: {integrity: sha512-cE1qsB/VwyQozZ+q1dGxR8LBYNZeofhEdUNGSMbQD3Gw2lAzX9Zb3uIU6Ebc/Fmyjo9AWWfnn0AUCHqtevs/8g==}
 
@@ -1913,6 +1954,9 @@ packages:
 
   prop-types@15.8.1:
     resolution: {integrity: sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==}
+
+  pure-rand@7.0.1:
+    resolution: {integrity: sha512-oTUZM/NAZS8p7ANR3SHh30kXB+zK2r2BPcEn/awJIbOvq82WoMN4p62AWWp3Hhw50G0xMsw1mhIBLqHw64EcNQ==}
 
   react-colorful@5.6.1:
     resolution: {integrity: sha512-1exovf0uGTGyq5mXQT0zgQ80uvj2PCwvF8zY1RN9/vbJVSjSo3fsB/4L3ObbF7u70NduSiK4xu4Y6q1MHoUGEw==}
@@ -3577,6 +3621,10 @@ snapshots:
       assign-symbols: 1.0.0
       is-extendable: 1.0.1
 
+  fast-check@4.5.3:
+    dependencies:
+      pure-rand: 7.0.1
+
   fd-slicer@1.1.0:
     dependencies:
       pend: 1.2.0
@@ -3864,6 +3912,8 @@ snapshots:
       loose-envify: 1.4.0
       object-assign: 4.1.1
       react-is: 16.13.1
+
+  pure-rand@7.0.1: {}
 
   react-colorful@5.6.1(react-dom@19.2.3(react@19.2.3))(react@19.2.3):
     dependencies:

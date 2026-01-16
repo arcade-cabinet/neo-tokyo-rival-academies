@@ -46,7 +46,7 @@ export const calculateDamage = (
   const defense = getDefense(defender);
 
   // Calculate base damage: (AttackPower * StatMultiplier) - (Defense / 2)
-  const baseDamage = (attackPower * statMultiplier) - (defense / 2);
+  const baseDamage = attackPower * statMultiplier - defense / 2;
 
   // Ensure damage is non-negative
   let damage = Math.max(0, Math.floor(baseDamage));
@@ -71,12 +71,12 @@ function getAttackPower(entity: ECSEntity, attackType: AttackType): number {
 
   if (attackType === 'melee') {
     const ignition = entity.stats?.ignition ?? 10;
-    return baseAttack + (ignition * 0.5);
+    return baseAttack + ignition * 0.5;
   }
 
   // Ranged and tech use Logic stat
   const logic = entity.stats?.logic ?? 10;
-  return baseAttack + (logic * 0.5);
+  return baseAttack + logic * 0.5;
 }
 
 /**
