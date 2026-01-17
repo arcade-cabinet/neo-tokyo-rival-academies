@@ -6,7 +6,11 @@ import { JRPGHUD } from "@components/react/ui/JRPGHUD";
 import { MainMenu } from "@components/react/ui/MainMenu";
 import { NarrativeOverlay } from "@components/react/ui/NarrativeOverlay";
 import { SplashScreen } from "@components/react/ui/SplashScreen";
+import { QuestLog } from "@components/react/ui/QuestLog";
+import { QuestObjective } from "@components/react/ui/QuestObjective";
+import { AlignmentBar } from "@components/react/ui/AlignmentBar";
 import { musicSynth } from "@neo-tokyo/content-gen";
+import { DistrictManager, QuestGenerator, useQuestStore } from "@neo-tokyo/core";
 import { initialGameState, initialInputState } from "@utils/gameConfig";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { SaveSystem } from "@/systems/SaveSystem";
@@ -56,6 +60,12 @@ export default function NeoTokyoGame() {
 		null,
 	);
 	const [_shakeIntensity, setShakeIntensity] = useState(0);
+	const [questLogOpen, setQuestLogOpen] = useState(false);
+	const [worldInitialized, setWorldInitialized] = useState(false);
+
+	const districtManagerRef = useRef<DistrictManager | null>(null);
+	const addCluster = useQuestStore((state) => state.addCluster);
+	const activateQuest = useQuestStore((state) => state.activateQuest);
 
 	const handleStartStory = () => {
 		// Attempt load
@@ -76,10 +86,40 @@ export default function NeoTokyoGame() {
 		});
 	};
 
-	const handleIntroComplete = () => {
+	const handleIntroComplete = async () => {
 		setViewState("game");
 		setGameState({ ...initialGameState, active: true });
 		musicSynth.start();
+
+		// Initialize world and quests
+		if (!worldInitialized) {
+			const masterSeed = "neotokyo-" + Date.now(); // TODO: Load from save or generate
+			const districtManager = new DistrictManager(masterSeed);
+			await districtManager.initialize(true); // MVP: single district mode
+
+			const currentDistrict = districtManager.getCurrentDistrict();
+			if (currentDistrict) {
+				// Generate quest cluster for this district
+				const questGenerator = new QuestGenerator(currentDistrict.seed);
+				const cluster = questGenerator.generateCluster(
+					currentDistrict.profile,
+					currentDistrict.id,
+					currentDistrict.name
+				);
+
+				// Add cluster to quest store
+				addCluster(cluster);
+
+				// Activate the main quest
+				activateQuest(cluster.main.id);
+
+				console.log(`World initialized: ${currentDistrict.name}`);
+				console.log(`Main quest activated: ${cluster.main.title}`);
+			}
+
+			districtManagerRef.current = districtManager;
+			setWorldInitialized(true);
+		}
 	};
 
 	const _handleGameOver = () => {
@@ -164,6 +204,18 @@ export default function NeoTokyoGame() {
 						// TODO: Connect to live ECS player position in next Phase
 						playerPos={{ x: 0, y: 0 }}
 					/>
+
+					{/* Quest Objective (always visible) */}
+					<QuestObjective />
+
+					{/* Alignment Bar (top-left) */}
+					<div style={{ position: "fixed", top: "20px", left: "20px", zIndex: 100 }}>
+						<AlignmentBar />
+					</div>
+
+					{/* Quest Log (toggle) */}
+					<QuestLog isOpen={questLogOpen} onClose={() => setQuestLogOpen(false)} />
+
 					{combatText && (
 						<CombatText
 							message={combatText.message}
@@ -171,6 +223,29 @@ export default function NeoTokyoGame() {
 							onComplete={() => setCombatText(null)}
 						/>
 					)}
+
+					{/* Quest Log Toggle Button */}
+					<button
+						type="button"
+						onClick={() => setQuestLogOpen(!questLogOpen)}
+						style={{
+							position: "fixed",
+							bottom: "80px",
+							left: "20px",
+							backgroundColor: "rgba(14, 165, 233, 0.9)",
+							border: "2px solid #0ea5e9",
+							borderRadius: "8px",
+							color: "#ffffff",
+							padding: "12px 20px",
+							cursor: "pointer",
+							fontSize: "14px",
+							fontWeight: "bold",
+							fontFamily: '"M PLUS 1", sans-serif',
+							zIndex: 100,
+						}}
+					>
+						📋 Quests (Q)
+					</button>
 				</>
 			)}
 
