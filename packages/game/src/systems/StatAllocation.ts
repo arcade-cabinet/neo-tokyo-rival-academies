@@ -108,6 +108,11 @@ export function applyStatAllocation(
 	// Update entity stats
 	entity.stats = newStats;
 
+	// Update health if structure was increased
+	if (allocation.structure > 0 && entity.health !== undefined) {
+		entity.health += allocation.structure;
+	}
+
 	// Deduct stat points
 	entity.level.statPoints -= totalPoints;
 
