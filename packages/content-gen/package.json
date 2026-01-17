@@ -22,13 +22,8 @@
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^25.0.9",
     "@types/seedrandom": "^3.0.8",
-    "@types/three": "^0.182.0",
-    "three": "^0.182.0",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3"
-  },
-  "peerDependencies": {
-    "three": "^0.182.0"
   },
   "dependencies": {
     "commander": "^14.0.2",
