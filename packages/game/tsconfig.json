@@ -26,20 +26,6 @@
 		"types": ["vite/client"]
 	},
 	"include": ["src"],
-	"exclude": [
-		"src/components/react/game/**",
-		"src/components/react/objects/**",
-		"src/components/react/scenes/WelcomeScene.tsx",
-		"src/components/react/scenes/IsometricScene.tsx",
-		"src/components/react/scenes/SideScrollScene.tsx",
-		"src/systems/CombatSystem.tsx",
-		"src/systems/PhysicsSystem.tsx",
-		"src/systems/InputSystem.tsx",
-		"src/systems/AISystem.ts",
-		"src/systems/AIStateMachine.ts",
-		"src/systems/EnemyAI.ts",
-		"src/systems/TentacleSwarm.ts",
-		"src/systems/HitDetection.ts"
-	],
+	"exclude": ["src/_legacy/**"],
 	"references": [{ "path": "./tsconfig.node.json" }]
 }

@@ -191,6 +191,43 @@ importers:
         specifier: ^4.0.17
         version: 4.0.17(@types/node@25.0.9)(jiti@1.21.7)(jsdom@20.0.3)(lightningcss@1.30.2)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2)
 
+  packages/diorama:
+    dependencies:
+      '@babylonjs/core':
+        specifier: ^8.46.2
+        version: 8.46.2
+      '@babylonjs/materials':
+        specifier: ^8.46.2
+        version: 8.46.2(@babylonjs/core@8.46.2)
+      '@neo-tokyo/config':
+        specifier: workspace:*
+        version: link:../config
+      '@neo-tokyo/core':
+        specifier: workspace:*
+        version: link:../core
+      react:
+        specifier: ^19.2.3
+        version: 19.2.3
+      reactylon:
+        specifier: ^3.5.2
+        version: 3.5.2(@babylonjs/core@8.46.2)(@babylonjs/gui@8.46.2(@babylonjs/core@8.46.2))(@types/react@19.2.8)(react-dom@19.2.3(react@19.2.3))(react-reconciler@0.31.0(react@19.2.3))(react@19.2.3)(use-sync-external-store@1.6.0(react@19.2.3))
+      seedrandom:
+        specifier: ^3.0.5
+        version: 3.0.5
+    devDependencies:
+      '@biomejs/biome':
+        specifier: ^2.3.11
+        version: 2.3.11
+      '@types/react':
+        specifier: ^19.2.8
+        version: 19.2.8
+      '@types/seedrandom':
+        specifier: ^3.0.8
+        version: 3.0.8
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+
   packages/e2e:
     devDependencies:
       '@playwright/test':
@@ -232,15 +269,21 @@ importers:
       '@capacitor/screen-orientation':
         specifier: ^8.0.0
         version: 8.0.0(@capacitor/core@8.0.1)
+      '@neo-tokyo/config':
+        specifier: workspace:*
+        version: link:../config
       '@neo-tokyo/content-gen':
         specifier: workspace:*
         version: link:../content-gen
       '@neo-tokyo/core':
         specifier: workspace:*
         version: link:../core
-      '@react-three/postprocessing':
-        specifier: ^3.0.4
-        version: 3.0.4(@react-three/fiber@9.5.0(@types/react@19.2.8)(expo-asset@12.0.12(expo@54.0.31)(react-native@0.83.1(@babel/core@7.28.6)(@types/react@19.2.8)(react@19.2.3))(react@19.2.3))(expo-file-system@19.0.21(expo@54.0.31)(react-native@0.83.1(@babel/core@7.28.6)(@types/react@19.2.8)(react@19.2.3)))(expo@54.0.31)(react-dom@19.2.3(react@19.2.3))(react-native@0.83.1(@babel/core@7.28.6)(@types/react@19.2.8)(react@19.2.3))(react@19.2.3)(three@0.182.0))(@types/three@0.182.0)(react@19.2.3)(three@0.182.0)
+      '@neo-tokyo/diorama':
+        specifier: workspace:*
+        version: link:../diorama
+      '@neo-tokyo/types':
+        specifier: workspace:*
+        version: link:../types
       leva:
         specifier: ^0.10.1
         version: 0.10.1(@types/react-dom@19.2.3(@types/react@19.2.8))(@types/react@19.2.8)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
@@ -265,9 +308,6 @@ importers:
       seedrandom:
         specifier: ^3.0.5
         version: 3.0.5
-      yuka:
-        specifier: ^0.7.8
-        version: 0.7.8
       zustand:
         specifier: ^5.0.10
         version: 5.0.10(@types/react@19.2.8)(react@19.2.3)(use-sync-external-store@1.6.0(react@19.2.3))
@@ -287,12 +327,6 @@ importers:
       '@types/seedrandom':
         specifier: ^3.0.8
         version: 3.0.8
-      '@types/three':
-        specifier: ^0.182.0
-        version: 0.182.0
-      '@types/yuka':
-        specifier: ^0.7.4
-        version: 0.7.4
       '@vitejs/plugin-react':
         specifier: ^5.1.2
         version: 5.1.2(vite@7.3.1(@types/node@25.0.9)(jiti@1.21.7)(lightningcss@1.30.2)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2))
@@ -310,6 +344,10 @@ importers:
         version: 4.0.17(@types/node@25.0.9)(jiti@1.21.7)(jsdom@20.0.3)(lightningcss@1.30.2)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2)
 
   packages/types:
+    dependencies:
+      '@neo-tokyo/core':
+        specifier: workspace:*
+        version: link:../core
     devDependencies:
       typescript:
         specifier: ^5.9.3
@@ -2118,38 +2156,6 @@ packages:
   '@react-navigation/routers@7.5.3':
     resolution: {integrity: sha512-1tJHg4KKRJuQ1/EvJxatrMef3NZXEPzwUIUZ3n1yJ2t7Q97siwRtbynRpQG9/69ebbtiZ8W3ScOZF/OmhvM4Rg==}
 
-  '@react-three/fiber@9.5.0':
-    resolution: {integrity: sha512-FiUzfYW4wB1+PpmsE47UM+mCads7j2+giRBltfwH7SNhah95rqJs3ltEs9V3pP8rYdS0QlNne+9Aj8dS/SiaIA==}
-    peerDependencies:
-      expo: '>=43.0'
-      expo-asset: '>=8.4'
-      expo-file-system: '>=11.0'
-      expo-gl: '>=11.0'
-      react: '>=19 <19.3'
-      react-dom: '>=19 <19.3'
-      react-native: '>=0.78'
-      three: '>=0.156'
-    peerDependenciesMeta:
-      expo:
-        optional: true
-      expo-asset:
-        optional: true
-      expo-file-system:
-        optional: true
-      expo-gl:
-        optional: true
-      react-dom:
-        optional: true
-      react-native:
-        optional: true
-
-  '@react-three/postprocessing@3.0.4':
-    resolution: {integrity: sha512-e4+F5xtudDYvhxx3y0NtWXpZbwvQ0x1zdOXWTbXMK6fFLVDd4qucN90YaaStanZGS4Bd5siQm0lGL/5ogf8iDQ==}
-    peerDependencies:
-      '@react-three/fiber': ^9.0.0
-      react: ^19.0
-      three: '>= 0.156.0'
-
   '@rolldown/pluginutils@1.0.0-beta.53':
     resolution: {integrity: sha512-vENRlFU4YbrwVqNDZ7fLvy+JR1CRkyr01jhSiDpE1u6py3OMzQfztQU2jxykW3ALNxO4kSlqIDeYyD0Y9RcQeQ==}
 
@@ -2416,9 +2422,6 @@ packages:
 
   '@types/yargs@17.0.35':
     resolution: {integrity: sha512-qUHkeCyQFxMXg79wQfTtfndEC+N9ZZg76HJftDJp+qH2tV7Gj4OJi7l+PiWwJ+pWtW8GwSmqsDj/oymhrTWXjg==}
-
-  '@types/yuka@0.7.4':
-    resolution: {integrity: sha512-nyfp47Re8wtzG0DdBPQ6PepXOU0CiMpPVWZ21y1mRImbnz53ADdHUbDY2GRNbIdsl7qlV3XWS+gVpj3zoIIPXA==}
 
   '@ungap/structured-clone@1.3.0':
     resolution: {integrity: sha512-WmoN8qaIAo7WTYWbAZuG8PYEhn5fkz7dZrqTBZ7dtt//lL2Gwms1IcnQ5yHqjDfX8Ft5j4YzDM23f87zBfDe9g==}
@@ -2847,9 +2850,6 @@ packages:
 
   buffer@5.7.1:
     resolution: {integrity: sha512-EHcyIPBQ4BSGlvjB16k5KgAJ27CIsHY/2JBmCRReo48y9rQ3MaUzWX3KVlBa4U7MyX02HdVj0K7C3WaB3ju7FQ==}
-
-  buffer@6.0.3:
-    resolution: {integrity: sha512-FTiCpNxtwiZZHEZbcbTIcZjERVICn9yq/pDFkTl95/AxzD1naBctN7YO68riM/gLSDY7sdrMby8hofADYuuqOA==}
 
   bytes@3.1.2:
     resolution: {integrity: sha512-/Nf7TyzTx6S3yRJObOAV7956r8cr2+Oj8AC5dt8wSP3BQAoeX58NoHyCU8P8zGkNXStjTSi6fzO6F0pBdcYbEg==}
@@ -3850,11 +3850,6 @@ packages:
     peerDependencies:
       react: '>=18.0'
 
-  its-fine@2.0.0:
-    resolution: {integrity: sha512-KLViCmWx94zOvpLwSlsx6yOCeMhZYaxrJV87Po5k/FoZzcPSahvK5qJ7fYhS61sZi5ikmh2S3Hz55A2l3U69ng==}
-    peerDependencies:
-      react: ^19.0.0
-
   jackspeak@3.4.3:
     resolution: {integrity: sha512-OGlZQpz2yfahA/Rd1Y8Cd9SIEsqvXkLVoSw/cgwhnhFMDbsQFeZYoJJ7bIZBS9BcamUW96asq/npPWugM+RQBw==}
 
@@ -4313,12 +4308,6 @@ packages:
   lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}
 
-  maath@0.6.0:
-    resolution: {integrity: sha512-dSb2xQuP7vDnaYqfoKzlApeRcR2xtN8/f7WV/TMAkBC8552TwTLtOO0JTcSygkYMjNDPoo6V01jTw/aPi4JrMw==}
-    peerDependencies:
-      '@types/three': '>=0.144.0'
-      three: '>=0.144.0'
-
   magic-string@0.30.21:
     resolution: {integrity: sha512-vd2F4YUyEXKGcLHoq+TEyCjxueSeHnFxyyjNp80yg0XV4vUhnDer/lvvlqM/arB5bXQN5K2/3oinyCRyx8T2CQ==}
 
@@ -4491,12 +4480,6 @@ packages:
 
   mz@2.7.0:
     resolution: {integrity: sha512-z81GNO7nnYMEhrGh9LeymoE4+Yr0Wn5McHIZMK5cfQCl+NDX08sCZgUc9/6MHni9IWuFLm1Z3HTCXu2z9fN62Q==}
-
-  n8ao@1.10.1:
-    resolution: {integrity: sha512-hhI1pC+BfOZBV1KMwynBrVlIm8wqLxj/abAWhF2nZ0qQKyzTSQa1QtLVS2veRiuoBQXojxobcnp0oe+PUoxf/w==}
-    peerDependencies:
-      postprocessing: '>=6.30.0'
-      three: '>=0.137'
 
   nanoid@3.3.11:
     resolution: {integrity: sha512-N8SpfPUnUp1bK+PMYW8qSWdl9U+wwNWI4QKxOYDy9JAro3WMX7p2OeVRF9v+347pnakNevPmiHhNmZ2HbFA76w==}
@@ -4726,11 +4709,6 @@ packages:
     resolution: {integrity: sha512-3Ybi1tAuwAP9s0r1UQ2J4n5Y0G05bJkpUIO0/bI9MhwmD70S5aTWbXGBwxHrelT+XM1k6dM0pk+SwNkpTRN7Pg==}
     engines: {node: ^10 || ^12 || >=14}
 
-  postprocessing@6.38.2:
-    resolution: {integrity: sha512-7DwuT7Tkst41ZjSj287g7C9c5/D3Xx5rMgBosg0dadbUPoZD2HNzkadKPol1d2PJAoI9f+Jeh1/v9YfLzpFGVw==}
-    peerDependencies:
-      three: '>= 0.157.0 < 0.183.0'
-
   pretty-bytes@5.6.0:
     resolution: {integrity: sha512-FFw039TmrBqFK8ma/7OL3sDz/VytdtJr044/QUJtH0wK9lb9jLq9tJyIxUwtQJHwar2BqtiA4iCWSwo9JLkzFg==}
     engines: {node: '>=6'}
@@ -4956,15 +4934,6 @@ packages:
     resolution: {integrity: sha512-jXkSl3CpvPYEF+p/eGDLB4sPoDX8pKkYvRl9+rR8HxLY0X04vW7hCm1/0zHoUSjPZ3bDa+wXWNTDVIw/R8aDVw==}
     peerDependencies:
       react: ^19.1.0
-
-  react-use-measure@2.1.7:
-    resolution: {integrity: sha512-KrvcAo13I/60HpwGO5jpW7E9DfusKyLPLvuHlUyP5zqnmAPhNc6qTRjUQrdTADl0lpPpDVU2/Gg51UlOGHXbdg==}
-    peerDependencies:
-      react: '>=16.13'
-      react-dom: '>=16.13'
-    peerDependenciesMeta:
-      react-dom:
-        optional: true
 
   react@19.2.3:
     resolution: {integrity: sha512-Ku/hhYbVjOQnXDZFv2+RibmLFGwFdeeKHFcOTlrt7xplBnya5OGn/hIRDsqDiSUcfORsDC7MPxwork8jBwsIWA==}
@@ -5841,9 +5810,6 @@ packages:
   yocto-queue@0.1.0:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
-
-  yuka@0.7.8:
-    resolution: {integrity: sha512-G/pFcMZh2Azz7Yy500NSV1jQ0Ru7h9hTNyEW+HjRXcdzjJIyp/3mCGspnx7VJVP06zxORqK6mkl5TywLqVUnVg==}
 
   zod@4.3.5:
     resolution: {integrity: sha512-k7Nwx6vuWx1IJ9Bjuf4Zt1PEllcwe7cls3VNzm4CQ1/hgtFUK2bRNG3rvnpPUhFjmqJKAKtjV576KnUkHocg/g==}
@@ -8101,41 +8067,6 @@ snapshots:
     dependencies:
       nanoid: 3.3.11
 
-  '@react-three/fiber@9.5.0(@types/react@19.2.8)(expo-asset@12.0.12(expo@54.0.31)(react-native@0.83.1(@babel/core@7.28.6)(@types/react@19.2.8)(react@19.2.3))(react@19.2.3))(expo-file-system@19.0.21(expo@54.0.31)(react-native@0.83.1(@babel/core@7.28.6)(@types/react@19.2.8)(react@19.2.3)))(expo@54.0.31)(react-dom@19.2.3(react@19.2.3))(react-native@0.83.1(@babel/core@7.28.6)(@types/react@19.2.8)(react@19.2.3))(react@19.2.3)(three@0.182.0)':
-    dependencies:
-      '@babel/runtime': 7.28.6
-      '@types/webxr': 0.5.24
-      base64-js: 1.5.1
-      buffer: 6.0.3
-      its-fine: 2.0.0(@types/react@19.2.8)(react@19.2.3)
-      react: 19.2.3
-      react-use-measure: 2.1.7(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
-      scheduler: 0.27.0
-      suspend-react: 0.1.3(react@19.2.3)
-      three: 0.182.0
-      use-sync-external-store: 1.6.0(react@19.2.3)
-      zustand: 5.0.10(@types/react@19.2.8)(react@19.2.3)(use-sync-external-store@1.6.0(react@19.2.3))
-    optionalDependencies:
-      expo: 54.0.31(@babel/core@7.28.6)(@expo/metro-runtime@6.1.2)(expo-router@6.0.21)(react-native-webview@13.16.0(react-native@0.83.1(@babel/core@7.28.6)(@types/react@19.2.8)(react@19.2.3))(react@19.2.3))(react-native@0.83.1(@babel/core@7.28.6)(@types/react@19.2.8)(react@19.2.3))(react@19.2.3)
-      expo-asset: 12.0.12(expo@54.0.31)(react-native@0.83.1(@babel/core@7.28.6)(@types/react@19.2.8)(react@19.2.3))(react@19.2.3)
-      expo-file-system: 19.0.21(expo@54.0.31)(react-native@0.83.1(@babel/core@7.28.6)(@types/react@19.2.8)(react@19.2.3))
-      react-dom: 19.2.3(react@19.2.3)
-      react-native: 0.83.1(@babel/core@7.28.6)(@types/react@19.2.8)(react@19.2.3)
-    transitivePeerDependencies:
-      - '@types/react'
-      - immer
-
-  '@react-three/postprocessing@3.0.4(@react-three/fiber@9.5.0(@types/react@19.2.8)(expo-asset@12.0.12(expo@54.0.31)(react-native@0.83.1(@babel/core@7.28.6)(@types/react@19.2.8)(react@19.2.3))(react@19.2.3))(expo-file-system@19.0.21(expo@54.0.31)(react-native@0.83.1(@babel/core@7.28.6)(@types/react@19.2.8)(react@19.2.3)))(expo@54.0.31)(react-dom@19.2.3(react@19.2.3))(react-native@0.83.1(@babel/core@7.28.6)(@types/react@19.2.8)(react@19.2.3))(react@19.2.3)(three@0.182.0))(@types/three@0.182.0)(react@19.2.3)(three@0.182.0)':
-    dependencies:
-      '@react-three/fiber': 9.5.0(@types/react@19.2.8)(expo-asset@12.0.12(expo@54.0.31)(react-native@0.83.1(@babel/core@7.28.6)(@types/react@19.2.8)(react@19.2.3))(react@19.2.3))(expo-file-system@19.0.21(expo@54.0.31)(react-native@0.83.1(@babel/core@7.28.6)(@types/react@19.2.8)(react@19.2.3)))(expo@54.0.31)(react-dom@19.2.3(react@19.2.3))(react-native@0.83.1(@babel/core@7.28.6)(@types/react@19.2.8)(react@19.2.3))(react@19.2.3)(three@0.182.0)
-      maath: 0.6.0(@types/three@0.182.0)(three@0.182.0)
-      n8ao: 1.10.1(postprocessing@6.38.2(three@0.182.0))(three@0.182.0)
-      postprocessing: 6.38.2(three@0.182.0)
-      react: 19.2.3
-      three: 0.182.0
-    transitivePeerDependencies:
-      - '@types/three'
-
   '@rolldown/pluginutils@1.0.0-beta.53': {}
 
   '@rollup/rollup-android-arm-eabi@4.55.1':
@@ -8366,8 +8297,6 @@ snapshots:
   '@types/yargs@17.0.35':
     dependencies:
       '@types/yargs-parser': 21.0.3
-
-  '@types/yuka@0.7.4': {}
 
   '@ungap/structured-clone@1.3.0': {}
 
@@ -8819,11 +8748,6 @@ snapshots:
   buffer-from@1.1.2: {}
 
   buffer@5.7.1:
-    dependencies:
-      base64-js: 1.5.1
-      ieee754: 1.2.1
-
-  buffer@6.0.3:
     dependencies:
       base64-js: 1.5.1
       ieee754: 1.2.1
@@ -9815,13 +9739,6 @@ snapshots:
     transitivePeerDependencies:
       - '@types/react'
 
-  its-fine@2.0.0(@types/react@19.2.8)(react@19.2.3):
-    dependencies:
-      '@types/react-reconciler': 0.28.9(@types/react@19.2.8)
-      react: 19.2.3
-    transitivePeerDependencies:
-      - '@types/react'
-
   jackspeak@3.4.3:
     dependencies:
       '@isaacs/cliui': 8.0.2
@@ -10545,11 +10462,6 @@ snapshots:
     dependencies:
       yallist: 3.1.1
 
-  maath@0.6.0(@types/three@0.182.0)(three@0.182.0):
-    dependencies:
-      '@types/three': 0.182.0
-      three: 0.182.0
-
   magic-string@0.30.21:
     dependencies:
       '@jridgewell/sourcemap-codec': 1.5.5
@@ -10827,11 +10739,6 @@ snapshots:
       object-assign: 4.1.1
       thenify-all: 1.6.0
 
-  n8ao@1.10.1(postprocessing@6.38.2(three@0.182.0))(three@0.182.0):
-    dependencies:
-      postprocessing: 6.38.2(three@0.182.0)
-      three: 0.182.0
-
   nanoid@3.3.11: {}
 
   napi-postinstall@0.3.4: {}
@@ -11051,10 +10958,6 @@ snapshots:
       nanoid: 3.3.11
       picocolors: 1.1.1
       source-map-js: 1.2.1
-
-  postprocessing@6.38.2(three@0.182.0):
-    dependencies:
-      three: 0.182.0
 
   pretty-bytes@5.6.0: {}
 
@@ -11332,12 +11235,6 @@ snapshots:
       react: 19.2.3
       react-is: 19.2.3
       scheduler: 0.26.0
-
-  react-use-measure@2.1.7(react-dom@19.2.3(react@19.2.3))(react@19.2.3):
-    dependencies:
-      react: 19.2.3
-    optionalDependencies:
-      react-dom: 19.2.3(react@19.2.3)
 
   react@19.2.3: {}
 
@@ -12170,8 +12067,6 @@ snapshots:
       fd-slicer: 1.1.0
 
   yocto-queue@0.1.0: {}
-
-  yuka@0.7.8: {}
 
   zod@4.3.5: {}
 

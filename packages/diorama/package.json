@@ -1,0 +1,50 @@
+{
+	"name": "@neo-tokyo/diorama",
+	"version": "0.1.0",
+	"private": true,
+	"description": "3D rendering components using Babylon.js and Reactylon",
+	"type": "module",
+	"exports": {
+		".": {
+			"types": "./src/index.ts",
+			"import": "./src/index.ts"
+		},
+		"./components": {
+			"types": "./src/components/index.ts",
+			"import": "./src/components/index.ts"
+		},
+		"./materials": {
+			"types": "./src/materials/index.ts",
+			"import": "./src/materials/index.ts"
+		},
+		"./camera": {
+			"types": "./src/camera/index.ts",
+			"import": "./src/camera/index.ts"
+		}
+	},
+	"files": [
+		"src"
+	],
+	"scripts": {
+		"check": "biome check .",
+		"check:fix": "biome check --write ."
+	},
+	"dependencies": {
+		"@babylonjs/core": "^8.46.2",
+		"@babylonjs/materials": "^8.46.2",
+		"@neo-tokyo/config": "workspace:*",
+		"@neo-tokyo/core": "workspace:*",
+		"react": "^19.2.3",
+		"reactylon": "^3.5.2",
+		"seedrandom": "^3.0.5"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^2.3.11",
+		"@types/react": "^19.2.8",
+		"@types/seedrandom": "^3.0.8",
+		"typescript": "^5.9.3"
+	},
+	"peerDependencies": {
+		"react": ">=18.0.0"
+	}
+}
