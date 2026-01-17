@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useQuestStore } from '@neo-tokyo/core';
 
 export function QuestObjective() {
-  const activeQuests = useQuestStore((state) => state.getActiveQuests());
+  // Use stable selector - get the Map directly, then derive array in useMemo
+  const activeQuestsMap = useQuestStore((state) => state.activeQuests);
+  const activeQuests = useMemo(() => Array.from(activeQuestsMap.values()), [activeQuestsMap]);
 
   // Show the first active quest (typically main quest)
   const currentQuest = activeQuests.find((q) => q.type === 'main') || activeQuests[0];
