@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useQuestStore } from '@neo-tokyo/core';
 
 interface QuestLogProps {
@@ -7,8 +7,11 @@ interface QuestLogProps {
 }
 
 export function QuestLog({ isOpen, onClose }: QuestLogProps) {
-  const activeQuests = useQuestStore((state) => state.getActiveQuests());
-  const completedQuests = useQuestStore((state) => state.getCompletedQuests());
+  // Use stable selectors - get Maps/Sets directly, then derive arrays in useMemo
+  const activeQuestsMap = useQuestStore((state) => state.activeQuests);
+  const completedQuestsSet = useQuestStore((state) => state.completedQuests);
+  const activeQuests = useMemo(() => Array.from(activeQuestsMap.values()), [activeQuestsMap]);
+  const completedQuests = useMemo(() => Array.from(completedQuestsSet), [completedQuestsSet]);
   const [tab, setTab] = React.useState<'active' | 'completed'>('active');
 
   if (!isOpen) return null;
