@@ -1,37 +1,36 @@
 {
-  "name": "@neo-tokyo/core",
-  "version": "0.1.0",
-  "private": true,
-  "description": "Platform-agnostic game logic for Neo-Tokyo: Rival Academies",
-  "type": "module",
-  "exports": {
-    ".": {
-      "types": "./src/index.ts",
-      "import": "./src/index.ts"
-    },
-    "./types": {
-      "types": "./src/types/index.ts",
-      "import": "./src/types/index.ts"
-    },
-    "./systems": {
-      "types": "./src/systems/index.ts",
-      "import": "./src/systems/index.ts"
-    }
-  },
-  "files": [
-    "src"
-  ],
-  "scripts": {
-    "check": "biome check .",
-    "check:fix": "biome check --write .",
-    "test": "vitest run",
-    "test:watch": "vitest"
-  },
-  "dependencies": {},
-  "devDependencies": {
-    "@biomejs/biome": "^2.3.11",
-    "fast-check": "^4.5.3",
-    "typescript": "^5.9.3",
-    "vitest": "^4.0.16"
-  }
+	"name": "@neo-tokyo/core",
+	"version": "0.1.0",
+	"private": true,
+	"description": "Platform-agnostic game logic for Neo-Tokyo: Rival Academies",
+	"type": "module",
+	"exports": {
+		".": {
+			"types": "./src/index.ts",
+			"import": "./src/index.ts"
+		},
+		"./types": {
+			"types": "./src/types/index.ts",
+			"import": "./src/types/index.ts"
+		},
+		"./systems": {
+			"types": "./src/systems/index.ts",
+			"import": "./src/systems/index.ts"
+		}
+	},
+	"files": [
+		"src"
+	],
+	"scripts": {
+		"check": "biome check .",
+		"check:fix": "biome check --write .",
+		"test": "vitest run",
+		"test:watch": "vitest"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^2.3.11",
+		"fast-check": "^4.5.3",
+		"typescript": "^5.9.3",
+		"vitest": "^4.0.17"
+	}
 }

@@ -13,9 +13,9 @@
  * No platform-specific imports (no DOM, no React Native APIs) allowed here.
  */
 
-export const CORE_VERSION = '0.1.0';
+export const CORE_VERSION = "0.1.0";
 
 // Systems
-export * from './systems';
+export * from "./systems";
 // Types
-export * from './types';
+export * from "./types";

@@ -1,20 +1,20 @@
 {
-  "id": "rooftop_grate",
-  "name": "Rooftop Metal Grate Tile",
-  "type": "tile",
-  "description": "Neo-Tokyo rooftop tile with industrial metal grating.",
-  "visualPrompt": "Top-down orthographic view of industrial diamond-pattern metal floor grate, steel mesh walkway surface, rusted edges, bolted frame, dark void visible through holes, wet metal reflecting neon cyan and magenta lights, Neo-Tokyo cyberpunk aesthetic, hexagonal tile format, seamless edges, no characters, flat even lighting, 4k texture, anime cel-shaded style.",
-  "imageConfig": {
-    "aiModel": "nano-banana-pro",
-    "aspectRatio": "1:1",
-    "poseMode": "t-pose"
-  },
-  "tasks": {
-    "conceptArt": {
-      "taskId": "019bc120-ea67-7b1f-afd6-cdabe7a1ff59",
-      "status": "SUCCEEDED",
-      "resultUrl": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/uploads/image_019bc120-ea67-7b1f-afd6-cdabe7a1ff59_0.png?Expires=1768730933&Signature=VUWQmS7c7CnGgf9Gkr9~j1mDRoxnIPobJEGamFS-RKZJm7~9m~wIXtGweeejoO4-r2IFJNJXIBAyPqxMaBvvNbzyn7EEFGwAqScYFO4XrsKBt2IOI2jfM2qavdI-jtfWzkECIMi9L5GQ7aiOHj1KOaJnA97Ma3PTDiq78gjWEB5CzacKquT7LH8KGk3z4JdRFIltFnA50CjrMSSB2zenU8KDTJ43BYxpxDEemqDASjKu95rB58adKCsTNYC9Q7-OOa6Vap3fl3D3UxPrLcoxIEf6Cy-YAJJGr0nVVVOheqnBbX2430RcH~EcG4kDYaxAOBQrotAlizk~oGABYEk4dg__&Key-Pair-Id=KL5I0C8H7HX83",
-      "localPath": "./concept.png"
-    }
-  }
+	"id": "rooftop_grate",
+	"name": "Rooftop Metal Grate Tile",
+	"type": "tile",
+	"description": "Neo-Tokyo rooftop tile with industrial metal grating.",
+	"visualPrompt": "Top-down orthographic view of industrial diamond-pattern metal floor grate, steel mesh walkway surface, rusted edges, bolted frame, dark void visible through holes, wet metal reflecting neon cyan and magenta lights, Neo-Tokyo cyberpunk aesthetic, hexagonal tile format, seamless edges, no characters, flat even lighting, 4k texture, anime cel-shaded style.",
+	"imageConfig": {
+		"aiModel": "nano-banana-pro",
+		"aspectRatio": "1:1",
+		"poseMode": "t-pose"
+	},
+	"tasks": {
+		"conceptArt": {
+			"taskId": "019bc120-ea67-7b1f-afd6-cdabe7a1ff59",
+			"status": "SUCCEEDED",
+			"resultUrl": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/uploads/image_019bc120-ea67-7b1f-afd6-cdabe7a1ff59_0.png?Expires=1768730933&Signature=VUWQmS7c7CnGgf9Gkr9~j1mDRoxnIPobJEGamFS-RKZJm7~9m~wIXtGweeejoO4-r2IFJNJXIBAyPqxMaBvvNbzyn7EEFGwAqScYFO4XrsKBt2IOI2jfM2qavdI-jtfWzkECIMi9L5GQ7aiOHj1KOaJnA97Ma3PTDiq78gjWEB5CzacKquT7LH8KGk3z4JdRFIltFnA50CjrMSSB2zenU8KDTJ43BYxpxDEemqDASjKu95rB58adKCsTNYC9Q7-OOa6Vap3fl3D3UxPrLcoxIEf6Cy-YAJJGr0nVVVOheqnBbX2430RcH~EcG4kDYaxAOBQrotAlizk~oGABYEk4dg__&Key-Pair-Id=KL5I0C8H7HX83",
+			"localPath": "./concept.png"
+		}
+	}
 }

@@ -1,20 +1,20 @@
 {
-  "id": "parallax_far",
-  "name": "Sector 0 Far Skyline",
-  "type": "background",
-  "description": "Distant Neo-Tokyo skyline for parallax background.",
-  "visualPrompt": "Distant Neo-Tokyo cityscape silhouette, towering skyscrapers, holographic billboards, night sky, thunderstorm clouds, lightning, cyberpunk atmosphere, wide panoramic view, 8k, cel shaded anime style, no foreground elements.",
-  "imageConfig": {
-    "aiModel": "nano-banana-pro",
-    "aspectRatio": "16:9",
-    "poseMode": "t-pose"
-  },
-  "tasks": {
-    "conceptArt": {
-      "taskId": "019bc111-ffbc-7991-818a-098c9cd41175",
-      "status": "SUCCEEDED",
-      "resultUrl": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/uploads/image_019bc111-ffbc-7991-818a-098c9cd41175_0.png?Expires=1768729956&Signature=H5u6nStXOVE6XWa7uVg-Vu0ebQu5Q9nOECNcKRqdPe9lgD4fuwYx1-64x3j8ISgtPKOVJp1Y5lwwmE4fZg85Z6TLemIlL-z52CNb0YvVUfhEMtyl9P1Nl37WmhdVXQfTi2PgV7f4tbLR749xJ-tkXUcgcHRJyeyvzaJj7DfdxZwIN75lwDA7pYdPxfNGdy0DsYxObB0Fv406M0xPx5aurcFIN-uf7scNG~MvSXg0AKNfRw14wQbgKF0UGn7kESMbQ7jU665Ty~fxmyH1wjA-T~81eQ0OBKq4lY1vDkj-ewraRnc30WzHw8wQjkATcyrEQ6emBcjHPzsDvfMf3O3TNA__&Key-Pair-Id=KL5I0C8H7HX83",
-      "localPath": "./concept.png"
-    }
-  }
+	"id": "parallax_far",
+	"name": "Sector 0 Far Skyline",
+	"type": "background",
+	"description": "Distant Neo-Tokyo skyline for parallax background.",
+	"visualPrompt": "Distant Neo-Tokyo cityscape silhouette, towering skyscrapers, holographic billboards, night sky, thunderstorm clouds, lightning, cyberpunk atmosphere, wide panoramic view, 8k, cel shaded anime style, no foreground elements.",
+	"imageConfig": {
+		"aiModel": "nano-banana-pro",
+		"aspectRatio": "16:9",
+		"poseMode": "t-pose"
+	},
+	"tasks": {
+		"conceptArt": {
+			"taskId": "019bc111-ffbc-7991-818a-098c9cd41175",
+			"status": "SUCCEEDED",
+			"resultUrl": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/uploads/image_019bc111-ffbc-7991-818a-098c9cd41175_0.png?Expires=1768729956&Signature=H5u6nStXOVE6XWa7uVg-Vu0ebQu5Q9nOECNcKRqdPe9lgD4fuwYx1-64x3j8ISgtPKOVJp1Y5lwwmE4fZg85Z6TLemIlL-z52CNb0YvVUfhEMtyl9P1Nl37WmhdVXQfTi2PgV7f4tbLR749xJ-tkXUcgcHRJyeyvzaJj7DfdxZwIN75lwDA7pYdPxfNGdy0DsYxObB0Fv406M0xPx5aurcFIN-uf7scNG~MvSXg0AKNfRw14wQbgKF0UGn7kESMbQ7jU665Ty~fxmyH1wjA-T~81eQ0OBKq4lY1vDkj-ewraRnc30WzHw8wQjkATcyrEQ6emBcjHPzsDvfMf3O3TNA__&Key-Pair-Id=KL5I0C8H7HX83",
+			"localPath": "./concept.png"
+		}
+	}
 }

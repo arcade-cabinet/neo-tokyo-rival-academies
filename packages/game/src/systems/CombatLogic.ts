@@ -1,4 +1,4 @@
-import type { ECSEntity } from '../state/ecs';
+import type { ECSEntity } from "../state/ecs";
 
 /**
  * Combat damage calculation system.
@@ -13,12 +13,12 @@ import type { ECSEntity } from '../state/ecs';
  * Critical Hit Multiplier: 2.0x damage
  */
 
-export type AttackType = 'melee' | 'ranged' | 'tech';
+export type AttackType = "melee" | "ranged" | "tech";
 
 export interface CombatResult {
-  damage: number;
-  isCritical: boolean;
-  attackType: AttackType;
+	damage: number;
+	isCritical: boolean;
+	attackType: AttackType;
 }
 
 /**
@@ -31,35 +31,35 @@ export interface CombatResult {
  * @returns Combat result with damage and critical hit status
  */
 export const calculateDamage = (
-  attacker: ECSEntity,
-  defender: ECSEntity,
-  attackType: AttackType = 'melee',
-  rng: () => number = Math.random
+	attacker: ECSEntity,
+	defender: ECSEntity,
+	attackType: AttackType = "melee",
+	rng: () => number = Math.random,
 ): CombatResult => {
-  // Get attacker's attack power based on attack type
-  const attackPower = getAttackPower(attacker, attackType);
+	// Get attacker's attack power based on attack type
+	const attackPower = getAttackPower(attacker, attackType);
 
-  // Get stat multiplier based on attack type
-  const statMultiplier = getStatMultiplier(attacker, attackType);
+	// Get stat multiplier based on attack type
+	const statMultiplier = getStatMultiplier(attacker, attackType);
 
-  // Get defender's defense
-  const defense = getDefense(defender);
+	// Get defender's defense
+	const defense = getDefense(defender);
 
-  // Calculate base damage: (AttackPower * StatMultiplier) - (Defense / 2)
-  const baseDamage = attackPower * statMultiplier - defense / 2;
+	// Calculate base damage: (AttackPower * StatMultiplier) - (Defense / 2)
+	const baseDamage = attackPower * statMultiplier - defense / 2;
 
-  // Ensure damage is non-negative
-  let damage = Math.max(0, Math.floor(baseDamage));
+	// Ensure damage is non-negative
+	let damage = Math.max(0, Math.floor(baseDamage));
 
-  // Critical hit logic (1% per Ignition point, max 50%)
-  const critChance = Math.min((attacker.stats?.ignition ?? 10) * 0.01, 0.5);
-  const isCritical = rng() < critChance;
+	// Critical hit logic (1% per Ignition point, max 50%)
+	const critChance = Math.min((attacker.stats?.ignition ?? 10) * 0.01, 0.5);
+	const isCritical = rng() < critChance;
 
-  if (isCritical) {
-    damage = Math.floor(damage * 2.0); // 2.0x multiplier for critical hits
-  }
+	if (isCritical) {
+		damage = Math.floor(damage * 2.0); // 2.0x multiplier for critical hits
+	}
 
-  return { damage, isCritical, attackType };
+	return { damage, isCritical, attackType };
 };
 
 /**
@@ -67,16 +67,16 @@ export const calculateDamage = (
  * Base attack power is 10, modified by Ignition stat.
  */
 function getAttackPower(entity: ECSEntity, attackType: AttackType): number {
-  const baseAttack = 10;
+	const baseAttack = 10;
 
-  if (attackType === 'melee') {
-    const ignition = entity.stats?.ignition ?? 10;
-    return baseAttack + ignition * 0.5;
-  }
+	if (attackType === "melee") {
+		const ignition = entity.stats?.ignition ?? 10;
+		return baseAttack + ignition * 0.5;
+	}
 
-  // Ranged and tech use Logic stat
-  const logic = entity.stats?.logic ?? 10;
-  return baseAttack + logic * 0.5;
+	// Ranged and tech use Logic stat
+	const logic = entity.stats?.logic ?? 10;
+	return baseAttack + logic * 0.5;
 }
 
 /**
@@ -85,11 +85,11 @@ function getAttackPower(entity: ECSEntity, attackType: AttackType): number {
  * - Ranged/Tech: Logic stat
  */
 function getStatMultiplier(entity: ECSEntity, attackType: AttackType): number {
-  if (attackType === 'melee') {
-    return (entity.stats?.ignition ?? 10) / 10;
-  }
-  // Ranged and tech use Logic stat
-  return (entity.stats?.logic ?? 10) / 10;
+	if (attackType === "melee") {
+		return (entity.stats?.ignition ?? 10) / 10;
+	}
+	// Ranged and tech use Logic stat
+	return (entity.stats?.logic ?? 10) / 10;
 }
 
 /**
@@ -97,8 +97,8 @@ function getStatMultiplier(entity: ECSEntity, attackType: AttackType): number {
  * Defense is based on Structure stat.
  */
 function getDefense(entity: ECSEntity): number {
-  const structure = entity.stats?.structure ?? 10;
-  return structure / 2; // Defense = Structure / 2
+	const structure = entity.stats?.structure ?? 10;
+	return structure / 2; // Defense = Structure / 2
 }
 
 /**
@@ -106,10 +106,10 @@ function getDefense(entity: ECSEntity): number {
  * Uses melee attack type.
  */
 export const resolveCombat = (
-  attacker: ECSEntity,
-  defender: ECSEntity,
-  rng: () => number = Math.random
+	attacker: ECSEntity,
+	defender: ECSEntity,
+	rng: () => number = Math.random,
 ): { damage: number; isCritical: boolean } => {
-  const result = calculateDamage(attacker, defender, 'melee', rng);
-  return { damage: result.damage, isCritical: result.isCritical };
+	const result = calculateDamage(attacker, defender, "melee", rng);
+	return { damage: result.damage, isCritical: result.isCritical };
 };
