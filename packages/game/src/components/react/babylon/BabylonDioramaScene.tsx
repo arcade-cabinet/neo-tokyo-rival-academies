@@ -6,6 +6,7 @@
 
 import { Color3, HemisphericLight, Vector3 } from '@babylonjs/core';
 import type { ReactNode } from 'react';
+import { useEffect, useRef } from 'react';
 import { useScene } from 'reactylon';
 import { BabylonCanvas } from './BabylonCanvas';
 import { BackgroundPanels } from './BackgroundPanels';
@@ -18,15 +19,35 @@ export interface BabylonDioramaSceneProps {
 
 function SceneContent({ children }: { children?: ReactNode }) {
   const scene = useScene();
+  const lightRef = useRef<HemisphericLight | null>(null);
 
-  // Setup lighting
-  if (scene) {
+  // Setup lighting in useEffect to avoid re-creating on every render
+  useEffect(() => {
+    if (!scene) return;
+
+    // Skip if light already exists
+    if (lightRef.current) return;
+
     // Hemispheric light for flat, even lighting (anime aesthetic)
     const light = new HemisphericLight('hemisphericLight', new Vector3(0, 1, 0), scene);
     light.intensity = 1.2;
     light.diffuse = new Color3(1, 1, 1);
     light.specular = new Color3(0, 0, 0); // No specular for flat look
-  }
+    lightRef.current = light;
+
+    // Set clear color to dark blue for cyberpunk aesthetic
+    scene.clearColor = new Color3(0.02, 0.02, 0.08).toColor4(1);
+
+    return () => {
+      if (lightRef.current) {
+        lightRef.current.dispose();
+        lightRef.current = null;
+      }
+    };
+  }, [scene]);
+
+  // Don't render children until scene is ready
+  if (!scene) return null;
 
   return (
     <>
