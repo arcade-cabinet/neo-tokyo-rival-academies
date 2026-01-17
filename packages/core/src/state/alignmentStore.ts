@@ -21,6 +21,8 @@ export interface AlignmentState {
   shiftAlignment: (delta: number) => void;
   addKurenaiRep: (amount: number) => void;
   addAzureRep: (amount: number) => void;
+  setKurenaiRep: (value: number) => void;
+  setAzureRep: (value: number) => void;
   getAlignmentLabel: () => string;
   getStatBonuses: () => { structure: number; ignition: number; logic: number; flow: number };
   isThresholdMet: (threshold: number) => boolean;
@@ -59,6 +61,20 @@ export const useAlignmentStore = create<AlignmentState>((set, get) => ({
   addAzureRep: (amount: number) => {
     const { kurenaiRep } = get();
     const newAzureRep = Math.min(100, Math.max(0, get().azureRep + amount));
+    const newAlignment = (newAzureRep - kurenaiRep) / 100;
+    set({ azureRep: newAzureRep, alignment: Math.max(-1.0, Math.min(1.0, newAlignment)) });
+  },
+
+  setKurenaiRep: (value: number) => {
+    const { azureRep } = get();
+    const newKurenaiRep = Math.min(100, Math.max(0, value));
+    const newAlignment = (azureRep - newKurenaiRep) / 100;
+    set({ kurenaiRep: newKurenaiRep, alignment: Math.max(-1.0, Math.min(1.0, newAlignment)) });
+  },
+
+  setAzureRep: (value: number) => {
+    const { kurenaiRep } = get();
+    const newAzureRep = Math.min(100, Math.max(0, value));
     const newAlignment = (newAzureRep - kurenaiRep) / 100;
     set({ azureRep: newAzureRep, alignment: Math.max(-1.0, Math.min(1.0, newAlignment)) });
   },
