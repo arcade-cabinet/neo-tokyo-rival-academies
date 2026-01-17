@@ -22,5 +22,6 @@ export * from "./types";
 // State
 export * from "./state/worldStore";
 export * from "./state/questStore";
+export * from "./state/alignmentStore";
 // Data
 export * from "./data/questGrammar";
