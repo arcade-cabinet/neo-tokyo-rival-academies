@@ -1,0 +1,25 @@
+{
+  "id": "biker_grunt",
+  "name": "Biker Grunt",
+  "type": "character",
+  "textTo3DPreviewTask": {
+    "prompt": "A rough-looking biker grunt with a leather jacket and a bandana.",
+    "artStyle": "sculpture",
+    "poseMode": "t-pose"
+  },
+  "textTo3DRefineTask": {
+    "texturePrompt": "Cel-shaded, anime style, worn leather jacket, skull bandana.",
+    "enablePbr": false
+  },
+  "animationConfig": {
+    "animationIds": [
+      "idle",
+      "run",
+      "attack_melee",
+      "hit_reaction",
+      "death"
+    ]
+  },
+  "tasks": {},
+  "seed": 4567890123
+}

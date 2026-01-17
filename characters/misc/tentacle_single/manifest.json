@@ -1,0 +1,23 @@
+{
+  "id": "tentacle_single",
+  "name": "Tentacle Single",
+  "type": "character",
+  "textTo3DPreviewTask": {
+    "prompt": "A single, green, slimy tentacle with suckers.",
+    "artStyle": "sculpture",
+    "poseMode": ""
+  },
+  "textTo3DRefineTask": {
+    "texturePrompt": "Cel-shaded, anime style, vibrant green, slimy texture.",
+    "enablePbr": false
+  },
+  "animationConfig": {
+    "animationIds": [
+      "idle_tentacle",
+      "attack_tentacle",
+      "death_tentacle"
+    ]
+  },
+  "tasks": {},
+  "seed": 8901234567
+}

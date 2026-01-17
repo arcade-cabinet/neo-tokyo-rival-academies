@@ -13,7 +13,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "generate": "tsx src/cli.ts all",
+    "generate": "tsx src/cli.ts pipeline",
     "gen:story": "tsx src/cli.ts story",
     "gen:assets": "tsx src/cli.ts assets"
   },
@@ -26,8 +26,10 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
+    "@types/node-fetch": "^2.6.13",
     "commander": "^14.0.2",
     "fs-extra": "^11.3.3",
+    "node-fetch": "2",
     "seedrandom": "^3.0.5",
     "sharp": "^0.34.5",
     "zod": "^4.3.5"

@@ -1,0 +1,25 @@
+{
+  "id": "yakuza_grunt",
+  "name": "Yakuza Grunt",
+  "type": "character",
+  "textTo3DPreviewTask": {
+    "prompt": "A low-level Yakuza grunt, wearing a cheap suit and sunglasses.",
+    "artStyle": "sculpture",
+    "poseMode": "t-pose"
+  },
+  "textTo3DRefineTask": {
+    "texturePrompt": "Cel-shaded, anime style, dark suit, sunglasses.",
+    "enablePbr": false
+  },
+  "animationConfig": {
+    "animationIds": [
+      "idle",
+      "run",
+      "attack_melee",
+      "hit_reaction",
+      "death"
+    ]
+  },
+  "tasks": {},
+  "seed": 2345678901
+}

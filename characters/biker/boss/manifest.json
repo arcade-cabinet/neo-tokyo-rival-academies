@@ -1,0 +1,26 @@
+{
+  "id": "biker_boss",
+  "name": "Biker Boss",
+  "type": "character",
+  "textTo3DPreviewTask": {
+    "prompt": "A heavily built biker boss with a large beard and a custom chopper jacket.",
+    "artStyle": "sculpture",
+    "poseMode": "t-pose"
+  },
+  "textTo3DRefineTask": {
+    "texturePrompt": "Cel-shaded, anime style, detailed chopper jacket with gang logos, grizzled beard.",
+    "enablePbr": false
+  },
+  "animationConfig": {
+    "animationIds": [
+      "idle",
+      "run",
+      "attack_melee",
+      "hit_reaction",
+      "death",
+      "block"
+    ]
+  },
+  "tasks": {},
+  "seed": 5678901234
+}

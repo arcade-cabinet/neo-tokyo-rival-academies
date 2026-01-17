@@ -1,0 +1,27 @@
+{
+  "id": "vera",
+  "name": "Vera",
+  "type": "character",
+  "textTo3DPreviewTask": {
+    "prompt": "A young woman with azure hair, wearing a student council uniform.",
+    "artStyle": "sculpture",
+    "poseMode": "t-pose"
+  },
+  "textTo3DRefineTask": {
+    "texturePrompt": "Cel-shaded, anime style.",
+    "enablePbr": false
+  },
+  "animationConfig": {
+    "animationIds": [
+      "idle",
+      "run",
+      "jump",
+      "attack_melee",
+      "block",
+      "hit_reaction",
+      "death"
+    ]
+  },
+  "tasks": {},
+  "seed": 9876543210
+}
