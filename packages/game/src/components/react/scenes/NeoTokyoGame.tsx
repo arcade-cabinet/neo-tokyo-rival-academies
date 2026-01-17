@@ -46,7 +46,7 @@ const INTRO_SCRIPT = [
 
 export default function NeoTokyoGame() {
 	const [_gameState, setGameState] = useState<GameState>(initialGameState);
-	const [_inputState, setInputState] = useState<InputState>(initialInputState);
+	const [inputState, setInputState] = useState<InputState>(initialInputState);
 	const [viewState, setViewState] = useState<ViewState>("menu");
 	const [combatText, setCombatText] = useState<{
 		message: string;
@@ -138,7 +138,7 @@ export default function NeoTokyoGame() {
 	return (
 		<div style={{ width: "100vw", height: "100vh", position: "relative" }}>
 			{/* Babylon.js 3D Scene */}
-			<BabylonDioramaScene />
+			<BabylonDioramaScene inputState={inputState} />
 
 			{/* UI Overlays based on State */}
 

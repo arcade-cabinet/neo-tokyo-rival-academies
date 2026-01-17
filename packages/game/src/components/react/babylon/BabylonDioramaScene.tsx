@@ -18,14 +18,22 @@ import {
 	DirectionalLightWithShadows,
 	HexTileFloor,
 	IsometricCamera,
+	PlayerController,
 } from "@neo-tokyo/diorama";
 import type { AbstractMesh, AnimationGroup } from "@babylonjs/core";
 
 export interface BabylonDioramaSceneProps {
 	children?: ReactNode;
+	/** Input state from UI controls */
+	inputState?: {
+		up: boolean;
+		down: boolean;
+		left: boolean;
+		right: boolean;
+	};
 }
 
-function SceneContent({ children }: { children?: ReactNode }) {
+function SceneContent({ children, inputState }: { children?: ReactNode; inputState?: BabylonDioramaSceneProps["inputState"] }) {
 	const scene = useScene();
 	const lightRef = useRef<HemisphericLight | null>(null);
 	const [characterMeshes, setCharacterMeshes] = useState<AbstractMesh[]>([]);
@@ -116,16 +124,27 @@ function SceneContent({ children }: { children?: ReactNode }) {
 				onLoaded={handleCharacterLoaded}
 			/>
 
+			{/* Player movement controller */}
+			{characterMeshes.length > 0 && animationController && (
+				<PlayerController
+					characterMeshes={characterMeshes}
+					animationController={animationController}
+					speed={5}
+					bounds={{ minX: -20, maxX: 20, minZ: -20, maxZ: 20 }}
+					inputState={inputState}
+				/>
+			)}
+
 			{children}
 		</>
 	);
 }
 
-export function BabylonDioramaScene({ children }: BabylonDioramaSceneProps) {
+export function BabylonDioramaScene({ children, inputState }: BabylonDioramaSceneProps) {
 	return (
 		<div style={{ width: "100vw", height: "100vh", overflow: "hidden" }}>
 			<BabylonCanvas>
-				<SceneContent>{children}</SceneContent>
+				<SceneContent inputState={inputState}>{children}</SceneContent>
 			</BabylonCanvas>
 		</div>
 	);
