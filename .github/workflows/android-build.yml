@@ -42,15 +42,18 @@ jobs:
       - name: Build Web Assets
         run: pnpm build
 
+      - name: Install Capacitor CLI
+        run: npm install -g @capacitor/cli@6.2.0
+
       - name: Add Android Platform
         run: |
           if [ ! -d "android" ]; then
-            npx cap add android
+            cap add android
           fi
         working-directory: packages/game
 
       - name: Sync Capacitor
-        run: npx cap sync android
+        run: cap sync android
         working-directory: packages/game
 
       - name: Build Debug APK
