@@ -196,6 +196,9 @@ importers:
       '@babylonjs/core':
         specifier: ^8.46.2
         version: 8.46.2
+      '@babylonjs/loaders':
+        specifier: ^8.46.2
+        version: 8.46.2(@babylonjs/core@8.46.2)(babylonjs-gltf2interface@8.46.2)
       '@babylonjs/materials':
         specifier: ^8.46.2
         version: 8.46.2(@babylonjs/core@8.46.2)
