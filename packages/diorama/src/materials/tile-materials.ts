@@ -6,10 +6,10 @@
 
 import { Color3, type Scene } from "@babylonjs/core";
 import { TileType } from "../types/tiles";
-import { createEnvironmentMaterial } from "./toon-material";
+import { createToonMaterial } from "./toon-material";
 
 /**
- * Tile color palette (neon cyberpunk theme)
+ * Tile color palette (neon cyberpunk theme) - fallback for missing textures
  */
 const TILE_COLORS: Record<TileType, Color3> = {
 	[TileType.BASE]: new Color3(0.15, 0.15, 0.2), // Dark gray
@@ -21,11 +21,29 @@ const TILE_COLORS: Record<TileType, Color3> = {
 };
 
 /**
- * Create material for a specific tile type
+ * Tile texture paths (matching legacy Three.js implementation)
+ */
+const TILE_TEXTURES: Record<TileType, string> = {
+	[TileType.BASE]: "/assets/tiles/rooftop/base/concept.png",
+	[TileType.AIRVENT]: "/assets/tiles/rooftop/airvent/concept.png",
+	[TileType.PIPES]: "/assets/tiles/rooftop/pipes/concept.png",
+	[TileType.GENERATOR]: "/assets/tiles/rooftop/glass/concept.png", // Glass → Generator
+	[TileType.ANTENNA]: "/assets/tiles/rooftop/tarpaper/concept.png", // Tarpaper → Antenna
+	[TileType.EDGE]: "/assets/tiles/rooftop/grate/concept.png", // Grate → Edge
+};
+
+/**
+ * Create material for a specific tile type with texture
  */
 export function createTileMaterial(type: TileType, scene: Scene) {
 	const color = TILE_COLORS[type];
-	return createEnvironmentMaterial(`tile_${type}`, scene, color);
+	const texturePath = TILE_TEXTURES[type];
+
+	return createToonMaterial(`tile_${type}`, scene, {
+		diffuseColor: color,
+		diffuseTexture: texturePath,
+		computeHighLevel: true,
+	});
 }
 
 /**
