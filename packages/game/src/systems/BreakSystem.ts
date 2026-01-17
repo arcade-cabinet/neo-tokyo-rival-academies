@@ -1,4 +1,4 @@
-import type { ECSEntity } from '@/state/ecs';
+import type { ECSEntity } from "@/state/ecs";
 
 /**
  * Break system for combat.
@@ -7,21 +7,21 @@ import type { ECSEntity } from '@/state/ecs';
  */
 
 export interface StabilityState {
-  /** Current stability value */
-  current: number;
-  /** Maximum stability value */
-  max: number;
-  /** Stability regeneration rate per second */
-  regenRate: number;
-  /** Timestamp of last hit */
-  lastHitTime: number;
+	/** Current stability value */
+	current: number;
+	/** Maximum stability value */
+	max: number;
+	/** Stability regeneration rate per second */
+	regenRate: number;
+	/** Timestamp of last hit */
+	lastHitTime: number;
 }
 
 export interface BreakState {
-  /** Whether entity is currently broken */
-  isBroken: boolean;
-  /** Timestamp when break state ends */
-  endsAt: number;
+	/** Whether entity is currently broken */
+	isBroken: boolean;
+	/** Timestamp when break state ends */
+	endsAt: number;
 }
 
 /**
@@ -30,28 +30,30 @@ export interface BreakState {
  * @param entityType - Type of entity (grunt, boss, etc.)
  * @returns Initial stability state
  */
-export function initializeStability(entityType: 'grunt' | 'boss' | 'player'): StabilityState {
-  const stabilityValues = {
-    grunt: 100,
-    boss: 500,
-    player: 200,
-  };
+export function initializeStability(
+	entityType: "grunt" | "boss" | "player",
+): StabilityState {
+	const stabilityValues = {
+		grunt: 100,
+		boss: 500,
+		player: 200,
+	};
 
-  const regenRates = {
-    grunt: 10, // 10 stability per second
-    boss: 20, // 20 stability per second
-    player: 15, // 15 stability per second
-  };
+	const regenRates = {
+		grunt: 10, // 10 stability per second
+		boss: 20, // 20 stability per second
+		player: 15, // 15 stability per second
+	};
 
-  const maxStability = stabilityValues[entityType];
-  const regenRate = regenRates[entityType];
+	const maxStability = stabilityValues[entityType];
+	const regenRate = regenRates[entityType];
 
-  return {
-    current: maxStability,
-    max: maxStability,
-    regenRate: regenRate,
-    lastHitTime: 0, // Allow immediate regeneration for fresh entities
-  };
+	return {
+		current: maxStability,
+		max: maxStability,
+		regenRate: regenRate,
+		lastHitTime: 0, // Allow immediate regeneration for fresh entities
+	};
 }
 
 /**
@@ -62,20 +64,20 @@ export function initializeStability(entityType: 'grunt' | 'boss' | 'player'): St
  * @returns Updated stability state and whether break was triggered
  */
 export function reduceStability(
-  stability: StabilityState,
-  damage: number
+	stability: StabilityState,
+	damage: number,
 ): { stability: StabilityState; breakTriggered: boolean } {
-  const newCurrent = Math.max(0, stability.current - damage);
-  const breakTriggered = newCurrent === 0 && stability.current > 0;
+	const newCurrent = Math.max(0, stability.current - damage);
+	const breakTriggered = newCurrent === 0 && stability.current > 0;
 
-  return {
-    stability: {
-      ...stability,
-      current: newCurrent,
-      lastHitTime: Date.now(),
-    },
-    breakTriggered,
-  };
+	return {
+		stability: {
+			...stability,
+			current: newCurrent,
+			lastHitTime: Date.now(),
+		},
+		breakTriggered,
+	};
 }
 
 /**
@@ -86,24 +88,25 @@ export function reduceStability(
  * @returns Updated stability state
  */
 export function regenerateStability(
-  stability: StabilityState,
-  deltaTimeMs: number
+	stability: StabilityState,
+	deltaTimeMs: number,
 ): StabilityState {
-  const now = Date.now();
-  const timeSinceLastHit = stability.lastHitTime === 0 ? Infinity : now - stability.lastHitTime;
+	const now = Date.now();
+	const timeSinceLastHit =
+		stability.lastHitTime === 0 ? Infinity : now - stability.lastHitTime;
 
-  // Only regenerate if not hit recently (1 second grace period)
-  if (timeSinceLastHit < 1000) {
-    return stability;
-  }
+	// Only regenerate if not hit recently (1 second grace period)
+	if (timeSinceLastHit < 1000) {
+		return stability;
+	}
 
-  const regenAmount = (stability.regenRate * deltaTimeMs) / 1000;
-  const newCurrent = Math.min(stability.max, stability.current + regenAmount);
+	const regenAmount = (stability.regenRate * deltaTimeMs) / 1000;
+	const newCurrent = Math.min(stability.max, stability.current + regenAmount);
 
-  return {
-    ...stability,
-    current: newCurrent,
-  };
+	return {
+		...stability,
+		current: newCurrent,
+	};
 }
 
 /**
@@ -113,12 +116,15 @@ export function regenerateStability(
  * @param durationMs - Duration of break state in milliseconds (default 5000)
  * @returns Break state
  */
-export function applyBreakState(_entity: ECSEntity, durationMs: number = 5000): BreakState {
-  const now = Date.now();
-  return {
-    isBroken: true,
-    endsAt: now + durationMs,
-  };
+export function applyBreakState(
+	_entity: ECSEntity,
+	durationMs: number = 5000,
+): BreakState {
+	const now = Date.now();
+	return {
+		isBroken: true,
+		endsAt: now + durationMs,
+	};
 }
 
 /**
@@ -128,10 +134,10 @@ export function applyBreakState(_entity: ECSEntity, durationMs: number = 5000): 
  * @returns True if the entity is broken
  */
 export function isBroken(breakState: BreakState | undefined): boolean {
-  if (!breakState) return false;
+	if (!breakState) return false;
 
-  const now = Date.now();
-  return breakState.isBroken && now < breakState.endsAt;
+	const now = Date.now();
+	return breakState.isBroken && now < breakState.endsAt;
 }
 
 /**
@@ -140,15 +146,17 @@ export function isBroken(breakState: BreakState | undefined): boolean {
  * @param breakState - The entity's break state
  * @returns Updated break state
  */
-export function updateBreakState(breakState: BreakState | undefined): BreakState | undefined {
-  if (!breakState) return undefined;
+export function updateBreakState(
+	breakState: BreakState | undefined,
+): BreakState | undefined {
+	if (!breakState) return undefined;
 
-  const now = Date.now();
-  if (now >= breakState.endsAt) {
-    return undefined; // Break state expired
-  }
+	const now = Date.now();
+	if (now >= breakState.endsAt) {
+		return undefined; // Break state expired
+	}
 
-  return breakState;
+	return breakState;
 }
 
 /**
@@ -158,20 +166,26 @@ export function updateBreakState(breakState: BreakState | undefined): BreakState
  * @param damage - Amount of damage dealt
  * @returns Whether break was triggered
  */
-export function processHitWithStability(entity: ECSEntity, damage: number): boolean {
-  if (!entity.stability) {
-    return false;
-  }
+export function processHitWithStability(
+	entity: ECSEntity,
+	damage: number,
+): boolean {
+	if (!entity.stability) {
+		return false;
+	}
 
-  const { stability, breakTriggered } = reduceStability(entity.stability, damage);
-  entity.stability = stability;
+	const { stability, breakTriggered } = reduceStability(
+		entity.stability,
+		damage,
+	);
+	entity.stability = stability;
 
-  if (breakTriggered) {
-    entity.breakState = applyBreakState(entity);
-    return true;
-  }
+	if (breakTriggered) {
+		entity.breakState = applyBreakState(entity);
+		return true;
+	}
 
-  return false;
+	return false;
 }
 
 /**
@@ -180,19 +194,22 @@ export function processHitWithStability(entity: ECSEntity, damage: number): bool
  * @param entity - The entity to update
  * @param deltaTimeMs - Time elapsed since last update in milliseconds
  */
-export function updateStabilityAndBreak(entity: ECSEntity, deltaTimeMs: number): void {
-  // Update break state
-  if (entity.breakState) {
-    entity.breakState = updateBreakState(entity.breakState);
+export function updateStabilityAndBreak(
+	entity: ECSEntity,
+	deltaTimeMs: number,
+): void {
+	// Update break state
+	if (entity.breakState) {
+		entity.breakState = updateBreakState(entity.breakState);
 
-    // Reset stability when break ends
-    if (!entity.breakState && entity.stability) {
-      entity.stability.current = entity.stability.max;
-    }
-  }
+		// Reset stability when break ends
+		if (!entity.breakState && entity.stability) {
+			entity.stability.current = entity.stability.max;
+		}
+	}
 
-  // Regenerate stability if not broken
-  if (entity.stability && !isBroken(entity.breakState)) {
-    entity.stability = regenerateStability(entity.stability, deltaTimeMs);
-  }
+	// Regenerate stability if not broken
+	if (entity.stability && !isBroken(entity.breakState)) {
+		entity.stability = regenerateStability(entity.stability, deltaTimeMs);
+	}
 }

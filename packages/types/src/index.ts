@@ -1,46 +1,150 @@
 /**
  * @neo-tokyo/types
- * Shared TypeScript types for the Neo-Tokyo game.
  *
- * These types are platform-agnostic and used by both:
- * - apps/web (Vite + Reactylon)
- * - apps/mobile (React Native + Babylon Native)
+ * Shared TypeScript types for the Neo-Tokyo game.
+ * Re-exports core types and adds additional type definitions.
+ *
+ * This package is the central type authority - all packages should import
+ * types from here rather than defining their own.
  */
 
-// Re-export from game package for now - will be migrated to packages/core
-// when the full Native Monorepo architecture is implemented.
+// Re-export all types from @neo-tokyo/core
+export type {
+	BreakState,
+	CharacterState,
+	CoreEntity,
+	DialogueState,
+	Equipment,
+	Faction,
+	InvincibilityState,
+	LevelProgress,
+	MeshRef,
+	ObstacleType,
+	PlatformData,
+	ReputationState,
+	RPGStats,
+	StabilityState,
+	Vec2,
+	Vec3,
+} from "@neo-tokyo/core";
 
-// Placeholder types until core extraction is complete
-export interface Vector3 {
-  x: number;
-  y: number;
-  z: number;
+export {
+	createEnemyEntity,
+	createEntity,
+	createPlayerEntity,
+	DEFAULT_STATS,
+	vec2,
+	vec3,
+	Vec2Math,
+	Vec3Math,
+} from "@neo-tokyo/core";
+
+// Additional types specific to game presentation
+
+/**
+ * Scene types for navigation
+ */
+export type SceneType = "menu" | "diorama" | "combat" | "dialogue" | "cutscene";
+
+/**
+ * Game flow state
+ */
+export type GamePhase =
+	| "loading"
+	| "splash"
+	| "menu"
+	| "narrative"
+	| "playing"
+	| "paused"
+	| "gameOver";
+
+/**
+ * Input action types
+ */
+export interface InputActions {
+	move: { x: number; y: number };
+	attack: boolean;
+	jump: boolean;
+	interact: boolean;
+	menu: boolean;
 }
 
-export interface HexCoord {
-  q: number;
-  r: number;
+/**
+ * Touch control configuration
+ */
+export interface TouchControlConfig {
+	joystickSize: number;
+	joystickPosition: "left" | "right";
+	buttonLayout: "standard" | "compact";
+	hapticFeedback: boolean;
 }
 
-export interface RPGStats {
-  structure: number;
-  ignition: number;
-  logic: number;
-  flow: number;
+/**
+ * Save data structure
+ */
+export interface SaveData {
+	version: string;
+	seed: string;
+	timestamp: number;
+	playerEntity: {
+		stats: import("@neo-tokyo/core").RPGStats;
+		level: import("@neo-tokyo/core").LevelProgress;
+		equipment: import("@neo-tokyo/core").Equipment;
+		reputation: import("@neo-tokyo/core").ReputationState;
+	};
+	questProgress: Record<string, boolean>;
+	unlockedDistricts: number[];
+	alignment: number;
+	playTime: number;
 }
 
-export type Faction = 'Kurenai' | 'Azure';
-
-export interface ReputationState {
-  Kurenai: number;
-  Azure: number;
+/**
+ * Quest definition
+ */
+export interface QuestDefinition {
+	id: string;
+	name: string;
+	description: string;
+	type: "main" | "side" | "faction";
+	faction?: import("@neo-tokyo/core").Faction;
+	alignmentBias: number;
+	xpReward: number;
+	reputationReward: {
+		Kurenai: number;
+		Azure: number;
+	};
+	prerequisites: string[];
 }
 
-export type ReputationLevel =
-  | 'Hated'
-  | 'Hostile'
-  | 'Unfriendly'
-  | 'Neutral'
-  | 'Friendly'
-  | 'Honored'
-  | 'Revered';
+/**
+ * Dialogue node for dialogue tree
+ */
+export interface DialogueNode {
+	id: string;
+	speaker: string;
+	text: string;
+	choices?: DialogueChoice[];
+	next?: string;
+}
+
+/**
+ * Dialogue choice
+ */
+export interface DialogueChoice {
+	text: string;
+	nextNodeId: string;
+	alignmentShift?: number;
+	requires?: string;
+}
+
+/**
+ * HUD configuration
+ */
+export interface HUDConfig {
+	showHealth: boolean;
+	showMana: boolean;
+	showMinimap: boolean;
+	showQuestTracker: boolean;
+	showFactionBar: boolean;
+	touchControlsEnabled: boolean;
+}

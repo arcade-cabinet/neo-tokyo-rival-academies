@@ -1,116 +1,116 @@
 {
-  "id": "mall-security-guard",
-  "name": "Mall Security Guard",
-  "type": "character",
-  "description": "Overzealous mall cop, comedy relief enemy.",
-  "textToImageTask": {
-    "prompt": "Middle-aged Japanese man, soft pudgy build with round belly visible under shirt, weak sloping shoulders, pale indoor skin tone. HANDS: two hands with five distinct fingers each, proper finger proportions with defined knuckles, natural finger spacing, thumbs positioned correctly. FACE: small well-shaped ears, round nose with defined bridge, distinct naturally shaped lips with thin mustache, small nervous eyes behind thick-framed glasses, round face with double chin. Thinning black hair combed over bald spot. Light blue short-sleeve security uniform shirt with dark patches on shoulders tucked tightly into navy blue pants creating belly bulge, black utility belt with flashlight and radio hanging loose, black rubber-soled work shoes with flat soles, feet with normal proportions. Determined serious expression trying to look tough, awkward stiff stance. Anime cel-shaded art style with comedic proportions and anatomically correct extremities.",
-    "generateMultiView": true,
-    "poseMode": "a-pose"
-  },
-  "multiImageTo3DTask": {
-    "topology": "quad",
-    "targetPolycount": 20000,
-    "symmetryMode": "auto",
-    "shouldRemesh": true,
-    "shouldTexture": true,
-    "enablePbr": false,
-    "poseMode": "a-pose"
-  },
-  "riggingTask": {
-    "heightMeters": 1.68
-  },
-  "animationTask": {
-    "preset": "enemy"
-  },
-  "tasks": {
-    "concept": {
-      "taskId": "019bc45c-96a3-77a0-a347-185d83a8be4e",
-      "status": "SUCCEEDED",
-      "completedAt": 1768526008872,
-      "outputs": {
-        "taskId": "019bc45c-96a3-77a0-a347-185d83a8be4e",
-        "imageUrls": [
-          "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/uploads/multi_view_image_019bc45d-4fe8-7509-8f66-1b188deb651c_part_0.png?Expires=1768785208&Signature=Da2jnahDARhs5z7Iwei~pXJbEYyx5eL2Ze22jXKrInhhpnd3mYnbgzSfU1GaOh~5Nza5IsAW-uo1ktvGK7dOwRO8oa6M4iQ1mBDMgSiZHE~7XCWLSqmgpyyj3PxlK9GDICOqVMPeThLxCeoSUyf3-FB7msNgX6OBDvkuJg-9jeKQc-HacaAEnQ3O3AXjjrE8hijuL-PY04ZNgQ6y8hXAUSZA7givb7iGNoYs1LK7tpHwqiT3QS3HCzVQ6QyZl6FqCVdX~IjwAlNRSR4Mhhbvq693SJ5CiMqNvcH41tcrTTCsW1rThrr6XmcO6I3XL0i~SHAKwtRLOgv6y6FnLlGcrg__&Key-Pair-Id=KL5I0C8H7HX83",
-          "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/uploads/multi_view_image_019bc45d-4fe8-7509-8f66-1b188deb651c_part_1.png?Expires=1768785208&Signature=OfmNCbLhVJwJWZ5A-LiiAhTTyDKCuV0I-iXpXlIUqZSJutljpE2GYRxtdN7-t66qy4lLemovHV5vYefV0PI9p10nUtECz6hDYabVoN4ObO5NB6G~O2dHZcPQ3sBpaaJjXlsryuvKPK12hspG2ej-8DU1a3c9wE1Fx6lHZ4eMxfFuN9JH32bTr30TrKXjjrFCxXUrIuIz5WENmAmEB0E-rCL0uzNUbYlWq50V6queaV4M3FfoHYfKo4yXH8zxToyBgdGWL6VQE4qqPfNIwbbH9pGvH4ZXp-z~coQkePZvvGlvnPHMVdcgAr4gV~6GcnzdPSmaT~wu3hLhFTVgMRLVNQ__&Key-Pair-Id=KL5I0C8H7HX83",
-          "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/uploads/multi_view_image_019bc45d-4fe8-7509-8f66-1b188deb651c_part_2.png?Expires=1768785208&Signature=J0oDzCJask4YeDRy7~cYs9t61hJHKP3M5~L0OcN2bGxdGHb~MAQRA5KUM0rQf6DnB05pLZD8hHiezsvgmAqV9wbcxfhQ-pYhEN8~-kDstYuPUHN4p8nWawM-F60u9e4VqqV8Xx5~yRV9N2P0j~2yxDlnHXHlbUy12N5oHMxSgCsY523CzrfZ~Dz3Gv5CvljXIzkZIIwDM0e64hMU3ARfTrnZsLDPH887NrrJPqnhARtM5dfz6Pb01ruteNoTGG0l-ggwQy8dVuzcCSUF0RGnjHGd~RoJZSRaRYSNdVHTB9Q2T5wAi4svMshZ7nWvInMshixFZruL9TeDDepJTFHqJA__&Key-Pair-Id=KL5I0C8H7HX83"
-        ]
-      },
-      "artifacts": {}
-    },
-    "model": {
-      "taskId": "019bc45d-52cf-7a69-a0e1-89524948fd52",
-      "status": "SUCCEEDED",
-      "completedAt": 1768526146641,
-      "outputs": {
-        "taskId": "019bc45d-52cf-7a69-a0e1-89524948fd52",
-        "model": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019bc45d-52cf-7a69-a0e1-89524948fd52/output/model.glb?Expires=1768785346&Signature=k1mllY9xXLmorRObeXVT5mokoLwtYKvwajX3dfqv1PQqaG-igfnXXcvcUEa37M8sYkDFOvlXLzhilXRzn39Flt8cV35CNBRogbkSQFeY4DkL7EAYUsjMNXcifcycXarLG-k3JhHIt5~18-ptlL0cZFuyvfHQWaWCY3DS6DNqLPDRkhxHYdU5KCpaIrOMdlDaNYWaVdah1UL3WtMpCXU1TZXBv1sMHcKTOl-vQ-Yixd7Hz8bDtTmmh8qQjaRlcIecaocjGQJhxjim-ImSD9IO0cj-hskr22NlclBBd1Q0q6qL1YPKvovjkNmdiF7wQshVN~FlkhyXBfaQKmMl8lktpQ__&Key-Pair-Id=KL5I0C8H7HX83",
-        "textures": [
-          {
-            "base_color": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019bc45d-52cf-7a69-a0e1-89524948fd52/output/texture_0.png?Expires=1768785346&Signature=WmjgYEPTqdEurqNYvWIqBQn7ZC-rbn2ekxazBZNiSISNaf8ZK7xiO7LHgbUfbgvpygk5C8g63cANBbm3hUU6QcgZ~o7f0GocY4ZwXk5~mwKEhLHHIVYkiuBCXcps0btGyqHjXVlAfzkR64GhZBsAYUkL92GAmqc5Ht7d58xyLUtXZm4BVtEKVT90i5UhTj81c1u54SDtSalalDHUcHIDB-tmCRMbNwJzXgX5C~bP4u3h24z16ZjsGKvl1MeXOMRxfSH8hrhUBO2v9~~6ZUKadwWSX9nTWNiVkmYRpkY6xYpm~AlEl47rsXJa4sLQp~eNWSqbpSXfQw-pg1wnQHJLVg__&Key-Pair-Id=KL5I0C8H7HX83"
-          }
-        ],
-        "textureUrl": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019bc45d-52cf-7a69-a0e1-89524948fd52/output/texture_0.png?Expires=1768785346&Signature=WmjgYEPTqdEurqNYvWIqBQn7ZC-rbn2ekxazBZNiSISNaf8ZK7xiO7LHgbUfbgvpygk5C8g63cANBbm3hUU6QcgZ~o7f0GocY4ZwXk5~mwKEhLHHIVYkiuBCXcps0btGyqHjXVlAfzkR64GhZBsAYUkL92GAmqc5Ht7d58xyLUtXZm4BVtEKVT90i5UhTj81c1u54SDtSalalDHUcHIDB-tmCRMbNwJzXgX5C~bP4u3h24z16ZjsGKvl1MeXOMRxfSH8hrhUBO2v9~~6ZUKadwWSX9nTWNiVkmYRpkY6xYpm~AlEl47rsXJa4sLQp~eNWSqbpSXfQw-pg1wnQHJLVg__&Key-Pair-Id=KL5I0C8H7HX83"
-      },
-      "artifacts": {}
-    },
-    "rigging": {
-      "taskId": "019bc45f-6d1c-73d1-bc29-80ff5ea00fec",
-      "status": "SUCCEEDED",
-      "completedAt": 1768526178948,
-      "outputs": {
-        "taskId": "019bc45f-6d1c-73d1-bc29-80ff5ea00fec",
-        "riggedModel": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019bc45f-6d1c-73d1-bc29-80ff5ea00fec/output/Character_output.glb?Expires=1768785378&Signature=EgYLS242zdoyxKwsQWMMc9Lp0FjNd0QsFsk96~FbxMWYoyrSMan45LfuO7Z2LTPm2rYUjq17-mEOIbFuMdZcbNsD6b1WsoZK8~ZP29jHKI2RdLGXnLDoKmGbuSkBetw0wJOcE~5Yo1EVZxDlano2qBDeyPxGkIkPADbG0v3hGXdjesnGYNpgpB~~CvSIh6VqvVjl7Yran06eTH-pYUNiwcVIz~QtDlAtfO6zKTCPvFraMZYMskUcaBpdubR5Hxrg96XRaxwW5O8vqi8SX-9aaQj95g7X5gY-mgr-AMHObhDkSBfCF6U2hIIt1-TmVhxmXX9fIwA7bxSIa9NUXJF-eA__&Key-Pair-Id=KL5I0C8H7HX83"
-      },
-      "artifacts": {}
-    },
-    "animations": [
-      {
-        "taskId": "019bc45f-eb26-77c5-a997-2252a2876abc",
-        "status": "SUCCEEDED",
-        "animationName": "COMBAT_STANCE",
-        "completedAt": 1768526189587,
-        "outputs": {
-          "animations/combat_stance.glb": "animations/combat_stance.glb"
-        }
-      },
-      {
-        "taskId": "019bc460-14b8-7a8a-aed1-fd6295bad620",
-        "status": "SUCCEEDED",
-        "animationName": "RUNFAST",
-        "completedAt": 1768526198832,
-        "outputs": {
-          "animations/runfast.glb": "animations/runfast.glb"
-        }
-      },
-      {
-        "taskId": "019bc460-38d6-7a8b-bf0f-5c448e9ca359",
-        "status": "SUCCEEDED",
-        "animationName": "DOUBLE_COMBO_ATTACK",
-        "completedAt": 1768526209158,
-        "outputs": {
-          "animations/double_combo_attack.glb": "animations/double_combo_attack.glb"
-        }
-      },
-      {
-        "taskId": "019bc460-6125-7890-8648-55544e9a7d92",
-        "status": "SUCCEEDED",
-        "animationName": "BEHIT_FLYUP",
-        "completedAt": 1768526217319,
-        "outputs": {
-          "animations/behit_flyup.glb": "animations/behit_flyup.glb"
-        }
-      },
-      {
-        "taskId": "019bc460-810b-7a90-bc1e-50e55cefef7f",
-        "status": "SUCCEEDED",
-        "animationName": "DEAD",
-        "completedAt": 1768526234487,
-        "outputs": {
-          "animations/dead.glb": "animations/dead.glb"
-        }
-      }
-    ]
-  },
-  "seed": 3810790990
+	"id": "mall-security-guard",
+	"name": "Mall Security Guard",
+	"type": "character",
+	"description": "Overzealous mall cop, comedy relief enemy.",
+	"textToImageTask": {
+		"prompt": "Middle-aged Japanese man, soft pudgy build with round belly visible under shirt, weak sloping shoulders, pale indoor skin tone. HANDS: two hands with five distinct fingers each, proper finger proportions with defined knuckles, natural finger spacing, thumbs positioned correctly. FACE: small well-shaped ears, round nose with defined bridge, distinct naturally shaped lips with thin mustache, small nervous eyes behind thick-framed glasses, round face with double chin. Thinning black hair combed over bald spot. Light blue short-sleeve security uniform shirt with dark patches on shoulders tucked tightly into navy blue pants creating belly bulge, black utility belt with flashlight and radio hanging loose, black rubber-soled work shoes with flat soles, feet with normal proportions. Determined serious expression trying to look tough, awkward stiff stance. Anime cel-shaded art style with comedic proportions and anatomically correct extremities.",
+		"generateMultiView": true,
+		"poseMode": "a-pose"
+	},
+	"multiImageTo3DTask": {
+		"topology": "quad",
+		"targetPolycount": 20000,
+		"symmetryMode": "auto",
+		"shouldRemesh": true,
+		"shouldTexture": true,
+		"enablePbr": false,
+		"poseMode": "a-pose"
+	},
+	"riggingTask": {
+		"heightMeters": 1.68
+	},
+	"animationTask": {
+		"preset": "enemy"
+	},
+	"tasks": {
+		"concept": {
+			"taskId": "019bc45c-96a3-77a0-a347-185d83a8be4e",
+			"status": "SUCCEEDED",
+			"completedAt": 1768526008872,
+			"outputs": {
+				"taskId": "019bc45c-96a3-77a0-a347-185d83a8be4e",
+				"imageUrls": [
+					"https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/uploads/multi_view_image_019bc45d-4fe8-7509-8f66-1b188deb651c_part_0.png?Expires=1768785208&Signature=Da2jnahDARhs5z7Iwei~pXJbEYyx5eL2Ze22jXKrInhhpnd3mYnbgzSfU1GaOh~5Nza5IsAW-uo1ktvGK7dOwRO8oa6M4iQ1mBDMgSiZHE~7XCWLSqmgpyyj3PxlK9GDICOqVMPeThLxCeoSUyf3-FB7msNgX6OBDvkuJg-9jeKQc-HacaAEnQ3O3AXjjrE8hijuL-PY04ZNgQ6y8hXAUSZA7givb7iGNoYs1LK7tpHwqiT3QS3HCzVQ6QyZl6FqCVdX~IjwAlNRSR4Mhhbvq693SJ5CiMqNvcH41tcrTTCsW1rThrr6XmcO6I3XL0i~SHAKwtRLOgv6y6FnLlGcrg__&Key-Pair-Id=KL5I0C8H7HX83",
+					"https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/uploads/multi_view_image_019bc45d-4fe8-7509-8f66-1b188deb651c_part_1.png?Expires=1768785208&Signature=OfmNCbLhVJwJWZ5A-LiiAhTTyDKCuV0I-iXpXlIUqZSJutljpE2GYRxtdN7-t66qy4lLemovHV5vYefV0PI9p10nUtECz6hDYabVoN4ObO5NB6G~O2dHZcPQ3sBpaaJjXlsryuvKPK12hspG2ej-8DU1a3c9wE1Fx6lHZ4eMxfFuN9JH32bTr30TrKXjjrFCxXUrIuIz5WENmAmEB0E-rCL0uzNUbYlWq50V6queaV4M3FfoHYfKo4yXH8zxToyBgdGWL6VQE4qqPfNIwbbH9pGvH4ZXp-z~coQkePZvvGlvnPHMVdcgAr4gV~6GcnzdPSmaT~wu3hLhFTVgMRLVNQ__&Key-Pair-Id=KL5I0C8H7HX83",
+					"https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/uploads/multi_view_image_019bc45d-4fe8-7509-8f66-1b188deb651c_part_2.png?Expires=1768785208&Signature=J0oDzCJask4YeDRy7~cYs9t61hJHKP3M5~L0OcN2bGxdGHb~MAQRA5KUM0rQf6DnB05pLZD8hHiezsvgmAqV9wbcxfhQ-pYhEN8~-kDstYuPUHN4p8nWawM-F60u9e4VqqV8Xx5~yRV9N2P0j~2yxDlnHXHlbUy12N5oHMxSgCsY523CzrfZ~Dz3Gv5CvljXIzkZIIwDM0e64hMU3ARfTrnZsLDPH887NrrJPqnhARtM5dfz6Pb01ruteNoTGG0l-ggwQy8dVuzcCSUF0RGnjHGd~RoJZSRaRYSNdVHTB9Q2T5wAi4svMshZ7nWvInMshixFZruL9TeDDepJTFHqJA__&Key-Pair-Id=KL5I0C8H7HX83"
+				]
+			},
+			"artifacts": {}
+		},
+		"model": {
+			"taskId": "019bc45d-52cf-7a69-a0e1-89524948fd52",
+			"status": "SUCCEEDED",
+			"completedAt": 1768526146641,
+			"outputs": {
+				"taskId": "019bc45d-52cf-7a69-a0e1-89524948fd52",
+				"model": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019bc45d-52cf-7a69-a0e1-89524948fd52/output/model.glb?Expires=1768785346&Signature=k1mllY9xXLmorRObeXVT5mokoLwtYKvwajX3dfqv1PQqaG-igfnXXcvcUEa37M8sYkDFOvlXLzhilXRzn39Flt8cV35CNBRogbkSQFeY4DkL7EAYUsjMNXcifcycXarLG-k3JhHIt5~18-ptlL0cZFuyvfHQWaWCY3DS6DNqLPDRkhxHYdU5KCpaIrOMdlDaNYWaVdah1UL3WtMpCXU1TZXBv1sMHcKTOl-vQ-Yixd7Hz8bDtTmmh8qQjaRlcIecaocjGQJhxjim-ImSD9IO0cj-hskr22NlclBBd1Q0q6qL1YPKvovjkNmdiF7wQshVN~FlkhyXBfaQKmMl8lktpQ__&Key-Pair-Id=KL5I0C8H7HX83",
+				"textures": [
+					{
+						"base_color": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019bc45d-52cf-7a69-a0e1-89524948fd52/output/texture_0.png?Expires=1768785346&Signature=WmjgYEPTqdEurqNYvWIqBQn7ZC-rbn2ekxazBZNiSISNaf8ZK7xiO7LHgbUfbgvpygk5C8g63cANBbm3hUU6QcgZ~o7f0GocY4ZwXk5~mwKEhLHHIVYkiuBCXcps0btGyqHjXVlAfzkR64GhZBsAYUkL92GAmqc5Ht7d58xyLUtXZm4BVtEKVT90i5UhTj81c1u54SDtSalalDHUcHIDB-tmCRMbNwJzXgX5C~bP4u3h24z16ZjsGKvl1MeXOMRxfSH8hrhUBO2v9~~6ZUKadwWSX9nTWNiVkmYRpkY6xYpm~AlEl47rsXJa4sLQp~eNWSqbpSXfQw-pg1wnQHJLVg__&Key-Pair-Id=KL5I0C8H7HX83"
+					}
+				],
+				"textureUrl": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019bc45d-52cf-7a69-a0e1-89524948fd52/output/texture_0.png?Expires=1768785346&Signature=WmjgYEPTqdEurqNYvWIqBQn7ZC-rbn2ekxazBZNiSISNaf8ZK7xiO7LHgbUfbgvpygk5C8g63cANBbm3hUU6QcgZ~o7f0GocY4ZwXk5~mwKEhLHHIVYkiuBCXcps0btGyqHjXVlAfzkR64GhZBsAYUkL92GAmqc5Ht7d58xyLUtXZm4BVtEKVT90i5UhTj81c1u54SDtSalalDHUcHIDB-tmCRMbNwJzXgX5C~bP4u3h24z16ZjsGKvl1MeXOMRxfSH8hrhUBO2v9~~6ZUKadwWSX9nTWNiVkmYRpkY6xYpm~AlEl47rsXJa4sLQp~eNWSqbpSXfQw-pg1wnQHJLVg__&Key-Pair-Id=KL5I0C8H7HX83"
+			},
+			"artifacts": {}
+		},
+		"rigging": {
+			"taskId": "019bc45f-6d1c-73d1-bc29-80ff5ea00fec",
+			"status": "SUCCEEDED",
+			"completedAt": 1768526178948,
+			"outputs": {
+				"taskId": "019bc45f-6d1c-73d1-bc29-80ff5ea00fec",
+				"riggedModel": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019bc45f-6d1c-73d1-bc29-80ff5ea00fec/output/Character_output.glb?Expires=1768785378&Signature=EgYLS242zdoyxKwsQWMMc9Lp0FjNd0QsFsk96~FbxMWYoyrSMan45LfuO7Z2LTPm2rYUjq17-mEOIbFuMdZcbNsD6b1WsoZK8~ZP29jHKI2RdLGXnLDoKmGbuSkBetw0wJOcE~5Yo1EVZxDlano2qBDeyPxGkIkPADbG0v3hGXdjesnGYNpgpB~~CvSIh6VqvVjl7Yran06eTH-pYUNiwcVIz~QtDlAtfO6zKTCPvFraMZYMskUcaBpdubR5Hxrg96XRaxwW5O8vqi8SX-9aaQj95g7X5gY-mgr-AMHObhDkSBfCF6U2hIIt1-TmVhxmXX9fIwA7bxSIa9NUXJF-eA__&Key-Pair-Id=KL5I0C8H7HX83"
+			},
+			"artifacts": {}
+		},
+		"animations": [
+			{
+				"taskId": "019bc45f-eb26-77c5-a997-2252a2876abc",
+				"status": "SUCCEEDED",
+				"animationName": "COMBAT_STANCE",
+				"completedAt": 1768526189587,
+				"outputs": {
+					"animations/combat_stance.glb": "animations/combat_stance.glb"
+				}
+			},
+			{
+				"taskId": "019bc460-14b8-7a8a-aed1-fd6295bad620",
+				"status": "SUCCEEDED",
+				"animationName": "RUNFAST",
+				"completedAt": 1768526198832,
+				"outputs": {
+					"animations/runfast.glb": "animations/runfast.glb"
+				}
+			},
+			{
+				"taskId": "019bc460-38d6-7a8b-bf0f-5c448e9ca359",
+				"status": "SUCCEEDED",
+				"animationName": "DOUBLE_COMBO_ATTACK",
+				"completedAt": 1768526209158,
+				"outputs": {
+					"animations/double_combo_attack.glb": "animations/double_combo_attack.glb"
+				}
+			},
+			{
+				"taskId": "019bc460-6125-7890-8648-55544e9a7d92",
+				"status": "SUCCEEDED",
+				"animationName": "BEHIT_FLYUP",
+				"completedAt": 1768526217319,
+				"outputs": {
+					"animations/behit_flyup.glb": "animations/behit_flyup.glb"
+				}
+			},
+			{
+				"taskId": "019bc460-810b-7a90-bc1e-50e55cefef7f",
+				"status": "SUCCEEDED",
+				"animationName": "DEAD",
+				"completedAt": 1768526234487,
+				"outputs": {
+					"animations/dead.glb": "animations/dead.glb"
+				}
+			}
+		]
+	},
+	"seed": 3810790990
 }

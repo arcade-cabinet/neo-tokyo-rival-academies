@@ -1,20 +1,20 @@
 {
-  "id": "rooftop_floor",
-  "name": "Sector 0 Rooftop Floor",
-  "type": "background",
-  "description": "Isometric floor texture for the rooftop diorama.",
-  "visualPrompt": "Top-down view of rain-slicked rooftop floor, Neo-Tokyo industrial metal grating, puddles reflecting neon pink and cyan lights, cyberpunk aesthetic, tileable seamless texture, 8k, highly detailed, cel shaded anime style, no characters, no people, flat orthographic lighting.",
-  "imageConfig": {
-    "aiModel": "nano-banana-pro",
-    "aspectRatio": "1:1",
-    "poseMode": "t-pose"
-  },
-  "tasks": {
-    "conceptArt": {
-      "taskId": "019bc114-122f-70db-ac1d-1b38bbef2b50",
-      "status": "SUCCEEDED",
-      "resultUrl": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/uploads/image_019bc114-122f-70db-ac1d-1b38bbef2b50_0.png?Expires=1768730097&Signature=huUlrqRFRB733YMNXQ~BCBZazWQLGjwcMlIlXrTh1SRHE0tg1b74~0HL9awj8kOG-KSbl9NUmBnzm8b3z5hIVNrI31MDhKMNDWouu0Cpj6AYvnFdm0cgHUmLSGOxnFlh1mQNTcHDPo5sqFAnoxMwOpYk5nfrQns0B8Dt3v392Z8XJks6RosIJ4LZr4zrVIDfYctxGM0yiN1lhaYAFfGfid-n0eToLJuLtzXrkilXhA7rYR3E-BIAP549f4uGr5rQuJtAXy1U7Rkj~zHEkBqzijUgA2-ynTcwMeVmMWWrqWEHhVNEf9pOVuCX6QenwHm80ySPP3prOQN5TIpF9q2e2w__&Key-Pair-Id=KL5I0C8H7HX83",
-      "localPath": "./concept.png"
-    }
-  }
+	"id": "rooftop_floor",
+	"name": "Sector 0 Rooftop Floor",
+	"type": "background",
+	"description": "Isometric floor texture for the rooftop diorama.",
+	"visualPrompt": "Top-down view of rain-slicked rooftop floor, Neo-Tokyo industrial metal grating, puddles reflecting neon pink and cyan lights, cyberpunk aesthetic, tileable seamless texture, 8k, highly detailed, cel shaded anime style, no characters, no people, flat orthographic lighting.",
+	"imageConfig": {
+		"aiModel": "nano-banana-pro",
+		"aspectRatio": "1:1",
+		"poseMode": "t-pose"
+	},
+	"tasks": {
+		"conceptArt": {
+			"taskId": "019bc114-122f-70db-ac1d-1b38bbef2b50",
+			"status": "SUCCEEDED",
+			"resultUrl": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/uploads/image_019bc114-122f-70db-ac1d-1b38bbef2b50_0.png?Expires=1768730097&Signature=huUlrqRFRB733YMNXQ~BCBZazWQLGjwcMlIlXrTh1SRHE0tg1b74~0HL9awj8kOG-KSbl9NUmBnzm8b3z5hIVNrI31MDhKMNDWouu0Cpj6AYvnFdm0cgHUmLSGOxnFlh1mQNTcHDPo5sqFAnoxMwOpYk5nfrQns0B8Dt3v392Z8XJks6RosIJ4LZr4zrVIDfYctxGM0yiN1lhaYAFfGfid-n0eToLJuLtzXrkilXhA7rYR3E-BIAP549f4uGr5rQuJtAXy1U7Rkj~zHEkBqzijUgA2-ynTcwMeVmMWWrqWEHhVNEf9pOVuCX6QenwHm80ySPP3prOQN5TIpF9q2e2w__&Key-Pair-Id=KL5I0C8H7HX83",
+			"localPath": "./concept.png"
+		}
+	}
 }
