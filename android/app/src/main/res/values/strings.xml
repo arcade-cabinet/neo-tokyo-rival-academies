@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='utf-8'?>
-<resources>
-    <string name="app_name">NeoTokyo Rival Academies</string>
-    <string name="title_activity_main">NeoTokyo Rival Academies</string>
-    <string name="package_name">com.neotokyo.game</string>
-    <string name="custom_url_scheme">com.neotokyo.game</string>
-</resources>

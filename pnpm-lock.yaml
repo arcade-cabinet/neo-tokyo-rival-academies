@@ -261,12 +261,6 @@ importers:
       '@babylonjs/materials':
         specifier: ^8.46.2
         version: 8.46.2(@babylonjs/core@8.46.2)
-      '@capacitor/android':
-        specifier: ^8.0.1
-        version: 8.0.1(@capacitor/core@8.0.1)
-      '@capacitor/core':
-        specifier: ^8.0.1
-        version: 8.0.1
       '@capacitor/haptics':
         specifier: ^8.0.0
         version: 8.0.0(@capacitor/core@8.0.1)
@@ -322,7 +316,13 @@ importers:
       '@biomejs/biome':
         specifier: ^2.3.11
         version: 2.3.11
+      '@capacitor/android':
+        specifier: ^8.0.1
+        version: 8.0.1(@capacitor/core@8.0.1)
       '@capacitor/cli':
+        specifier: ^8.0.1
+        version: 8.0.1
+      '@capacitor/core':
         specifier: ^8.0.1
         version: 8.0.1
       '@types/react':
