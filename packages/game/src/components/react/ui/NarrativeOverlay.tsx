@@ -32,18 +32,35 @@ export const NarrativeOverlay: FC<NarrativeOverlayProps> = ({
 		}
 	}, [script, onComplete]);
 
-	// Typewriter effect
+	// Typewriter effect with auto-advance
 	useEffect(() => {
 		if (!script || script.length === 0) return;
 
 		if (charIndex < currentLine.text.length) {
+			// Still typing
 			const timeout = setTimeout(() => {
 				setDisplayText((prev) => prev + currentLine.text[charIndex]);
 				setCharIndex((prev) => prev + 1);
-			}, 30); // Typing speed
+			}, 25); // Faster typing speed
 			return () => clearTimeout(timeout);
+		} else {
+			// Text finished - auto-advance after reading time
+			// ~80ms per word for comfortable reading
+			const wordCount = currentLine.text.split(" ").length;
+			const readingDelay = Math.max(1500, wordCount * 80);
+
+			const autoAdvance = setTimeout(() => {
+				if (index < script.length - 1) {
+					setIndex(index + 1);
+					setDisplayText("");
+					setCharIndex(0);
+				} else {
+					onComplete();
+				}
+			}, readingDelay);
+			return () => clearTimeout(autoAdvance);
 		}
-	}, [charIndex, currentLine.text, script]);
+	}, [charIndex, currentLine.text, script, index, onComplete]);
 
 	const handleNext = () => {
 		if (charIndex < currentLine.text.length) {
@@ -80,7 +97,7 @@ export const NarrativeOverlay: FC<NarrativeOverlayProps> = ({
 				cursor: "pointer",
 			}}
 		>
-			{/* Background Image (Anime Panel) */}
+			{/* Background Image (Narrative Panel) */}
 			{currentLine.image && (
 				<div
 					style={{
@@ -97,6 +114,48 @@ export const NarrativeOverlay: FC<NarrativeOverlayProps> = ({
 					}}
 				/>
 			)}
+
+			{/* Skip Button */}
+			<div
+				onClick={(e) => {
+					e.stopPropagation();
+					onComplete();
+				}}
+				onKeyDown={(e) => {
+					if (e.key === "Enter" || e.key === " ") {
+						e.stopPropagation();
+						onComplete();
+					}
+				}}
+				role="button"
+				tabIndex={0}
+				style={{
+					position: "absolute",
+					top: "20px",
+					right: "20px",
+					padding: "8px 16px",
+					background: "rgba(0,0,0,0.7)",
+					border: "1px solid #666",
+					borderRadius: "4px",
+					color: "#aaa",
+					fontSize: "0.9rem",
+					cursor: "pointer",
+					zIndex: 100,
+					transition: "all 0.2s ease",
+				}}
+				onMouseEnter={(e) => {
+					e.currentTarget.style.background = "rgba(255,0,0,0.3)";
+					e.currentTarget.style.borderColor = "#f00";
+					e.currentTarget.style.color = "#fff";
+				}}
+				onMouseLeave={(e) => {
+					e.currentTarget.style.background = "rgba(0,0,0,0.7)";
+					e.currentTarget.style.borderColor = "#666";
+					e.currentTarget.style.color = "#aaa";
+				}}
+			>
+				SKIP INTRO &gt;&gt;
+			</div>
 
 			{/* Letterbox Bars */}
 			<div
@@ -169,11 +228,11 @@ export const NarrativeOverlay: FC<NarrativeOverlayProps> = ({
 						position: "absolute",
 						bottom: "10px",
 						right: "20px",
-						color: "#aaa",
-						fontSize: "0.8rem",
+						color: "#666",
+						fontSize: "0.75rem",
 					}}
 				>
-					CLICK TO CONTINUE
+					{charIndex < currentLine.text.length ? "" : `${index + 1} / ${script.length}`}
 				</div>
 			</div>
 
