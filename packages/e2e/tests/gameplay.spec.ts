@@ -72,4 +72,33 @@ test.describe('JRPG Gameplay Verification', () => {
     await page.screenshot({ path: 'verification/3_gameplay_hud.png' });
     console.log('Gameplay Verified.');
   });
+
+  test('should move the player character with keyboard input', async ({ page }) => {
+    // Navigate and start game (leverages setup from previous test)
+    await page.goto('/neo-tokyo-rival-academies/');
+    const startBtn = page.getByText('INITIATE STORY MODE');
+    await expect(startBtn).toBeVisible({ timeout: 15000 });
+    await startBtn.click();
+
+    // Advance dialogue to get to gameplay
+    const viewport = page.viewportSize();
+    if (!viewport) throw new Error("Viewport not available");
+    for (let i = 0; i < 6; i++) {
+        await page.mouse.click(viewport.width / 2, viewport.height / 2);
+    }
+
+    // Wait for HUD to ensure game is ready
+    await expect(page.getByText('LVL 1 KAI')).toBeVisible();
+
+    // Take a screenshot before moving
+    await page.screenshot({ path: 'verification/4_player_before_move.png' });
+
+    // Simulate pressing 'W' to move up
+    await page.keyboard.down('W');
+    await page.waitForTimeout(1000); // Wait for 1 second to move
+    await page.keyboard.up('W');
+
+    // Take a screenshot after moving
+    await page.screenshot({ path: 'verification/5_player_after_move.png' });
+  });
 });
