@@ -23,5 +23,6 @@ export * from "./types";
 export * from "./state/worldStore";
 export * from "./state/questStore";
 export * from "./state/alignmentStore";
+export * from "./state/playerStore";
 // Data
 export * from "./data/questGrammar";

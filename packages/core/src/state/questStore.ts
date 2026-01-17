@@ -1,6 +1,18 @@
 import { create } from 'zustand';
 import type { Quest, QuestCluster } from '../systems/QuestGenerator';
 
+export interface QuestRewards {
+  xp: number;
+  credits: number;
+  leveledUp: boolean;
+  newLevel?: number;
+  alignmentShift?: {
+    faction: 'kurenai' | 'azure';
+    amount: number;
+  };
+  items?: string[];
+}
+
 interface QuestState {
   clusters: Map<string, QuestCluster>;
   activeQuests: Map<string, Quest>;
@@ -9,7 +21,7 @@ interface QuestState {
   // Actions
   addCluster: (cluster: QuestCluster) => void;
   activateQuest: (questId: string) => void;
-  completeQuest: (questId: string) => void;
+  completeQuest: (questId: string) => QuestRewards | null;
   getQuest: (questId: string) => Quest | undefined;
   getActiveQuests: () => Quest[];
   getCompletedQuests: () => string[];
@@ -76,6 +88,50 @@ export const useQuestStore = create<QuestState>((set, get) => ({
 
   completeQuest: (questId: string) => {
     const { activeQuests, completedQuests } = get();
+    const quest = activeQuests.get(questId);
+
+    if (!quest) {
+      console.warn(`Cannot complete quest ${questId}: not active`);
+      return null;
+    }
+
+    // Import stores dynamically to avoid circular dependencies
+    // Note: In production, these should be passed as parameters or use context
+    const { usePlayerStore } = require('./playerStore');
+    const { useAlignmentStore } = require('./alignmentStore');
+
+    const playerStore = usePlayerStore.getState();
+    const alignmentStore = useAlignmentStore.getState();
+
+    // Distribute rewards
+    const { xp, credits, alignmentShift, items } = quest.rewards;
+
+    // Add XP
+    const { leveledUp, newLevel } = playerStore.addXP(xp);
+
+    // Add credits
+    playerStore.addCredits(credits);
+
+    // Apply alignment shift
+    if (alignmentShift) {
+      if (alignmentShift.faction === 'kurenai') {
+        alignmentStore.addKurenaiRep(alignmentShift.amount);
+      } else {
+        alignmentStore.addAzureRep(alignmentShift.amount);
+      }
+    }
+
+    // Add items
+    if (items && items.length > 0) {
+      for (const itemId of items) {
+        // TODO: Proper item data lookup
+        playerStore.addItem({
+          id: itemId,
+          name: itemId,
+          type: 'key_item',
+        });
+      }
+    }
 
     // Remove from active quests
     const newActiveQuests = new Map(activeQuests);
@@ -89,6 +145,16 @@ export const useQuestStore = create<QuestState>((set, get) => ({
       activeQuests: newActiveQuests,
       completedQuests: newCompletedQuests,
     });
+
+    // Return reward summary
+    return {
+      xp,
+      credits,
+      leveledUp,
+      newLevel: leveledUp ? newLevel : undefined,
+      alignmentShift,
+      items,
+    };
   },
 
   getQuest: (questId: string) => {
