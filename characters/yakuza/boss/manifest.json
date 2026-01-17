@@ -1,0 +1,26 @@
+{
+  "id": "yakuza_boss",
+  "name": "Yakuza Boss",
+  "type": "character",
+  "textTo3DPreviewTask": {
+    "prompt": "An imposing Yakuza boss in a fine suit, with a dragon tattoo visible on his neck.",
+    "artStyle": "sculpture",
+    "poseMode": "t-pose"
+  },
+  "textTo3DRefineTask": {
+    "texturePrompt": "Cel-shaded, anime style, high-quality suit, intricate dragon tattoo.",
+    "enablePbr": false
+  },
+  "animationConfig": {
+    "animationIds": [
+      "idle",
+      "run",
+      "attack_melee",
+      "hit_reaction",
+      "death",
+      "block"
+    ]
+  },
+  "tasks": {},
+  "seed": 3456789012
+}

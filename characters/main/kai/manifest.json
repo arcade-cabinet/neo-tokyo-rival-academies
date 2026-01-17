@@ -1,0 +1,27 @@
+{
+  "id": "kai",
+  "name": "Kai",
+  "type": "character",
+  "textTo3DPreviewTask": {
+    "prompt": "A young man with crimson hair, wearing a biker jacket.",
+    "artStyle": "sculpture",
+    "poseMode": "t-pose"
+  },
+  "textTo3DRefineTask": {
+    "texturePrompt": "Cel-shaded, anime style.",
+    "enablePbr": false
+  },
+  "animationConfig": {
+    "animationIds": [
+      "idle",
+      "run",
+      "jump",
+      "attack_melee",
+      "block",
+      "hit_reaction",
+      "death"
+    ]
+  },
+  "tasks": {},
+  "seed": 1234567890
+}

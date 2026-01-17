@@ -53,4 +53,27 @@ program.command('all')
     }
   });
 
+import { MeshyClient } from './api/meshy-client.js';
+import { PipelineExecutor } from './pipelines/pipeline-executor.js';
+
+program
+  .command('pipeline <assetPath>')
+  .description('Run a generation pipeline for a specific asset')
+  .action(async (assetPath: string) => {
+    try {
+      const apiKey = process.env.GEMINI_API_KEY; // Using GEMINI_API_KEY as per docs
+      if (!apiKey) {
+        console.error('❌ Error: GEMINI_API_KEY environment variable not set.');
+        process.exit(1);
+      }
+
+      const client = new MeshyClient({ apiKey });
+      const executor = new PipelineExecutor(client, assetPath);
+      await executor.run();
+    } catch (error) {
+      console.error(`\n❌ Pipeline execution failed:`, error);
+      process.exit(1);
+    }
+  });
+
 program.parse();

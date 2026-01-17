@@ -1,0 +1,24 @@
+{
+  "id": "alien_humanoid",
+  "name": "Alien Humanoid",
+  "type": "character",
+  "textTo3DPreviewTask": {
+    "prompt": "A classic grey alien with large black eyes and a slender body.",
+    "artStyle": "sculpture",
+    "poseMode": "t-pose"
+  },
+  "textTo3DRefineTask": {
+    "texturePrompt": "Cel-shaded, anime style, smooth grey skin, reflective black eyes.",
+    "enablePbr": false
+  },
+  "animationConfig": {
+    "animationIds": [
+      "idle",
+      "run",
+      "hit_reaction",
+      "death"
+    ]
+  },
+  "tasks": {},
+  "seed": 7890123456
+}

@@ -1,0 +1,25 @@
+{
+  "id": "mall_security_guard",
+  "name": "Mall Security Guard",
+  "type": "character",
+  "textTo3DPreviewTask": {
+    "prompt": "A slightly overweight mall security guard with a determined look.",
+    "artStyle": "sculpture",
+    "poseMode": "t-pose"
+  },
+  "textTo3DRefineTask": {
+    "texturePrompt": "Cel-shaded, anime style, standard security guard uniform, shiny badge.",
+    "enablePbr": false
+  },
+  "animationConfig": {
+    "animationIds": [
+      "idle",
+      "run",
+      "attack_melee",
+      "hit_reaction",
+      "death"
+    ]
+  },
+  "tasks": {},
+  "seed": 6789012345
+}
