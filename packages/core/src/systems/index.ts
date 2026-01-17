@@ -5,6 +5,7 @@
 
 export * from "./BreakSystem";
 export * from "./CombatLogic";
+export * from "./CombatSystem";
 export * from "./HitDetection";
 export * from "./ReputationSystem";
 export * from "./StatAllocation";
