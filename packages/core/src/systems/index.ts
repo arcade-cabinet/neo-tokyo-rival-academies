@@ -8,3 +8,6 @@ export * from "./CombatLogic";
 export * from "./HitDetection";
 export * from "./ReputationSystem";
 export * from "./StatAllocation";
+export * from "./WorldGenerator";
+export * from "./DistrictManager";
+export * from "./QuestGenerator";
