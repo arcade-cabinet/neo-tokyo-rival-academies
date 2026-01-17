@@ -33,6 +33,7 @@
 		"reactylon": "^3.5.2",
 		"recast-detour": "^1.6.4",
 		"seedrandom": "^3.0.5",
+		"yuka": "^0.7.8",
 		"zustand": "^5.0.10"
 	},
 	"devDependencies": {

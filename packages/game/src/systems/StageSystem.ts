@@ -12,6 +12,7 @@ export class StageSystem {
 	constructor(initialStageId = "intro_cutscene") {
 		this.currentStageId = initialStageId;
 		this.currentStage = STAGES[initialStageId];
+		this.loadStage(initialStageId);
 	}
 
 	loadStage(stageId: string) {

@@ -37,26 +37,23 @@ export const calculateDamage = (
 	rng: () => number = Math.random,
 ): CombatResult => {
 	// Get attacker's attack power based on attack type
-	const attackPower = getAttackPower(attacker, attackType);
-
-	// Get stat multiplier based on attack type
-	const statMultiplier = getStatMultiplier(attacker, attackType);
+	const attackPower = attacker.stats?.ignition ?? 10;
 
 	// Get defender's defense
 	const defense = getDefense(defender);
 
-	// Calculate base damage: (AttackPower * StatMultiplier) - (Defense / 2)
-	const baseDamage = attackPower * statMultiplier - defense / 2;
+	// Calculate base damage: AttackPower - Defense
+	const baseDamage = attackPower - defense;
 
 	// Ensure damage is non-negative
-	let damage = Math.max(0, Math.floor(baseDamage));
+	let damage = Math.max(1, Math.floor(baseDamage));
 
 	// Critical hit logic (1% per Ignition point, max 50%)
 	const critChance = Math.min((attacker.stats?.ignition ?? 10) * 0.01, 0.5);
 	const isCritical = rng() < critChance;
 
 	if (isCritical) {
-		damage = Math.floor(damage * 2.0); // 2.0x multiplier for critical hits
+		damage = Math.floor(damage * 1.5); // 1.5x multiplier for critical hits
 	}
 
 	return { damage, isCritical, attackType };
@@ -98,7 +95,7 @@ function getStatMultiplier(entity: ECSEntity, attackType: AttackType): number {
  */
 function getDefense(entity: ECSEntity): number {
 	const structure = entity.stats?.structure ?? 10;
-	return structure / 2; // Defense = Structure / 2
+	return structure / 10; // Defense = Structure / 10
 }
 
 /**
@@ -111,5 +108,12 @@ export const resolveCombat = (
 	rng: () => number = Math.random,
 ): { damage: number; isCritical: boolean } => {
 	const result = calculateDamage(attacker, defender, "melee", rng);
+	console.log({
+		attackPower: getAttackPower(attacker, 'melee'),
+		statMultiplier: getStatMultiplier(attacker, 'melee'),
+		defense: getDefense(defender),
+		damage: result.damage,
+		isCritical: result.isCritical,
+	});
 	return { damage: result.damage, isCritical: result.isCritical };
 };
