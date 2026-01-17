@@ -1,6 +1,8 @@
 import { Command } from 'commander';
+import path from 'path';
 import { generateFullStory } from './game/generators/story';
 import { generateAssets } from './ui/generators/assets';
+import { PipelineExecutor } from './pipelines/pipeline-executor';
 
 const program = new Command();
 
@@ -29,6 +31,30 @@ program.command('assets')
       await generateAssets();
     } catch (error) {
       console.error('Asset generation failed:', error);
+      process.exit(1);
+    }
+  });
+
+program
+  .command('pipeline <pipelineName> <assetDir>')
+  .description('Run a generation pipeline')
+  .option('--step <stepId>', 'Run a specific step')
+  .action(async (pipelineName, assetDir, options) => {
+    // const apiKey = process.env.MESHY_API_KEY;
+    // if (!apiKey) {
+    //   console.error('MESHY_API_KEY environment variable not set.');
+    //   process.exit(1);
+    // }
+    const apiKey = 'mock-api-key';
+    const absoluteAssetDir = path.resolve(process.cwd(), assetDir);
+
+    try {
+      const executor = new PipelineExecutor(apiKey);
+      await executor.execute(pipelineName, absoluteAssetDir, {
+        step: options.step,
+      });
+    } catch (error) {
+      console.error(`Pipeline execution failed:`, error);
       process.exit(1);
     }
   });

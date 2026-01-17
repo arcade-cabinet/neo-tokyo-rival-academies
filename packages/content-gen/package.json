@@ -15,7 +15,8 @@
     "build": "tsc",
     "generate": "tsx src/cli.ts all",
     "gen:story": "tsx src/cli.ts story",
-    "gen:assets": "tsx src/cli.ts assets"
+    "gen:assets": "tsx src/cli.ts assets",
+    "pipeline": "tsx src/cli.ts pipeline"
   },
   "devDependencies": {
     "@google/generative-ai": "^0.24.1",
