@@ -13,11 +13,11 @@ import { Color3, Vector3 } from "@babylonjs/core";
 import { useState, useCallback } from "react";
 import { createRoot } from "react-dom/client";
 import { TestHarness } from "../TestHarness";
-import { Roof, ROOF_PRESETS, type RoofStyle } from "../components/Roof";
-import { TexturedWall } from "../components/TexturedWall";
-import { Floor } from "../components/Floor";
-import { Water } from "../components/Water";
-import { NeonSign } from "../components/NeonSign";
+import { Roof, ROOF_PRESETS, type RoofStyle } from "../components";
+import { TexturedWall } from "../components";
+import { Floor } from "../components";
+import { Water } from "../components";
+import { NeonSign } from "../components";
 
 function RoofTestScene() {
 	const [seed, setSeed] = useState("roof-001");

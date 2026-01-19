@@ -10,114 +10,107 @@ import { useState, useCallback } from "react";
 import { createRoot } from "react-dom/client";
 import { TestHarness } from "../TestHarness";
 
-// Import ALL components for verification
-import { Floor } from "../components/Floor";
-import { Water } from "../components/Water";
-
-// Structural
-import { Stairs } from "../components/Stairs";
-import { Ramp } from "../components/Ramp";
-import { Door } from "../components/Door";
-import { Window } from "../components/Window";
-import { Balcony } from "../components/Balcony";
-import { Pillar } from "../components/Pillar";
-import { Railing } from "../components/Railing";
-import { Awning } from "../components/Awning";
-import { Fence } from "../components/Fence";
-import { Ladder } from "../components/Ladder";
-import { FireEscape } from "../components/FireEscape";
-import { Catwalk } from "../components/Catwalk";
-import { Scaffolding } from "../components/Scaffolding";
-import { Gutter } from "../components/Gutter";
-import { Shutter } from "../components/Shutter";
-import { Chimney } from "../components/Chimney";
-import { Skylight } from "../components/Skylight";
-
-// Water & Flooded
-import { FloatingPlatform } from "../components/FloatingPlatform";
-import { Houseboat } from "../components/Houseboat";
-import { Bridge } from "../components/Bridge";
-import { Canal } from "../components/Canal";
-import { Boat } from "../components/Boat";
-import { Buoy } from "../components/Buoy";
-import { Puddle } from "../components/Puddle";
-import { RainCollector } from "../components/RainCollector";
-import { FishingNet } from "../components/FishingNet";
-import { Anchor } from "../components/Anchor";
-
-// Transport
-import { Bicycle } from "../components/Bicycle";
-import { BicycleRack } from "../components/BicycleRack";
-import { Carcass } from "../components/Carcass";
-
-// Signage & Lighting
-import { NeonSign } from "../components/NeonSign";
-import { StreetLight } from "../components/StreetLight";
-import { Billboard } from "../components/Billboard";
-import { Poster } from "../components/Poster";
-import { TrafficSign } from "../components/TrafficSign";
-import { Signpost } from "../components/Signpost";
-import { Lamppost } from "../components/Lamppost";
-import { Graffiti } from "../components/Graffiti";
-import { Lantern } from "../components/Lantern";
-import { Flagpole } from "../components/Flagpole";
-
-// Urban Furniture
-import { VendingMachine } from "../components/VendingMachine";
-import { Bench } from "../components/Bench";
-import { TrashCan } from "../components/TrashCan";
-import { Mailbox } from "../components/Mailbox";
-import { Planter } from "../components/Planter";
-import { PhoneBooth } from "../components/PhoneBooth";
-import { FireHydrant } from "../components/FireHydrant";
-import { ParkingMeter } from "../components/ParkingMeter";
-import { BollardPost } from "../components/BollardPost";
-import { Manhole } from "../components/Manhole";
-import { DrainGrate } from "../components/DrainGrate";
-import { ShoppingCart } from "../components/ShoppingCart";
-import { Umbrella } from "../components/Umbrella";
-import { Newspaper } from "../components/Newspaper";
-
-// Utilities & Infrastructure
-import { Pipe } from "../components/Pipe";
-import { ACUnit } from "../components/ACUnit";
-import { AirConditioner } from "../components/AirConditioner";
-import { PowerLine } from "../components/PowerLine";
-import { Antenna } from "../components/Antenna";
-import { SatelliteDish } from "../components/SatelliteDish";
-import { WaterTank } from "../components/WaterTank";
-import { StorageTank } from "../components/StorageTank";
-import { Generator } from "../components/Generator";
-import { Dumpster } from "../components/Dumpster";
-import { Elevator } from "../components/Elevator";
-import { Vent } from "../components/Vent";
-import { SolarPanel } from "../components/SolarPanel";
-import { CoolingTower } from "../components/CoolingTower";
-import { HeliPad } from "../components/HeliPad";
-import { Rope } from "../components/Rope";
-
-// Vegetation
-import { Tree } from "../components/Tree";
-import { Shrub } from "../components/Shrub";
-import { GrassClump } from "../components/GrassClump";
-import { Vine } from "../components/Vine";
-import { Mushroom } from "../components/Mushroom";
-import { FlowerBed } from "../components/FlowerBed";
-
-// Props & Clutter
-import { Crate } from "../components/Crate";
-import { CrateStack } from "../components/CrateStack";
-import { Barrel } from "../components/Barrel";
-import { Debris } from "../components/Debris";
-import { PalletStack } from "../components/PalletStack";
-import { Tarp } from "../components/Tarp";
-import { Tarpaulin } from "../components/Tarpaulin";
-import { Clothesline } from "../components/Clothesline";
-import { TentStructure } from "../components/TentStructure";
-
-// Atmospheric
-import { SteamVent } from "../components/SteamVent";
-import { Fog } from "../components/Fog";
+// Import ALL components from @neo-tokyo/diorama via barrel export
+import {
+	// Structural
+	Floor,
+	Stairs,
+	Ramp,
+	Door,
+	Window,
+	Balcony,
+	Pillar,
+	Railing,
+	Awning,
+	Fence,
+	Ladder,
+	FireEscape,
+	Catwalk,
+	Scaffolding,
+	Gutter,
+	Shutter,
+	Chimney,
+	Skylight,
+	// Maritime
+	Water,
+	FloatingPlatform,
+	Houseboat,
+	Bridge,
+	Canal,
+	Boat,
+	Buoy,
+	Puddle,
+	RainCollector,
+	FishingNet,
+	Anchor,
+	// Transport
+	Bicycle,
+	BicycleRack,
+	Carcass,
+	// Signage & Lighting
+	NeonSign,
+	StreetLight,
+	Billboard,
+	Poster,
+	TrafficSign,
+	Signpost,
+	Lamppost,
+	Graffiti,
+	Lantern,
+	Flagpole,
+	// Urban Furniture
+	VendingMachine,
+	Bench,
+	TrashCan,
+	Mailbox,
+	Planter,
+	PhoneBooth,
+	FireHydrant,
+	ParkingMeter,
+	BollardPost,
+	Manhole,
+	DrainGrate,
+	ShoppingCart,
+	Umbrella,
+	Newspaper,
+	// Infrastructure
+	Pipe,
+	ACUnit,
+	AirConditioner,
+	PowerLine,
+	Antenna,
+	SatelliteDish,
+	WaterTank,
+	StorageTank,
+	Generator,
+	Dumpster,
+	Elevator,
+	Vent,
+	SolarPanel,
+	CoolingTower,
+	HeliPad,
+	Rope,
+	// Vegetation
+	Tree,
+	Shrub,
+	GrassClump,
+	Vine,
+	Mushroom,
+	FlowerBed,
+	// Props
+	Crate,
+	CrateStack,
+	Barrel,
+	Debris,
+	PalletStack,
+	Tarp,
+	Tarpaulin,
+	Clothesline,
+	TentStructure,
+	// Atmospheric
+	SteamVent,
+	Fog,
+} from "../components";
 
 function ComponentShowcaseTestScene() {
 	const [seed, setSeed] = useState("showcase-001");

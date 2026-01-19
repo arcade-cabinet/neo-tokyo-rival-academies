@@ -13,8 +13,8 @@ import { Vector3 } from "@babylonjs/core";
 import { useState, useCallback } from "react";
 import { createRoot } from "react-dom/client";
 import { TestHarness } from "../TestHarness";
-import { Water, WATER_PRESETS, type WaterPreset } from "../components/Water";
-import { TexturedWall } from "../components/TexturedWall";
+import { Water, WATER_PRESETS, type WaterPreset } from "../components";
+import { TexturedWall } from "../components";
 
 function WaterTestScene() {
 	const [seed, setSeed] = useState("water-001");

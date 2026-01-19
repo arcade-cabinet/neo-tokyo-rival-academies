@@ -214,7 +214,12 @@ export function PlayerController({
 					const distToMinZ = Math.abs(newZ - expandedMinZ);
 					const distToMaxZ = Math.abs(newZ - expandedMaxZ);
 
-					const minDist = Math.min(distToMinX, distToMaxX, distToMinZ, distToMaxZ);
+					const minDist = Math.min(
+						distToMinX,
+						distToMaxX,
+						distToMinZ,
+						distToMaxZ,
+					);
 
 					if (minDist === distToMinX) {
 						newX = expandedMinX - 0.01;

@@ -8,14 +8,14 @@
  */
 
 import {
+	type AbstractMesh,
 	Color3,
 	MeshBuilder,
 	ParticleSystem,
+	type Scene,
 	StandardMaterial,
 	Texture,
 	Vector3,
-	type AbstractMesh,
-	type Scene,
 } from "@babylonjs/core";
 import { useEffect, useRef } from "react";
 import { useScene } from "reactylon";
@@ -321,8 +321,10 @@ function createPipeCluster(
 			scene,
 		);
 
-		const rotatedX = cfg.xOff * Math.cos(rotation) - cfg.zOff * Math.sin(rotation);
-		const rotatedZ = cfg.xOff * Math.sin(rotation) + cfg.zOff * Math.cos(rotation);
+		const rotatedX =
+			cfg.xOff * Math.cos(rotation) - cfg.zOff * Math.sin(rotation);
+		const rotatedZ =
+			cfg.xOff * Math.sin(rotation) + cfg.zOff * Math.cos(rotation);
 
 		pipe.position = new Vector3(
 			position.x + rotatedX,

@@ -17,11 +17,11 @@ import {
 	NavMesh,
 	type NavMeshController,
 	createNavAreasFromFloors,
-} from "../components/NavMesh";
-import { Floor } from "../components/Floor";
-import { TexturedWall } from "../components/TexturedWall";
-import { Water } from "../components/Water";
-import { NeonSign } from "../components/NeonSign";
+} from "../components";
+import { Floor } from "../components";
+import { TexturedWall } from "../components";
+import { Water } from "../components";
+import { NeonSign } from "../components";
 
 // Simple AI Agent component
 import {

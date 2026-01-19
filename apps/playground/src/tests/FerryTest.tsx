@@ -15,12 +15,12 @@ import { Color3, Vector3, Path3D } from "@babylonjs/core";
 import { useState, useCallback, useRef } from "react";
 import { createRoot } from "react-dom/client";
 import { TestHarness } from "../TestHarness";
-import { Water } from "../components/Water";
-import { RailPath } from "../components/RailPath";
-import { Platform, type PlatformAnimationControls } from "../components/Platform";
-import { DockingStation } from "../components/DockingStation";
-import { TexturedWall } from "../components/TexturedWall";
-import { Floor } from "../components/Floor";
+import { Water } from "../components";
+import { RailPath } from "../components";
+import { Platform, type PlatformAnimationControls } from "../components";
+import { DockingStation } from "../components";
+import { TexturedWall } from "../components";
+import { Floor } from "../components";
 
 function FerryTestScene() {
 	const [seed, setSeed] = useState("ferry-001");

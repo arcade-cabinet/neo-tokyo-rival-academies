@@ -13,9 +13,9 @@
 
 import { Color3, Vector3 } from "@babylonjs/core";
 import { useMemo } from "react";
-import { Floor, type FloorSurface } from "../components/Floor";
-import { TexturedWall } from "../components/TexturedWall";
-import { NeonSign } from "../components/NeonSign";
+import { Floor, type FloorSurface } from "../components";
+import { TexturedWall } from "../components";
+import { NeonSign } from "../components";
 
 export type BridgeStyle = "industrial" | "modern" | "makeshift" | "glass";
 

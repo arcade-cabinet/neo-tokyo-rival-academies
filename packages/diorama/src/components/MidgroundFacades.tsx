@@ -6,12 +6,12 @@
  */
 
 import {
+	type AbstractMesh,
 	Color3,
 	MeshBuilder,
+	type Scene,
 	StandardMaterial,
 	Vector3,
-	type AbstractMesh,
-	type Scene,
 } from "@babylonjs/core";
 import { useEffect, useRef } from "react";
 import { useScene } from "reactylon";

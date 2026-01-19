@@ -19,13 +19,14 @@ import { Color3, Vector3 } from "@babylonjs/core";
 import React, { useState, useCallback, useMemo } from "react";
 import { createRoot } from "react-dom/client";
 import { TestHarness } from "../TestHarness";
-import { Water } from "../components/Water";
-import { Floor } from "../components/Floor";
 import {
+	// Components
+	Water,
+	Floor,
+	// Block system
 	BlockDebugRenderer,
 	GridVisualizer,
-} from "../blocks/BlockRenderer";
-import {
+	BlockContentRenderer,
 	type BlockDefinition,
 	type BlockCategory,
 	type BlockInstance,
@@ -33,11 +34,10 @@ import {
 	createSeededRandom,
 	getBlockPool,
 	selectBlockFromPool,
-} from "../blocks/Block";
-import { RTB_BLOCKS, registerAllRTBBlocks } from "../blocks/RTBBlocks";
-import { BlockContentRenderer } from "../blocks/BlockContentRenderer";
-import { registerAllBlockContent } from "../blocks/BlockContent";
-import { PlaygroundNotes } from "../components/PlaygroundNotes";
+	RTB_BLOCKS,
+	registerAllRTBBlocks,
+	registerAllBlockContent,
+} from "../components";
 
 // Ensure blocks and content rules are registered
 registerAllRTBBlocks();
@@ -420,16 +420,7 @@ function BlockTestScene() {
 			/>
 		</TestHarness>
 
-		{/* Human feedback notes panel - outside scene tree since it's HTML */}
-		<PlaygroundNotes
-			testId="block-test"
-			sceneContext={{
-				seed,
-				renderMode,
-				showSnapPoints,
-				showGrid,
-			}}
-		/>
+		{/* Human feedback notes panel - TODO: Create PlaygroundNotes component */}
 	</>
 	);
 }

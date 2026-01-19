@@ -14,8 +14,8 @@ import { useState, useCallback } from "react";
 import { createRoot } from "react-dom/client";
 import { TestHarness } from "../TestHarness";
 import { Alley, ALLEY_PRESETS, type AlleyMood } from "../compounds/Alley";
-import { Water } from "../components/Water";
-import { Floor } from "../components/Floor";
+import { Water } from "../components";
+import { Floor } from "../components";
 
 function AlleyTestScene() {
 	const [seed, setSeed] = useState("alley-001");

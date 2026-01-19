@@ -13,10 +13,10 @@ import { Color3, Vector3, Path3D } from "@babylonjs/core";
 import { useState, useCallback, useRef } from "react";
 import { createRoot } from "react-dom/client";
 import { TestHarness } from "../TestHarness";
-import { Platform, type PlatformAnimationControls } from "../components/Platform";
-import { RailPath, RailPathPresets } from "../components/RailPath";
-import { Water } from "../components/Water";
-import { TexturedWall } from "../components/TexturedWall";
+import { Platform, type PlatformAnimationControls } from "../components";
+import { RailPath, RailPathPresets } from "../components";
+import { Water } from "../components";
+import { TexturedWall } from "../components";
 
 function PlatformTestScene() {
 	const [seed, setSeed] = useState("platform-001");

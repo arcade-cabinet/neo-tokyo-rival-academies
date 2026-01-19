@@ -6,14 +6,14 @@
  */
 
 import {
+	type AbstractMesh,
 	Animation,
 	Color3,
 	GlowLayer,
 	MeshBuilder,
+	type Scene,
 	StandardMaterial,
 	Vector3,
-	type AbstractMesh,
-	type Scene,
 } from "@babylonjs/core";
 import { useEffect, useRef, useState } from "react";
 import { useScene } from "reactylon";
@@ -67,7 +67,9 @@ export function QuestMarkers({
 
 		// Track which markers exist
 		const existingIds = new Set(meshesRef.current.keys());
-		const newIds = new Set(markers.filter((m) => m.active !== false).map((m) => m.id));
+		const newIds = new Set(
+			markers.filter((m) => m.active !== false).map((m) => m.id),
+		);
 
 		// Remove markers that are no longer active
 		for (const id of existingIds) {
@@ -97,7 +99,8 @@ export function QuestMarkers({
 				meshesRef.current.set(marker.id, mesh);
 
 				// Setup click interaction
-				mesh.actionManager = mesh.actionManager || new ActionManagerProxy(scene);
+				mesh.actionManager =
+					mesh.actionManager || new ActionManagerProxy(scene);
 				setupMarkerInteraction(mesh, marker.id, onMarkerInteract);
 			} else {
 				// Update existing marker position
@@ -157,7 +160,7 @@ function createMarkerMesh(
 			mesh.rotation.x = Math.PI / 4;
 			mesh.rotation.z = Math.PI / 4;
 			break;
-		case "npc":
+		case "npc": {
 			// Exclamation mark shape (cylinder + sphere)
 			const cylinder = MeshBuilder.CreateCylinder(
 				`marker_${marker.id}_cyl`,
@@ -173,6 +176,7 @@ function createMarkerMesh(
 			dot.parent = cylinder;
 			mesh = cylinder;
 			break;
+		}
 		case "exit":
 			// Arrow pointing up/forward
 			mesh = MeshBuilder.CreateCylinder(

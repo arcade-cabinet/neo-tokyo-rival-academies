@@ -16,7 +16,7 @@ import {
 	TexturedWall,
 	WALL_TEXTURES,
 	type WallTextureType,
-} from "../components/TexturedWall";
+} from "../components";
 
 function TexturedWallTestScene() {
 	const [seed, setSeed] = useState("textured-wall-001");

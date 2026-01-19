@@ -12,9 +12,9 @@ import { Color3, Vector3 } from "@babylonjs/core";
 import { useState, useCallback } from "react";
 import { createRoot } from "react-dom/client";
 import { TestHarness } from "../TestHarness";
-import { Floor, type FloorSurface } from "../components/Floor";
-import { TexturedWall } from "../components/TexturedWall";
-import { Water } from "../components/Water";
+import { Floor, type FloorSurface } from "../components";
+import { TexturedWall } from "../components";
+import { Water } from "../components";
 
 function FloorTestScene() {
 	const [seed, setSeed] = useState("floor-001");

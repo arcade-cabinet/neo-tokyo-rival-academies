@@ -12,9 +12,9 @@ import { Color3, Vector3 } from "@babylonjs/core";
 import { useState, useCallback } from "react";
 import { createRoot } from "react-dom/client";
 import { TestHarness } from "../TestHarness";
-import { RailPath, RailPathPresets } from "../components/RailPath";
-import { Water } from "../components/Water";
-import { TexturedWall } from "../components/TexturedWall";
+import { RailPath, RailPathPresets } from "../components";
+import { Water } from "../components";
+import { TexturedWall } from "../components";
 
 type PathPreset = "straight" | "arc" | "vertical" | "lshape" | "loop";
 

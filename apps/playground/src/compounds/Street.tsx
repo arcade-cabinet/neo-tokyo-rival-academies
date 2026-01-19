@@ -13,10 +13,10 @@
 
 import { Color3, Vector3 } from "@babylonjs/core";
 import { useMemo } from "react";
-import { Water } from "../components/Water";
-import { Floor } from "../components/Floor";
-import { TexturedWall } from "../components/TexturedWall";
-import { NeonSign } from "../components/NeonSign";
+import { Water } from "../components";
+import { Floor } from "../components";
+import { TexturedWall } from "../components";
+import { NeonSign } from "../components";
 
 export type StreetStyle = "commercial" | "industrial" | "residential" | "market";
 

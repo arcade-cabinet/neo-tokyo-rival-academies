@@ -14,8 +14,8 @@ import { useState, useCallback } from "react";
 import { createRoot } from "react-dom/client";
 import { TestHarness } from "../TestHarness";
 import { Building, BUILDING_PRESETS, type BuildingStyle } from "../compounds/Building";
-import { Water } from "../components/Water";
-import { Floor } from "../components/Floor";
+import { Water } from "../components";
+import { Floor } from "../components";
 
 function BuildingTestScene() {
 	const [seed, setSeed] = useState("building-001");

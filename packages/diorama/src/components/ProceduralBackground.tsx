@@ -13,12 +13,12 @@
  */
 
 import {
+	type AbstractMesh,
 	Color3,
 	MeshBuilder,
+	type Scene,
 	StandardMaterial,
 	Vector3,
-	type AbstractMesh,
-	type Scene,
 } from "@babylonjs/core";
 import { useEffect, useRef } from "react";
 import { useScene } from "reactylon";
@@ -350,7 +350,8 @@ function generateBuildingRow(
 		const x = config.startX + i * spacing + (rng() - 0.5) * spacing * 0.5;
 		const z = config.z + (rng() - 0.5) * config.zVariance;
 		const width = 4 + rng() * 6;
-		const height = config.minHeight + rng() * (config.maxHeight - config.minHeight);
+		const height =
+			config.minHeight + rng() * (config.maxHeight - config.minHeight);
 		const depth = 4 + rng() * 6;
 
 		const building = MeshBuilder.CreateBox(

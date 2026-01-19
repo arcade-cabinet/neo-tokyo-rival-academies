@@ -13,9 +13,9 @@
 
 import { Color3, Vector3 } from "@babylonjs/core";
 import { useMemo } from "react";
-import { TexturedWall, type WallTextureType } from "../components/TexturedWall";
-import { Floor, type FloorSurface } from "../components/Floor";
-import { NeonSign } from "../components/NeonSign";
+import { TexturedWall, type WallTextureType } from "../components";
+import { Floor, type FloorSurface } from "../components";
+import { NeonSign } from "../components";
 
 export type AlleyMood = "dark" | "neon" | "industrial" | "residential";
 

@@ -13,11 +13,11 @@ import { Color3, Vector3 } from "@babylonjs/core";
 import { useState, useCallback } from "react";
 import { createRoot } from "react-dom/client";
 import { TestHarness } from "../TestHarness";
-import { Farground, FARGROUND_PRESETS } from "../components/Farground";
-import { Water } from "../components/Water";
-import { Floor } from "../components/Floor";
-import { TexturedWall } from "../components/TexturedWall";
-import { NeonSign } from "../components/NeonSign";
+import { Farground, FARGROUND_PRESETS } from "../components";
+import { Water } from "../components";
+import { Floor } from "../components";
+import { TexturedWall } from "../components";
+import { NeonSign } from "../components";
 
 type PresetKey = keyof typeof FARGROUND_PRESETS;
 

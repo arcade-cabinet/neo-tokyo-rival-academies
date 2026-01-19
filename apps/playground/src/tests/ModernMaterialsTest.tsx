@@ -30,9 +30,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { useScene } from "reactylon";
 import { TestHarness } from "../TestHarness";
-import { Water } from "../components/Water";
-import { Floor } from "../components/Floor";
-import { GRID_UNIT_SIZE, createSeededRandom } from "../blocks/Block";
+import { Water, Floor, GRID_UNIT_SIZE, createSeededRandom } from "../components";
 import {
 	createConcreteMaterial,
 	createCorrugatedSteelMaterial,

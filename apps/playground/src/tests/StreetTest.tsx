@@ -15,7 +15,7 @@ import { createRoot } from "react-dom/client";
 import { TestHarness } from "../TestHarness";
 import { Street, STREET_PRESETS, type StreetStyle } from "../compounds/Street";
 import { Building, BUILDING_PRESETS } from "../compounds/Building";
-import { Farground } from "../components/Farground";
+import { Farground } from "../components";
 
 function StreetTestScene() {
 	const [seed, setSeed] = useState("street-001");

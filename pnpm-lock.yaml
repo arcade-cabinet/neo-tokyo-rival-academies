@@ -252,6 +252,9 @@ importers:
       '@neo-tokyo/core':
         specifier: workspace:*
         version: link:../core
+      '@neo-tokyo/shared-assets':
+        specifier: workspace:*
+        version: link:../shared-assets
       react:
         specifier: ^19.2.3
         version: 19.2.3

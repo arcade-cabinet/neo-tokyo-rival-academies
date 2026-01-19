@@ -17,7 +17,7 @@ import {
 	TexturedWall,
 	WALL_TEXTURES,
 	type WallTextureType,
-} from "../components/TexturedWall";
+} from "../components";
 
 function CornerWallTestScene() {
 	const [seed, setSeed] = useState("corner-001");

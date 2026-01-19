@@ -13,7 +13,7 @@ import { Vector3 } from "@babylonjs/core";
 import { useState, useCallback } from "react";
 import { createRoot } from "react-dom/client";
 import { TestHarness } from "../TestHarness";
-import { Wall, type WallMaterial, type WallCondition } from "../components/Wall";
+import { Wall, type WallMaterial, type WallCondition } from "../components";
 
 function WallTestScene() {
 	const [seed, setSeed] = useState("wall-test-001");

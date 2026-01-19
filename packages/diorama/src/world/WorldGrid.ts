@@ -220,7 +220,8 @@ export class WorldGrid {
 		// Calculate world position
 		const worldPos = this.gridToWorld(gridX, gridZ);
 		const stratumConfig = STRATA[stratum];
-		const y = stratumConfig.minY + (stratumConfig.maxY - stratumConfig.minY) / 2;
+		const y =
+			stratumConfig.minY + (stratumConfig.maxY - stratumConfig.minY) / 2;
 
 		return {
 			x: gridX,
@@ -264,7 +265,7 @@ export class WorldGrid {
 		const centerZ = WORLD_DEPTH / 2;
 
 		const distFromCenter = Math.sqrt(
-			Math.pow(gridX - centerX, 2) + Math.pow(gridZ - centerZ, 2)
+			(gridX - centerX) ** 2 + (gridZ - centerZ) ** 2,
 		);
 
 		const maxDist = Math.sqrt(centerX * centerX + centerZ * centerZ);
@@ -282,7 +283,7 @@ export class WorldGrid {
 	private determineCellType(
 		gridX: number,
 		gridZ: number,
-		rng: () => number
+		rng: () => number,
 	): CellType {
 		// Streets form a grid pattern (every 4th cell)
 		const isStreetX = gridX % 4 === 0;

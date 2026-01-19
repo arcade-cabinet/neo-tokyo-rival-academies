@@ -14,9 +14,9 @@
 
 import { Color3, Vector3 } from "@babylonjs/core";
 import { useMemo } from "react";
-import { Floor, type FloorSurface } from "../components/Floor";
-import { TexturedWall, type WallTextureType } from "../components/TexturedWall";
-import { NeonSign } from "../components/NeonSign";
+import { Floor, type FloorSurface } from "../components";
+import { TexturedWall, type WallTextureType } from "../components";
+import { NeonSign } from "../components";
 
 export type RoomStyle = "residential" | "office" | "industrial" | "shop" | "club";
 

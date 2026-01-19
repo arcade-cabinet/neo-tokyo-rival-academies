@@ -24,9 +24,9 @@ import { Color3, Vector3 } from "@babylonjs/core";
 import { useState, useCallback } from "react";
 import { createRoot } from "react-dom/client";
 import { TestHarness } from "../TestHarness";
-import { NeonSign, type NeonShape, type NeonMountType, NEON_PRESETS } from "../components/NeonSign";
-import { TexturedWall } from "../components/TexturedWall";
-import { Water } from "../components/Water";
+import { NeonSign, type NeonShape, type NeonMountType, NEON_PRESETS } from "../components";
+import { TexturedWall } from "../components";
+import { Water } from "../components";
 
 function NeonTestScene() {
 	const [seed, setSeed] = useState("neon-001");

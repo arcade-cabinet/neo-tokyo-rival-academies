@@ -13,12 +13,12 @@ import { Color3, Vector3 } from "@babylonjs/core";
 import { useState, useCallback, useRef } from "react";
 import { createRoot } from "react-dom/client";
 import { TestHarness } from "../TestHarness";
-import { Hero, type HeroControls } from "../components/Hero";
-import { Floor } from "../components/Floor";
-import { TexturedWall } from "../components/TexturedWall";
-import { Water } from "../components/Water";
-import { NeonSign } from "../components/NeonSign";
-import { Roof } from "../components/Roof";
+import { Hero, type HeroControls } from "../components";
+import { Floor } from "../components";
+import { TexturedWall } from "../components";
+import { Water } from "../components";
+import { NeonSign } from "../components";
+import { Roof } from "../components";
 
 function HeroTestScene() {
 	const [seed, setSeed] = useState("hero-001");

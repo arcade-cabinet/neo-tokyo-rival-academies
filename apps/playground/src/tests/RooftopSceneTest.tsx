@@ -18,17 +18,17 @@ import { createRoot } from "react-dom/client";
 import { TestHarness } from "../TestHarness";
 
 // All components
-import { Water } from "../components/Water";
-import { Floor } from "../components/Floor";
-import { TexturedWall } from "../components/TexturedWall";
-import { Roof } from "../components/Roof";
-import { NeonSign } from "../components/NeonSign";
-import { RailPath } from "../components/RailPath";
-import { Platform, type PlatformAnimationControls } from "../components/Platform";
-import { DockingStation } from "../components/DockingStation";
-import { Farground } from "../components/Farground";
-import { Hero, type HeroControls } from "../components/Hero";
-import { NavMesh, type NavMeshController, createNavAreasFromFloors } from "../components/NavMesh";
+import { Water } from "../components";
+import { Floor } from "../components";
+import { TexturedWall } from "../components";
+import { Roof } from "../components";
+import { NeonSign } from "../components";
+import { RailPath } from "../components";
+import { Platform, type PlatformAnimationControls } from "../components";
+import { DockingStation } from "../components";
+import { Farground } from "../components";
+import { Hero, type HeroControls } from "../components";
+import { NavMesh, type NavMeshController, createNavAreasFromFloors } from "../components";
 
 function RooftopSceneTestScene() {
 	const [seed, setSeed] = useState("rooftop-scene-001");

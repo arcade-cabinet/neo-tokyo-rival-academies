@@ -15,7 +15,7 @@ import { createRoot } from "react-dom/client";
 import { TestHarness } from "../TestHarness";
 import { Bridge, BRIDGE_PRESETS, type BridgeStyle } from "../compounds/Bridge";
 import { Building, BUILDING_PRESETS } from "../compounds/Building";
-import { Water } from "../components/Water";
+import { Water } from "../components";
 
 function BridgeTestScene() {
 	const [seed, setSeed] = useState("bridge-001");

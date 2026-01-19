@@ -7,9 +7,14 @@
  * - Cell seed (deterministic)
  */
 
-import { Color3, MeshBuilder, StandardMaterial, Vector3 } from "@babylonjs/core";
 import type { AbstractMesh, Scene } from "@babylonjs/core";
-import type { WorldCell, DistrictId, StratumId, CellType } from "./WorldGrid";
+import {
+	Color3,
+	MeshBuilder,
+	StandardMaterial,
+	Vector3,
+} from "@babylonjs/core";
+import type { CellType, DistrictId, StratumId, WorldCell } from "./WorldGrid";
 import { CELL_SIZE } from "./WorldGrid";
 
 // District visual profiles
@@ -193,7 +198,7 @@ export interface CellContent {
  */
 export function generateCellContent(
 	scene: Scene,
-	cell: WorldCell
+	cell: WorldCell,
 ): CellContent {
 	const profile = DISTRICT_PROFILES[cell.districtId as DistrictId];
 	const rng = createSeededRNG(cell.seed);
@@ -212,50 +217,86 @@ export function generateCellContent(
 
 	// Generate content based on cell type
 	switch (cell.cellType) {
-		case "building":
+		case "building": {
 			const buildings = generateBuildings(
 				scene,
 				cell,
 				profile,
 				rng,
-				cellMaterials
+				cellMaterials,
 			);
 			meshes.push(...buildings.meshes);
 			collisionMeshes.push(...buildings.collision);
 			break;
+		}
 
-		case "street":
-			const streetContent = generateStreet(scene, cell, profile, rng, cellMaterials);
+		case "street": {
+			const streetContent = generateStreet(
+				scene,
+				cell,
+				profile,
+				rng,
+				cellMaterials,
+			);
 			meshes.push(...streetContent.meshes);
 			break;
+		}
 
-		case "plaza":
-			const plazaContent = generatePlaza(scene, cell, profile, rng, cellMaterials);
+		case "plaza": {
+			const plazaContent = generatePlaza(
+				scene,
+				cell,
+				profile,
+				rng,
+				cellMaterials,
+			);
 			meshes.push(...plazaContent.meshes);
 			break;
+		}
 
-		case "alley":
-			const alleyContent = generateAlley(scene, cell, profile, rng, cellMaterials);
+		case "alley": {
+			const alleyContent = generateAlley(
+				scene,
+				cell,
+				profile,
+				rng,
+				cellMaterials,
+			);
 			meshes.push(...alleyContent.meshes);
 			collisionMeshes.push(...alleyContent.collision);
 			break;
+		}
 
-		case "park":
-			const parkContent = generatePark(scene, cell, profile, rng, cellMaterials);
+		case "park": {
+			const parkContent = generatePark(
+				scene,
+				cell,
+				profile,
+				rng,
+				cellMaterials,
+			);
 			meshes.push(...parkContent.meshes);
 			break;
+		}
 
-		case "elevator":
-			const elevatorContent = generateElevator(scene, cell, profile, cellMaterials);
+		case "elevator": {
+			const elevatorContent = generateElevator(
+				scene,
+				cell,
+				profile,
+				cellMaterials,
+			);
 			meshes.push(...elevatorContent.meshes);
 			collisionMeshes.push(...elevatorContent.collision);
 			break;
+		}
 
-		case "bridge":
+		case "bridge": {
 			const bridgeContent = generateBridge(scene, cell, profile, cellMaterials);
 			meshes.push(...bridgeContent.meshes);
 			collisionMeshes.push(...bridgeContent.collision);
 			break;
+		}
 	}
 
 	// Add neon signs based on district intensity
@@ -292,7 +333,7 @@ export function disposeCellContent(content: CellContent): void {
 function createCellMaterials(
 	scene: Scene,
 	seed: string,
-	profile: DistrictProfile
+	profile: DistrictProfile,
 ) {
 	const building = new StandardMaterial(`${seed}_building`, scene);
 	building.diffuseColor = profile.colors.building;
@@ -317,17 +358,17 @@ function createCellMaterials(
 function createGround(
 	scene: Scene,
 	cell: WorldCell,
-	material: StandardMaterial
+	material: StandardMaterial,
 ): AbstractMesh {
 	const ground = MeshBuilder.CreateGround(
 		`ground_${cell.x}_${cell.z}`,
 		{ width: CELL_SIZE, height: CELL_SIZE },
-		scene
+		scene,
 	);
 	ground.position = new Vector3(
 		cell.worldPosition.x,
 		cell.worldPosition.y,
-		cell.worldPosition.z
+		cell.worldPosition.z,
 	);
 	ground.material = material;
 	ground.receiveShadows = true;
@@ -339,7 +380,7 @@ function generateBuildings(
 	cell: WorldCell,
 	profile: DistrictProfile,
 	rng: () => number,
-	materials: ReturnType<typeof createCellMaterials>
+	materials: ReturnType<typeof createCellMaterials>,
 ): { meshes: AbstractMesh[]; collision: AbstractMesh[] } {
 	const meshes: AbstractMesh[] = [];
 	const collision: AbstractMesh[] = [];
@@ -356,16 +397,14 @@ function generateBuildings(
 		// Position within cell (avoid edges for streets)
 		const margin = 2;
 		const x =
-			cell.worldPosition.x +
-			(rng() - 0.5) * (CELL_SIZE - margin * 2 - width);
+			cell.worldPosition.x + (rng() - 0.5) * (CELL_SIZE - margin * 2 - width);
 		const z =
-			cell.worldPosition.z +
-			(rng() - 0.5) * (CELL_SIZE - margin * 2 - depth);
+			cell.worldPosition.z + (rng() - 0.5) * (CELL_SIZE - margin * 2 - depth);
 
 		const building = MeshBuilder.CreateBox(
 			`building_${cell.x}_${cell.z}_${i}`,
 			{ width, height, depth },
-			scene
+			scene,
 		);
 		building.position = new Vector3(x, cell.worldPosition.y + height / 2, z);
 		building.material = rng() > 0.7 ? materials.accent : materials.building;
@@ -375,7 +414,7 @@ function generateBuildings(
 		const collisionBox = MeshBuilder.CreateBox(
 			`collision_${cell.x}_${cell.z}_${i}`,
 			{ width: width + 0.5, height: 3, depth: depth + 0.5 },
-			scene
+			scene,
 		);
 		collisionBox.position = new Vector3(x, cell.worldPosition.y + 1.5, z);
 		collisionBox.isVisible = false;
@@ -384,7 +423,15 @@ function generateBuildings(
 
 		// Windows
 		if (rng() < 0.6) {
-			const windows = generateWindows(scene, building, height, width, depth, rng, materials.neon);
+			const windows = generateWindows(
+				scene,
+				building,
+				height,
+				width,
+				depth,
+				rng,
+				materials.neon,
+			);
 			meshes.push(...windows);
 		}
 	}
@@ -399,7 +446,7 @@ function generateWindows(
 	width: number,
 	depth: number,
 	rng: () => number,
-	neonMaterial: StandardMaterial
+	neonMaterial: StandardMaterial,
 ): AbstractMesh[] {
 	const windows: AbstractMesh[] = [];
 	const rows = Math.floor(height / 4);
@@ -412,7 +459,7 @@ function generateWindows(
 			const win = MeshBuilder.CreatePlane(
 				`window_${building.name}_${row}_${col}`,
 				{ width: 1.2, height: 1.8 },
-				scene
+				scene,
 			);
 
 			const xOffset = (col - (cols - 1) / 2) * 2.5;
@@ -421,7 +468,7 @@ function generateWindows(
 			win.position = new Vector3(
 				building.position.x + xOffset,
 				building.position.y + yOffset,
-				building.position.z + depth / 2 + 0.1
+				building.position.z + depth / 2 + 0.1,
 			);
 
 			const brightness = 0.2 + rng() * 0.5;
@@ -440,7 +487,7 @@ function generateStreet(
 	cell: WorldCell,
 	profile: DistrictProfile,
 	rng: () => number,
-	materials: ReturnType<typeof createCellMaterials>
+	materials: ReturnType<typeof createCellMaterials>,
 ): { meshes: AbstractMesh[] } {
 	const meshes: AbstractMesh[] = [];
 
@@ -449,12 +496,12 @@ function generateStreet(
 		const line = MeshBuilder.CreateBox(
 			`streetLine_${cell.x}_${cell.z}_${i}`,
 			{ width: 0.2, height: 0.02, depth: CELL_SIZE * 0.8 },
-			scene
+			scene,
 		);
 		line.position = new Vector3(
 			cell.worldPosition.x + (i - 1) * 2,
 			cell.worldPosition.y + 0.01,
-			cell.worldPosition.z
+			cell.worldPosition.z,
 		);
 
 		const lineMat = new StandardMaterial(`lineMat_${line.name}`, scene);
@@ -472,7 +519,7 @@ function generatePlaza(
 	cell: WorldCell,
 	profile: DistrictProfile,
 	rng: () => number,
-	materials: ReturnType<typeof createCellMaterials>
+	materials: ReturnType<typeof createCellMaterials>,
 ): { meshes: AbstractMesh[] } {
 	const meshes: AbstractMesh[] = [];
 
@@ -481,12 +528,12 @@ function generatePlaza(
 		const fountain = MeshBuilder.CreateCylinder(
 			`fountain_${cell.x}_${cell.z}`,
 			{ diameter: 4, height: 1.5, tessellation: 16 },
-			scene
+			scene,
 		);
 		fountain.position = new Vector3(
 			cell.worldPosition.x,
 			cell.worldPosition.y + 0.75,
-			cell.worldPosition.z
+			cell.worldPosition.z,
 		);
 		fountain.material = materials.accent;
 		meshes.push(fountain);
@@ -500,7 +547,7 @@ function generateAlley(
 	cell: WorldCell,
 	profile: DistrictProfile,
 	rng: () => number,
-	materials: ReturnType<typeof createCellMaterials>
+	materials: ReturnType<typeof createCellMaterials>,
 ): { meshes: AbstractMesh[]; collision: AbstractMesh[] } {
 	const meshes: AbstractMesh[] = [];
 	const collision: AbstractMesh[] = [];
@@ -511,12 +558,12 @@ function generateAlley(
 		const wall = MeshBuilder.CreateBox(
 			`alleyWall_${cell.x}_${cell.z}_${side}`,
 			{ width: 3, height, depth: CELL_SIZE },
-			scene
+			scene,
 		);
 		wall.position = new Vector3(
 			cell.worldPosition.x + (side === 0 ? -8 : 8),
 			cell.worldPosition.y + height / 2,
-			cell.worldPosition.z
+			cell.worldPosition.z,
 		);
 		wall.material = materials.building;
 		meshes.push(wall);
@@ -525,12 +572,12 @@ function generateAlley(
 		const collisionBox = MeshBuilder.CreateBox(
 			`alleyCollision_${cell.x}_${cell.z}_${side}`,
 			{ width: 4, height: 3, depth: CELL_SIZE },
-			scene
+			scene,
 		);
 		collisionBox.position = new Vector3(
 			cell.worldPosition.x + (side === 0 ? -8 : 8),
 			cell.worldPosition.y + 1.5,
-			cell.worldPosition.z
+			cell.worldPosition.z,
 		);
 		collisionBox.isVisible = false;
 		collision.push(collisionBox);
@@ -545,7 +592,7 @@ function generatePark(
 	cell: WorldCell,
 	profile: DistrictProfile,
 	rng: () => number,
-	materials: ReturnType<typeof createCellMaterials>
+	materials: ReturnType<typeof createCellMaterials>,
 ): { meshes: AbstractMesh[] } {
 	const meshes: AbstractMesh[] = [];
 
@@ -555,12 +602,12 @@ function generatePark(
 		const trunk = MeshBuilder.CreateCylinder(
 			`tree_${cell.x}_${cell.z}_${i}`,
 			{ diameter: 0.5, height: 4, tessellation: 8 },
-			scene
+			scene,
 		);
 		trunk.position = new Vector3(
 			cell.worldPosition.x + (rng() - 0.5) * (CELL_SIZE - 4),
 			cell.worldPosition.y + 2,
-			cell.worldPosition.z + (rng() - 0.5) * (CELL_SIZE - 4)
+			cell.worldPosition.z + (rng() - 0.5) * (CELL_SIZE - 4),
 		);
 
 		const treeMat = new StandardMaterial(`treeMat_${trunk.name}`, scene);
@@ -572,7 +619,7 @@ function generatePark(
 		const canopy = MeshBuilder.CreateSphere(
 			`canopy_${cell.x}_${cell.z}_${i}`,
 			{ diameter: 3, segments: 8 },
-			scene
+			scene,
 		);
 		canopy.position = trunk.position.add(new Vector3(0, 3, 0));
 		const canopyMat = new StandardMaterial(`canopyMat_${canopy.name}`, scene);
@@ -588,7 +635,7 @@ function generateElevator(
 	scene: Scene,
 	cell: WorldCell,
 	profile: DistrictProfile,
-	materials: ReturnType<typeof createCellMaterials>
+	materials: ReturnType<typeof createCellMaterials>,
 ): { meshes: AbstractMesh[]; collision: AbstractMesh[] } {
 	const meshes: AbstractMesh[] = [];
 	const collision: AbstractMesh[] = [];
@@ -597,12 +644,12 @@ function generateElevator(
 	const shaft = MeshBuilder.CreateCylinder(
 		`elevator_${cell.x}_${cell.z}`,
 		{ diameter: 6, height: 20, tessellation: 12 },
-		scene
+		scene,
 	);
 	shaft.position = new Vector3(
 		cell.worldPosition.x,
 		cell.worldPosition.y + 10,
-		cell.worldPosition.z
+		cell.worldPosition.z,
 	);
 	shaft.material = materials.accent;
 	meshes.push(shaft);
@@ -611,12 +658,12 @@ function generateElevator(
 	const collisionCyl = MeshBuilder.CreateCylinder(
 		`elevatorCollision_${cell.x}_${cell.z}`,
 		{ diameter: 7, height: 3, tessellation: 12 },
-		scene
+		scene,
 	);
 	collisionCyl.position = new Vector3(
 		cell.worldPosition.x,
 		cell.worldPosition.y + 1.5,
-		cell.worldPosition.z
+		cell.worldPosition.z,
 	);
 	collisionCyl.isVisible = false;
 	collision.push(collisionCyl);
@@ -629,7 +676,7 @@ function generateBridge(
 	scene: Scene,
 	cell: WorldCell,
 	profile: DistrictProfile,
-	materials: ReturnType<typeof createCellMaterials>
+	materials: ReturnType<typeof createCellMaterials>,
 ): { meshes: AbstractMesh[]; collision: AbstractMesh[] } {
 	const meshes: AbstractMesh[] = [];
 	const collision: AbstractMesh[] = [];
@@ -638,12 +685,12 @@ function generateBridge(
 	const deck = MeshBuilder.CreateBox(
 		`bridge_${cell.x}_${cell.z}`,
 		{ width: CELL_SIZE, height: 0.5, depth: 6 },
-		scene
+		scene,
 	);
 	deck.position = new Vector3(
 		cell.worldPosition.x,
 		cell.worldPosition.y + 5,
-		cell.worldPosition.z
+		cell.worldPosition.z,
 	);
 	deck.material = materials.accent;
 	meshes.push(deck);
@@ -653,12 +700,12 @@ function generateBridge(
 		const pillar = MeshBuilder.CreateCylinder(
 			`bridgePillar_${cell.x}_${cell.z}_${i}`,
 			{ diameter: 1, height: 5, tessellation: 8 },
-			scene
+			scene,
 		);
 		pillar.position = new Vector3(
 			cell.worldPosition.x + (i === 0 ? -8 : 8),
 			cell.worldPosition.y + 2.5,
-			cell.worldPosition.z
+			cell.worldPosition.z,
 		);
 		pillar.material = materials.building;
 		meshes.push(pillar);
@@ -667,7 +714,7 @@ function generateBridge(
 		const pillarCollision = MeshBuilder.CreateCylinder(
 			`bridgePillarCollision_${cell.x}_${cell.z}_${i}`,
 			{ diameter: 1.5, height: 3, tessellation: 8 },
-			scene
+			scene,
 		);
 		pillarCollision.position = pillar.position.clone();
 		pillarCollision.position.y = cell.worldPosition.y + 1.5;
@@ -684,7 +731,7 @@ function generateNeonSigns(
 	cell: WorldCell,
 	profile: DistrictProfile,
 	rng: () => number,
-	materials: ReturnType<typeof createCellMaterials>
+	materials: ReturnType<typeof createCellMaterials>,
 ): AbstractMesh[] {
 	const signs: AbstractMesh[] = [];
 	const count = Math.floor(1 + profile.neonIntensity * 3);
@@ -693,12 +740,12 @@ function generateNeonSigns(
 		const sign = MeshBuilder.CreateBox(
 			`neonSign_${cell.x}_${cell.z}_${i}`,
 			{ width: 2 + rng() * 3, height: 1 + rng() * 1.5, depth: 0.2 },
-			scene
+			scene,
 		);
 		sign.position = new Vector3(
 			cell.worldPosition.x + (rng() - 0.5) * CELL_SIZE,
 			cell.worldPosition.y + 5 + rng() * 10,
-			cell.worldPosition.z + (rng() - 0.5) * CELL_SIZE
+			cell.worldPosition.z + (rng() - 0.5) * CELL_SIZE,
 		);
 		sign.material = materials.neon;
 		signs.push(sign);
@@ -712,7 +759,7 @@ function generateProps(
 	cell: WorldCell,
 	profile: DistrictProfile,
 	rng: () => number,
-	materials: ReturnType<typeof createCellMaterials>
+	materials: ReturnType<typeof createCellMaterials>,
 ): AbstractMesh[] {
 	const props: AbstractMesh[] = [];
 	const count = Math.floor(2 + profile.propDensity * 5);
@@ -728,38 +775,42 @@ function generateProps(
 				prop = MeshBuilder.CreatePolyhedron(
 					`prop_${cell.x}_${cell.z}_${i}`,
 					{ type: 1, size: 0.3 + rng() * 0.3 },
-					scene
+					scene,
 				);
 				break;
 			case "barrel":
 				prop = MeshBuilder.CreateCylinder(
 					`prop_${cell.x}_${cell.z}_${i}`,
 					{ diameter: 0.8, height: 1.2, tessellation: 8 },
-					scene
+					scene,
 				);
 				break;
 			case "crate":
 				prop = MeshBuilder.CreateBox(
 					`prop_${cell.x}_${cell.z}_${i}`,
 					{ size: 0.8 + rng() * 0.4 },
-					scene
+					scene,
 				);
 				break;
 			case "vent":
 				prop = MeshBuilder.CreateCylinder(
 					`prop_${cell.x}_${cell.z}_${i}`,
 					{ diameter: 1, height: 0.2, tessellation: 12 },
-					scene
+					scene,
 				);
 				break;
 			default:
-				prop = MeshBuilder.CreateBox(`prop_${cell.x}_${cell.z}_${i}`, { size: 0.5 }, scene);
+				prop = MeshBuilder.CreateBox(
+					`prop_${cell.x}_${cell.z}_${i}`,
+					{ size: 0.5 },
+					scene,
+				);
 		}
 
 		prop.position = new Vector3(
 			cell.worldPosition.x + (rng() - 0.5) * (CELL_SIZE - 4),
 			cell.worldPosition.y + 0.5,
-			cell.worldPosition.z + (rng() - 0.5) * (CELL_SIZE - 4)
+			cell.worldPosition.z + (rng() - 0.5) * (CELL_SIZE - 4),
 		);
 		prop.material = rng() > 0.5 ? materials.accent : materials.building;
 		props.push(prop);
