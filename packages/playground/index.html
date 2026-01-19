@@ -3,79 +3,142 @@
 <head>
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>Neo-Tokyo Component Playground</title>
+	<title>Flooded World Component Playground</title>
+	<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 	<style>
 		* { margin: 0; padding: 0; box-sizing: border-box; }
 		body {
-			font-family: 'Courier New', monospace;
-			background: #0a0a0f;
-			color: #00ff88;
+			font-family: 'Inter', sans-serif;
+			background: #0F1419;
+			color: #E2E8F0;
 			min-height: 100vh;
 			padding: 2rem;
+			line-height: 1.5;
 		}
 		h1 {
-			font-size: 2rem;
+			font-family: 'Rajdhani', sans-serif;
+			font-size: 2.25rem;
+			font-weight: 600;
 			margin-bottom: 0.5rem;
-			text-shadow: 0 0 10px #00ff88;
+			color: #60A5FA;
 		}
 		.subtitle {
-			font-size: 0.9rem;
-			opacity: 0.7;
+			font-size: 1rem;
+			color: #94A3B8;
 			margin-bottom: 2rem;
 		}
 		h2 {
-			font-size: 1.2rem;
+			font-family: 'Rajdhani', sans-serif;
+			font-size: 1.25rem;
+			font-weight: 600;
 			margin: 2rem 0 1rem;
-			color: #ff0088;
+			color: #F97316;
+			text-transform: uppercase;
+			letter-spacing: 0.05em;
 		}
 		.grid {
 			display: grid;
-			grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+			grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
 			gap: 1rem;
 		}
 		a {
 			display: block;
 			padding: 1rem;
-			background: #1a1a2e;
-			border: 1px solid #00ff88;
-			color: #00ff88;
+			background: #1A2332;
+			border: 1px solid #334155;
+			border-radius: 6px;
+			color: #E2E8F0;
 			text-decoration: none;
 			transition: all 0.2s;
+			font-size: 0.875rem;
 		}
 		a:hover {
-			background: #00ff88;
-			color: #0a0a0f;
-			box-shadow: 0 0 20px #00ff88;
+			background: #243447;
+			border-color: #60A5FA;
+			transform: translateY(-2px);
 		}
 		.status {
-			font-size: 0.7rem;
+			font-family: 'Rajdhani', sans-serif;
+			font-size: 0.75rem;
 			margin-top: 0.5rem;
+			text-transform: uppercase;
+			letter-spacing: 0.1em;
 		}
-		.status.ready { color: #00ff00; opacity: 1; }
-		.status.wip { color: #ffff00; opacity: 0.8; }
-		.status.todo { color: #ff4444; opacity: 0.5; }
+		.status.ready { color: #34D399; }
+		.status.wip { color: #FBBF24; }
+		.status.todo { color: #F87171; opacity: 0.7; }
 		.vision {
-			background: #1a1a2e;
-			border: 1px solid #ff0088;
-			padding: 1rem;
-			margin: 1rem 0;
-			font-size: 0.8rem;
-			line-height: 1.5;
+			background: #1A2332;
+			border: 1px solid #334155;
+			border-left: 4px solid #F97316;
+			border-radius: 6px;
+			padding: 1.25rem;
+			margin: 1.5rem 0;
+			font-size: 0.875rem;
+			line-height: 1.6;
 		}
-		.vision strong { color: #ff0088; }
+		.vision strong {
+			font-family: 'Rajdhani', sans-serif;
+			color: #F97316;
+			text-transform: uppercase;
+			letter-spacing: 0.05em;
+		}
+		.design-section {
+			background: #1E3A5F;
+			border: 1px solid #60A5FA;
+			border-radius: 6px;
+			padding: 1rem;
+			margin-bottom: 2rem;
+		}
+		.design-section h2 {
+			color: #60A5FA;
+			margin-top: 0;
+		}
+		.badge {
+			display: inline-block;
+			padding: 0.25rem 0.5rem;
+			background: #F97316;
+			color: #0F1419;
+			font-family: 'Rajdhani', sans-serif;
+			font-size: 0.7rem;
+			font-weight: 600;
+			border-radius: 4px;
+			margin-left: 0.5rem;
+			text-transform: uppercase;
+		}
 	</style>
 </head>
 <body>
-	<h1>// NEO-TOKYO COMPONENT PLAYGROUND</h1>
-	<p class="subtitle">Isolated testing environment for flooded city building blocks.</p>
+	<h1>Flooded World Component Playground</h1>
+	<p class="subtitle">Isolated testing environment for flooded city building blocks — Year 40 post-flood</p>
 
 	<div class="vision">
-		<strong>WORLD CONCEPT:</strong> Neo-Tokyo after global flooding. The city has "become its rooftops" -
-		streets are underwater, residents live on upper floors and roofs connected by bridges, ferries, and ziplines.
-		Buildings rise from murky water, neon reflects on dark surfaces, platform ferries glide on hidden rails.
+		<strong>World Setting:</strong> Forty years after the waters rose, the city has "become its rooftops."
+		Streets sit underwater at the 4th floor. Residents live on upper floors and rooftops connected by
+		rope bridges, ferries, and salvaged infrastructure. Buildings rise from murky water, lantern light
+		reflects on dark surfaces, and platform ferries glide between docking stations. Academy students
+		patrol territories, diving for salvage in the flooded depths below.
 	</div>
 
-	<h2>// STRUCTURAL PRIMITIVES</h2>
+	<div class="design-section">
+		<h2>// Design System <span class="badge">New</span></h2>
+		<div class="grid">
+			<a href="/tests/design-system.html">
+				Typography & HUD
+				<div class="status ready">[ READY ]</div>
+			</a>
+			<a href="/tests/color-palette.html">
+				Color Palettes
+				<div class="status ready">[ READY ]</div>
+			</a>
+			<a href="/tests/component-showcase.html">
+				Component Showcase
+				<div class="status ready">[ READY ]</div>
+			</a>
+		</div>
+	</div>
+
+	<h2>// Structural Primitives</h2>
 	<div class="grid">
 		<a href="/tests/textured-wall.html">
 			Textured Wall (PBR)
@@ -99,7 +162,7 @@
 		</a>
 	</div>
 
-	<h2>// TRANSPORT SYSTEM</h2>
+	<h2>// Transport System</h2>
 	<div class="grid">
 		<a href="/tests/water.html">
 			Water Surface
@@ -117,49 +180,45 @@
 			Ferry System
 			<div class="status ready">[ READY ]</div>
 		</a>
-		<a href="/tests/elevator.html">
-			Elevator
-			<div class="status todo">[ TODO ]</div>
-		</a>
 		<a href="/tests/bridge.html">
 			Bridge / Walkway
-			<div class="status todo">[ TODO ]</div>
+			<div class="status ready">[ READY ]</div>
 		</a>
 	</div>
 
-	<h2>// ASSEMBLED STRUCTURES</h2>
+	<h2>// Assembled Structures</h2>
 	<div class="grid">
 		<a href="/tests/room.html">
 			Room (4 Walls)
-			<div class="status todo">[ TODO ]</div>
+			<div class="status ready">[ READY ]</div>
 		</a>
 		<a href="/tests/building.html">
 			Building
-			<div class="status todo">[ TODO ]</div>
+			<div class="status ready">[ READY ]</div>
 		</a>
-		<a href="/tests/dock.html">
-			Dock Station
-			<div class="status todo">[ TODO ]</div>
+		<a href="/tests/alley.html">
+			Alley
+			<div class="status ready">[ READY ]</div>
+		</a>
+		<a href="/tests/street.html">
+			Street
+			<div class="status ready">[ READY ]</div>
 		</a>
 	</div>
 
-	<h2>// ENVIRONMENT</h2>
+	<h2>// Environment</h2>
 	<div class="grid">
 		<a href="/tests/farground.html">
 			Farground (Skyline)
 			<div class="status ready">[ READY ]</div>
 		</a>
 		<a href="/tests/neon.html">
-			Neon Signs
+			Signage & Lanterns
 			<div class="status ready">[ READY ]</div>
-		</a>
-		<a href="/tests/props.html">
-			Props (AC units, etc)
-			<div class="status todo">[ TODO ]</div>
 		</a>
 	</div>
 
-	<h2>// CHARACTER & NAVIGATION</h2>
+	<h2>// Character & Navigation</h2>
 	<div class="grid">
 		<a href="/tests/hero.html">
 			Hero Controller
@@ -169,13 +228,9 @@
 			Navigation Mesh
 			<div class="status ready">[ READY ]</div>
 		</a>
-		<a href="/tests/ai-pathfind.html">
-			AI Pathfinding
-			<div class="status wip">[ WIP ]</div>
-		</a>
 	</div>
 
-	<h2>// DAGGERFALL ARCHITECTURE</h2>
+	<h2>// Daggerfall Architecture</h2>
 	<div class="grid">
 		<a href="/tests/block.html">
 			Block System
@@ -185,17 +240,9 @@
 			Modern Materials
 			<div class="status ready">[ READY ]</div>
 		</a>
-		<a href="/tests/node-geometry.html">
-			Node Geometry
-			<div class="status todo">[ TODO ]</div>
-		</a>
-		<a href="/tests/decals.html">
-			Decal System
-			<div class="status todo">[ TODO ]</div>
-		</a>
 	</div>
 
-	<h2>// WORLD GENERATION</h2>
+	<h2>// World Generation</h2>
 	<div class="grid">
 		<a href="/tests/cell.html">
 			Cell Generation
@@ -205,25 +252,13 @@
 			Cell Streaming
 			<div class="status todo">[ TODO ]</div>
 		</a>
-		<a href="/tests/connector.html">
-			Area Connectors
-			<div class="status todo">[ TODO ]</div>
-		</a>
 	</div>
 
-	<h2>// INTEGRATION DEMOS</h2>
+	<h2>// Integration Demos</h2>
 	<div class="grid">
 		<a href="/tests/rooftop-scene.html">
 			Rooftop Scene
 			<div class="status ready">[ READY ]</div>
-		</a>
-		<a href="/tests/ferry.html">
-			Ferry Crossing
-			<div class="status ready">[ READY ]</div>
-		</a>
-		<a href="/tests/flooded-district.html">
-			Flooded District
-			<div class="status todo">[ TODO ]</div>
 		</a>
 	</div>
 </body>
