@@ -10,6 +10,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { pipeline as streamPipeline } from 'node:stream/promises';
 import { createWriteStream } from 'node:fs';
+import { Readable } from 'node:stream';
 
 const MESHY_API_KEY = process.env.MESHY_API_KEY;
 if (!MESHY_API_KEY) {
@@ -44,7 +45,8 @@ async function fetchTaskResult(taskId: string, endpoint: string): Promise<Record
   if (!response.ok) {
     throw new Error(`Failed to fetch task ${taskId}: ${response.statusText}`);
   }
-  return response.json();
+  const data = await response.json() as Record<string, unknown>;
+  return data;
 }
 
 async function downloadFile(url: string, dest: string): Promise<void> {
@@ -56,8 +58,8 @@ async function downloadFile(url: string, dest: string): Promise<void> {
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir, { recursive: true });
   }
-  // @ts-ignore
-  await streamPipeline(response.body, createWriteStream(dest));
+  const nodeReadable = Readable.fromWeb(response.body as import('node:stream/web').ReadableStream);
+  await streamPipeline(nodeReadable, createWriteStream(dest));
   console.log(`  Downloaded: ${dest}`);
 }
 

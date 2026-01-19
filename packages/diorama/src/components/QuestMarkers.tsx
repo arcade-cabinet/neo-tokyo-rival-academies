@@ -53,7 +53,7 @@ export function QuestMarkers({
 	const scene = useScene();
 	const meshesRef = useRef<Map<string, AbstractMesh>>(new Map());
 	const glowLayerRef = useRef<GlowLayer | null>(null);
-	const [activeMarkers, setActiveMarkers] = useState<Set<string>>(new Set());
+	const [, setActiveMarkers] = useState<Set<string>>(new Set());
 
 	useEffect(() => {
 		if (!scene) return;

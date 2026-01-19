@@ -179,10 +179,22 @@ function SceneContent({ children, inputState }: { children?: ReactNode; inputSta
 					characterMeshes={characterMeshes}
 					animationController={animationController}
 					speed={5}
-					bounds={{ minX: -20, maxX: 20, minZ: -20, maxZ: 20 }}
+					bounds={SCENE_BOUNDS}
 					inputState={inputState}
 				/>
 			)}
+
+			{/* Quest markers */}
+			<QuestMarkers
+				markers={questMarkers}
+				onMarkerInteract={handleMarkerInteract}
+			/>
+
+			{/* Data shards */}
+			<DataShards
+				shards={dataShards}
+				onCollect={handleShardCollect}
+			/>
 
 			{children}
 		</>

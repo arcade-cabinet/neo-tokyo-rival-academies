@@ -10,7 +10,7 @@
 import { Color3, MeshBuilder, StandardMaterial, Vector3 } from "@babylonjs/core";
 import type { AbstractMesh, Scene } from "@babylonjs/core";
 import type { WorldCell, DistrictId, StratumId, CellType } from "./WorldGrid";
-import { CELL_SIZE, STRATA } from "./WorldGrid";
+import { CELL_SIZE } from "./WorldGrid";
 
 // District visual profiles
 export interface DistrictProfile {
@@ -201,11 +201,6 @@ export function generateCellContent(
 	const meshes: AbstractMesh[] = [];
 	const materials: StandardMaterial[] = [];
 	const collisionMeshes: AbstractMesh[] = [];
-
-	// Cell base position
-	const baseX = cell.worldPosition.x;
-	const baseY = cell.worldPosition.y;
-	const baseZ = cell.worldPosition.z;
 
 	// Create materials for this cell
 	const cellMaterials = createCellMaterials(scene, cell.seed, profile);
