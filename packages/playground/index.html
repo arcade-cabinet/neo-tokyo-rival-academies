@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Neo-Tokyo Component Playground</title>
+	<style>
+		* { margin: 0; padding: 0; box-sizing: border-box; }
+		body {
+			font-family: 'Courier New', monospace;
+			background: #0a0a0f;
+			color: #00ff88;
+			min-height: 100vh;
+			padding: 2rem;
+		}
+		h1 {
+			font-size: 2rem;
+			margin-bottom: 0.5rem;
+			text-shadow: 0 0 10px #00ff88;
+		}
+		.subtitle {
+			font-size: 0.9rem;
+			opacity: 0.7;
+			margin-bottom: 2rem;
+		}
+		h2 {
+			font-size: 1.2rem;
+			margin: 2rem 0 1rem;
+			color: #ff0088;
+		}
+		.grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+			gap: 1rem;
+		}
+		a {
+			display: block;
+			padding: 1rem;
+			background: #1a1a2e;
+			border: 1px solid #00ff88;
+			color: #00ff88;
+			text-decoration: none;
+			transition: all 0.2s;
+		}
+		a:hover {
+			background: #00ff88;
+			color: #0a0a0f;
+			box-shadow: 0 0 20px #00ff88;
+		}
+		.status {
+			font-size: 0.7rem;
+			margin-top: 0.5rem;
+		}
+		.status.ready { color: #00ff00; opacity: 1; }
+		.status.wip { color: #ffff00; opacity: 0.8; }
+		.status.todo { color: #ff4444; opacity: 0.5; }
+		.vision {
+			background: #1a1a2e;
+			border: 1px solid #ff0088;
+			padding: 1rem;
+			margin: 1rem 0;
+			font-size: 0.8rem;
+			line-height: 1.5;
+		}
+		.vision strong { color: #ff0088; }
+	</style>
+</head>
+<body>
+	<h1>// NEO-TOKYO COMPONENT PLAYGROUND</h1>
+	<p class="subtitle">Isolated testing environment for flooded city building blocks.</p>
+
+	<div class="vision">
+		<strong>WORLD CONCEPT:</strong> Neo-Tokyo after global flooding. The city has "become its rooftops" -
+		streets are underwater, residents live on upper floors and roofs connected by bridges, ferries, and ziplines.
+		Buildings rise from murky water, neon reflects on dark surfaces, platform ferries glide on hidden rails.
+	</div>
+
+	<h2>// STRUCTURAL PRIMITIVES</h2>
+	<div class="grid">
+		<a href="/tests/textured-wall.html">
+			Textured Wall (PBR)
+			<div class="status ready">[ READY ]</div>
+		</a>
+		<a href="/tests/corner-wall.html">
+			Corner Wall (90°)
+			<div class="status wip">[ WIP ]</div>
+		</a>
+		<a href="/tests/wall.html">
+			Procedural Wall
+			<div class="status wip">[ WIP ]</div>
+		</a>
+		<a href="/tests/floor.html">
+			Floor / Rooftop
+			<div class="status todo">[ TODO ]</div>
+		</a>
+		<a href="/tests/roof.html">
+			Roof / Ceiling
+			<div class="status todo">[ TODO ]</div>
+		</a>
+	</div>
+
+	<h2>// TRANSPORT SYSTEM</h2>
+	<div class="grid">
+		<a href="/tests/water.html">
+			Water Surface
+			<div class="status wip">[ WIP ]</div>
+		</a>
+		<a href="/tests/rail-path.html">
+			Rail Path (Spline)
+			<div class="status wip">[ WIP ]</div>
+		</a>
+		<a href="/tests/platform.html">
+			Platform (Rideable)
+			<div class="status wip">[ WIP ]</div>
+		</a>
+		<a href="/tests/ferry.html">
+			Ferry System
+			<div class="status todo">[ TODO ]</div>
+		</a>
+		<a href="/tests/elevator.html">
+			Elevator
+			<div class="status todo">[ TODO ]</div>
+		</a>
+		<a href="/tests/bridge.html">
+			Bridge / Walkway
+			<div class="status todo">[ TODO ]</div>
+		</a>
+	</div>
+
+	<h2>// ASSEMBLED STRUCTURES</h2>
+	<div class="grid">
+		<a href="/tests/room.html">
+			Room (4 Walls)
+			<div class="status todo">[ TODO ]</div>
+		</a>
+		<a href="/tests/building.html">
+			Building
+			<div class="status todo">[ TODO ]</div>
+		</a>
+		<a href="/tests/dock.html">
+			Dock Station
+			<div class="status todo">[ TODO ]</div>
+		</a>
+	</div>
+
+	<h2>// ENVIRONMENT</h2>
+	<div class="grid">
+		<a href="/tests/farground.html">
+			Farground (Skyline)
+			<div class="status todo">[ TODO ]</div>
+		</a>
+		<a href="/tests/neon.html">
+			Neon Signs
+			<div class="status todo">[ TODO ]</div>
+		</a>
+		<a href="/tests/props.html">
+			Props (AC units, etc)
+			<div class="status todo">[ TODO ]</div>
+		</a>
+	</div>
+
+	<h2>// CHARACTER & NAVIGATION</h2>
+	<div class="grid">
+		<a href="/tests/hero.html">
+			Hero Controller
+			<div class="status todo">[ TODO ]</div>
+		</a>
+		<a href="/tests/navmesh.html">
+			Navigation Mesh
+			<div class="status todo">[ TODO ]</div>
+		</a>
+		<a href="/tests/ai-pathfind.html">
+			AI Pathfinding
+			<div class="status todo">[ TODO ]</div>
+		</a>
+	</div>
+
+	<h2>// WORLD GENERATION</h2>
+	<div class="grid">
+		<a href="/tests/cell.html">
+			Cell Generation
+			<div class="status todo">[ TODO ]</div>
+		</a>
+		<a href="/tests/streaming.html">
+			Cell Streaming
+			<div class="status todo">[ TODO ]</div>
+		</a>
+		<a href="/tests/connector.html">
+			Area Connectors
+			<div class="status todo">[ TODO ]</div>
+		</a>
+	</div>
+
+	<h2>// INTEGRATION DEMOS</h2>
+	<div class="grid">
+		<a href="/tests/rooftop-scene.html">
+			Rooftop Scene
+			<div class="status todo">[ TODO ]</div>
+		</a>
+		<a href="/tests/ferry-crossing.html">
+			Ferry Crossing
+			<div class="status todo">[ TODO ]</div>
+		</a>
+		<a href="/tests/flooded-district.html">
+			Flooded District
+			<div class="status todo">[ TODO ]</div>
+		</a>
+	</div>
+</body>
+</html>
