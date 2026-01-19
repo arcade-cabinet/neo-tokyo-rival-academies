@@ -1,7 +1,7 @@
 /**
  * TexturedWall - Wall component using real AmbientCG PBR textures
  *
- * Uses @neo-tokyo/assets package for texture paths and material types.
+ * Uses @neo-tokyo/core for texture paths and material types.
  * Separates visual (textures) from physics (collision boxes).
  */
 
@@ -14,7 +14,7 @@ import {
 } from "@babylonjs/core";
 import { useEffect, useRef } from "react";
 import { useScene } from "reactylon";
-import { type MaterialName, getMaterialTexturePath } from "@neo-tokyo/assets";
+import { type MaterialName, getMaterialTexturePath } from "@neo-tokyo/shared-assets";
 
 // Map semantic wall types to actual AmbientCG materials
 export const WALL_TEXTURES = {

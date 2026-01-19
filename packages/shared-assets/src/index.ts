@@ -1,12 +1,13 @@
 /**
  * Shared Game Assets
  *
- * This package provides typed asset paths and manifests for all Neo-Tokyo apps.
- * Assets are stored here and imported by game, playground, mobile, and web apps.
+ * Typed asset paths for PBR materials and decals.
+ * Assets are stored in this package's assets/ directory.
  *
  * Usage:
- *   import { TEXTURES, MATERIALS } from '@neo-tokyo/assets';
- *   const concreteColor = TEXTURES.materials.Concrete004.Color;
+ *   import { getMaterialTexturePath, type MaterialName } from '@neo-tokyo/shared-assets';
+ *   // Direct asset imports:
+ *   import textureUrl from '@neo-tokyo/shared-assets/assets/textures/...';
  */
 
 // ============================================================================

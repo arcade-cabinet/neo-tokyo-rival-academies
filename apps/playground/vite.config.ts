@@ -1,16 +1,32 @@
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
-import { resolve } from "node:path";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+// Monorepo root (two levels up from apps/playground)
+const monorepoRoot = resolve(__dirname, "../..");
+
+// Shared assets package location
+const sharedAssetsDir = resolve(monorepoRoot, "packages/shared-assets/assets");
 
 export default defineConfig({
 	plugins: [react()],
 	server: {
 		port: 3001,
 		host: "0.0.0.0",
+		// Allow serving files from the monorepo (for shared-assets package)
+		fs: {
+			allow: [monorepoRoot],
+		},
 	},
 	resolve: {
 		alias: {
 			"@": resolve(__dirname, "./src"),
+			// Map /assets to @neo-tokyo/shared-assets package
+			"/assets": sharedAssetsDir,
 		},
 	},
 	build: {

@@ -121,20 +121,51 @@ importers:
         specifier: ~5.9.3
         version: 5.9.3
 
+  apps/playground:
+    dependencies:
+      '@babylonjs/core':
+        specifier: ^7.47.3
+        version: 7.54.3
+      '@babylonjs/loaders':
+        specifier: ^7.47.3
+        version: 7.54.3(@babylonjs/core@7.54.3)(babylonjs-gltf2interface@8.46.2)
+      '@neo-tokyo/diorama':
+        specifier: workspace:*
+        version: link:../../packages/diorama
+      '@neo-tokyo/shared-assets':
+        specifier: workspace:*
+        version: link:../../packages/shared-assets
+      react:
+        specifier: ^19.1.0
+        version: 19.2.3
+      react-dom:
+        specifier: ^19.1.0
+        version: 19.2.3(react@19.2.3)
+      reactylon:
+        specifier: ^2.1.0
+        version: 2.1.0(@babylonjs/core@7.54.3)(@babylonjs/gui@8.46.2(@babylonjs/core@7.54.3))(@types/react@19.2.8)(react-dom@19.2.3(react@19.2.3))(react-reconciler@0.31.0(react@19.2.3))(react@19.2.3)(use-sync-external-store@1.6.0(react@19.2.3))
+    devDependencies:
+      '@types/react':
+        specifier: ^19.1.6
+        version: 19.2.8
+      '@types/react-dom':
+        specifier: ^19.1.5
+        version: 19.2.3(@types/react@19.2.8)
+      '@vitejs/plugin-react':
+        specifier: ^4.5.1
+        version: 4.7.0(vite@6.4.1(@types/node@25.0.9)(jiti@1.21.7)(lightningcss@1.30.2)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2))
+      typescript:
+        specifier: ^5.8.3
+        version: 5.9.3
+      vite:
+        specifier: ^6.3.5
+        version: 6.4.1(@types/node@25.0.9)(jiti@1.21.7)(lightningcss@1.30.2)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2)
+
   apps/web:
     dependencies:
       '@neo-tokyo/core':
         specifier: workspace:*
         version: link:../../packages/core
-
-  packages/assets:
-    devDependencies:
-      tsx:
-        specifier: ^4.0.0
-        version: 4.21.0
-      typescript:
-        specifier: ^5.3.0
-        version: 5.9.3
 
   packages/config:
     devDependencies:
@@ -362,45 +393,11 @@ importers:
         specifier: ^4.0.17
         version: 4.0.17(@types/node@25.0.9)(jiti@1.21.7)(jsdom@20.0.3)(lightningcss@1.30.2)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2)
 
-  packages/playground:
-    dependencies:
-      '@babylonjs/core':
-        specifier: ^7.47.3
-        version: 7.54.3
-      '@babylonjs/loaders':
-        specifier: ^7.47.3
-        version: 7.54.3(@babylonjs/core@7.54.3)(babylonjs-gltf2interface@8.46.2)
-      '@neo-tokyo/assets':
-        specifier: workspace:*
-        version: link:../assets
-      '@neo-tokyo/diorama':
-        specifier: workspace:*
-        version: link:../diorama
-      react:
-        specifier: ^19.1.0
-        version: 19.2.3
-      react-dom:
-        specifier: ^19.1.0
-        version: 19.2.3(react@19.2.3)
-      reactylon:
-        specifier: ^2.1.0
-        version: 2.1.0(@babylonjs/core@7.54.3)(@babylonjs/gui@8.46.2(@babylonjs/core@7.54.3))(@types/react@19.2.8)(react-dom@19.2.3(react@19.2.3))(react-reconciler@0.31.0(react@19.2.3))(react@19.2.3)(use-sync-external-store@1.6.0(react@19.2.3))
+  packages/shared-assets:
     devDependencies:
-      '@types/react':
-        specifier: ^19.1.6
-        version: 19.2.8
-      '@types/react-dom':
-        specifier: ^19.1.5
-        version: 19.2.3(@types/react@19.2.8)
-      '@vitejs/plugin-react':
-        specifier: ^4.5.1
-        version: 4.7.0(vite@6.4.1(@types/node@25.0.9)(jiti@1.21.7)(lightningcss@1.30.2)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2))
       typescript:
-        specifier: ^5.8.3
+        specifier: ^5.8.0
         version: 5.9.3
-      vite:
-        specifier: ^6.3.5
-        version: 6.4.1(@types/node@25.0.9)(jiti@1.21.7)(lightningcss@1.30.2)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2)
 
   packages/types:
     dependencies:
