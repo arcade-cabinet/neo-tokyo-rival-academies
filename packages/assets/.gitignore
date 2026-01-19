@@ -1,0 +1,12 @@
+# AmbientCG textures (copied from local ~/assets by scripts/copy-textures.sh)
+# These are ~100MB+ and should be copied locally, not committed
+textures/ambientcg/
+
+# Generated model files
+models/*.glb
+models/*.gltf
+
+# Generated sound files (large)
+sounds/*.wav
+sounds/*.mp3
+sounds/*.ogg
