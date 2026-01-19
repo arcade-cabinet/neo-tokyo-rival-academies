@@ -38,6 +38,7 @@ export default defineConfig({
 				building: resolve(__dirname, "tests/building.html"),
 				alley: resolve(__dirname, "tests/alley.html"),
 				bridge: resolve(__dirname, "tests/bridge.html"),
+				room: resolve(__dirname, "tests/room.html"),
 				// Integration demos
 				rooftopScene: resolve(__dirname, "tests/rooftop-scene.html"),
 				// World generation (TODO)
