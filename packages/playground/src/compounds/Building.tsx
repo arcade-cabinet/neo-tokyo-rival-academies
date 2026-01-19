@@ -221,7 +221,6 @@ export function Building({
 				)}
 				size={{ width: footprint.width, height: buildingHeight, depth: 0.3 }}
 				textureType={finalWallTexture}
-				neonAccent={finalAccentColor}
 			/>
 
 			{/* Back wall */}
@@ -258,7 +257,6 @@ export function Building({
 				)}
 				size={{ width: 0.3, height: buildingHeight, depth: footprint.depth }}
 				textureType={finalWallTexture}
-				neonAccent={finalAccentColor}
 			/>
 
 			{/* Rooftop floor */}

@@ -9,7 +9,7 @@
  * - Seed-based procedural variation
  */
 
-import { Color3, Vector3 } from "@babylonjs/core";
+import { Vector3 } from "@babylonjs/core";
 import { useState, useCallback } from "react";
 import { createRoot } from "react-dom/client";
 import { TestHarness } from "../TestHarness";
@@ -21,7 +21,6 @@ function WallTestScene() {
 	const [condition, setCondition] = useState<WallCondition>("worn");
 	const [showWindows, setShowWindows] = useState(true);
 	const [windowEmissive, setWindowEmissive] = useState(true);
-	const [showNeon, setShowNeon] = useState(true);
 
 	const handleSeedChange = useCallback((newSeed: string) => {
 		setSeed(newSeed);
@@ -92,14 +91,6 @@ function WallTestScene() {
 					/>
 					Lit
 				</label>
-				<label style={{ display: "flex", alignItems: "center", gap: "0.25rem", fontSize: "0.7rem" }}>
-					<input
-						type="checkbox"
-						checked={showNeon}
-						onChange={(e) => setShowNeon(e.target.checked)}
-					/>
-					Neon
-				</label>
 			</div>
 		</div>
 	);
@@ -123,7 +114,6 @@ function WallTestScene() {
 				material={material}
 				condition={condition}
 				windows={showWindows ? { columns: 3, rows: 4, emissive: windowEmissive } : undefined}
-				neonAccent={showNeon ? new Color3(0, 1, 0.5) : null}
 				seed={`${seed}-main`}
 			/>
 
@@ -144,7 +134,6 @@ function WallTestScene() {
 				size={{ width: 4, height: 6, depth: 0.25 }}
 				material="metal"
 				condition="damaged"
-				neonAccent={new Color3(1, 0, 0.4)}
 				seed={`${seed}-metal`}
 			/>
 
@@ -175,7 +164,6 @@ function WallTestScene() {
 				condition="worn"
 				rotation={Math.PI / 4}
 				windows={{ columns: 2, rows: 2, emissive: true }}
-				neonAccent={new Color3(0, 0.5, 1)}
 				seed={`${seed}-rotated`}
 			/>
 		</TestHarness>

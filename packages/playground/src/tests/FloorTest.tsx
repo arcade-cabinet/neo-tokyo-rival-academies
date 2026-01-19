@@ -195,7 +195,6 @@ function FloorTestScene() {
 				position={new Vector3(0, 2.2, floorSize / 2 + 0.4)}
 				size={{ width: floorSize * 0.8, height: 1.2, depth: 0.2 }}
 				textureType="concrete_clean"
-				neonAccent={new Color3(0, 1, 0.5)}
 			/>
 		</TestHarness>
 	);

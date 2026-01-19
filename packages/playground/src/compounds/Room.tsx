@@ -247,7 +247,6 @@ export function Room({
 					)}
 					size={{ width, height, depth: 0.2 }}
 					textureType={finalWallTexture}
-					neonAccent={finalAccentColor}
 				/>
 			)}
 
@@ -276,7 +275,6 @@ export function Room({
 					)}
 					size={{ width: 0.2, height, depth }}
 					textureType={finalWallTexture}
-					neonAccent={finalAccentColor}
 				/>
 			)}
 

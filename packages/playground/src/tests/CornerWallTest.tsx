@@ -9,7 +9,7 @@
  * - Proper rotation handling
  */
 
-import { Color3, Vector3 } from "@babylonjs/core";
+import { Vector3 } from "@babylonjs/core";
 import { useState, useCallback } from "react";
 import { createRoot } from "react-dom/client";
 import { TestHarness } from "../TestHarness";
@@ -108,35 +108,34 @@ function CornerWallTestScene() {
 				<ul style={{ paddingLeft: "1rem", marginTop: "0.25rem" }}>
 					<li>☐ No gap at corner joint</li>
 					<li>☐ Textures align properly</li>
-					<li>☐ Neon strips continuous</li>
 					<li>☐ Player POV correct</li>
 				</ul>
 			</div>
 		</div>
 	);
 
-	// Calculate corner joint - walls meet at 90 degrees
-	// Wall A runs along X axis (East-West)
-	// Wall B runs along Z axis (North-South)
-	// They meet at the corner point
+	// Calculate corner joint - walls meet at 90 degrees forming an L-shape
+	// Wall A runs along X axis (facing -Z)
+	// Wall B runs along Z axis (facing -X)
+	// Corner is at origin, walls extend into positive X and negative Z
 
 	const cornerX = 0;
 	const cornerZ = 0;
 
-	// Wall A: runs along X, positioned so its end meets the corner
-	// Positioned at (cornerX + wallWidth/2, 0, cornerZ - wallDepth/2)
+	// Wall A: runs along +X from corner, facing -Z
+	// Ends at the corner, extends in +X direction
 	const wallAPosition = new Vector3(
 		cornerX + wallWidth / 2,
 		0,
-		cornerZ - wallDepth / 2
+		cornerZ
 	);
 
-	// Wall B: runs along Z, rotated 90 degrees
-	// Positioned at (cornerX - wallDepth/2, 0, cornerZ - wallWidth/2)
+	// Wall B: runs along -Z from corner, facing -X
+	// Starts at corner + wallDepth offset to avoid overlap
 	const wallBPosition = new Vector3(
-		cornerX - wallDepth / 2,
+		cornerX,
 		0,
-		cornerZ - wallWidth / 2
+		cornerZ - wallWidth / 2 - wallDepth / 2
 	);
 
 	return (
@@ -149,34 +148,22 @@ function CornerWallTestScene() {
 			cameraTarget={new Vector3(wallWidth / 3, wallHeight / 2, -wallWidth / 3)}
 			controls={controls}
 		>
-			{/* Wall A - along X axis (East-West) */}
+			{/* Wall A - along X axis (facing -Z direction) */}
 			<TexturedWall
 				id="corner_wall_a"
 				position={wallAPosition}
 				size={{ width: wallWidth, height: wallHeight, depth: wallDepth }}
 				textureType={selectedTexture}
 				uvScale={{ u: wallWidth / 2, v: wallHeight / 2 }}
-				neonAccent={new Color3(0, 1, 0.5)}
 			/>
 
-			{/* Wall B - along Z axis (North-South), rotated 90° */}
+			{/* Wall B - along Z axis (facing -X direction) */}
 			<TexturedWall
 				id="corner_wall_b"
 				position={wallBPosition}
-				size={{ width: wallWidth, height: wallHeight, depth: wallDepth }}
+				size={{ width: wallDepth, height: wallHeight, depth: wallWidth }}
 				textureType={selectedTexture}
-				rotation={Math.PI / 2}
 				uvScale={{ u: wallWidth / 2, v: wallHeight / 2 }}
-				neonAccent={new Color3(1, 0, 0.6)}
-			/>
-
-			{/* Additional corner accent - could be a pillar or trim piece */}
-			<TexturedWall
-				id="corner_pillar"
-				position={new Vector3(cornerX - wallDepth / 2, 0, cornerZ - wallDepth / 2)}
-				size={{ width: wallDepth * 2, height: wallHeight, depth: wallDepth * 2 }}
-				textureType="metal_clean"
-				neonAccent={new Color3(0, 0.5, 1)}
 			/>
 		</TestHarness>
 	);

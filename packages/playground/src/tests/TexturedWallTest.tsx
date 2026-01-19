@@ -8,7 +8,7 @@
  * - Rust variations
  */
 
-import { Color3, Vector3 } from "@babylonjs/core";
+import { Vector3 } from "@babylonjs/core";
 import { useState, useCallback } from "react";
 import { createRoot } from "react-dom/client";
 import { TestHarness } from "../TestHarness";
@@ -92,7 +92,6 @@ function TexturedWallTestScene() {
 				size={{ width: 6, height: 8, depth: 0.3 }}
 				textureType={selectedTexture}
 				uvScale={{ u: 2, v: 3 }}
-				neonAccent={new Color3(0, 1, 0.5)}
 			/>
 
 			{/* Concrete row - left side */}
@@ -118,7 +117,6 @@ function TexturedWallTestScene() {
 				size={{ width: 4, height: 6, depth: 0.25 }}
 				textureType="brick_red"
 				uvScale={{ u: 2, v: 3 }}
-				neonAccent={new Color3(1, 0.2, 0.1)}
 			/>
 			<TexturedWall
 				id="brick_grey"
@@ -135,7 +133,6 @@ function TexturedWallTestScene() {
 				size={{ width: 4, height: 6, depth: 0.25 }}
 				textureType="metal_clean"
 				uvScale={{ u: 2, v: 2 }}
-				neonAccent={new Color3(1, 0, 0.6)}
 			/>
 			<TexturedWall
 				id="metal_rusted"
@@ -143,7 +140,6 @@ function TexturedWallTestScene() {
 				size={{ width: 4, height: 6, depth: 0.25 }}
 				textureType="metal_rusted"
 				uvScale={{ u: 2, v: 2 }}
-				neonAccent={new Color3(0, 0.5, 1)}
 			/>
 		</TestHarness>
 	);

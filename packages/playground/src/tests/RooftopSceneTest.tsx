@@ -313,7 +313,6 @@ function RooftopSceneTestScene() {
 				position={new Vector3(-15, -5, 7)}
 				size={{ width: 10, height: 10, depth: 1 }}
 				textureType="concrete_dirty"
-				neonAccent={new Color3(1, 0, 0.5)}
 			/>
 
 			<TexturedWall
@@ -458,7 +457,6 @@ function RooftopSceneTestScene() {
 				position={new Vector3(15, -5, -7)}
 				size={{ width: 10, height: 10, depth: 1 }}
 				textureType="brick_grey"
-				neonAccent={new Color3(0, 0.5, 1)}
 			/>
 
 			<TexturedWall
@@ -481,7 +479,6 @@ function RooftopSceneTestScene() {
 				position={new Vector3(15, -1, 12)}
 				size={{ width: 8, height: 8, depth: 1 }}
 				textureType="concrete_dirty"
-				neonAccent={new Color3(1, 0.5, 0)}
 			/>
 
 			{/* Rooftop structures - east */}

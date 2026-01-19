@@ -6,7 +6,6 @@
  * - Different materials (concrete, metal, glass)
  * - With or without windows
  * - With optional damage/graffiti
- * - With neon accents
  *
  * Used to construct buildings, barriers, facades.
  */
@@ -43,8 +42,6 @@ export interface WallProps {
 		rows: number;
 		emissive?: boolean;
 	};
-	/** Neon accent color (null = no accent) */
-	neonAccent?: Color3 | null;
 	/** Seed for procedural variation */
 	seed: string;
 	/** Callback when mesh is ready */
@@ -119,7 +116,6 @@ export function Wall({
 	condition = "worn",
 	rotation = 0,
 	windows,
-	neonAccent = null,
 	seed,
 	onReady,
 }: WallProps) {
@@ -211,31 +207,6 @@ export function Wall({
 			}
 		}
 
-		// Add neon accent strip
-		if (neonAccent) {
-			const neonStrip = MeshBuilder.CreateBox(
-				`neon_${id}`,
-				{
-					width: size.width * 0.9,
-					height: 0.1,
-					depth: size.depth + 0.05,
-				},
-				scene
-			);
-
-			// Position at top of wall
-			neonStrip.position = position.clone();
-			neonStrip.position.y += size.height - 0.1;
-			neonStrip.rotation.y = rotation;
-
-			const neonMat = new StandardMaterial(`neonMat_${id}`, scene);
-			neonMat.diffuseColor = neonAccent;
-			neonMat.emissiveColor = neonAccent.scale(0.8);
-			neonMat.specularColor = new Color3(0.5, 0.5, 0.5);
-			neonStrip.material = neonMat;
-			meshes.push(neonStrip);
-		}
-
 		meshesRef.current = meshes;
 
 		// Notify parent
@@ -249,7 +220,7 @@ export function Wall({
 			}
 			meshesRef.current = [];
 		};
-	}, [scene, id, position, size, material, condition, rotation, windows, neonAccent, seed, onReady]);
+	}, [scene, id, position, size, material, condition, rotation, windows, seed, onReady]);
 
 	return null;
 }

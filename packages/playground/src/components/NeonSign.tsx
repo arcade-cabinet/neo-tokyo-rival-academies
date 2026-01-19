@@ -1,7 +1,13 @@
 /**
  * NeonSign - Glowing signage component
  *
- * Reusable for:
+ * @deprecated As of v2.0 Flooded World pivot (Jan 2026).
+ * Power is scarce in the flooded world - neon displays don't fit the aesthetic.
+ * Use Lantern or Bonfire components for lighting instead (when implemented).
+ * See: docs/DESIGN_PHILOSOPHY.md, docs/FLOODED_WORLD.md
+ * GitHub Issue: #64
+ *
+ * Legacy uses included:
  * - Building-mounted signs
  * - Rooftop advertisements
  * - Directional indicators
@@ -53,6 +59,7 @@ export interface NeonSignProps {
 
 /**
  * NeonSign component
+ * @deprecated Use Lantern or Bonfire components instead. See GitHub Issue #64.
  */
 export function NeonSign({
 	id,

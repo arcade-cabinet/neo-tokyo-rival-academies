@@ -215,7 +215,6 @@ export function Alley({
 				)}
 				size={{ width: 0.3, height: wallHeight, depth: length }}
 				textureType={finalWallTexture}
-				neonAccent={finalAccentColor}
 			/>
 
 			{/* Right wall */}
@@ -228,7 +227,6 @@ export function Alley({
 				)}
 				size={{ width: 0.3, height: wallHeight, depth: length }}
 				textureType={finalWallTexture}
-				neonAccent={finalAccentColor}
 			/>
 
 			{/* Back wall (dead end) */}

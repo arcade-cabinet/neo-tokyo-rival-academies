@@ -37,8 +37,6 @@ export interface DockingStationProps {
 	waitingArea?: boolean;
 	/** Neon edge color */
 	neonColor?: Color3;
-	/** Station name/label (for UI) */
-	label?: string;
 	/** Callback when mesh is ready */
 	onReady?: (mesh: AbstractMesh) => void;
 }
@@ -82,7 +80,6 @@ export function DockingStation({
 	approachAngle = 0,
 	waitingArea = true,
 	neonColor,
-	label,
 	onReady,
 }: DockingStationProps) {
 	const scene = useScene();
@@ -258,7 +255,7 @@ export function DockingStation({
 			}
 			meshesRef.current = [];
 		};
-	}, [scene, id, position, size, dockType, approachAngle, waitingArea, neonColor, label, onReady]);
+	}, [scene, id, position, size, dockType, approachAngle, waitingArea, neonColor, onReady]);
 
 	return null;
 }

@@ -1,7 +1,15 @@
 /**
  * NeonTest - Test neon sign components
  *
- * Testing:
+ * @deprecated As of v2.0 Flooded World pivot (Jan 2026).
+ * This test file and the NeonSign component are deprecated.
+ * Power is scarce in the flooded world - neon displays don't fit the aesthetic.
+ * See: docs/DESIGN_PHILOSOPHY.md, docs/FLOODED_WORLD.md
+ * GitHub Issue: #64
+ *
+ * When LightingTest.tsx is created (for Lantern/Bonfire), this file can be removed.
+ *
+ * Legacy testing included:
  * - Different shapes (rectangle, circle, arrow, bar)
  * - Mount types (wall, pole, hanging)
  * - Color combinations
@@ -203,7 +211,6 @@ function NeonTestScene() {
 				position={new Vector3(-12, 0, 0)}
 				size={{ width: 0.5, height: 10, depth: 8 }}
 				textureType="brick_grey"
-				neonAccent={new Color3(1, 0.3, 0)}
 			/>
 
 			<TexturedWall
@@ -211,7 +218,6 @@ function NeonTestScene() {
 				position={new Vector3(12, 0, 0)}
 				size={{ width: 0.5, height: 8, depth: 6 }}
 				textureType="metal_rusted"
-				neonAccent={new Color3(0, 1, 1)}
 			/>
 
 			{/* More neon variety */}

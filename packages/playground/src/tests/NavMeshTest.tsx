@@ -447,7 +447,6 @@ function NavMeshTestScene() {
 				position={new Vector3(0, -3, -7)}
 				size={{ width: 10, height: 6, depth: 1 }}
 				textureType="concrete_dirty"
-				neonAccent={new Color3(1, 0, 0.5)}
 			/>
 
 			<TexturedWall
@@ -455,7 +454,6 @@ function NavMeshTestScene() {
 				position={new Vector3(12, -3, -5)}
 				size={{ width: 6, height: 6, depth: 1 }}
 				textureType="brick_grey"
-				neonAccent={new Color3(0, 1, 0.5)}
 			/>
 
 			<TexturedWall
@@ -463,7 +461,6 @@ function NavMeshTestScene() {
 				position={new Vector3(-8, -3, 12)}
 				size={{ width: 5, height: 6, depth: 1 }}
 				textureType="metal_rusted"
-				neonAccent={new Color3(0, 0.5, 1)}
 			/>
 
 			{/* Destination markers */}

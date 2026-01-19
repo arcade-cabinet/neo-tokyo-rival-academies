@@ -190,7 +190,6 @@ export function Bridge({
 						size={{ width: length, height: finalRailingHeight, depth: 0.05 }}
 						textureType="metal_rusted"
 						rotation={angle}
-						neonAccent={finalAccentColor}
 					/>
 
 					{/* Right railing */}
@@ -204,7 +203,6 @@ export function Bridge({
 						size={{ width: length, height: finalRailingHeight, depth: 0.05 }}
 						textureType="metal_rusted"
 						rotation={angle}
-						neonAccent={finalAccentColor}
 					/>
 				</>
 			)}

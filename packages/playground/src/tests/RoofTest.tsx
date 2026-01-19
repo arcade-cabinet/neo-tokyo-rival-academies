@@ -279,7 +279,6 @@ function RoofTestScene() {
 				position={new Vector3(-10, 2, -6)}
 				size={{ width: 4, height: 4, depth: 0.3 }}
 				textureType="concrete_dirty"
-				neonAccent={new Color3(1, 0.3, 0)}
 			/>
 
 			{/* Industrial shed */}

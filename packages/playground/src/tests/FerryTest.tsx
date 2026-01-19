@@ -214,7 +214,6 @@ function FerryTestScene() {
 				dockType="ferry"
 				approachAngle={90}
 				neonColor={new Color3(0, 1, 0.5)}
-				label="DOCK A - WEST"
 			/>
 
 			{/* Building A - West side */}
@@ -236,7 +235,6 @@ function FerryTestScene() {
 				position={new Vector3(-27, -1, 0)}
 				size={{ width: 0.3, height: 4, depth: 14 }}
 				textureType="brick_grey"
-				neonAccent={new Color3(1, 0, 0.5)}
 			/>
 
 			{/* ===== DOCK B (Right/East) ===== */}
@@ -247,7 +245,6 @@ function FerryTestScene() {
 				dockType="ferry"
 				approachAngle={-90}
 				neonColor={new Color3(1, 0.3, 0)}
-				label="DOCK B - EAST"
 			/>
 
 			{/* Building B - East side */}
@@ -269,7 +266,6 @@ function FerryTestScene() {
 				position={new Vector3(27, -1.5, 0)}
 				size={{ width: 0.3, height: 4, depth: 12 }}
 				textureType="concrete_clean"
-				neonAccent={new Color3(0, 0.5, 1)}
 			/>
 
 			{/* Background buildings for depth */}
@@ -278,21 +274,18 @@ function FerryTestScene() {
 				position={new Vector3(-10, -1, -20)}
 				size={{ width: 8, height: 12, depth: 6 }}
 				textureType="brick_red"
-				neonAccent={new Color3(1, 0, 0.3)}
 			/>
 			<TexturedWall
 				id="bg_building_2"
 				position={new Vector3(8, -1, -18)}
 				size={{ width: 6, height: 10, depth: 5 }}
 				textureType="metal_clean"
-				neonAccent={new Color3(0, 1, 1)}
 			/>
 			<TexturedWall
 				id="bg_building_3"
 				position={new Vector3(0, -1, -25)}
 				size={{ width: 12, height: 15, depth: 4 }}
 				textureType="concrete_dirty"
-				neonAccent={new Color3(1, 0.5, 0)}
 			/>
 		</TestHarness>
 	);

@@ -186,14 +186,12 @@ function RailPathTestScene() {
 						position={new Vector3(-12, -1, 0)}
 						size={{ width: 4, height: 5, depth: 4 }}
 						textureType="concrete_dirty"
-						neonAccent={new Color3(0, 1, 0.5)}
 					/>
 					<TexturedWall
 						id="dock_b"
 						position={new Vector3(12, -1, 0)}
 						size={{ width: 4, height: 5, depth: 4 }}
 						textureType="concrete_dirty"
-						neonAccent={new Color3(1, 0, 0.5)}
 					/>
 				</>
 			)}
@@ -205,7 +203,6 @@ function RailPathTestScene() {
 					position={new Vector3(2, -1, 0)}
 					size={{ width: 3, height: 10, depth: 3 }}
 					textureType="metal_clean"
-					neonAccent={new Color3(0, 0.5, 1)}
 				/>
 			)}
 		</TestHarness>

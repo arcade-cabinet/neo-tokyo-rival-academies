@@ -240,7 +240,6 @@ function HeroTestScene() {
 				position={new Vector3(0, -4, 8)}
 				size={{ width: 12, height: 8, depth: 1 }}
 				textureType="concrete_dirty"
-				neonAccent={new Color3(1, 0, 0.5)}
 			/>
 
 			<TexturedWall
@@ -248,7 +247,6 @@ function HeroTestScene() {
 				position={new Vector3(-12, -2, 5)}
 				size={{ width: 8, height: 6, depth: 1 }}
 				textureType="brick_grey"
-				neonAccent={new Color3(0, 0.5, 1)}
 			/>
 
 			<TexturedWall
@@ -256,7 +254,6 @@ function HeroTestScene() {
 				position={new Vector3(10, -1, 5)}
 				size={{ width: 6, height: 8, depth: 1 }}
 				textureType="metal_rusted"
-				neonAccent={new Color3(0, 1, 0.5)}
 			/>
 
 			{/* Rooftop structures */}

@@ -210,7 +210,6 @@ function PlatformTestScene() {
 				position={new Vector3(-15, -0.5, 0)}
 				size={{ width: 6, height: 4, depth: 8 }}
 				textureType="concrete_dirty"
-				neonAccent={new Color3(0, 1, 0.5)}
 			/>
 
 			{/* Static platform at dock A */}
@@ -229,7 +228,6 @@ function PlatformTestScene() {
 				position={new Vector3(15, -0.5, 0)}
 				size={{ width: 6, height: 4, depth: 8 }}
 				textureType="concrete_dirty"
-				neonAccent={new Color3(1, 0, 0.5)}
 			/>
 
 			{/* Static platform at dock B */}

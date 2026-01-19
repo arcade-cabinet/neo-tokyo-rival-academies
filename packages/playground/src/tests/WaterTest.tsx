@@ -6,10 +6,10 @@
  * - Reflectivity levels
  * - Transparency/opacity
  * - Color variations
- * - Interaction with lighting (neon reflections)
+ * - Interaction with natural lighting
  */
 
-import { Color3, Vector3 } from "@babylonjs/core";
+import { Vector3 } from "@babylonjs/core";
 import { useState, useCallback } from "react";
 import { createRoot } from "react-dom/client";
 import { TestHarness } from "../TestHarness";
@@ -92,14 +92,14 @@ function WaterTestScene() {
 					<li>puddle - shallow, reflective</li>
 					<li>pool - clean rooftop</li>
 					<li>polluted - industrial waste</li>
-					<li>neon_night - dark, reflective</li>
+					<li>dark_night - dark, reflective</li>
 				</ul>
 			</div>
 
 			<div style={{ fontSize: "0.65rem", marginTop: "1rem", color: "#ff0088" }}>
 				<p>TESTS:</p>
 				<ul style={{ paddingLeft: "1rem", marginTop: "0.25rem" }}>
-					<li>☐ Neon reflects on surface</li>
+					<li>☐ Buildings reflect on surface</li>
 					<li>☐ Depth affects color</li>
 					<li>☐ Transparency visible</li>
 					<li>☐ Looks "wet" not solid</li>
@@ -136,7 +136,6 @@ function WaterTestScene() {
 				size={{ width: 5, height: 12, depth: 4 }}
 				textureType="concrete_dirty"
 				uvScale={{ u: 2, v: 4 }}
-				neonAccent={new Color3(1, 0, 0.5)}
 			/>
 
 			<TexturedWall
@@ -145,7 +144,6 @@ function WaterTestScene() {
 				size={{ width: 4, height: 8, depth: 3 }}
 				textureType="metal_rusted"
 				uvScale={{ u: 1.5, v: 3 }}
-				neonAccent={new Color3(0, 1, 0.5)}
 			/>
 
 			<TexturedWall
@@ -154,7 +152,6 @@ function WaterTestScene() {
 				size={{ width: 6, height: 10, depth: 5 }}
 				textureType="brick_grey"
 				uvScale={{ u: 2, v: 3 }}
-				neonAccent={new Color3(0, 0.5, 1)}
 			/>
 
 			{/* Small platform/rooftop above water - player standing area */}

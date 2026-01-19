@@ -49,8 +49,6 @@ export interface TexturedWallProps {
 	rotation?: number;
 	/** UV tiling (how many times texture repeats) */
 	uvScale?: { u: number; v: number };
-	/** Neon accent strip at top */
-	neonAccent?: Color3 | null;
 	/** Callback when mesh is ready (for collision registration) */
 	onReady?: (mesh: AbstractMesh) => void;
 }
@@ -68,11 +66,20 @@ export function TexturedWall({
 	textureType,
 	rotation = 0,
 	uvScale = { u: 1, v: 1 },
-	neonAccent = null,
 	onReady,
 }: TexturedWallProps) {
 	const scene = useScene();
 	const meshesRef = useRef<AbstractMesh[]>([]);
+
+	// Stabilize primitive values to avoid unnecessary re-renders
+	const posX = position.x;
+	const posY = position.y;
+	const posZ = position.z;
+	const sizeW = size.width;
+	const sizeH = size.height;
+	const sizeD = size.depth;
+	const uvU = uvScale.u;
+	const uvV = uvScale.v;
 
 	useEffect(() => {
 		if (!scene) return;
@@ -81,19 +88,22 @@ export function TexturedWall({
 		const textureInfo = WALL_TEXTURES[textureType];
 		const texturePath = `${TEXTURE_BASE_PATH}/${textureInfo.category}`;
 
+		// Reconstruct from primitive values
+		const pos = new Vector3(posX, posY, posZ);
+
 		// Main wall body
 		const wallMesh = MeshBuilder.CreateBox(
 			`wall_${id}`,
 			{
-				width: size.width,
-				height: size.height,
-				depth: size.depth,
+				width: sizeW,
+				height: sizeH,
+				depth: sizeD,
 			},
 			scene
 		);
 
-		wallMesh.position = position.clone();
-		wallMesh.position.y += size.height / 2; // Position from base
+		wallMesh.position = pos.clone();
+		wallMesh.position.y += sizeH / 2; // Position from base
 		wallMesh.rotation.y = rotation;
 
 		// Create PBR material with textures
@@ -112,16 +122,11 @@ export function TexturedWall({
 			`${texturePath}/${textureInfo.name}_roughness.jpg`,
 			scene
 		);
-		// Displacement map for parallax effect (optional, can be perf heavy)
-		// const displacementMap = new Texture(
-		// 	`${texturePath}/${textureInfo.name}_displacement.jpg`,
-		// 	scene
-		// );
 
 		// Apply UV scaling to all maps
 		const applyUV = (tex: Texture) => {
-			tex.uScale = uvScale.u;
-			tex.vScale = uvScale.v;
+			tex.uScale = uvU;
+			tex.vScale = uvV;
 		};
 		applyUV(colorMap);
 		applyUV(normalMap);
@@ -135,68 +140,11 @@ export function TexturedWall({
 		wallMat.metallicTexture = roughnessMap;
 		wallMat.useRoughnessFromMetallicTextureGreen = true;
 		wallMat.useRoughnessFromMetallicTextureAlpha = false;
-		wallMat.metallic = 0; // Not metallic (walls aren't metal even if named "metal")
-		wallMat.roughness = 1; // Base roughness, texture modifies
-
-		// Optional: Parallax mapping for depth effect
-		// wallMat.useParallax = true;
-		// wallMat.useParallaxOcclusion = true;
-		// wallMat.parallaxScaleBias = 0.02;
+		wallMat.metallic = 0;
+		wallMat.roughness = 1;
 
 		wallMesh.material = wallMat;
 		meshes.push(wallMesh);
-
-		// Add neon accent strip with GLOW
-		if (neonAccent) {
-			const neonStrip = MeshBuilder.CreateBox(
-				`neon_${id}`,
-				{
-					width: size.width * 0.95,
-					height: 0.1,
-					depth: size.depth + 0.03,
-				},
-				scene
-			);
-
-			neonStrip.position = position.clone();
-			neonStrip.position.y += size.height - 0.05;
-			neonStrip.rotation.y = rotation;
-
-			// PBR material for proper bloom interaction
-			const neonMat = new PBRMaterial(`neonMat_${id}`, scene);
-			neonMat.albedoColor = neonAccent;
-			// HIGH emissive intensity for bloom to pick up
-			neonMat.emissiveColor = neonAccent.scale(2.5);
-			neonMat.emissiveIntensity = 3.0;
-			// Unlit appearance - neon doesn't need diffuse shading
-			neonMat.unlit = true;
-			neonStrip.material = neonMat;
-			meshes.push(neonStrip);
-
-			// Add a subtle glow plane behind the neon for extra bloom
-			const glowPlane = MeshBuilder.CreatePlane(
-				`neonGlow_${id}`,
-				{
-					width: size.width * 1.1,
-					height: 0.4,
-				},
-				scene
-			);
-			glowPlane.position = position.clone();
-			glowPlane.position.y += size.height - 0.05;
-			glowPlane.position.z -= (size.depth / 2 + 0.05);
-			glowPlane.rotation.y = rotation;
-
-			const glowMat = new PBRMaterial(`glowMat_${id}`, scene);
-			glowMat.albedoColor = neonAccent.scale(0.3);
-			glowMat.emissiveColor = neonAccent.scale(1.5);
-			glowMat.emissiveIntensity = 2.0;
-			glowMat.alpha = 0.4;
-			glowMat.transparencyMode = 2; // Alpha blend
-			glowMat.unlit = true;
-			glowPlane.material = glowMat;
-			meshes.push(glowPlane);
-		}
 
 		meshesRef.current = meshes;
 
@@ -211,7 +159,7 @@ export function TexturedWall({
 			}
 			meshesRef.current = [];
 		};
-	}, [scene, id, position, size, textureType, rotation, uvScale, neonAccent, onReady]);
+	}, [scene, id, posX, posY, posZ, sizeW, sizeH, sizeD, textureType, rotation, uvU, uvV, onReady]);
 
 	return null;
 }
@@ -226,30 +174,38 @@ export function FallbackTexturedWall({
 	size,
 	textureType,
 	rotation = 0,
-	neonAccent = null,
 	onReady,
 }: TexturedWallProps) {
 	const scene = useScene();
 	const meshesRef = useRef<AbstractMesh[]>([]);
 
+	// Stabilize primitive values
+	const posX = position.x;
+	const posY = position.y;
+	const posZ = position.z;
+	const sizeW = size.width;
+	const sizeH = size.height;
+	const sizeD = size.depth;
+
 	useEffect(() => {
 		if (!scene) return;
 
 		const meshes: AbstractMesh[] = [];
+		const pos = new Vector3(posX, posY, posZ);
 
 		// Main wall body
 		const wallMesh = MeshBuilder.CreateBox(
 			`wall_${id}`,
 			{
-				width: size.width,
-				height: size.height,
-				depth: size.depth,
+				width: sizeW,
+				height: sizeH,
+				depth: sizeD,
 			},
 			scene
 		);
 
-		wallMesh.position = position.clone();
-		wallMesh.position.y += size.height / 2;
+		wallMesh.position = pos.clone();
+		wallMesh.position.y += sizeH / 2;
 		wallMesh.rotation.y = rotation;
 
 		// Fallback colors based on texture type
@@ -271,32 +227,6 @@ export function FallbackTexturedWall({
 		wallMesh.material = wallMat;
 		meshes.push(wallMesh);
 
-		// Neon strip with glow
-		if (neonAccent) {
-			const neonStrip = MeshBuilder.CreateBox(
-				`neon_${id}`,
-				{
-					width: size.width * 0.95,
-					height: 0.1,
-					depth: size.depth + 0.03,
-				},
-				scene
-			);
-
-			neonStrip.position = position.clone();
-			neonStrip.position.y += size.height - 0.05;
-			neonStrip.rotation.y = rotation;
-
-			// Use PBR for bloom interaction even in fallback
-			const neonMat = new PBRMaterial(`neonMat_${id}`, scene);
-			neonMat.albedoColor = neonAccent;
-			neonMat.emissiveColor = neonAccent.scale(2.5);
-			neonMat.emissiveIntensity = 3.0;
-			neonMat.unlit = true;
-			neonStrip.material = neonMat;
-			meshes.push(neonStrip);
-		}
-
 		meshesRef.current = meshes;
 
 		if (onReady && meshes.length > 0) {
@@ -309,7 +239,7 @@ export function FallbackTexturedWall({
 			}
 			meshesRef.current = [];
 		};
-	}, [scene, id, position, size, textureType, rotation, neonAccent, onReady]);
+	}, [scene, id, posX, posY, posZ, sizeW, sizeH, sizeD, textureType, rotation, onReady]);
 
 	return null;
 }

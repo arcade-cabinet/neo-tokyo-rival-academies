@@ -158,7 +158,6 @@ function FargroundTestScene() {
 				position={new Vector3(0, 2.2, 5)}
 				size={{ width: 15, height: 1.2, depth: 0.2 }}
 				textureType="concrete_dirty"
-				neonAccent={new Color3(0, 1, 0.5)}
 			/>
 
 			{/* Nearby buildings (middleground) */}
@@ -167,7 +166,6 @@ function FargroundTestScene() {
 				position={new Vector3(-20, -1, 30)}
 				size={{ width: 8, height: 20, depth: 6 }}
 				textureType="concrete_dirty"
-				neonAccent={new Color3(1, 0, 0.5)}
 			/>
 
 			<TexturedWall
@@ -175,7 +173,6 @@ function FargroundTestScene() {
 				position={new Vector3(25, -1, 40)}
 				size={{ width: 10, height: 25, depth: 8 }}
 				textureType="brick_grey"
-				neonAccent={new Color3(0, 0.5, 1)}
 			/>
 
 			<TexturedWall
@@ -183,7 +180,6 @@ function FargroundTestScene() {
 				position={new Vector3(5, -1, 25)}
 				size={{ width: 6, height: 15, depth: 5 }}
 				textureType="metal_rusted"
-				neonAccent={new Color3(1, 0.5, 0)}
 			/>
 
 			{/* Neon signs on middleground */}
