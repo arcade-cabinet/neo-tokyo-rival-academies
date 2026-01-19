@@ -964,7 +964,8 @@ BASE PRIMITIVE: Floor (the "bear")
 ├── Ferry = Floor + movable + rails
 ├── Bridge = Floor + narrow + railings
 ├── Walkway = Floor + very narrow
-└── Rooftop = Floor + surface variations
+├── Rooftop = Floor + surface variations
+└── Ramp = Floor + angle + side lips + floor-hole snap
 
 BASE PRIMITIVE: Wall (another "bear")
 ├── Lean-to = Wall + canted angle + tarp PBR
@@ -1014,6 +1015,59 @@ Properties:
 ```
 
 Rooms snap to rooms. The assembly system doesn't place individual walls and floors - it places **tested, complete environments** that connect at standardized door positions.
+
+### No Climbing - Ramps Only
+
+**Critical optimization**: This is NOT a platformer. Vertical navigation uses **ramps**, never ladders or climbing.
+
+Why this matters for GenAI characters:
+- **Climbing requires**: IK rigging, hand placement, climbing state machine, grip points, transition animations
+- **Ramps require**: Walk forward. Physics/navmesh handles incline automatically.
+
+Meshy-generated character models have unpredictable proportions - arm length, torso height, hand size. Making them climb would require per-model IK calibration. Impossible at scale.
+
+```
+RAMP COMPONENT (vertical connector):
+
+Upper Floor
+┌─────────────────┐
+│    ┌────────────┤ ← floor hole cutout
+│    │////////////│   (standardized size)
+│    │////////////│
+│    │////////////│ ← ramp surface
+│    │////////////│   (walkable incline)
+│    │////////////│
+│    ├────────────┘
+│    │ lip ←──────────── side lip prevents
+└────┴────────────────   falling off edge
+
+Snap points:
+- Top: locks into floor hole cutout
+- Bottom: aligns with lower floor surface
+- Angle: ~30° for comfortable walk speed
+```
+
+Multi-story buildings use stacked ramp+floor units:
+
+```
+VERTICAL STRUCTURE:
+┌──────────────┐ Level 3
+│   ┌──────────┤
+│   │//////////│ Ramp 2→3
+├───┴──────────┤ Level 2
+│   ┌──────────┤
+│   │//////////│ Ramp 1→2
+├───┴──────────┤ Level 1
+│   ┌──────────┤
+│   │//////////│ Ramp 0→1
+└───┴──────────┘ Ground/Water level
+```
+
+This approach:
+- Works with ANY Meshy model (no animation requirements)
+- Simplifies navmesh generation (just walkable surfaces)
+- Reduces collision complexity (no grab/climb states)
+- Matches post-apocalyptic aesthetic (salvaged construction, not pristine stairs)
 
 ---
 
