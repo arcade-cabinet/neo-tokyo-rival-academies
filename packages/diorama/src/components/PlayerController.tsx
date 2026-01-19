@@ -18,13 +18,15 @@ export interface PlayerControllerProps {
 	animationController: CharacterAnimationController | null;
 	/** Movement speed in units per second */
 	speed?: number;
-	/** Grid bounds for collision */
+	/** Grid bounds for collision (outer bounds) */
 	bounds?: {
 		minX: number;
 		maxX: number;
 		minZ: number;
 		maxZ: number;
 	};
+	/** Collision meshes that block movement (buildings, walls, etc.) */
+	collisionMeshes?: AbstractMesh[];
 	/** Input state from UI controls */
 	inputState?: {
 		up: boolean;
@@ -115,6 +117,7 @@ export function PlayerController({
 	animationController,
 	speed = 5,
 	bounds = { minX: -10, maxX: 10, minZ: -10, maxZ: 10 },
+	collisionMeshes = [],
 	inputState,
 }: PlayerControllerProps) {
 	const scene = useScene();
@@ -123,11 +126,14 @@ export function PlayerController({
 	const positionRef = useRef(new Vector3(0, 0, 0));
 	const velocityRef = useRef(new Vector3(0, 0, 0));
 
-	// Calculate bounds based on hex grid if provided
+	// Calculate bounds (add small margin)
 	const maxX = bounds.maxX - 1;
 	const maxZ = bounds.maxZ - 1;
 	const minX = bounds.minX + 1;
 	const minZ = bounds.minZ + 1;
+
+	// Character collision radius
+	const CHARACTER_RADIUS = 0.5;
 
 	useEffect(() => {
 		if (!scene || characterMeshes.length === 0) return;
@@ -180,10 +186,49 @@ export function PlayerController({
 			velocityRef.current.x = velX;
 			velocityRef.current.z = velZ;
 
-			const newX = positionRef.current.x + velX * deltaTime;
-			const newZ = positionRef.current.z + velZ * deltaTime;
+			let newX = positionRef.current.x + velX * deltaTime;
+			let newZ = positionRef.current.z + velZ * deltaTime;
 
-			// Apply boundary constraints
+			// Check collision with meshes (simple AABB check)
+			for (const collisionMesh of collisionMeshes) {
+				const bb = collisionMesh.getBoundingInfo().boundingBox;
+				const minBound = bb.minimumWorld;
+				const maxBound = bb.maximumWorld;
+
+				// Expand bounds by character radius
+				const expandedMinX = minBound.x - CHARACTER_RADIUS;
+				const expandedMaxX = maxBound.x + CHARACTER_RADIUS;
+				const expandedMinZ = minBound.z - CHARACTER_RADIUS;
+				const expandedMaxZ = maxBound.z + CHARACTER_RADIUS;
+
+				// Check if new position would collide
+				if (
+					newX >= expandedMinX &&
+					newX <= expandedMaxX &&
+					newZ >= expandedMinZ &&
+					newZ <= expandedMaxZ
+				) {
+					// Find the axis with smallest penetration and resolve
+					const distToMinX = Math.abs(newX - expandedMinX);
+					const distToMaxX = Math.abs(newX - expandedMaxX);
+					const distToMinZ = Math.abs(newZ - expandedMinZ);
+					const distToMaxZ = Math.abs(newZ - expandedMaxZ);
+
+					const minDist = Math.min(distToMinX, distToMaxX, distToMinZ, distToMaxZ);
+
+					if (minDist === distToMinX) {
+						newX = expandedMinX - 0.01;
+					} else if (minDist === distToMaxX) {
+						newX = expandedMaxX + 0.01;
+					} else if (minDist === distToMinZ) {
+						newZ = expandedMinZ - 0.01;
+					} else {
+						newZ = expandedMaxZ + 0.01;
+					}
+				}
+			}
+
+			// Apply boundary constraints (outer bounds)
 			const clampedX = Math.max(minX, Math.min(maxX, newX));
 			const clampedZ = Math.max(minZ, Math.min(maxZ, newZ));
 
@@ -216,6 +261,7 @@ export function PlayerController({
 		inputState,
 		animationController,
 		isMoving,
+		collisionMeshes,
 	]);
 
 	return null;

@@ -1,13 +1,15 @@
 /**
  * BabylonDioramaScene Component
  *
- * Complete isometric diorama scene with camera, lighting, hex floor, background panels,
- * and character rendering.
+ * Complete isometric diorama scene with:
+ * - Layer 1: Foreground (hex floor, props, character, quest markers)
+ * - Layer 2: Midground (building facades, neon signs)
+ * - Layer 3: Background (parallax cityscape panels)
  */
 
 import { Color3, HemisphericLight, Vector3 } from "@babylonjs/core";
 import type { ReactNode } from "react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useScene } from "reactylon";
 import { BabylonCanvas } from "./BabylonCanvas";
 import {
@@ -15,12 +17,17 @@ import {
 	Character,
 	CharacterAnimationController,
 	CyberpunkNeonLights,
+	DataShards,
 	DirectionalLightWithShadows,
+	ForegroundProps,
 	HexTileFloor,
 	IsometricCamera,
+	MidgroundFacades,
 	PlayerController,
+	QuestMarkers,
 } from "@neo-tokyo/diorama";
 import type { AbstractMesh, AnimationGroup } from "@babylonjs/core";
+import type { QuestMarker, DataShard } from "@neo-tokyo/diorama";
 
 export interface BabylonDioramaSceneProps {
 	children?: ReactNode;
@@ -33,11 +40,41 @@ export interface BabylonDioramaSceneProps {
 	};
 }
 
+// Scene bounds constant
+const SCENE_BOUNDS = { minX: -20, maxX: 20, minZ: -20, maxZ: 20 };
+
 function SceneContent({ children, inputState }: { children?: ReactNode; inputState?: BabylonDioramaSceneProps["inputState"] }) {
 	const scene = useScene();
 	const lightRef = useRef<HemisphericLight | null>(null);
 	const [characterMeshes, setCharacterMeshes] = useState<AbstractMesh[]>([]);
 	const [animationController, setAnimationController] = useState<CharacterAnimationController | null>(null);
+	const [collectedShards, setCollectedShards] = useState<Set<string>>(new Set());
+
+	// Quest markers for this scene (tutorial objectives)
+	const questMarkers = useMemo<QuestMarker[]>(() => [
+		{
+			id: "tutorial_start",
+			position: new Vector3(0, 0, 5),
+			type: "objective",
+			label: "Talk to Vera",
+			active: true,
+		},
+		{
+			id: "exit_north",
+			position: new Vector3(0, 0, -18),
+			type: "exit",
+			label: "Exit to Sector 7",
+			active: true,
+		},
+	], []);
+
+	// Data shards scattered around the scene
+	const dataShards = useMemo<DataShard[]>(() => [
+		{ id: "shard_1", position: new Vector3(-8, 0, -5), collected: collectedShards.has("shard_1") },
+		{ id: "shard_2", position: new Vector3(12, 0, 3), collected: collectedShards.has("shard_2") },
+		{ id: "shard_3", position: new Vector3(-3, 0, -12), collected: collectedShards.has("shard_3") },
+		{ id: "shard_4", position: new Vector3(7, 0, -8), collected: collectedShards.has("shard_4") },
+	], [collectedShards]);
 
 	// Setup ambient lighting in useEffect to avoid re-creating on every render
 	useEffect(() => {
@@ -76,6 +113,18 @@ function SceneContent({ children, inputState }: { children?: ReactNode; inputSta
 
 		// Play initial idle animation
 		controller.play("combat", true);
+	};
+
+	// Quest marker interaction
+	const handleMarkerInteract = (markerId: string) => {
+		console.log("Quest marker interaction:", markerId);
+		// TODO: Trigger dialogue or scene transition based on marker
+	};
+
+	// Data shard collection
+	const handleShardCollect = (shardId: string) => {
+		console.log("Collected shard:", shardId);
+		setCollectedShards((prev) => new Set([...prev, shardId]));
 	};
 
 	// Don't render children until scene is ready
