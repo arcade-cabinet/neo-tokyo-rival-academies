@@ -8,6 +8,7 @@ Every component in this playground MUST pass its acceptance checklist before bei
 ## Wall Component
 
 ### Visual Requirements
+
 1. Wall segment must be a clearly defined rectangular solid
 2. Material variations must be VISUALLY DISTINCT:
    - **Concrete**: Grey, matte, minimal specular
@@ -46,6 +47,7 @@ Every component in this playground MUST pass its acceptance checklist before bei
 - [ ] **ACW-012**: FPS remains > 55 with all test walls visible
 
 ### Screenshot Verification Points
+
 1. Take screenshot with all materials visible (concrete, metal, glass, brick)
 2. Take screenshot comparing pristine vs ruined condition
 3. Take screenshot showing emissive windows at night exposure
@@ -57,6 +59,7 @@ Every component in this playground MUST pass its acceptance checklist before bei
 ## Floor / Ground Component
 
 ### Visual Requirements
+
 1. Ground plane is FLAT at y=0
 2. Material variations:
    - **Asphalt**: Dark grey/black, road texture feel
@@ -68,6 +71,7 @@ Every component in this playground MUST pass its acceptance checklist before bei
 5. Puddles (if enabled) are REFLECTIVE areas
 
 ### Acceptance Checklist
+
 - [ ] **ACF-001**: Floor sits exactly at y=0
 - [ ] **ACF-002**: Asphalt is darker than concrete
 - [ ] **ACF-003**: Metal grating has visible holes/transparency
