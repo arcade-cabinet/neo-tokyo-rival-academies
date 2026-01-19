@@ -6,9 +6,10 @@ import {
 	type AbilityCooldownState,
 	applyCooldown,
 	executeAbility,
+	getRemainingCooldown,
 	isOnCooldown,
+	updateCooldowns,
 } from "@/systems/AbilitySystem";
-import { getRemainingCooldown, updateCooldowns } from "@/systems/utils/cooldowns";
 
 describe("AbilitySystem", () => {
 	const testAbility: Ability = {
