@@ -38,7 +38,7 @@ import {
 	Color3,
 	Color4,
 	HemisphericLight,
-	PointLight,
+	DirectionalLight,
 	MeshBuilder,
 	Vector3,
 	type Scene as BabylonScene,
@@ -48,6 +48,7 @@ import {
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { Scene, useScene } from "reactylon";
 import { Engine } from "reactylon/web";
+import { useTheme, createThemedStyles, typography, type ThemeMode } from "./design";
 
 /**
  * Control definition for automation-friendly controls
@@ -210,9 +211,10 @@ function CameraSetup({
 }
 
 /**
- * Cyberpunk lighting setup - colored accent lights + post-processing
+ * Flooded World lighting setup - natural lighting, no neon
+ * Simulates overcast sky with water reflections
  */
-function LightingSetup({ enableBloom = true }: { enableBloom?: boolean }) {
+function LightingSetup({ enablePostProcessing = true }: { enablePostProcessing?: boolean }) {
 	const scene = useScene();
 
 	useEffect(() => {
@@ -220,94 +222,73 @@ function LightingSetup({ enableBloom = true }: { enableBloom?: boolean }) {
 
 		const disposables: { dispose: () => void }[] = [];
 
-		// Ambient hemisphere light - low intensity, dark blue ground
+		// Ambient hemisphere light - cool blue sky, warm ground bounce
 		const hemi = new HemisphericLight("hemiLight", new Vector3(0, 1, 0), scene);
-		hemi.intensity = 0.4;
-		hemi.diffuse = new Color3(0.6, 0.6, 0.7);
-		hemi.groundColor = new Color3(0.05, 0.05, 0.1);
+		hemi.intensity = 0.6;
+		hemi.diffuse = new Color3(0.7, 0.75, 0.85); // Cool overcast sky
+		hemi.groundColor = new Color3(0.15, 0.12, 0.1); // Warm rust/wood bounce
 		disposables.push(hemi);
 
-		// Cyberpunk colored accent lights
-		// Cyan/teal accent from one side
-		const cyanLight = new PointLight("cyanLight", new Vector3(-10, 8, -5), scene);
-		cyanLight.diffuse = new Color3(0, 0.8, 1);
-		cyanLight.specular = new Color3(0, 0.5, 0.8);
-		cyanLight.intensity = 0.6;
-		cyanLight.range = 30;
-		disposables.push(cyanLight);
+		// Main sun/sky light - slightly warm, represents filtered sunlight
+		const sunLight = new DirectionalLight("sunLight", new Vector3(-1, -2, -1), scene);
+		sunLight.diffuse = new Color3(1.0, 0.95, 0.85); // Warm daylight
+		sunLight.specular = new Color3(0.8, 0.8, 0.75);
+		sunLight.intensity = 0.8;
+		disposables.push(sunLight);
 
-		// Magenta/pink accent from opposite side
-		const magentaLight = new PointLight("magentaLight", new Vector3(10, 6, 5), scene);
-		magentaLight.diffuse = new Color3(1, 0, 0.6);
-		magentaLight.specular = new Color3(0.8, 0, 0.4);
-		magentaLight.intensity = 0.5;
-		magentaLight.range = 25;
-		disposables.push(magentaLight);
+		// Water reflection fill - subtle blue from below
+		const waterReflection = new HemisphericLight("waterFill", new Vector3(0, -1, 0), scene);
+		waterReflection.intensity = 0.15;
+		waterReflection.diffuse = new Color3(0.3, 0.5, 0.6); // Deep water blue
+		waterReflection.groundColor = new Color3(0, 0, 0);
+		disposables.push(waterReflection);
 
-		// Green accent from below/street level
-		const greenLight = new PointLight("greenLight", new Vector3(0, 1, 8), scene);
-		greenLight.diffuse = new Color3(0, 1, 0.5);
-		greenLight.specular = new Color3(0, 0.6, 0.3);
-		greenLight.intensity = 0.3;
-		greenLight.range = 20;
-		disposables.push(greenLight);
-
-		// Post-processing pipeline - bloom, tone mapping, etc.
-		// Wait for camera to be available before creating pipeline
-		if (enableBloom) {
+		// Post-processing pipeline - subtle, realistic
+		if (enablePostProcessing) {
 			const setupPipeline = () => {
-				// Ensure we have at least one camera
 				if (scene.cameras.length === 0) return;
 
 				const pipeline = new DefaultRenderingPipeline(
-					"cyberpunkPipeline",
+					"floodedWorldPipeline",
 					true, // HDR
 					scene,
 					scene.cameras
 				);
 
-				// BLOOM - makes emissive surfaces glow
+				// Subtle bloom for highlights (sunlight on water, wet surfaces)
 				pipeline.bloomEnabled = true;
-				pipeline.bloomThreshold = 0.3;
-				pipeline.bloomWeight = 0.8;
-				pipeline.bloomKernel = 64;
-				pipeline.bloomScale = 0.6;
+				pipeline.bloomThreshold = 0.6;
+				pipeline.bloomWeight = 0.3;
+				pipeline.bloomKernel = 32;
+				pipeline.bloomScale = 0.4;
 
-				// Chromatic aberration - subtle color fringing for that cyberpunk feel
-				pipeline.chromaticAberrationEnabled = true;
-				pipeline.chromaticAberration.aberrationAmount = 15;
-				pipeline.chromaticAberration.radialIntensity = 0.5;
+				// No chromatic aberration - keep it realistic
 
-				// Vignette through image processing
+				// Subtle vignette - weathered view
 				pipeline.imageProcessing.vignetteEnabled = true;
-				pipeline.imageProcessing.vignetteWeight = 1.5;
-				pipeline.imageProcessing.vignetteColor = new Color4(0.1, 0, 0.15, 0);
-				pipeline.imageProcessing.vignetteStretch = 0;
+				pipeline.imageProcessing.vignetteWeight = 0.8;
+				pipeline.imageProcessing.vignetteColor = new Color4(0.05, 0.05, 0.08, 0);
+				pipeline.imageProcessing.vignetteStretch = 0.2;
 
 				// FXAA anti-aliasing
 				pipeline.fxaaEnabled = true;
 
-				// Tone mapping for HDR
+				// Tone mapping for HDR - natural look
 				pipeline.imageProcessingEnabled = true;
 				pipeline.imageProcessing.toneMappingEnabled = true;
 				pipeline.imageProcessing.toneMappingType = ImageProcessingConfiguration.TONEMAPPING_ACES;
-				pipeline.imageProcessing.exposure = 1.1;
-				pipeline.imageProcessing.contrast = 1.15;
+				pipeline.imageProcessing.exposure = 1.0;
+				pipeline.imageProcessing.contrast = 1.05;
 
-				// Slight color grading - push toward cyan/magenta
-				pipeline.imageProcessing.colorCurvesEnabled = true;
-				if (pipeline.imageProcessing.colorCurves) {
-					pipeline.imageProcessing.colorCurves.globalSaturation = 1.2;
-				}
+				// Natural color - no saturation boost
+				pipeline.imageProcessing.colorCurvesEnabled = false;
 
 				disposables.push(pipeline);
 			};
 
-			// Try immediately if camera already exists
 			if (scene.cameras.length > 0) {
 				setupPipeline();
 			} else {
-				// Otherwise wait for camera to be added
 				const observer = scene.onNewCameraAddedObservable.addOnce(() => {
 					setupPipeline();
 				});
@@ -320,21 +301,21 @@ function LightingSetup({ enableBloom = true }: { enableBloom?: boolean }) {
 				d.dispose();
 			}
 		};
-	}, [scene, enableBloom]);
+	}, [scene, enablePostProcessing]);
 
 	return null;
 }
 
 /**
- * Render automation-friendly control
+ * Render automation-friendly control with theme support
  */
-function AutomationControl({ control }: { control: PlaygroundControl }) {
+function AutomationControl({ control, styles }: { control: PlaygroundControl; styles: ReturnType<typeof createThemedStyles> }) {
 	const { name, label, type, value, options, min, max, step, onChange } = control;
 
 	if (type === "toggle") {
 		return (
 			<div style={{ marginBottom: "0.5rem" }}>
-				<label style={{ fontSize: "0.7rem", display: "block", marginBottom: "0.25rem" }}>
+				<label style={{ ...styles.muted, display: "block", marginBottom: "0.25rem" }}>
 					{label}:
 				</label>
 				<button
@@ -347,15 +328,7 @@ function AutomationControl({ control }: { control: PlaygroundControl }) {
 						console.log(`[PLAYGROUND] Control "${name}" changed: ${value} → ${newValue}`);
 						onChange(newValue);
 					}}
-					style={{
-						width: "100%",
-						padding: "0.5rem",
-						background: value ? "#00ff88" : "#1a1a2e",
-						border: "1px solid #00ff88",
-						color: value ? "#0a0a0f" : "#00ff88",
-						cursor: "pointer",
-						fontSize: "0.7rem",
-					}}
+					style={value ? styles.primaryButton : styles.secondaryButton}
 				>
 					{value ? "ON" : "OFF"}
 				</button>
@@ -366,7 +339,7 @@ function AutomationControl({ control }: { control: PlaygroundControl }) {
 	if (type === "select" && options) {
 		return (
 			<div style={{ marginBottom: "0.5rem" }}>
-				<label style={{ fontSize: "0.7rem", display: "block", marginBottom: "0.25rem" }}>
+				<label style={{ ...styles.muted, display: "block", marginBottom: "0.25rem" }}>
 					{label}:
 				</label>
 				<select
@@ -379,14 +352,7 @@ function AutomationControl({ control }: { control: PlaygroundControl }) {
 						console.log(`[PLAYGROUND] Control "${name}" changed: ${value} → ${e.target.value}`);
 						onChange(e.target.value);
 					}}
-					style={{
-						width: "100%",
-						padding: "0.25rem",
-						background: "#1a1a2e",
-						border: "1px solid #00ff88",
-						color: "#00ff88",
-						fontSize: "0.65rem",
-					}}
+					style={styles.input}
 				>
 					{options.map((opt) => (
 						<option key={opt.value} value={opt.value}>
@@ -401,7 +367,7 @@ function AutomationControl({ control }: { control: PlaygroundControl }) {
 	if (type === "slider" || type === "number") {
 		return (
 			<div style={{ marginBottom: "0.5rem" }}>
-				<label style={{ fontSize: "0.7rem", display: "block", marginBottom: "0.25rem" }}>
+				<label style={{ ...styles.muted, display: "block", marginBottom: "0.25rem" }}>
 					{label}: <span data-playground-control-display={name}>{value}</span>
 				</label>
 				<input
@@ -421,7 +387,7 @@ function AutomationControl({ control }: { control: PlaygroundControl }) {
 					}}
 					style={{
 						width: "100%",
-						accentColor: "#00ff88",
+						accentColor: styles.primaryButton.background as string,
 					}}
 				/>
 			</div>
@@ -432,7 +398,7 @@ function AutomationControl({ control }: { control: PlaygroundControl }) {
 }
 
 /**
- * Main test harness component
+ * Main test harness component with Flooded World design system
  */
 export function TestHarness({
 	title,
@@ -441,7 +407,7 @@ export function TestHarness({
 	showGrid = true,
 	cameraDistance = 20,
 	cameraTarget = Vector3.Zero(),
-	backgroundColor = new Color4(0.05, 0.05, 0.08, 1),
+	backgroundColor,
 	onSeedChange,
 	initialSeed = "test-seed-001",
 	controls,
@@ -451,6 +417,13 @@ export function TestHarness({
 	const [fps, setFps] = useState(0);
 	const engineRef = useRef<import("@babylonjs/core").AbstractEngine | null>(null);
 	const sceneRef = useRef<BabylonScene | null>(null);
+
+	// Use design system theme
+	const { colors, mode } = useTheme();
+	const styles = createThemedStyles(mode);
+
+	// Compute background color from theme if not provided
+	const computedBackgroundColor = backgroundColor ?? new Color4(0.06, 0.08, 0.1, 1); // Dark tidal blue
 
 	// FPS counter
 	useEffect(() => {
@@ -520,34 +493,55 @@ export function TestHarness({
 	);
 
 	const handleSceneReady = useCallback((scene: BabylonScene) => {
-		scene.clearColor = backgroundColor;
+		scene.clearColor = computedBackgroundColor;
 		engineRef.current = scene.getEngine();
 		sceneRef.current = scene;
 		console.log("[PLAYGROUND] Scene ready");
-	}, [backgroundColor]);
+	}, [computedBackgroundColor]);
+
+	// FPS color based on semantic colors
+	const fpsColor = fps > 55 ? colors.success : fps > 30 ? colors.warning : colors.error;
 
 	return (
 		<div style={{ width: "100vw", height: "100vh", display: "flex" }}>
+			{/* Google Fonts */}
+			<link href={typography.googleFontsUrl} rel="stylesheet" />
+
 			{/* Side panel */}
 			<div
 				style={{
 					width: "300px",
-					background: "#0a0a0f",
-					borderRight: "1px solid #00ff88",
+					background: colors.background,
+					borderRight: `1px solid ${colors.border}`,
 					padding: "1rem",
-					fontFamily: "'Courier New', monospace",
-					color: "#00ff88",
+					fontFamily: typography.fonts.body,
+					color: colors.text,
 					overflow: "auto",
 				}}
 			>
-				<h1 style={{ fontSize: "1.2rem", marginBottom: "0.5rem" }}>{title}</h1>
-				<p style={{ fontSize: "0.8rem", opacity: 0.7, marginBottom: "1rem" }}>
+				<h1 style={{
+					...styles.header,
+					fontSize: typography.sizes.xl,
+					marginBottom: "0.5rem",
+				}}>
+					{title}
+				</h1>
+				<p style={{
+					...styles.muted,
+					marginBottom: "1rem",
+				}}>
 					{description}
 				</p>
 
 				<div style={{ marginBottom: "1rem" }}>
-					<label style={{ display: "block", fontSize: "0.7rem", marginBottom: "0.25rem" }}>
-						SEED:
+					<label style={{
+						...styles.muted,
+						display: "block",
+						marginBottom: "0.25rem",
+						textTransform: "uppercase",
+						letterSpacing: "0.05em",
+					}}>
+						Seed:
 					</label>
 					<input
 						id="playground-seed-input"
@@ -556,12 +550,9 @@ export function TestHarness({
 						value={seed}
 						onChange={handleSeedChange}
 						style={{
+							...styles.input,
 							width: "100%",
-							padding: "0.5rem",
-							background: "#1a1a2e",
-							border: "1px solid #00ff88",
-							color: "#00ff88",
-							fontFamily: "inherit",
+							boxSizing: "border-box",
 						}}
 					/>
 				</div>
@@ -571,23 +562,31 @@ export function TestHarness({
 					data-playground="fps-display"
 					data-fps={fps}
 					style={{
-						padding: "0.5rem",
-						background: "#1a1a2e",
+						...styles.panel,
+						padding: "0.75rem",
 						marginBottom: "1rem",
-						fontSize: "0.8rem",
 					}}
 				>
-					FPS: <span style={{ color: fps > 55 ? "#00ff00" : fps > 30 ? "#ffff00" : "#ff0000" }}>{fps}</span>
+					<span style={{ fontFamily: typography.fonts.mono }}>
+						FPS: <span style={{ color: fpsColor, fontWeight: typography.weights.semibold }}>{fps}</span>
+					</span>
 				</div>
 
 				{/* Automation-friendly controls */}
 				{automationControls.length > 0 && (
 					<div style={{ marginTop: "1rem" }} data-playground="controls-panel">
-						<h3 style={{ fontSize: "0.9rem", marginBottom: "0.5rem", color: "#ff0088" }}>
-							CONTROLS
+						<h3 style={{
+							...styles.header,
+							fontSize: typography.sizes.base,
+							marginBottom: "0.75rem",
+							color: colors.accent,
+							textTransform: "uppercase",
+							letterSpacing: "0.05em",
+						}}>
+							Controls
 						</h3>
 						{automationControls.map((ctrl) => (
-							<AutomationControl key={ctrl.name} control={ctrl} />
+							<AutomationControl key={ctrl.name} control={ctrl} styles={styles} />
 						))}
 					</div>
 				)}
@@ -595,14 +594,21 @@ export function TestHarness({
 				{/* Legacy custom controls (for backward compatibility) */}
 				{controls && (
 					<div style={{ marginTop: "1rem" }}>
-						<h3 style={{ fontSize: "0.9rem", marginBottom: "0.5rem", color: "#ff0088" }}>
-							CONTROLS
+						<h3 style={{
+							...styles.header,
+							fontSize: typography.sizes.base,
+							marginBottom: "0.75rem",
+							color: colors.accent,
+							textTransform: "uppercase",
+							letterSpacing: "0.05em",
+						}}>
+							Controls
 						</h3>
 						{controls}
 					</div>
 				)}
 
-				<div style={{ marginTop: "2rem", fontSize: "0.7rem", opacity: 0.5 }}>
+				<div style={{ marginTop: "2rem", ...styles.muted }}>
 					<p>Mouse: Orbit camera</p>
 					<p>Scroll: Zoom</p>
 					<p>Right-click drag: Pan</p>
@@ -611,12 +617,9 @@ export function TestHarness({
 				<a
 					href="/"
 					style={{
+						...styles.accentButton,
 						display: "block",
 						marginTop: "2rem",
-						padding: "0.5rem",
-						background: "#1a1a2e",
-						border: "1px solid #ff0088",
-						color: "#ff0088",
 						textDecoration: "none",
 						textAlign: "center",
 					}}
@@ -625,12 +628,41 @@ export function TestHarness({
 				</a>
 			</div>
 
-			{/* Canvas area */}
-			<div style={{ flex: 1, width: "100%", height: "100%", overflow: "hidden" }}>
-				<Engine engineOptions={{ antialias: true, adaptToDeviceRatio: true }}>
+			{/* Canvas area - use CSS to force full size */}
+			<div
+				id="canvas-container"
+				style={{
+					flex: 1,
+					width: "100%",
+					height: "100%",
+					overflow: "hidden",
+					position: "relative",
+				}}
+			>
+				<style>{`
+					#canvas-container canvas {
+						width: 100% !important;
+						height: 100% !important;
+						display: block !important;
+					}
+				`}</style>
+				<Engine
+					engineOptions={{
+						antialias: true,
+						adaptToDeviceRatio: true,
+						preserveDrawingBuffer: true,
+					}}
+					onEngineReady={(engine) => {
+						engineRef.current = engine;
+						// Resize to fill container
+						window.addEventListener('resize', () => engine.resize());
+						// Initial resize after a tick
+						setTimeout(() => engine.resize(), 100);
+					}}
+				>
 					<Scene onSceneReady={handleSceneReady}>
 						<CameraSetup distance={cameraDistance} target={cameraTarget} />
-						<LightingSetup enableBloom={false} />
+						<LightingSetup enablePostProcessing={false} />
 						{showGrid && <GridHelper />}
 						{children}
 					</Scene>

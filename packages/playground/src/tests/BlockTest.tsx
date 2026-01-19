@@ -6,15 +6,17 @@
  * - Visual snap point indicators
  * - Grid-based placement
  * - Seed-based block selection from pools
+ * - RULES-BASED CONTENT ASSEMBLAGE (new!)
  *
  * KEY DAGGERFALL CONCEPTS DEMONSTRATED:
  * 1. Blocks are fixed-size units on a grid
  * 2. Snap points define where blocks can connect
  * 3. Seed → deterministic block selection
+ * 4. Rules define what components spawn in each block type
  */
 
 import { Color3, Vector3 } from "@babylonjs/core";
-import { useState, useCallback, useMemo } from "react";
+import React, { useState, useCallback, useMemo } from "react";
 import { createRoot } from "react-dom/client";
 import { TestHarness } from "../TestHarness";
 import { Water } from "../components/Water";
@@ -26,15 +28,22 @@ import {
 import {
 	type BlockDefinition,
 	type BlockCategory,
+	type BlockInstance,
 	GRID_UNIT_SIZE,
 	createSeededRandom,
 	getBlockPool,
 	selectBlockFromPool,
 } from "../blocks/Block";
 import { RTB_BLOCKS, registerAllRTBBlocks } from "../blocks/RTBBlocks";
+import { BlockContentRenderer } from "../blocks/BlockContentRenderer";
+import { registerAllBlockContent } from "../blocks/BlockContent";
+import { PlaygroundNotes } from "../components/PlaygroundNotes";
 
-// Ensure blocks are registered
+// Ensure blocks and content rules are registered
 registerAllRTBBlocks();
+registerAllBlockContent();
+
+type RenderMode = "debug" | "content" | "both";
 
 /**
  * Demo: Place blocks on a grid using seed-based selection
@@ -42,9 +51,11 @@ registerAllRTBBlocks();
 function SeedBasedBlockPlacement({
 	seed,
 	showSnapPoints,
+	renderMode = "content",
 }: {
 	seed: number;
 	showSnapPoints: boolean;
+	renderMode?: RenderMode;
 }) {
 	// Generate a small territory using the seed
 	const blocks = useMemo(() => {
@@ -155,23 +166,60 @@ function SeedBasedBlockPlacement({
 		return placed;
 	}, [seed]);
 
+	// Convert to BlockInstances for content renderer
+	const blockInstances: BlockInstance[] = useMemo(() => {
+		return blocks.map((block) => ({
+			instanceId: block.id,
+			definition: block.definition,
+			position: {
+				x: block.gridX * GRID_UNIT_SIZE,
+				y: 0,
+				z: block.gridZ * GRID_UNIT_SIZE,
+			},
+			rotation: block.rotation,
+			seed: seed ^ (block.gridX * 73856093) ^ (block.gridZ * 19349663),
+		}));
+	}, [blocks, seed]);
+
 	return (
 		<>
-			{blocks.map((block) => (
-				<BlockDebugRenderer
-					key={block.id}
-					id={block.id}
-					definition={block.definition}
-					position={new Vector3(
-						block.gridX * GRID_UNIT_SIZE,
-						0,
-						block.gridZ * GRID_UNIT_SIZE
-					)}
-					rotation={(block.rotation * Math.PI) / 180}
-					showSnapPoints={showSnapPoints}
-					opacity={0.4}
-				/>
-			))}
+			{blocks.map((block, index) => {
+				const position = new Vector3(
+					block.gridX * GRID_UNIT_SIZE,
+					0,
+					block.gridZ * GRID_UNIT_SIZE
+				);
+				const rotationRad = (block.rotation * Math.PI) / 180;
+				const instanceSeed = seed ^ (block.gridX * 73856093) ^ (block.gridZ * 19349663);
+
+				return (
+					<React.Fragment key={block.id}>
+						{/* Debug wireframe (if debug or both mode) */}
+						{(renderMode === "debug" || renderMode === "both") && (
+							<BlockDebugRenderer
+								id={`${block.id}_debug`}
+								definition={block.definition}
+								position={position}
+								rotation={rotationRad}
+								showSnapPoints={showSnapPoints}
+								opacity={renderMode === "both" ? 0.15 : 0.4}
+							/>
+						)}
+
+						{/* Actual content (if content or both mode) */}
+						{(renderMode === "content" || renderMode === "both") && (
+							<BlockContentRenderer
+								definition={block.definition}
+								position={position}
+								rotation={rotationRad}
+								seed={instanceSeed}
+								renderStructure={true}
+								renderProps={true}
+							/>
+						)}
+					</React.Fragment>
+				);
+			})}
 		</>
 	);
 }
@@ -184,6 +232,7 @@ function BlockTestScene() {
 	const [showSnapPoints, setShowSnapPoints] = useState(true);
 	const [showGrid, setShowGrid] = useState(true);
 	const [selectedCategory, setSelectedCategory] = useState<BlockCategory>("rtb_shelter");
+	const [renderMode, setRenderMode] = useState<RenderMode>("content");
 
 	const handleSeedChange = useCallback((newSeed: string) => {
 		// Convert string seed to number
@@ -202,8 +251,35 @@ function BlockTestScene() {
 		"rtb_landing",
 	];
 
+	const renderModes: RenderMode[] = ["debug", "content", "both"];
+
 	const controls = (
 		<div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+			<div>
+				<label style={{ fontSize: "0.7rem", display: "block", marginBottom: "0.25rem" }}>
+					RENDER MODE:
+				</label>
+				<select
+					value={renderMode}
+					onChange={(e) => setRenderMode(e.target.value as RenderMode)}
+					style={{
+						width: "100%",
+						padding: "0.4rem",
+						background: "#1a1a2e",
+						border: "1px solid #ff0088",
+						color: "#ff0088",
+						fontSize: "0.7rem",
+						fontWeight: "bold",
+					}}
+				>
+					{renderModes.map((mode) => (
+						<option key={mode} value={mode}>
+							{mode.toUpperCase()}
+						</option>
+					))}
+				</select>
+			</div>
+
 			<div>
 				<label style={{ fontSize: "0.7rem", display: "block", marginBottom: "0.25rem" }}>
 					SHOW SNAP POINTS:
@@ -292,9 +368,10 @@ function BlockTestScene() {
 	);
 
 	return (
+		<>
 		<TestHarness
 			title="// DAGGERFALL BLOCKS"
-			description="Modular block system with snap points. Change seed to generate different layouts."
+			description="Rules-based assemblage system. Toggle RENDER MODE to see debug boxes vs actual content. Seed changes layout."
 			onSeedChange={handleSeedChange}
 			initialSeed="neo-tokyo-42"
 			cameraDistance={50}
@@ -335,12 +412,25 @@ function BlockTestScene() {
 				/>
 			)}
 
-			{/* Seed-based block placement */}
+			{/* Seed-based block placement with rules-based content */}
 			<SeedBasedBlockPlacement
 				seed={seed}
 				showSnapPoints={showSnapPoints}
+				renderMode={renderMode}
 			/>
 		</TestHarness>
+
+		{/* Human feedback notes panel - outside scene tree since it's HTML */}
+		<PlaygroundNotes
+			testId="block-test"
+			sceneContext={{
+				seed,
+				renderMode,
+				showSnapPoints,
+				showGrid,
+			}}
+		/>
+	</>
 	);
 }
 

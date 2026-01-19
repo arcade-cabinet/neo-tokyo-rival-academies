@@ -41,6 +41,7 @@ export default defineConfig({
 				room: resolve(__dirname, "tests/room.html"),
 				// Integration demos
 				rooftopScene: resolve(__dirname, "tests/rooftop-scene.html"),
+				componentShowcase: resolve(__dirname, "tests/component-showcase.html"),
 				// Daggerfall Architecture
 				block: resolve(__dirname, "tests/block.html"),
 				modernMaterials: resolve(__dirname, "tests/modern-materials.html"),
@@ -48,6 +49,9 @@ export default defineConfig({
 				cell: resolve(__dirname, "tests/cell.html"),
 				streaming: resolve(__dirname, "tests/streaming.html"),
 				street: resolve(__dirname, "tests/street.html"),
+				// Design System
+				colorPalette: resolve(__dirname, "tests/color-palette.html"),
+				designSystem: resolve(__dirname, "tests/design-system.html"),
 			},
 		},
 	},
