@@ -12,6 +12,7 @@
   "dependencies": {
     "@babylonjs/core": "^7.47.3",
     "@babylonjs/loaders": "^7.47.3",
+    "@neo-tokyo/assets": "workspace:*",
     "@neo-tokyo/diorama": "workspace:*",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",

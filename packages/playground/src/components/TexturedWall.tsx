@@ -1,37 +1,40 @@
 /**
  * TexturedWall - Wall component using real AmbientCG PBR textures
  *
- * Uses actual texture assets instead of procedural colors.
+ * Uses @neo-tokyo/assets package for texture paths and material types.
  * Separates visual (textures) from physics (collision boxes).
- *
- * Textures loaded from ~/assets/AmbientCG/Assets/MATERIAL/1K-JPG/
  */
 
 import {
-	Color3,
 	MeshBuilder,
 	PBRMaterial,
-	StandardMaterial,
 	Texture,
 	Vector3,
 	type AbstractMesh,
 } from "@babylonjs/core";
 import { useEffect, useRef } from "react";
 import { useScene } from "reactylon";
+import { type MaterialName, getMaterialTexturePath } from "@neo-tokyo/assets";
 
-// Available texture sets - organized semantically
+// Map semantic wall types to actual AmbientCG materials
 export const WALL_TEXTURES = {
-	// Concrete (walls/concrete/)
-	concrete_clean: { category: "walls/concrete", name: "clean" },
-	concrete_dirty: { category: "walls/concrete", name: "dirty" },
+	// Concrete walls
+	concrete_clean: "Concrete004" as MaterialName,
+	concrete_dirty: "Concrete022" as MaterialName,
+	concrete_weathered: "Concrete015" as MaterialName,
+	concrete_damaged: "Concrete034" as MaterialName,
 
-	// Brick (walls/brick/)
-	brick_red: { category: "walls/brick", name: "red" },
-	brick_grey: { category: "walls/brick", name: "grey" },
+	// Brick walls
+	brick_red: "Bricks001" as MaterialName,
+	brick_grey: "Bricks010" as MaterialName,
+	brick_weathered: "Bricks024" as MaterialName,
+	brick_old: "Bricks037" as MaterialName,
 
-	// Metal (walls/metal/)
-	metal_clean: { category: "walls/metal", name: "clean" },
-	metal_rusted: { category: "walls/metal", name: "rusted" },
+	// Metal walls
+	metal_clean: "Metal001" as MaterialName,
+	metal_corrugated: "CorrugatedSteel001" as MaterialName,
+	metal_rusted: "Rust001" as MaterialName,
+	metal_weathered: "CorrugatedSteel003" as MaterialName,
 } as const;
 
 export type WallTextureType = keyof typeof WALL_TEXTURES;
@@ -45,6 +48,8 @@ export interface TexturedWallProps {
 	size: { width: number; height: number; depth: number };
 	/** Texture type from available presets */
 	textureType: WallTextureType;
+	/** Or use a direct material name from @neo-tokyo/assets */
+	material?: MaterialName;
 	/** Rotation in radians around Y axis */
 	rotation?: number;
 	/** UV tiling (how many times texture repeats) */
@@ -53,17 +58,15 @@ export interface TexturedWallProps {
 	onReady?: (mesh: AbstractMesh) => void;
 }
 
-// Base path for textures
-const TEXTURE_BASE_PATH = "/assets/textures";
-
 /**
- * TexturedWall component using PBR materials
+ * TexturedWall component using PBR materials from @neo-tokyo/assets
  */
 export function TexturedWall({
 	id,
 	position,
 	size,
 	textureType,
+	material,
 	rotation = 0,
 	uvScale = { u: 1, v: 1 },
 	onReady,
@@ -81,12 +84,13 @@ export function TexturedWall({
 	const uvU = uvScale.u;
 	const uvV = uvScale.v;
 
+	// Resolve material name: direct material prop takes precedence over textureType
+	const materialName = material ?? WALL_TEXTURES[textureType];
+
 	useEffect(() => {
 		if (!scene) return;
 
 		const meshes: AbstractMesh[] = [];
-		const textureInfo = WALL_TEXTURES[textureType];
-		const texturePath = `${TEXTURE_BASE_PATH}/${textureInfo.category}`;
 
 		// Reconstruct from primitive values
 		const pos = new Vector3(posX, posY, posZ);
@@ -106,20 +110,20 @@ export function TexturedWall({
 		wallMesh.position.y += sizeH / 2; // Position from base
 		wallMesh.rotation.y = rotation;
 
-		// Create PBR material with textures
+		// Create PBR material with textures from @neo-tokyo/assets
 		const wallMat = new PBRMaterial(`wallMat_${id}`, scene);
 
-		// Load ALL PBR texture maps
+		// Load PBR texture maps using shared asset paths
 		const colorMap = new Texture(
-			`${texturePath}/${textureInfo.name}_color.jpg`,
+			getMaterialTexturePath(materialName, "Color"),
 			scene
 		);
 		const normalMap = new Texture(
-			`${texturePath}/${textureInfo.name}_normal.jpg`,
+			getMaterialTexturePath(materialName, "NormalGL"),
 			scene
 		);
 		const roughnessMap = new Texture(
-			`${texturePath}/${textureInfo.name}_roughness.jpg`,
+			getMaterialTexturePath(materialName, "Roughness"),
 			scene
 		);
 
@@ -159,87 +163,7 @@ export function TexturedWall({
 			}
 			meshesRef.current = [];
 		};
-	}, [scene, id, posX, posY, posZ, sizeW, sizeH, sizeD, textureType, rotation, uvU, uvV, onReady]);
-
-	return null;
-}
-
-/**
- * Fallback wall using StandardMaterial when textures aren't available
- * Good for development/testing before textures are copied
- */
-export function FallbackTexturedWall({
-	id,
-	position,
-	size,
-	textureType,
-	rotation = 0,
-	onReady,
-}: TexturedWallProps) {
-	const scene = useScene();
-	const meshesRef = useRef<AbstractMesh[]>([]);
-
-	// Stabilize primitive values
-	const posX = position.x;
-	const posY = position.y;
-	const posZ = position.z;
-	const sizeW = size.width;
-	const sizeH = size.height;
-	const sizeD = size.depth;
-
-	useEffect(() => {
-		if (!scene) return;
-
-		const meshes: AbstractMesh[] = [];
-		const pos = new Vector3(posX, posY, posZ);
-
-		// Main wall body
-		const wallMesh = MeshBuilder.CreateBox(
-			`wall_${id}`,
-			{
-				width: sizeW,
-				height: sizeH,
-				depth: sizeD,
-			},
-			scene
-		);
-
-		wallMesh.position = pos.clone();
-		wallMesh.position.y += sizeH / 2;
-		wallMesh.rotation.y = rotation;
-
-		// Fallback colors based on texture type
-		const fallbackColors: Record<WallTextureType, Color3> = {
-			concrete_clean: new Color3(0.45, 0.45, 0.48),
-			concrete_dirty: new Color3(0.35, 0.35, 0.38),
-			brick_red: new Color3(0.55, 0.25, 0.2),
-			brick_grey: new Color3(0.4, 0.4, 0.4),
-			metal_clean: new Color3(0.3, 0.32, 0.35),
-			metal_rusted: new Color3(0.4, 0.28, 0.2),
-		};
-
-		const wallMat = new StandardMaterial(`wallMat_${id}`, scene);
-		wallMat.diffuseColor = fallbackColors[textureType] || new Color3(0.4, 0.4, 0.4);
-		wallMat.specularColor = textureType.startsWith("metal")
-			? new Color3(0.3, 0.3, 0.3)
-			: new Color3(0.05, 0.05, 0.05);
-
-		wallMesh.material = wallMat;
-		meshes.push(wallMesh);
-
-		meshesRef.current = meshes;
-
-		if (onReady && meshes.length > 0) {
-			onReady(meshes[0]);
-		}
-
-		return () => {
-			for (const mesh of meshesRef.current) {
-				mesh.dispose();
-			}
-			meshesRef.current = [];
-		};
-	}, [scene, id, posX, posY, posZ, sizeW, sizeH, sizeD, textureType, rotation, onReady]);
+	}, [scene, id, posX, posY, posZ, sizeW, sizeH, sizeD, materialName, rotation, uvU, uvV, onReady]);
 
 	return null;
 }
