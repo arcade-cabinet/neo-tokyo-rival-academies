@@ -397,48 +397,27 @@ function ModernMaterialsTestScene() {
 		setSeed(numSeed || 42);
 	}, []);
 
-	const controls = (
+	// Automation-friendly controls that expose to window.playground API
+	const automationControls = useMemo(() => [
+		{
+			name: "showDecals",
+			label: "WATER STAIN DECALS",
+			type: "toggle" as const,
+			value: showDecals,
+			onChange: (v: boolean | string | number) => setShowDecals(Boolean(v)),
+		},
+		{
+			name: "showComparison",
+			label: "MATERIAL COMPARISON",
+			type: "toggle" as const,
+			value: showComparison,
+			onChange: (v: boolean | string | number) => setShowComparison(Boolean(v)),
+		},
+	], [showDecals, showComparison]);
+
+	// Legacy controls for info display (not interactive, just documentation)
+	const infoPanel = (
 		<div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
-			<div>
-				<label style={{ fontSize: "0.7rem", display: "block", marginBottom: "0.25rem" }}>
-					WATER STAIN DECALS:
-				</label>
-				<button
-					onClick={() => setShowDecals(!showDecals)}
-					style={{
-						width: "100%",
-						padding: "0.5rem",
-						background: showDecals ? "#00ff88" : "#1a1a2e",
-						border: "1px solid #00ff88",
-						color: showDecals ? "#0a0a0f" : "#00ff88",
-						cursor: "pointer",
-						fontSize: "0.7rem",
-					}}
-				>
-					{showDecals ? "VISIBLE" : "HIDDEN"}
-				</button>
-			</div>
-
-			<div>
-				<label style={{ fontSize: "0.7rem", display: "block", marginBottom: "0.25rem" }}>
-					MATERIAL COMPARISON:
-				</label>
-				<button
-					onClick={() => setShowComparison(!showComparison)}
-					style={{
-						width: "100%",
-						padding: "0.5rem",
-						background: showComparison ? "#00ff88" : "#1a1a2e",
-						border: "1px solid #00ff88",
-						color: showComparison ? "#0a0a0f" : "#00ff88",
-						cursor: "pointer",
-						fontSize: "0.7rem",
-					}}
-				>
-					{showComparison ? "VISIBLE" : "HIDDEN"}
-				</button>
-			</div>
-
 			<div style={{ fontSize: "0.6rem", marginTop: "1rem", color: "#ff0088" }}>
 				<p style={{ marginBottom: "0.5rem" }}>MODERN VISUALS:</p>
 				<ul style={{ paddingLeft: "0.8rem", lineHeight: "1.4" }}>
@@ -458,6 +437,15 @@ function ModernMaterialsTestScene() {
 					<li>4K modern VISUALS</li>
 				</ul>
 			</div>
+
+			<div style={{ fontSize: "0.6rem", marginTop: "0.5rem", color: "#888" }}>
+				<p style={{ marginBottom: "0.25rem" }}>AUTOMATION API:</p>
+				<code style={{ fontSize: "0.55rem" }}>
+					window.playground.setSeed("test")<br/>
+					window.playground.setControl("showDecals", false)<br/>
+					window.playground.getState()
+				</code>
+			</div>
 		</div>
 	);
 
@@ -469,7 +457,8 @@ function ModernMaterialsTestScene() {
 			initialSeed="neo-tokyo-42"
 			cameraDistance={45}
 			cameraTarget={new Vector3(0, 5, 0)}
-			controls={controls}
+			automationControls={automationControls}
+			controls={infoPanel}
 			showGrid={false}
 		>
 			{/* Environment setup */}

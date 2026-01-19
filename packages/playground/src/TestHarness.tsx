@@ -7,6 +7,26 @@
  * - Grid helper for spatial reference
  * - Info panel showing component state
  * - Seed input for procedural testing
+ *
+ * AUTOMATION-FRIENDLY DESIGN (for Claude MCP browser control):
+ *
+ * window.playground API:
+ *   - getSeed() → current seed string
+ *   - setSeed(value) → change seed programmatically
+ *   - getState() → all current state as object
+ *   - getFps() → current FPS number
+ *   - getScene() → Babylon scene reference
+ *   - listControls() → array of available control names
+ *   - setControl(name, value) → set a control value
+ *
+ * Data attributes for element finding:
+ *   - [data-playground="seed-input"] - seed input field
+ *   - [data-playground="fps-display"] - FPS counter
+ *   - [data-playground-control="name"] - control elements
+ *
+ * Console logging:
+ *   - All state changes logged with [PLAYGROUND] prefix
+ *   - Use read_console_messages with pattern "[PLAYGROUND]" to track
  */
 
 import "@babylonjs/core/Engines/engine";
@@ -29,6 +49,48 @@ import { useCallback, useEffect, useRef, useState, type ReactNode } from "react"
 import { Scene, useScene } from "reactylon";
 import { Engine } from "reactylon/web";
 
+/**
+ * Control definition for automation-friendly controls
+ */
+export interface PlaygroundControl {
+	/** Unique name for programmatic access */
+	name: string;
+	/** Display label */
+	label: string;
+	/** Control type */
+	type: "toggle" | "select" | "slider" | "number";
+	/** Current value */
+	value: boolean | string | number;
+	/** For select: available options */
+	options?: Array<{ label: string; value: string }>;
+	/** For slider/number: min/max */
+	min?: number;
+	max?: number;
+	step?: number;
+	/** Change handler */
+	onChange: (value: boolean | string | number) => void;
+}
+
+/**
+ * Global playground API exposed on window
+ */
+export interface PlaygroundAPI {
+	getSeed: () => string;
+	setSeed: (value: string) => void;
+	getState: () => Record<string, unknown>;
+	getFps: () => number;
+	getScene: () => import("@babylonjs/core").Scene | null;
+	listControls: () => string[];
+	getControl: (name: string) => unknown;
+	setControl: (name: string, value: unknown) => void;
+}
+
+declare global {
+	interface Window {
+		playground?: PlaygroundAPI;
+	}
+}
+
 export interface TestHarnessProps {
 	/** Test page title */
 	title: string;
@@ -48,8 +110,10 @@ export interface TestHarnessProps {
 	onSeedChange?: (seed: string) => void;
 	/** Initial seed value */
 	initialSeed?: string;
-	/** Extra controls to render */
+	/** Extra controls to render (legacy - use automationControls for programmatic access) */
 	controls?: ReactNode;
+	/** Automation-friendly controls with programmatic API */
+	automationControls?: PlaygroundControl[];
 }
 
 /**
@@ -262,6 +326,112 @@ function LightingSetup({ enableBloom = true }: { enableBloom?: boolean }) {
 }
 
 /**
+ * Render automation-friendly control
+ */
+function AutomationControl({ control }: { control: PlaygroundControl }) {
+	const { name, label, type, value, options, min, max, step, onChange } = control;
+
+	if (type === "toggle") {
+		return (
+			<div style={{ marginBottom: "0.5rem" }}>
+				<label style={{ fontSize: "0.7rem", display: "block", marginBottom: "0.25rem" }}>
+					{label}:
+				</label>
+				<button
+					id={`control-${name}`}
+					data-playground-control={name}
+					data-control-type="toggle"
+					data-control-value={String(value)}
+					onClick={() => {
+						const newValue = !value;
+						console.log(`[PLAYGROUND] Control "${name}" changed: ${value} → ${newValue}`);
+						onChange(newValue);
+					}}
+					style={{
+						width: "100%",
+						padding: "0.5rem",
+						background: value ? "#00ff88" : "#1a1a2e",
+						border: "1px solid #00ff88",
+						color: value ? "#0a0a0f" : "#00ff88",
+						cursor: "pointer",
+						fontSize: "0.7rem",
+					}}
+				>
+					{value ? "ON" : "OFF"}
+				</button>
+			</div>
+		);
+	}
+
+	if (type === "select" && options) {
+		return (
+			<div style={{ marginBottom: "0.5rem" }}>
+				<label style={{ fontSize: "0.7rem", display: "block", marginBottom: "0.25rem" }}>
+					{label}:
+				</label>
+				<select
+					id={`control-${name}`}
+					data-playground-control={name}
+					data-control-type="select"
+					data-control-value={String(value)}
+					value={String(value)}
+					onChange={(e) => {
+						console.log(`[PLAYGROUND] Control "${name}" changed: ${value} → ${e.target.value}`);
+						onChange(e.target.value);
+					}}
+					style={{
+						width: "100%",
+						padding: "0.25rem",
+						background: "#1a1a2e",
+						border: "1px solid #00ff88",
+						color: "#00ff88",
+						fontSize: "0.65rem",
+					}}
+				>
+					{options.map((opt) => (
+						<option key={opt.value} value={opt.value}>
+							{opt.label}
+						</option>
+					))}
+				</select>
+			</div>
+		);
+	}
+
+	if (type === "slider" || type === "number") {
+		return (
+			<div style={{ marginBottom: "0.5rem" }}>
+				<label style={{ fontSize: "0.7rem", display: "block", marginBottom: "0.25rem" }}>
+					{label}: <span data-playground-control-display={name}>{value}</span>
+				</label>
+				<input
+					type="range"
+					id={`control-${name}`}
+					data-playground-control={name}
+					data-control-type={type}
+					data-control-value={String(value)}
+					value={Number(value)}
+					min={min ?? 0}
+					max={max ?? 100}
+					step={step ?? 1}
+					onChange={(e) => {
+						const newValue = Number(e.target.value);
+						console.log(`[PLAYGROUND] Control "${name}" changed: ${value} → ${newValue}`);
+						onChange(newValue);
+					}}
+					style={{
+						width: "100%",
+						accentColor: "#00ff88",
+					}}
+				/>
+			</div>
+		);
+	}
+
+	return null;
+}
+
+/**
  * Main test harness component
  */
 export function TestHarness({
@@ -275,10 +445,12 @@ export function TestHarness({
 	onSeedChange,
 	initialSeed = "test-seed-001",
 	controls,
+	automationControls = [],
 }: TestHarnessProps) {
 	const [seed, setSeed] = useState(initialSeed);
 	const [fps, setFps] = useState(0);
 	const engineRef = useRef<import("@babylonjs/core").AbstractEngine | null>(null);
+	const sceneRef = useRef<BabylonScene | null>(null);
 
 	// FPS counter
 	useEffect(() => {
@@ -290,18 +462,68 @@ export function TestHarness({
 		return () => clearInterval(interval);
 	}, []);
 
+	// Expose window.playground API for automation
+	useEffect(() => {
+		const api: PlaygroundAPI = {
+			getSeed: () => seed,
+			setSeed: (value: string) => {
+				console.log(`[PLAYGROUND] API setSeed: "${seed}" → "${value}"`);
+				setSeed(value);
+				onSeedChange?.(value);
+			},
+			getState: () => {
+				const state: Record<string, unknown> = {
+					seed,
+					fps,
+					title,
+				};
+				for (const ctrl of automationControls) {
+					state[ctrl.name] = ctrl.value;
+				}
+				return state;
+			},
+			getFps: () => fps,
+			getScene: () => sceneRef.current,
+			listControls: () => automationControls.map((c) => c.name),
+			getControl: (name: string) => {
+				const ctrl = automationControls.find((c) => c.name === name);
+				return ctrl?.value;
+			},
+			setControl: (name: string, value: unknown) => {
+				const ctrl = automationControls.find((c) => c.name === name);
+				if (ctrl) {
+					console.log(`[PLAYGROUND] API setControl "${name}": ${ctrl.value} → ${value}`);
+					ctrl.onChange(value as boolean | string | number);
+				} else {
+					console.warn(`[PLAYGROUND] Unknown control: ${name}`);
+				}
+			},
+		};
+
+		window.playground = api;
+		console.log(`[PLAYGROUND] Initialized: "${title}"`);
+		console.log(`[PLAYGROUND] Available controls: ${automationControls.map((c) => c.name).join(", ") || "none"}`);
+
+		return () => {
+			delete window.playground;
+		};
+	}, [seed, fps, title, automationControls, onSeedChange]);
+
 	const handleSeedChange = useCallback(
 		(e: React.ChangeEvent<HTMLInputElement>) => {
 			const newSeed = e.target.value;
+			console.log(`[PLAYGROUND] Seed changed: "${seed}" → "${newSeed}"`);
 			setSeed(newSeed);
 			onSeedChange?.(newSeed);
 		},
-		[onSeedChange]
+		[seed, onSeedChange]
 	);
 
 	const handleSceneReady = useCallback((scene: BabylonScene) => {
 		scene.clearColor = backgroundColor;
 		engineRef.current = scene.getEngine();
+		sceneRef.current = scene;
+		console.log("[PLAYGROUND] Scene ready");
 	}, [backgroundColor]);
 
 	return (
@@ -328,6 +550,8 @@ export function TestHarness({
 						SEED:
 					</label>
 					<input
+						id="playground-seed-input"
+						data-playground="seed-input"
 						type="text"
 						value={seed}
 						onChange={handleSeedChange}
@@ -343,6 +567,9 @@ export function TestHarness({
 				</div>
 
 				<div
+					id="playground-fps-display"
+					data-playground="fps-display"
+					data-fps={fps}
 					style={{
 						padding: "0.5rem",
 						background: "#1a1a2e",
@@ -353,7 +580,19 @@ export function TestHarness({
 					FPS: <span style={{ color: fps > 55 ? "#00ff00" : fps > 30 ? "#ffff00" : "#ff0000" }}>{fps}</span>
 				</div>
 
-				{/* Custom controls */}
+				{/* Automation-friendly controls */}
+				{automationControls.length > 0 && (
+					<div style={{ marginTop: "1rem" }} data-playground="controls-panel">
+						<h3 style={{ fontSize: "0.9rem", marginBottom: "0.5rem", color: "#ff0088" }}>
+							CONTROLS
+						</h3>
+						{automationControls.map((ctrl) => (
+							<AutomationControl key={ctrl.name} control={ctrl} />
+						))}
+					</div>
+				)}
+
+				{/* Legacy custom controls (for backward compatibility) */}
 				{controls && (
 					<div style={{ marginTop: "1rem" }}>
 						<h3 style={{ fontSize: "0.9rem", marginBottom: "0.5rem", color: "#ff0088" }}>
