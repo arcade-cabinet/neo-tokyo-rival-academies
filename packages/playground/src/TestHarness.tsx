@@ -189,49 +189,66 @@ function LightingSetup({ enableBloom = true }: { enableBloom?: boolean }) {
 		disposables.push(greenLight);
 
 		// Post-processing pipeline - bloom, tone mapping, etc.
+		// Wait for camera to be available before creating pipeline
 		if (enableBloom) {
-			const pipeline = new DefaultRenderingPipeline(
-				"cyberpunkPipeline",
-				true, // HDR
-				scene,
-				scene.cameras
-			);
+			const setupPipeline = () => {
+				// Ensure we have at least one camera
+				if (scene.cameras.length === 0) return;
 
-			// BLOOM - makes emissive surfaces glow
-			pipeline.bloomEnabled = true;
-			pipeline.bloomThreshold = 0.3;
-			pipeline.bloomWeight = 0.8;
-			pipeline.bloomKernel = 64;
-			pipeline.bloomScale = 0.6;
+				const pipeline = new DefaultRenderingPipeline(
+					"cyberpunkPipeline",
+					true, // HDR
+					scene,
+					scene.cameras
+				);
 
-			// Chromatic aberration - subtle color fringing for that cyberpunk feel
-			pipeline.chromaticAberrationEnabled = true;
-			pipeline.chromaticAberration.aberrationAmount = 15;
-			pipeline.chromaticAberration.radialIntensity = 0.5;
+				// BLOOM - makes emissive surfaces glow
+				pipeline.bloomEnabled = true;
+				pipeline.bloomThreshold = 0.3;
+				pipeline.bloomWeight = 0.8;
+				pipeline.bloomKernel = 64;
+				pipeline.bloomScale = 0.6;
 
-			// Vignette through image processing
-			pipeline.imageProcessing.vignetteEnabled = true;
-			pipeline.imageProcessing.vignetteWeight = 1.5;
-			pipeline.imageProcessing.vignetteColor = new Color4(0.1, 0, 0.15, 0);
-			pipeline.imageProcessing.vignetteStretch = 0;
+				// Chromatic aberration - subtle color fringing for that cyberpunk feel
+				pipeline.chromaticAberrationEnabled = true;
+				pipeline.chromaticAberration.aberrationAmount = 15;
+				pipeline.chromaticAberration.radialIntensity = 0.5;
 
-			// FXAA anti-aliasing
-			pipeline.fxaaEnabled = true;
+				// Vignette through image processing
+				pipeline.imageProcessing.vignetteEnabled = true;
+				pipeline.imageProcessing.vignetteWeight = 1.5;
+				pipeline.imageProcessing.vignetteColor = new Color4(0.1, 0, 0.15, 0);
+				pipeline.imageProcessing.vignetteStretch = 0;
 
-			// Tone mapping for HDR
-			pipeline.imageProcessingEnabled = true;
-			pipeline.imageProcessing.toneMappingEnabled = true;
-			pipeline.imageProcessing.toneMappingType = ImageProcessingConfiguration.TONEMAPPING_ACES;
-			pipeline.imageProcessing.exposure = 1.1;
-			pipeline.imageProcessing.contrast = 1.15;
+				// FXAA anti-aliasing
+				pipeline.fxaaEnabled = true;
 
-			// Slight color grading - push toward cyan/magenta
-			pipeline.imageProcessing.colorCurvesEnabled = true;
-			if (pipeline.imageProcessing.colorCurves) {
-				pipeline.imageProcessing.colorCurves.globalSaturation = 1.2;
+				// Tone mapping for HDR
+				pipeline.imageProcessingEnabled = true;
+				pipeline.imageProcessing.toneMappingEnabled = true;
+				pipeline.imageProcessing.toneMappingType = ImageProcessingConfiguration.TONEMAPPING_ACES;
+				pipeline.imageProcessing.exposure = 1.1;
+				pipeline.imageProcessing.contrast = 1.15;
+
+				// Slight color grading - push toward cyan/magenta
+				pipeline.imageProcessing.colorCurvesEnabled = true;
+				if (pipeline.imageProcessing.colorCurves) {
+					pipeline.imageProcessing.colorCurves.globalSaturation = 1.2;
+				}
+
+				disposables.push(pipeline);
+			};
+
+			// Try immediately if camera already exists
+			if (scene.cameras.length > 0) {
+				setupPipeline();
+			} else {
+				// Otherwise wait for camera to be added
+				const observer = scene.onNewCameraAddedObservable.addOnce(() => {
+					setupPipeline();
+				});
+				disposables.push({ dispose: () => observer.remove() });
 			}
-
-			disposables.push(pipeline);
 		}
 
 		return () => {
@@ -374,7 +391,7 @@ export function TestHarness({
 				<Engine engineOptions={{ antialias: true, adaptToDeviceRatio: true }}>
 					<Scene onSceneReady={handleSceneReady}>
 						<CameraSetup distance={cameraDistance} target={cameraTarget} />
-						<LightingSetup />
+						<LightingSetup enableBloom={false} />
 						{showGrid && <GridHelper />}
 						{children}
 					</Scene>
