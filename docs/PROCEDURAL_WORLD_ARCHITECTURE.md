@@ -927,6 +927,94 @@ TARGET LOADING TIMES:
 | **Vertical** | Flat + dungeons | Multi-level rooftops |
 | **Assets** | Fixed at ship | Generated at build |
 
+### The "Rooftop is Grass" Principle
+
+A key insight: **rooftops are our grass**. In Daggerfall, grass is the baseline terrain that fills space between structures. In flooded Neo-Tokyo, rooftops serve the same purpose:
+
+```
+DAGGERFALL              →  NEO-TOKYO
+───────────────────────────────────────────
+Grass (base outdoor)       Rooftop concrete (base outdoor)
+Water/Sea (impassable)     Flooded water (impassable)
+Road/Path                  Bridge/Walkway
+Building                   Shelter/Structure
+Dungeon entrance           Submerged building entrance
+Tree/vegetation            Aquafarm/solar panels/debris
+Mountain (vertical block)  Taller building (vertical block)
+```
+
+The `Floor` component with `surface="concrete"` IS our base terrain. Water is just the negative space between bases - the gaps, not a "sea" to be crossed.
+
+This makes terrain generation simpler than Daggerfall's heightmap system:
+1. **Rooftops = BASE** (the walkable ground)
+2. **Water = GAPS** (negative space between bases)
+3. **Structures = PROPS** (things placed on the base)
+4. **Bridges = CONNECTIONS** (links between bases)
+
+### The "Reuse the Bear" Principle
+
+*Flintstones/Disney animator wisdom: "Hey look, we drew a bear. How many times can we reuse this bear?"*
+
+Most "new" components are parameterized versions of simpler primitives:
+
+```
+BASE PRIMITIVE: Floor (the "bear")
+├── Platform = Floor + movable flag
+├── Dock = Floor + neon edge + cleats
+├── Ferry = Floor + movable + rails
+├── Bridge = Floor + narrow + railings
+├── Walkway = Floor + very narrow
+└── Rooftop = Floor + surface variations
+
+BASE PRIMITIVE: Wall (another "bear")
+├── Lean-to = Wall + canted angle + tarp PBR
+├── Shelter = Wall × 3 + roof angle
+├── Barricade = Wall + shortened + debris PBR
+├── Fence = Wall + very thin + chain-link PBR
+└── Billboard = Wall + elevated + neon sign slot
+
+BASE PRIMITIVE: Box (collision container)
+├── Room = Box with doorway cutouts
+├── Container = Box + metal PBR + sealed
+├── Booth = Box + window cutout + service counter
+└── Kiosk = Box + open front + shelving
+```
+
+**Implementation insight**: Rather than creating many component files, the `Floor`, `Wall`, and `Box` components should accept `variant` props that adjust:
+- Dimensions and proportions
+- PBR material slots
+- Attachment points (neon edges, rails, cleats)
+- Movement flags (static vs. animatable)
+- Collision mesh configuration
+
+### Collision-Proofed Rooms
+
+Daggerfall's dungeon blocks were **pre-tested complete units** that snapped together, not individual primitives assembled at runtime. Neo-Tokyo should follow this pattern:
+
+```
+ROOM BLOCK (collision-proofed unit):
+┌─────────────────────────────────────┐
+│  ┌─────┐                    ┌─────┐ │
+│  │ PROP│    walkable area   │PROP │ │
+│  └─────┘                    └─────┘ │
+│                                     │
+│    ┌──────────────────┐             │
+│    │   furniture      │             │
+│    └──────────────────┘             │
+│                                     │
+│  [door]              [door]         │
+└─────────────────────────────────────┘
+
+Properties:
+- Interior walkable mesh verified
+- Furniture placement collision-tested
+- Door positions standardized for snapping
+- Lighting anchor points defined
+- Audio zone boundaries set
+```
+
+Rooms snap to rooms. The assembly system doesn't place individual walls and floors - it places **tested, complete environments** that connect at standardized door positions.
+
 ---
 
 ## References
