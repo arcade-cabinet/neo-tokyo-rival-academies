@@ -62,11 +62,13 @@ export function HexTileFloor({
 		}
 
 		// Create master hex mesh (flat-top orientation)
+		// Scale slightly larger (1.02x) to eliminate gaps from floating point precision
+		const tileScale = 1.02;
 		const masterHex = MeshBuilder.CreateCylinder(
 			"hexMaster",
 			{
-				height: 0.1,
-				diameter: HEX_SIZE * 2,
+				height: 0.15, // Slightly thicker for better visual
+				diameter: HEX_SIZE * 2 * tileScale,
 				tessellation: 6,
 			},
 			scene,

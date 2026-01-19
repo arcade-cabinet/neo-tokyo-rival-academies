@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Flooded World Component Playground</title>
+	<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+	<style>
+		* { margin: 0; padding: 0; box-sizing: border-box; }
+		body {
+			font-family: 'Inter', sans-serif;
+			background: #0F1419;
+			color: #E2E8F0;
+			min-height: 100vh;
+			padding: 2rem;
+			line-height: 1.5;
+		}
+		h1 {
+			font-family: 'Rajdhani', sans-serif;
+			font-size: 2.25rem;
+			font-weight: 600;
+			margin-bottom: 0.5rem;
+			color: #60A5FA;
+		}
+		.subtitle {
+			font-size: 1rem;
+			color: #94A3B8;
+			margin-bottom: 2rem;
+		}
+		h2 {
+			font-family: 'Rajdhani', sans-serif;
+			font-size: 1.25rem;
+			font-weight: 600;
+			margin: 2rem 0 1rem;
+			color: #F97316;
+			text-transform: uppercase;
+			letter-spacing: 0.05em;
+		}
+		.grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+			gap: 1rem;
+		}
+		a {
+			display: block;
+			padding: 1rem;
+			background: #1A2332;
+			border: 1px solid #334155;
+			border-radius: 6px;
+			color: #E2E8F0;
+			text-decoration: none;
+			transition: all 0.2s;
+			font-size: 0.875rem;
+		}
+		a:hover {
+			background: #243447;
+			border-color: #60A5FA;
+			transform: translateY(-2px);
+		}
+		.status {
+			font-family: 'Rajdhani', sans-serif;
+			font-size: 0.75rem;
+			margin-top: 0.5rem;
+			text-transform: uppercase;
+			letter-spacing: 0.1em;
+		}
+		.status.ready { color: #34D399; }
+		.status.wip { color: #FBBF24; }
+		.status.todo { color: #F87171; opacity: 0.7; }
+		.vision {
+			background: #1A2332;
+			border: 1px solid #334155;
+			border-left: 4px solid #F97316;
+			border-radius: 6px;
+			padding: 1.25rem;
+			margin: 1.5rem 0;
+			font-size: 0.875rem;
+			line-height: 1.6;
+		}
+		.vision strong {
+			font-family: 'Rajdhani', sans-serif;
+			color: #F97316;
+			text-transform: uppercase;
+			letter-spacing: 0.05em;
+		}
+		.design-section {
+			background: #1E3A5F;
+			border: 1px solid #60A5FA;
+			border-radius: 6px;
+			padding: 1rem;
+			margin-bottom: 2rem;
+		}
+		.design-section h2 {
+			color: #60A5FA;
+			margin-top: 0;
+		}
+		.badge {
+			display: inline-block;
+			padding: 0.25rem 0.5rem;
+			background: #F97316;
+			color: #0F1419;
+			font-family: 'Rajdhani', sans-serif;
+			font-size: 0.7rem;
+			font-weight: 600;
+			border-radius: 4px;
+			margin-left: 0.5rem;
+			text-transform: uppercase;
+		}
+	</style>
+</head>
+<body>
+	<h1>Flooded World Component Playground</h1>
+	<p class="subtitle">Isolated testing environment for flooded city building blocks — Year 40 post-flood</p>
+
+	<div class="vision">
+		<strong>World Setting:</strong> Forty years after the waters rose, the city has "become its rooftops."
+		Streets sit underwater at the 4th floor. Residents live on upper floors and rooftops connected by
+		rope bridges, ferries, and salvaged infrastructure. Buildings rise from murky water, lantern light
+		reflects on dark surfaces, and platform ferries glide between docking stations. Academy students
+		patrol territories, diving for salvage in the flooded depths below.
+	</div>
+
+	<div class="design-section">
+		<h2>// Design System <span class="badge">New</span></h2>
+		<div class="grid">
+			<a href="/tests/design-system.html">
+				Typography & HUD
+				<div class="status ready">[ READY ]</div>
+			</a>
+			<a href="/tests/color-palette.html">
+				Color Palettes
+				<div class="status ready">[ READY ]</div>
+			</a>
+			<a href="/tests/component-showcase.html">
+				Component Showcase
+				<div class="status ready">[ READY ]</div>
+			</a>
+		</div>
+	</div>
+
+	<h2>// Structural Primitives</h2>
+	<div class="grid">
+		<a href="/tests/textured-wall.html">
+			Textured Wall (PBR)
+			<div class="status ready">[ READY ]</div>
+		</a>
+		<a href="/tests/corner-wall.html">
+			Corner Wall (90°)
+			<div class="status ready">[ READY ]</div>
+		</a>
+		<a href="/tests/wall.html">
+			Procedural Wall
+			<div class="status ready">[ READY ]</div>
+		</a>
+		<a href="/tests/floor.html">
+			Floor / Rooftop
+			<div class="status ready">[ READY ]</div>
+		</a>
+		<a href="/tests/roof.html">
+			Roof / Ceiling
+			<div class="status ready">[ READY ]</div>
+		</a>
+	</div>
+
+	<h2>// Transport System</h2>
+	<div class="grid">
+		<a href="/tests/water.html">
+			Water Surface
+			<div class="status ready">[ READY ]</div>
+		</a>
+		<a href="/tests/rail-path.html">
+			Rail Path (Spline)
+			<div class="status ready">[ READY ]</div>
+		</a>
+		<a href="/tests/platform.html">
+			Platform (Rideable)
+			<div class="status ready">[ READY ]</div>
+		</a>
+		<a href="/tests/ferry.html">
+			Ferry System
+			<div class="status ready">[ READY ]</div>
+		</a>
+		<a href="/tests/bridge.html">
+			Bridge / Walkway
+			<div class="status ready">[ READY ]</div>
+		</a>
+	</div>
+
+	<h2>// Assembled Structures</h2>
+	<div class="grid">
+		<a href="/tests/room.html">
+			Room (4 Walls)
+			<div class="status ready">[ READY ]</div>
+		</a>
+		<a href="/tests/building.html">
+			Building
+			<div class="status ready">[ READY ]</div>
+		</a>
+		<a href="/tests/alley.html">
+			Alley
+			<div class="status ready">[ READY ]</div>
+		</a>
+		<a href="/tests/street.html">
+			Street
+			<div class="status ready">[ READY ]</div>
+		</a>
+	</div>
+
+	<h2>// Environment</h2>
+	<div class="grid">
+		<a href="/tests/farground.html">
+			Farground (Skyline)
+			<div class="status ready">[ READY ]</div>
+		</a>
+		<a href="/tests/neon.html">
+			Signage & Lanterns
+			<div class="status ready">[ READY ]</div>
+		</a>
+	</div>
+
+	<h2>// Character & Navigation</h2>
+	<div class="grid">
+		<a href="/tests/hero.html">
+			Hero Controller
+			<div class="status ready">[ READY ]</div>
+		</a>
+		<a href="/tests/navmesh.html">
+			Navigation Mesh
+			<div class="status ready">[ READY ]</div>
+		</a>
+	</div>
+
+	<h2>// Daggerfall Architecture</h2>
+	<div class="grid">
+		<a href="/tests/block.html">
+			Block System
+			<div class="status ready">[ READY ]</div>
+		</a>
+		<a href="/tests/modern-materials.html">
+			Modern Materials
+			<div class="status ready">[ READY ]</div>
+		</a>
+	</div>
+
+	<h2>// World Generation</h2>
+	<div class="grid">
+		<a href="/tests/cell.html">
+			Cell Generation
+			<div class="status todo">[ TODO ]</div>
+		</a>
+		<a href="/tests/streaming.html">
+			Cell Streaming
+			<div class="status todo">[ TODO ]</div>
+		</a>
+	</div>
+
+	<h2>// Integration Demos</h2>
+	<div class="grid">
+		<a href="/tests/rooftop-scene.html">
+			Rooftop Scene
+			<div class="status ready">[ READY ]</div>
+		</a>
+	</div>
+</body>
+</html>
