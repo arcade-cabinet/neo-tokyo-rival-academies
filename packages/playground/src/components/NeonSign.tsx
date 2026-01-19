@@ -41,8 +41,9 @@ import {
 import { useEffect, useRef } from "react";
 import { useScene } from "reactylon";
 
-export type NeonShape = "rectangle" | "circle" | "arrow" | "bar";
+export type NeonShape = "rectangle" | "circle" | "arrow" | "bar" | "kanji" | "skull";
 export type NeonMountType = "wall" | "pole" | "hanging" | "ground";
+export type NeonFaction = "syndicate" | "collective" | "academy" | "neutral";
 
 export interface NeonSignProps {
 	/** Unique identifier */
@@ -67,6 +68,10 @@ export interface NeonSignProps {
 	secondaryColor?: Color3 | null;
 	/** Flicker effect */
 	flicker?: boolean;
+	/** Faction affiliation (affects color and style defaults) */
+	faction?: NeonFaction;
+	/** Is sign powered/lit */
+	isPowered?: boolean;
 	/** Callback when mesh is ready */
 	onReady?: (mesh: AbstractMesh) => void;
 }
@@ -323,31 +328,93 @@ export function NeonSign({
 }
 
 /**
+ * Faction color schemes
+ */
+export const FACTION_COLORS: Record<NeonFaction, { primary: Color3; secondary: Color3 }> = {
+	syndicate: {
+		primary: new Color3(1, 0, 0.3),      // Crimson red
+		secondary: new Color3(1, 0.5, 0),    // Orange warning
+	},
+	collective: {
+		primary: new Color3(0.2, 0.8, 0.4),  // Green (community)
+		secondary: new Color3(0.9, 0.9, 0.3), // Yellow
+	},
+	academy: {
+		primary: new Color3(0, 0.6, 1),      // Academy blue
+		secondary: new Color3(1, 1, 1),       // White
+	},
+	neutral: {
+		primary: new Color3(0.8, 0.8, 0.8),  // Grey
+		secondary: new Color3(0.5, 0.5, 0.5),
+	},
+};
+
+/**
  * Preset neon sign configurations
  */
 export const NEON_PRESETS = {
-	// Classic Japanese-style rectangle
+	// === SYNDICATE TERRITORY MARKERS ===
+	syndicate_territory: {
+		shape: "rectangle" as NeonShape,
+		size: { width: 2, height: 1.5 },
+		color: FACTION_COLORS.syndicate.primary,
+		secondaryColor: FACTION_COLORS.syndicate.secondary,
+		mount: "wall" as NeonMountType,
+		faction: "syndicate" as NeonFaction,
+		intensity: 4.0,
+	},
+	syndicate_warning: {
+		shape: "arrow" as NeonShape,
+		size: { width: 1.5, height: 0.8 },
+		color: FACTION_COLORS.syndicate.secondary,
+		mount: "pole" as NeonMountType,
+		faction: "syndicate" as NeonFaction,
+		flicker: true,
+	},
+	syndicate_entrance: {
+		shape: "circle" as NeonShape,
+		size: { width: 1.2, height: 1.2 },
+		color: FACTION_COLORS.syndicate.primary,
+		mount: "hanging" as NeonMountType,
+		faction: "syndicate" as NeonFaction,
+	},
+	// === BLACK MARKET (COLLECTIVE) ===
+	black_market: {
+		shape: "bar" as NeonShape,
+		size: { width: 2.5, height: 0.1 },
+		color: FACTION_COLORS.collective.primary,
+		mount: "wall" as NeonMountType,
+		faction: "collective" as NeonFaction,
+		intensity: 2.0,
+	},
+	// === ACADEMY (RARE EVENTS) ===
+	academy_event: {
+		shape: "rectangle" as NeonShape,
+		size: { width: 3, height: 2 },
+		color: FACTION_COLORS.academy.primary,
+		secondaryColor: FACTION_COLORS.academy.secondary,
+		mount: "pole" as NeonMountType,
+		faction: "academy" as NeonFaction,
+	},
+	// === LEGACY PRESETS (backward compat) ===
 	kanji_frame: {
 		shape: "rectangle" as NeonShape,
 		size: { width: 1.5, height: 2 },
 		color: new Color3(1, 0, 0.3),
 		mount: "wall" as NeonMountType,
 	},
-	// Directional arrow
 	direction: {
 		shape: "arrow" as NeonShape,
 		size: { width: 1.5, height: 0.8 },
 		color: new Color3(0, 1, 0.5),
 		mount: "pole" as NeonMountType,
 	},
-	// Circle (open sign)
 	open_circle: {
 		shape: "circle" as NeonShape,
 		size: { width: 1, height: 1 },
 		color: new Color3(0, 0.8, 1),
 		mount: "hanging" as NeonMountType,
 	},
-	// Simple bar accent
 	accent_bar: {
 		shape: "bar" as NeonShape,
 		size: { width: 3, height: 0.1 },
@@ -355,5 +422,3 @@ export const NEON_PRESETS = {
 		mount: "wall" as NeonMountType,
 	},
 };
-
-export default NeonSign;

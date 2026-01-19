@@ -49,6 +49,7 @@ export { Buoy, type BuoyProps, type BuoyType, type BuoyColor } from "./Buoy";
 export { Puddle, type PuddleProps, type PuddleType, type PuddleCondition } from "./Puddle";
 export { RainCollector, type RainCollectorProps, type RainCollectorType, type RainCollectorCondition } from "./RainCollector";
 export { FishingNet, type FishingNetProps, type FishingNetType, type FishingNetState } from "./FishingNet";
+export { Aquafarm, type AquafarmProps, type AquafarmType, type AquafarmScale } from "./Aquafarm";
 export { Anchor, type AnchorProps, type AnchorType, type AnchorState } from "./Anchor";
 
 // =============================================================================
@@ -73,6 +74,7 @@ export { Signpost, type SignpostProps, type SignpostType } from "./Signpost";
 export { Lamppost, type LamppostProps, type LamppostType } from "./Lamppost";
 export { Graffiti, type GraffitiProps, type GraffitiType, type GraffitiSize } from "./Graffiti";
 export { Lantern, type LanternProps, type LanternType } from "./Lantern";
+export { Bonfire, type BonfireProps, type BonfireType, type BonfireState } from "./Bonfire";
 export { Flagpole, type FlagpoleProps, type FlagpoleType } from "./Flagpole";
 
 // =============================================================================
@@ -111,6 +113,7 @@ export { Dumpster, type DumpsterProps, type DumpsterType, type DumpsterCondition
 export { Elevator, type ElevatorProps, type ElevatorType, type ElevatorCondition } from "./Elevator";
 export { Vent, type VentProps, type VentType, type VentCondition } from "./Vent";
 export { SolarPanel, type SolarPanelProps, type SolarPanelType, type SolarPanelCondition } from "./SolarPanel";
+export { RooftopGarden, type RooftopGardenProps, type GardenType, type GardenCrop } from "./RooftopGarden";
 export { CoolingTower, type CoolingTowerProps, type CoolingTowerType, type CoolingTowerCondition } from "./CoolingTower";
 export { HeliPad, type HeliPadProps, type HeliPadType } from "./HeliPad";
 export { Rope, type RopeProps, type RopeType, type RopeStyle } from "./Rope";
