@@ -89,6 +89,10 @@ export const updateProgression = () => {
 
 		// Check level cap
 		if (entity.level.current >= MAX_LEVEL) {
+			entity.level.xp = Math.min(
+				entity.level.xp,
+				entity.level.nextLevelXp - 1,
+			);
 			continue;
 		}
 
