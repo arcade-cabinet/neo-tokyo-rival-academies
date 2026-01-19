@@ -19,9 +19,8 @@ import {
 	Path3D,
 	type AbstractMesh,
 	Animation,
-	type Scene,
 } from "@babylonjs/core";
-import { useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef } from "react";
 import { useScene } from "reactylon";
 
 export interface PlatformProps {

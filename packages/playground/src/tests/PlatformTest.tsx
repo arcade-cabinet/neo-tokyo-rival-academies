@@ -9,7 +9,7 @@
  * - Animation controls (start, stop, progress)
  */
 
-import { Color3, Vector3, Path3D, Curve3 } from "@babylonjs/core";
+import { Color3, Vector3, Path3D } from "@babylonjs/core";
 import { useState, useCallback, useRef } from "react";
 import { createRoot } from "react-dom/client";
 import { TestHarness } from "../TestHarness";

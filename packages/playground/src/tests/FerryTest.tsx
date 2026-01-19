@@ -16,7 +16,7 @@ import { useState, useCallback, useRef } from "react";
 import { createRoot } from "react-dom/client";
 import { TestHarness } from "../TestHarness";
 import { Water } from "../components/Water";
-import { RailPath, RailPathPresets } from "../components/RailPath";
+import { RailPath } from "../components/RailPath";
 import { Platform, type PlatformAnimationControls } from "../components/Platform";
 import { DockingStation } from "../components/DockingStation";
 import { TexturedWall } from "../components/TexturedWall";

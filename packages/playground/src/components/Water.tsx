@@ -15,7 +15,6 @@ import {
 	Color3,
 	MeshBuilder,
 	PBRMaterial,
-	Texture,
 	Vector3,
 	type AbstractMesh,
 } from "@babylonjs/core";

@@ -172,7 +172,7 @@ function RailPathTestScene() {
 				pathType={pathType}
 				debug={showDebug}
 				debugColor={new Color3(1, 1, 0)}
-				onPathReady={(path, curve) => {
+				onPathReady={(_path, curve) => {
 					console.log(`Path created with ${curve.getPoints().length} points`);
 					console.log(`Path length: ${curve.length().toFixed(2)} units`);
 				}}

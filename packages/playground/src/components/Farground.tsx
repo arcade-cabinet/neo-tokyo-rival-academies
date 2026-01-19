@@ -12,7 +12,6 @@
 
 import {
 	Color3,
-	Color4,
 	MeshBuilder,
 	PBRMaterial,
 	StandardMaterial,

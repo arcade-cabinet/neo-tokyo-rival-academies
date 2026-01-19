@@ -20,7 +20,6 @@ import {
 	Path3D,
 	StandardMaterial,
 	Vector3,
-	type AbstractMesh,
 	type LinesMesh,
 } from "@babylonjs/core";
 import { useEffect, useRef } from "react";

@@ -12,7 +12,7 @@ import { Color3, Vector3 } from "@babylonjs/core";
 import { useState, useCallback } from "react";
 import { createRoot } from "react-dom/client";
 import { TestHarness } from "../TestHarness";
-import { Floor, type FloorSurface, FLOOR_PRESETS } from "../components/Floor";
+import { Floor, type FloorSurface } from "../components/Floor";
 import { TexturedWall } from "../components/TexturedWall";
 import { Water } from "../components/Water";
 
