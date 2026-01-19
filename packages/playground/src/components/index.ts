@@ -22,6 +22,11 @@ export { Balcony, type BalconyProps, type BalconyType, type BalconyMaterial } fr
 export { Pillar, type PillarProps, type PillarShape, type PillarMaterial } from "./Pillar";
 export { Railing, type RailingProps, type RailingStyle, type RailingMaterial } from "./Railing";
 export { Awning, type AwningProps, type AwningStyle, type AwningFabric } from "./Awning";
+export { Fence, type FenceProps, type FenceStyle, type FenceCondition } from "./Fence";
+export { Ladder, type LadderProps, type LadderType, type LadderMaterial } from "./Ladder";
+export { FireEscape, type FireEscapeProps, type FireEscapeStyle } from "./FireEscape";
+export { Catwalk, type CatwalkProps, type CatwalkStyle, type CatwalkRailing } from "./Catwalk";
+export { Scaffolding, type ScaffoldingProps, type ScaffoldingType } from "./Scaffolding";
 
 // =============================================================================
 // WATER & FLOODED ELEMENTS
@@ -51,6 +56,10 @@ export { Billboard, type BillboardProps, type BillboardType, type BillboardSize 
 // =============================================================================
 
 export { VendingMachine, type VendingMachineProps, type VendingMachineType } from "./VendingMachine";
+export { Bench, type BenchProps, type BenchStyle, type BenchCondition } from "./Bench";
+export { TrashCan, type TrashCanProps, type TrashCanStyle, type TrashCanCondition } from "./TrashCan";
+export { Mailbox, type MailboxProps, type MailboxType } from "./Mailbox";
+export { Planter, type PlanterProps, type PlanterStyle, type PlanterMaterial } from "./Planter";
 
 // =============================================================================
 // UTILITIES & INFRASTRUCTURE
@@ -58,6 +67,11 @@ export { VendingMachine, type VendingMachineProps, type VendingMachineType } fro
 
 export { Pipe, type PipeProps, type PipeMaterial, type PipeSize } from "./Pipe";
 export { ACUnit, type ACUnitProps, type ACSize } from "./ACUnit";
+export { PowerLine, type PowerLineProps, type PowerLineType } from "./PowerLine";
+export { Antenna, type AntennaProps, type AntennaType } from "./Antenna";
+export { WaterTank, type WaterTankProps, type WaterTankType } from "./WaterTank";
+export { Generator, type GeneratorProps, type GeneratorType } from "./Generator";
+export { Dumpster, type DumpsterProps, type DumpsterType, type DumpsterCondition } from "./Dumpster";
 
 // =============================================================================
 // VEGETATION
