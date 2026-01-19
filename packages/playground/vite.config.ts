@@ -41,6 +41,9 @@ export default defineConfig({
 				room: resolve(__dirname, "tests/room.html"),
 				// Integration demos
 				rooftopScene: resolve(__dirname, "tests/rooftop-scene.html"),
+				// Daggerfall Architecture
+				block: resolve(__dirname, "tests/block.html"),
+				modernMaterials: resolve(__dirname, "tests/modern-materials.html"),
 				// World generation (TODO)
 				cell: resolve(__dirname, "tests/cell.html"),
 				streaming: resolve(__dirname, "tests/streaming.html"),
