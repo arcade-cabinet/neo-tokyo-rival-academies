@@ -1,20 +1,23 @@
 /**
  * NeonTest - Test neon sign components
  *
- * @deprecated As of v2.0 Flooded World pivot (Jan 2026).
- * This test file and the NeonSign component are deprecated.
- * Power is scarce in the flooded world - neon displays don't fit the aesthetic.
- * See: docs/DESIGN_PHILOSOPHY.md, docs/FLOODED_WORLD.md
- * GitHub Issue: #64
+ * FACTION CONTEXT (v2.0 Flooded World):
+ * Neon signs are salvaged pre-flood luxury items. Running them requires
+ * hoarded power (solar panels, generators, fuel) - a display of wealth
+ * that in this world means CRIME. Syndicate territory markers.
  *
- * When LightingTest.tsx is created (for Lantern/Bonfire), this file can be removed.
+ * This test validates the neon component works correctly for placement
+ * in Syndicate-controlled areas, gambling barges, and black markets.
  *
- * Legacy testing included:
+ * Testing:
  * - Different shapes (rectangle, circle, arrow, bar)
  * - Mount types (wall, pole, hanging)
- * - Color combinations
+ * - Color combinations (Syndicate = magenta/cyan)
  * - Bloom/glow effect
- * - Multiple signs together
+ * - Water reflections (key for flooded aesthetic)
+ *
+ * See: docs/MODULAR_ASSEMBLY_SYSTEM.md
+ * GitHub Issue: #64
  */
 
 import { Color3, Vector3 } from "@babylonjs/core";

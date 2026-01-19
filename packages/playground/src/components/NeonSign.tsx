@@ -1,18 +1,32 @@
 /**
- * NeonSign - Glowing signage component
+ * NeonSign - Salvaged pre-flood signage component
  *
- * @deprecated As of v2.0 Flooded World pivot (Jan 2026).
- * Power is scarce in the flooded world - neon displays don't fit the aesthetic.
- * Use Lantern or Bonfire components for lighting instead (when implemented).
- * See: docs/DESIGN_PHILOSOPHY.md, docs/FLOODED_WORLD.md
+ * FACTION CONTEXT (v2.0 Flooded World):
+ * In the flooded world, electricity is a scarce luxury. Most survivors live
+ * pre-industrial lives governed by day/night cycles, using lanterns and bonfires.
+ *
+ * Neon signs are SALVAGED PRE-FLOOD LUXURY ITEMS that require:
+ * - Hoarded solar panels (traded like gold)
+ * - Battery banks (rare)
+ * - Generators (rarer, fuel even more so)
+ *
+ * Running neon at night is an OBSCENE DISPLAY of hoarded resources.
+ * It signals: "We have power. We have control. Fear us."
+ *
+ * FACTION AFFINITY:
+ * - Syndicate (HIGH): Territory markers, gambling dens, black market
+ * - Collective (LOW): Black market zones only
+ * - Academy (RARE): Special occasions, championship events
+ * - Others (NONE): Can't afford the power expenditure
+ *
+ * GAMEPLAY SIGNALS:
+ * - Controlled territory (criminal activity)
+ * - Trade opportunity (black market goods)
+ * - Danger zone (enter at your own risk)
+ * - Quest giver nearby (Syndicate contacts)
+ *
+ * See: docs/MODULAR_ASSEMBLY_SYSTEM.md
  * GitHub Issue: #64
- *
- * Legacy uses included:
- * - Building-mounted signs
- * - Rooftop advertisements
- * - Directional indicators
- * - Shop/business markers
- * - Warning/hazard signs
  *
  * Uses high emissive for bloom interaction.
  */
@@ -59,7 +73,10 @@ export interface NeonSignProps {
 
 /**
  * NeonSign component
- * @deprecated Use Lantern or Bonfire components instead. See GitHub Issue #64.
+ *
+ * Displays salvaged pre-flood neon signage. Use sparingly - only in
+ * Syndicate territory and black market zones. The mere presence of
+ * powered neon signals wealth, crime, and danger to players.
  */
 export function NeonSign({
 	id,
