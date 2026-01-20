@@ -61,7 +61,8 @@ export default defineConfig({
 				// Daggerfall Architecture
 				block: resolve(__dirname, "tests/block.html"),
 				modernMaterials: resolve(__dirname, "tests/modern-materials.html"),
-				// World generation (TODO)
+				// World generation
+				rooftopProcgen: resolve(__dirname, "tests/rooftop-procgen.html"),
 				cell: resolve(__dirname, "tests/cell.html"),
 				streaming: resolve(__dirname, "tests/streaming.html"),
 				street: resolve(__dirname, "tests/street.html"),
