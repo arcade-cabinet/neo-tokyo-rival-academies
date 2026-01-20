@@ -306,9 +306,11 @@ export function getWordPools() {
 /**
  * Suggest completions for partial phrase input
  */
-export function suggestCompletions(
-	partial: string,
-): { adjectives: string[]; nouns: string[]; locations: string[] } {
+export function suggestCompletions(partial: string): {
+	adjectives: string[];
+	nouns: string[];
+	locations: string[];
+} {
 	const parts = partial.toLowerCase().split("-");
 	const current = parts[parts.length - 1] || "";
 

@@ -385,7 +385,6 @@ export function Hero({
 		glowColor,
 		enableCamera,
 		cameraDistance,
-		enableControls,
 		onMove,
 		onReady,
 	]);

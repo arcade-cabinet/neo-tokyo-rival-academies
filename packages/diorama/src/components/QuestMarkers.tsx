@@ -290,12 +290,7 @@ function setupMarkerInteraction(
  * Simple action manager proxy for markers
  * (Using proxy pattern since full ActionManager setup needs pointer events)
  */
-class ActionManagerProxy {
-	// biome-ignore lint/suspicious/noExplicitAny: any for scene
-	constructor(_scene: any) {
-		// Placeholder - full implementation would register pointer events
-	}
-}
+class ActionManagerProxy {}
 
 /**
  * Data shard collectible component

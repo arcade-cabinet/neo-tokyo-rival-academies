@@ -99,7 +99,7 @@ export function Skylight({
 		materials.push(glassMat);
 
 		const frameThickness = 0.04;
-		const frameHeight = 0.08;
+		const _frameHeight = 0.08;
 
 		if (type === "flat") {
 			// Flat skylight with metal frame
@@ -254,7 +254,7 @@ export function Skylight({
 				domeMat.alpha = conditionFactor.clarity * 0.45;
 				materials.push(domeMat);
 
-				const domeHeight = width * 0.4;
+				const _domeHeight = width * 0.4;
 				const dome = MeshBuilder.CreateSphere(
 					`${id}_dome`,
 					{
@@ -434,7 +434,7 @@ export function Skylight({
 			meshes.push(cap);
 		} else if (type === "tubular") {
 			// Tubular/sun tunnel skylight
-			const tubeRadius = width / 2;
+			const _tubeRadius = width / 2;
 			const tubeHeight = 0.5;
 
 			// Dome cap on roof

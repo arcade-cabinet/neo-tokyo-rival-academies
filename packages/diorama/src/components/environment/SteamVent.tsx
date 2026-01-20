@@ -10,7 +10,6 @@ import {
 	MeshBuilder,
 	ParticleSystem,
 	PBRMaterial,
-	Texture,
 	Vector3,
 } from "@babylonjs/core";
 import { useEffect, useRef } from "react";

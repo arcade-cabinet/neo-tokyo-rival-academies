@@ -91,8 +91,6 @@ export function RailPath({
 					curve = new Curve3(points);
 				}
 				break;
-
-			case "catmullrom":
 			default:
 				// Smooth Catmull-Rom spline through all points
 				curve = Curve3.CreateCatmullRomSpline(points, subdivisions, true);

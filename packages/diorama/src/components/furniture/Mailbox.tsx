@@ -58,7 +58,7 @@ export function Mailbox({
 		if (!scene) return;
 
 		const meshes: AbstractMesh[] = [];
-		const rng = seed !== undefined ? createSeededRandom(seed) : null;
+		const _rng = seed !== undefined ? createSeededRandom(seed) : null;
 
 		const conditionFactor =
 			condition === "new" ? 1 : condition === "weathered" ? 0.85 : 0.7;

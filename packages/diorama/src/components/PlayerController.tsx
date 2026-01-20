@@ -5,7 +5,7 @@
  * Integrates keyboard/touch input with character animations.
  */
 
-import type { AbstractMesh, AnimationGroup } from "@babylonjs/core";
+import type { AbstractMesh } from "@babylonjs/core";
 import { Vector3 } from "@babylonjs/core/Maths/math.vector";
 import { useEffect, useRef, useState } from "react";
 import { useScene } from "reactylon";

@@ -14,7 +14,7 @@ import {
 	StandardMaterial,
 	Vector3,
 } from "@babylonjs/core";
-import type { CellType, DistrictId, StratumId, WorldCell } from "./WorldGrid";
+import type { DistrictId, WorldCell } from "./WorldGrid";
 import { CELL_SIZE } from "./WorldGrid";
 
 // District visual profiles
@@ -485,9 +485,9 @@ function generateWindows(
 function generateStreet(
 	scene: Scene,
 	cell: WorldCell,
-	profile: DistrictProfile,
-	rng: () => number,
-	materials: ReturnType<typeof createCellMaterials>,
+	_profile: DistrictProfile,
+	_rng: () => number,
+	_materials: ReturnType<typeof createCellMaterials>,
 ): { meshes: AbstractMesh[] } {
 	const meshes: AbstractMesh[] = [];
 
@@ -517,7 +517,7 @@ function generateStreet(
 function generatePlaza(
 	scene: Scene,
 	cell: WorldCell,
-	profile: DistrictProfile,
+	_profile: DistrictProfile,
 	rng: () => number,
 	materials: ReturnType<typeof createCellMaterials>,
 ): { meshes: AbstractMesh[] } {
@@ -590,9 +590,9 @@ function generateAlley(
 function generatePark(
 	scene: Scene,
 	cell: WorldCell,
-	profile: DistrictProfile,
+	_profile: DistrictProfile,
 	rng: () => number,
-	materials: ReturnType<typeof createCellMaterials>,
+	_materials: ReturnType<typeof createCellMaterials>,
 ): { meshes: AbstractMesh[] } {
 	const meshes: AbstractMesh[] = [];
 
@@ -634,7 +634,7 @@ function generatePark(
 function generateElevator(
 	scene: Scene,
 	cell: WorldCell,
-	profile: DistrictProfile,
+	_profile: DistrictProfile,
 	materials: ReturnType<typeof createCellMaterials>,
 ): { meshes: AbstractMesh[]; collision: AbstractMesh[] } {
 	const meshes: AbstractMesh[] = [];
@@ -675,7 +675,7 @@ function generateElevator(
 function generateBridge(
 	scene: Scene,
 	cell: WorldCell,
-	profile: DistrictProfile,
+	_profile: DistrictProfile,
 	materials: ReturnType<typeof createCellMaterials>,
 ): { meshes: AbstractMesh[]; collision: AbstractMesh[] } {
 	const meshes: AbstractMesh[] = [];

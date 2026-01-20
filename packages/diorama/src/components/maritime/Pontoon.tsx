@@ -51,7 +51,7 @@ export function Pontoon({
 	const meshRef = useRef<AbstractMesh[]>([]);
 
 	const posX = position.x;
-	const posY = position.y;
+	const _posY = position.y;
 	const posZ = position.z;
 
 	useEffect(() => {
@@ -297,7 +297,6 @@ export function Pontoon({
 		scene,
 		id,
 		posX,
-		posY,
 		posZ,
 		type,
 		width,

@@ -61,7 +61,7 @@ export function PowerLine({
 		if (!scene) return;
 
 		const meshes: AbstractMesh[] = [];
-		const rng = seed !== undefined ? createSeededRandom(seed) : null;
+		const _rng = seed !== undefined ? createSeededRandom(seed) : null;
 
 		// Materials
 		const poleMat = new PBRMaterial(`powerline_pole_${id}`, scene);

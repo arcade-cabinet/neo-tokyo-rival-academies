@@ -137,13 +137,13 @@ export function SatelliteDish({
 		// Calculate dish center position based on mount configuration
 		let mountHeight: number;
 		let dishCenterY: number;
-		let dishCenterOffset: number;
+		let _dishCenterOffset: number;
 
 		if (type === "commercial") {
 			// Large commercial dish with heavy-duty mount
 			mountHeight = 0.8;
 			dishCenterY = posY + mountHeight + actualDiameter * 0.3;
-			dishCenterOffset = actualDiameter * 0.1;
+			_dishCenterOffset = actualDiameter * 0.1;
 
 			// Heavy base plate
 			const basePlate = MeshBuilder.CreateCylinder(
@@ -236,7 +236,7 @@ export function SatelliteDish({
 			// Standard residential/small commercial mount
 			mountHeight = type === "large" ? 0.5 : type === "medium" ? 0.35 : 0.25;
 			dishCenterY = posY + mountHeight + actualDiameter * 0.25;
-			dishCenterOffset = actualDiameter * 0.08;
+			_dishCenterOffset = actualDiameter * 0.08;
 
 			// Wall/roof mount bracket
 			const bracket = MeshBuilder.CreateBox(
@@ -306,7 +306,7 @@ export function SatelliteDish({
 		}
 
 		// Dish reflector (parabolic approximated as hemisphere slice)
-		const dishDepth = actualDiameter * 0.12;
+		const _dishDepth = actualDiameter * 0.12;
 		const dish = MeshBuilder.CreateSphere(
 			`${id}_dish`,
 			{

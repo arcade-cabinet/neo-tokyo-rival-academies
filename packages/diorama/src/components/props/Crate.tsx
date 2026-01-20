@@ -308,19 +308,7 @@ export function Crate({
 			}
 			mat.dispose();
 		};
-	}, [
-		scene,
-		id,
-		posX,
-		posY,
-		posZ,
-		type,
-		size,
-		stacked,
-		rotation,
-		damage,
-		seed,
-	]);
+	}, [scene, id, posX, posY, posZ, type, size, rotation, damage, seed]);
 
 	return null;
 }

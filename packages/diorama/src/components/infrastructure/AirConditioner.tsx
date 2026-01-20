@@ -376,7 +376,7 @@ export function AirConditioner({
 			// Portable AC
 			const width = 0.35;
 			const height = 0.7;
-			const depth = 0.35;
+			const _depth = 0.35;
 
 			// Main body
 			const body = MeshBuilder.CreateCylinder(

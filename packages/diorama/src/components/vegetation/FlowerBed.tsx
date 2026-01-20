@@ -148,7 +148,6 @@ export function FlowerBed({
 						new Color3(0.95, 0.6, 0.3),
 						new Color3(0.9, 0.9, 0.85),
 					];
-				case "mixed":
 				default:
 					return [
 						new Color3(0.9, 0.25, 0.3),

@@ -55,7 +55,7 @@ export function Generator({
 		if (!scene) return;
 
 		const meshes: AbstractMesh[] = [];
-		const rng = seed !== undefined ? createSeededRandom(seed) : null;
+		const _rng = seed !== undefined ? createSeededRandom(seed) : null;
 
 		const wearFactor = 1 - wear * 0.25;
 

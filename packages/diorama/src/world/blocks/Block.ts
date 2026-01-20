@@ -15,8 +15,6 @@
  * Grid unit: 8m x 8m (allows 2-3 shelters per block edge)
  */
 
-import type { Color3, Vector3 } from "@babylonjs/core";
-
 // ============================================================================
 // SNAP POINT SYSTEM
 // ============================================================================
@@ -306,7 +304,7 @@ export function registerBlock(definition: BlockDefinition): void {
 	if (!BLOCK_POOLS[definition.category]) {
 		BLOCK_POOLS[definition.category] = [];
 	}
-	BLOCK_POOLS[definition.category]!.push(definition);
+	BLOCK_POOLS[definition.category]?.push(definition);
 }
 
 /**

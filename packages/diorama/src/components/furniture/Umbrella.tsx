@@ -16,7 +16,12 @@ import { useEffect, useRef } from "react";
 import { useScene } from "reactylon";
 import { createSeededRandom } from "../../world/blocks/Block";
 
-export type UmbrellaType = "standard" | "parasol" | "golf" | "japanese" | "patio";
+export type UmbrellaType =
+	| "standard"
+	| "parasol"
+	| "golf"
+	| "japanese"
+	| "patio";
 export type UmbrellaState = "closed" | "open" | "broken" | "inverted";
 
 export interface UmbrellaProps {

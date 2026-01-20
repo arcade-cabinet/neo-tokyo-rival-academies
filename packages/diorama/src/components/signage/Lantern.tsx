@@ -61,7 +61,7 @@ export function Lantern({
 		if (!scene) return;
 
 		const meshes: AbstractMesh[] = [];
-		const rng = seed !== undefined ? createSeededRandom(seed) : null;
+		const _rng = seed !== undefined ? createSeededRandom(seed) : null;
 
 		const conditionFactor = condition;
 

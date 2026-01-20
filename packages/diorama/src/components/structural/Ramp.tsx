@@ -7,7 +7,6 @@
 
 import {
 	type AbstractMesh,
-	type Scene as BabylonScene,
 	Color3,
 	MeshBuilder,
 	PBRMaterial,

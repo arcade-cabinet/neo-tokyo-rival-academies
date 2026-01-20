@@ -350,7 +350,6 @@ export function NeonSign({
 		mount,
 		intensity,
 		secondaryColor,
-		flicker,
 		onReady,
 	]);
 

@@ -457,7 +457,6 @@ export function Carcass({
 		type,
 		state,
 		hasWheels,
-		missingPanels,
 		condition,
 		rotation,
 		seed,

@@ -273,7 +273,7 @@ export function Planter({
 			meshes.push(soil);
 		} else if (style === "hanging") {
 			const diameter = 0.35 * size;
-			const height = 0.25 * size;
+			const _height = 0.25 * size;
 
 			// Pot
 			const pot = MeshBuilder.CreateSphere(

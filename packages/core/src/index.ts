@@ -15,15 +15,15 @@
 
 export const CORE_VERSION = "0.1.0";
 
+// Data
+export * from "./data/questGrammar";
+export * from "./state/alignmentStore";
+export * from "./state/combatStore";
+export * from "./state/playerStore";
+export * from "./state/questStore";
+// State
+export * from "./state/worldStore";
 // Systems
 export * from "./systems";
 // Types
 export * from "./types";
-// State
-export * from "./state/worldStore";
-export * from "./state/questStore";
-export * from "./state/alignmentStore";
-export * from "./state/playerStore";
-export * from "./state/combatStore";
-// Data
-export * from "./data/questGrammar";

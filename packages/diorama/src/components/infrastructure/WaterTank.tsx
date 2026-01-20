@@ -63,7 +63,7 @@ export function WaterTank({
 		if (!scene) return;
 
 		const meshes: AbstractMesh[] = [];
-		const rng = seed !== undefined ? createSeededRandom(seed) : null;
+		const _rng = seed !== undefined ? createSeededRandom(seed) : null;
 
 		const ageFactor = 1 - age * 0.3;
 		const tankY = posY + (hasSupport ? supportHeight : 0);

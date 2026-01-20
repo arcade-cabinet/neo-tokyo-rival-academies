@@ -10,11 +10,9 @@
 
 import {
 	type AbstractMesh,
-	type Scene as BabylonScene,
 	Color3,
 	MeshBuilder,
 	PBRMaterial,
-	StandardMaterial,
 	Vector3,
 } from "@babylonjs/core";
 import { useEffect, useRef } from "react";

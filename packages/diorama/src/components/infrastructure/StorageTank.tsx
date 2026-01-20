@@ -78,7 +78,7 @@ export function StorageTank({
 		if (!scene) return;
 
 		const meshes: AbstractMesh[] = [];
-		const rng = seed !== undefined ? createSeededRandom(seed) : null;
+		const _rng = seed !== undefined ? createSeededRandom(seed) : null;
 
 		const conditionFactor = condition;
 
@@ -481,7 +481,6 @@ export function StorageTank({
 		height,
 		hasLadder,
 		hasPiping,
-		fillLevel,
 		condition,
 		rotation,
 		seed,

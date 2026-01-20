@@ -355,19 +355,7 @@ export function ACUnit({
 			grillMat.dispose();
 			fanMat.dispose();
 		};
-	}, [
-		scene,
-		id,
-		posX,
-		posY,
-		posZ,
-		size,
-		running,
-		age,
-		rotation,
-		wallMounted,
-		seed,
-	]);
+	}, [scene, id, posX, posY, posZ, size, age, rotation, wallMounted, seed]);
 
 	return null;
 }

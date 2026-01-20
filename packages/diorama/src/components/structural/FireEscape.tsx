@@ -61,7 +61,7 @@ export function FireEscape({
 		if (!scene) return;
 
 		const meshes: AbstractMesh[] = [];
-		const rng = seed !== undefined ? createSeededRandom(seed) : null;
+		const _rng = seed !== undefined ? createSeededRandom(seed) : null;
 
 		const rustFactor = 1 - rust * 0.4;
 
@@ -236,7 +236,7 @@ export function FireEscape({
 				// Stairs direction alternates for zigzag
 				const stairDirection =
 					style === "zigzag" ? (floor % 2 === 0 ? 1 : -1) : 1;
-				const stairStartX =
+				const _stairStartX =
 					style === "zigzag"
 						? floor % 2 === 0
 							? platformWidth / 2
