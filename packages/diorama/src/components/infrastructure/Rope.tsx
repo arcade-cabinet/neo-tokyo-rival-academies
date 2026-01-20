@@ -7,8 +7,10 @@
 import {
 	type AbstractMesh,
 	Color3,
+	Matrix,
 	MeshBuilder,
 	PBRMaterial,
+	Quaternion,
 	Vector3,
 } from "@babylonjs/core";
 import { useEffect, useRef } from "react";
@@ -169,11 +171,7 @@ export function Rope({
 				const axis = Vector3.Cross(up, direction).normalize();
 
 				if (axis.length() > 0.001) {
-					segment.rotationQuaternion = null;
-					const rotMatrix = BABYLON.Matrix.RotationAxis(axis, angle);
-					segment.rotation = rotMatrix
-						.getRotationMatrix()
-						.toEulerAngles() as any;
+					segment.rotationQuaternion = Quaternion.RotationAxis(axis, angle);
 				}
 
 				segment.material = ropeMat;

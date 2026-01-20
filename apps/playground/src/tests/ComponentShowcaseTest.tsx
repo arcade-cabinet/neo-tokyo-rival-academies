@@ -329,7 +329,7 @@ function ComponentShowcaseTestScene() {
 					<PowerLine id="powerline_1" position={gridPos(5, 4)} type="utility" length={5} seed={seedNumber+5} />
 					<Antenna id="antenna_1" position={gridPos(6)} type="tv" seed={seedNumber+6} />
 					<Antenna id="antenna_2" position={gridPos(7)} type="satellite" seed={seedNumber+7} />
-					<SatelliteDish id="satdish_1" position={gridPos(8)} type="residential" seed={seedNumber+8} />
+					<SatelliteDish id="satdish_1" position={gridPos(8)} type="small" seed={seedNumber+8} />
 					<SatelliteDish id="satdish_2" position={gridPos(9)} type="commercial" seed={seedNumber+9} />
 					<WaterTank id="watertank_1" position={gridPos(10)} type="rooftop" seed={seedNumber+10} />
 					<StorageTank id="storage_1" position={gridPos(11)} type="cylindrical" content="water" seed={seedNumber+11} />

@@ -16,7 +16,7 @@ import { useEffect, useRef } from "react";
 import { useScene } from "reactylon";
 import { createSeededRandom } from "../../world/blocks/Block";
 
-export type UmbrellaType = "standard" | "parasol" | "golf" | "japanese";
+export type UmbrellaType = "standard" | "parasol" | "golf" | "japanese" | "patio";
 export type UmbrellaState = "closed" | "open" | "broken" | "inverted";
 
 export interface UmbrellaProps {
@@ -45,6 +45,7 @@ const UMBRELLA_SPECS: Record<
 	parasol: { radius: 0.8, shaftLength: 0.9, ribCount: 8 },
 	golf: { radius: 0.7, shaftLength: 0.85, ribCount: 8 },
 	japanese: { radius: 0.45, shaftLength: 0.65, ribCount: 24 },
+	patio: { radius: 1.2, shaftLength: 2.0, ribCount: 8 }, // Large cafe/patio umbrella
 };
 
 // Common umbrella colors

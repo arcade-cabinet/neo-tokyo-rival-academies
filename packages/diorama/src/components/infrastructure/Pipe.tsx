@@ -20,10 +20,16 @@ export type PipeSize = "small" | "medium" | "large";
 
 export interface PipeProps {
 	id: string;
-	/** Start position */
-	start: Vector3;
-	/** End position */
-	end: Vector3;
+	/** Start position (use with end) */
+	start?: Vector3;
+	/** End position (use with start) */
+	end?: Vector3;
+	/** Position (use with length and direction for simpler API) */
+	position?: Vector3;
+	/** Length of pipe (use with position) */
+	length?: number;
+	/** Direction the pipe extends (use with position and length, defaults to +X) */
+	direction?: Vector3;
 	/** Pipe material */
 	material?: PipeMaterial;
 	/** Pipe size */
@@ -50,8 +56,11 @@ const SIZE_DIAMETERS: Record<PipeSize, number> = {
 
 export function Pipe({
 	id,
-	start,
-	end,
+	start: startProp,
+	end: endProp,
+	position,
+	length: lengthProp,
+	direction: directionProp,
 	material = "metal",
 	size = "medium",
 	flanges = false,
@@ -73,15 +82,35 @@ export function Pipe({
 		const diameter = SIZE_DIAMETERS[size];
 		const corrosionVariation = corrosion * (rng ? rng.next() * 0.15 : 0.1);
 
+		// Support both start/end and position/length/direction patterns
+		let pipeStart: Vector3;
+		let pipeEnd: Vector3;
+
+		if (startProp && endProp) {
+			// Use explicit start/end
+			pipeStart = startProp;
+			pipeEnd = endProp;
+		} else if (position) {
+			// Use position with length and direction
+			const pipeLength = lengthProp ?? 2;
+			const pipeDir = directionProp ?? new Vector3(1, 0, 0); // Default to +X
+			pipeStart = position;
+			pipeEnd = position.add(pipeDir.normalize().scale(pipeLength));
+		} else {
+			// Default fallback
+			pipeStart = Vector3.Zero();
+			pipeEnd = new Vector3(2, 0, 0);
+		}
+
 		// Calculate pipe length and direction
-		const direction = end.subtract(start);
-		const length = direction.length();
-		const center = start.add(direction.scale(0.5));
+		const pipeDirection = pipeEnd.subtract(pipeStart);
+		const length = pipeDirection.length();
+		const center = pipeStart.add(pipeDirection.scale(0.5));
 
 		// Calculate rotation to align cylinder
 		const up = Vector3.Up();
-		const angle = Math.acos(Vector3.Dot(direction.normalize(), up));
-		const axis = Vector3.Cross(up, direction.normalize()).normalize();
+		const angle = Math.acos(Vector3.Dot(pipeDirection.normalize(), up));
+		const axis = Vector3.Cross(up, pipeDirection.normalize()).normalize();
 
 		// Pipe material color
 		let pipeColor: Color3;
@@ -156,7 +185,7 @@ export function Pipe({
 			const bandCount = Math.max(2, Math.floor(length / 0.5));
 			for (let i = 0; i < bandCount; i++) {
 				const t = (i + 0.5) / bandCount;
-				const bandPos = start.add(direction.scale(t));
+				const bandPos = pipeStart.add(pipeDirection.scale(t));
 
 				const band = MeshBuilder.CreateTorus(
 					`${id}_band_${i}`,
@@ -167,7 +196,7 @@ export function Pipe({
 				if (axis.length() > 0.001) {
 					band.rotationQuaternion = null;
 					band.rotate(axis, angle);
-					band.rotate(direction.normalize(), Math.PI / 2);
+					band.rotate(pipeDirection.normalize(), Math.PI / 2);
 				} else {
 					band.rotation.x = Math.PI / 2;
 				}
@@ -183,9 +212,9 @@ export function Pipe({
 			flangeMat.metallic = 0.85;
 			flangeMat.roughness = 0.4;
 
-			for (const pos of [start, end]) {
+			for (const pos of [pipeStart, pipeEnd]) {
 				const flange = MeshBuilder.CreateCylinder(
-					`${id}_flange_${pos === start ? "start" : "end"}`,
+					`${id}_flange_${pos === pipeStart ? "start" : "end"}`,
 					{ height: 0.03, diameter: diameter * 2 },
 					scene,
 				);
@@ -208,7 +237,7 @@ export function Pipe({
 					);
 
 					const bolt = MeshBuilder.CreateCylinder(
-						`${id}_bolt_${pos === start ? "start" : "end"}_${i}`,
+						`${id}_bolt_${pos === pipeStart ? "start" : "end"}_${i}`,
 						{ height: 0.04, diameter: 0.02 },
 						scene,
 					);
@@ -230,7 +259,7 @@ export function Pipe({
 			valveMat.metallic = 0.7;
 			valveMat.roughness = 0.4;
 
-			const valvePos = start.add(direction.scale(valvePosition));
+			const valvePos = pipeStart.add(pipeDirection.scale(valvePosition));
 
 			// Valve body
 			const valveBody = MeshBuilder.CreateCylinder(
@@ -256,12 +285,12 @@ export function Pipe({
 
 			// Position wheel perpendicular to pipe
 			const perpendicular = Vector3.Cross(
-				direction.normalize(),
+				pipeDirection.normalize(),
 				new Vector3(1, 0, 0),
 			);
 			if (perpendicular.length() < 0.1) {
 				perpendicular.copyFrom(
-					Vector3.Cross(direction.normalize(), new Vector3(0, 0, 1)),
+					Vector3.Cross(pipeDirection.normalize(), new Vector3(0, 0, 1)),
 				);
 			}
 			perpendicular.normalize();
@@ -311,7 +340,7 @@ export function Pipe({
 			const patchCount = Math.floor(corrosion * 5) + 1;
 			for (let i = 0; i < patchCount; i++) {
 				const t = rng.next();
-				const patchPos = start.add(direction.scale(t));
+				const patchPos = pipeStart.add(pipeDirection.scale(t));
 				const patchAngle = rng.next() * Math.PI * 2;
 
 				const patch = MeshBuilder.CreateBox(
@@ -347,8 +376,11 @@ export function Pipe({
 	}, [
 		scene,
 		id,
-		start,
-		end,
+		startProp,
+		endProp,
+		position,
+		lengthProp,
+		directionProp,
 		material,
 		size,
 		flanges,
