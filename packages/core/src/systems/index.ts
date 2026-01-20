@@ -5,9 +5,9 @@
 
 export * from "./BreakSystem";
 export {
-	calculateDamage,
 	type AttackType,
 	type CombatResult as CombatLogicResult,
+	calculateDamage,
 	type DamageModifiers,
 } from "./CombatLogic";
 export * from "./CombatSystem";
