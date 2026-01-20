@@ -4,7 +4,12 @@
  */
 
 export * from "./BreakSystem";
-export * from "./CombatLogic";
+export {
+	calculateDamage,
+	type AttackType,
+	type CombatResult as CombatLogicResult,
+	type DamageModifiers,
+} from "./CombatLogic";
 export * from "./CombatSystem";
 export * from "./DistrictManager";
 export * from "./HitDetection";

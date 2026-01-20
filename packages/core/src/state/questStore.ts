@@ -112,12 +112,25 @@ export const useQuestStore = create<QuestState>((set, get) => ({
 		// Add credits
 		playerStore.addCredits(credits);
 
-		// Apply alignment shift
+		// Apply alignment shift and transform for return value
+		let transformedAlignmentShift:
+			| { faction: "kurenai" | "azure"; amount: number }
+			| undefined;
 		if (alignmentShift) {
-			if (alignmentShift.faction === "kurenai") {
-				alignmentStore.addKurenaiRep(alignmentShift.amount);
-			} else {
-				alignmentStore.addAzureRep(alignmentShift.amount);
+			// Quest has {kurenai?: number; azure?: number}, transform to {faction, amount}
+			if (alignmentShift.kurenai) {
+				alignmentStore.addKurenaiRep(alignmentShift.kurenai);
+				transformedAlignmentShift = {
+					faction: "kurenai",
+					amount: alignmentShift.kurenai,
+				};
+			}
+			if (alignmentShift.azure) {
+				alignmentStore.addAzureRep(alignmentShift.azure);
+				transformedAlignmentShift = {
+					faction: "azure",
+					amount: alignmentShift.azure,
+				};
 			}
 		}
 
@@ -152,7 +165,7 @@ export const useQuestStore = create<QuestState>((set, get) => ({
 			credits,
 			leveledUp,
 			newLevel: leveledUp ? newLevel : undefined,
-			alignmentShift,
+			alignmentShift: transformedAlignmentShift,
 			items,
 		};
 	},
