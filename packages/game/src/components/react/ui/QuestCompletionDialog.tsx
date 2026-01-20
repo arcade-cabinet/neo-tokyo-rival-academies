@@ -1,4 +1,3 @@
-import React from 'react';
 import type { QuestRewards } from '@neo-tokyo/core';
 
 interface QuestCompletionDialogProps {
@@ -21,6 +20,7 @@ export function QuestCompletionDialog({
   };
 
   return (
+    // biome-ignore lint/a11y/useSemanticElements: Full-screen backdrop overlay is not semantically a button
     <div
       style={{
         position: 'fixed',
@@ -36,7 +36,10 @@ export function QuestCompletionDialog({
         fontFamily: '"M PLUS 1", sans-serif',
         animation: 'fadeIn 0.3s ease-out',
       }}
+      role="button"
+      tabIndex={0}
       onClick={onClose}
+      onKeyDown={(e) => e.key === 'Enter' && onClose()}
     >
       <div
         style={{
@@ -49,7 +52,11 @@ export function QuestCompletionDialog({
           boxShadow: '0 0 40px #10b98160',
           animation: 'slideUp 0.4s ease-out',
         }}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="quest-complete-title"
         onClick={(e) => e.stopPropagation()}
+        onKeyDown={(e) => e.stopPropagation()}
       >
         {/* Success Icon */}
         <div

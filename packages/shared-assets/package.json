@@ -1,0 +1,24 @@
+{
+  "name": "@neo-tokyo/shared-assets",
+  "version": "1.0.0",
+  "description": "Shared game assets for Neo-Tokyo: Rival Academies",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./assets/*": "./assets/*"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "typecheck": "tsc --noEmit",
+    "copy-textures": "bash scripts/copy-textures.sh"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.0"
+  }
+}

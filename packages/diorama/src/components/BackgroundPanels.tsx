@@ -7,6 +7,7 @@
  * - Background: Parallax far skyline + mid city layers
  */
 
+import type { AbstractMesh, Material } from "@babylonjs/core";
 import {
 	Color3,
 	MeshBuilder,
@@ -16,7 +17,6 @@ import {
 } from "@babylonjs/core";
 import { useEffect, useRef } from "react";
 import { useScene } from "reactylon";
-import type { AbstractMesh, Material } from "@babylonjs/core";
 
 export type BackgroundTheme = "neon" | "dark" | "sunset";
 

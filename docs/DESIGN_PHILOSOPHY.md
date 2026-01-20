@@ -1,170 +1,186 @@
-# Neo-Tokyo: Rival Academies - Design Philosophy & Core Pillars
+# Neo-Tokyo: Rival Academies - Design Philosophy v2.0
 
-**Purpose**: Define the foundational design principles that guide Neo-Tokyo's development
-**Last Updated**: 2026-01-16
+**Purpose**: Define the foundational design principles for the Flooded Neo-Tokyo setting
+**Last Updated**: 2026-01-19
 
 ---
 
 ## Vision Statement
 
-**Neo-Tokyo: Rival Academies** is a browser-based 3D Action JRPG that combines classic JRPG depth with modern web technology and AI-generated content. We aim to prove that **browser games can achieve AAA-quality visuals** while maintaining the strategic depth and narrative richness that define the genre.
+**Neo-Tokyo: Rival Academies** is a browser-based 3D Action JRPG set in a drowned city where life persists on rooftops. Youth trained in rival academies navigate a world of makeshift bridges, salvaged boats, and contested territories. We prove that **procedural generation and hand-crafted assets can coexist beautifully** in a mobile-first web experience.
 
 ---
 
 ## Core Design Pillars
 
-### 1. Production Quality Through GenAI
+### 1. The Flooded World Aesthetic
 
-**Principle**: AI-generated assets should be indistinguishable from hand-crafted ones.
+**Principle**: Scarcity and survival shape every visual choice.
 
 **How We Achieve This**:
-- **Multi-View Generation**: 4-angle concept art ensures 3D model consistency
-- **Anatomical Prompts**: Explicit HANDS and FACE sections prevent AI deformities
-- **30K Polygon Budget**: Enough detail for close-ups, efficient for web
-- **Animation Presets**: Consistent combat animations across character types
-- **Cel-Shaded Rendering**: meshToonMaterial hides imperfections, creates style
+- **Weathered Materials**: Rust, water stains, patched tarps, salt-crusted wood
+- **Natural Lighting**: Sunlight, overcast skies, lanterns, bonfires (NO NEON)
+- **Water Dominance**: Murky water below, reflections, tidal movement
+- **Vertical Living**: Rooftops as territories, canopy antennas, flooded depths below
+- **Makeshift Construction**: Salvaged materials, improvised engineering
 
 **Anti-Patterns We Avoid**:
-- Placeholder assets that "we'll fix later"
-- Low-poly approximations of characters
-- Mismatched art styles between characters
-- Generic T-pose models without animations
+- Neon lights (power is scarce, displays wasteful)
+- Clean technology (everything is salvaged, repaired)
+- Corporate chrome (old world is underwater)
+- Abundance (resources are contested, precious)
+- Cyberpunk excess (this is post-apocalypse survival)
 
-**Inspiration Sources**:
-- Persona 5 (cel-shaded elegance)
-- Genshin Impact (anime 3D quality)
-- Final Fantasy XIV (character expressiveness)
+**Material Palette**:
+
+| Material | Usage | Visual Treatment |
+|----------|-------|------------------|
+| **Rusted Metal** | Railings, scaffolds, salvage | Orange/brown patina, pitting |
+| **Weathered Concrete** | Building surfaces | Water stains, moss, cracks |
+| **Salvaged Wood** | Bridges, shelters | Grey, warped, salt-crusted |
+| **Tarps/Canvas** | Roofs, walls | Faded colors, patches, tears |
+| **Rope/Cable** | Bridges, rigging | Frayed, knotted, weathered |
+
+**Lighting Sources**:
+
+| Source | Context | Color Temperature |
+|--------|---------|-------------------|
+| **Sunlight** | Day scenes | Warm yellow-white |
+| **Overcast** | Common weather | Cool grey, diffused |
+| **Lanterns** | Night, interiors | Warm orange, flickering |
+| **Bonfires** | Gathering spaces | Amber-red, animated |
+| **Solar Lamps** | Academy grounds | Cool white LED (rare) |
 
 ---
 
-### 2. Isometric Diorama: The "Toy Box" Feel
+### 2. Solid + Procedural Interplay
 
-**Principle**: The game world should feel like a beautiful, collectible diorama.
+**Principle**: Hand-crafted assets (Meshy) and procedural generation must work flawlessly together.
 
 **How We Achieve This**:
-- **Orthographic Camera**: True isometric view, no perspective distortion
-- **Hex Grid Foundation**: Clean geometric base for tactical positioning
-- **Bounded Scenes**: Each area is a self-contained "diorama" stage
-- **2.5D Backgrounds**: FF7-style parallax walls frame the action
-- **Depth Through Lighting**: Shadows and highlights create 3D presence
+- **DDL-Defined Catalogs**: Every asset type has a declarative definition
+- **Anchor Points**: Solid assets expose connection points for procedural placement
+- **Collision Integration**: Meshy models have matching navmesh-compatible bounds
+- **Rail-Based Systems**: Complex motion (boats, ferries) follows procedural paths
+- **Clip Prevention**: Solid assets check procedural bounds before placement
 
-**Anti-Patterns We Avoid**:
-- Sprawling open worlds (too ambitious for web)
-- Procedural infinity (no sense of place)
-- Flat 2D sprites on 3D backgrounds
-- Camera systems that require constant adjustment
+**Asset Classification**:
 
-**Inspiration Sources**:
-- Hades (isometric action clarity)
-- Octopath Traveler (2.5D diorama beauty)
-- Final Fantasy Tactics (strategic hex clarity)
-- Nintendo's figurine games (collectible appeal)
+| Category | Generation | Examples |
+|----------|------------|----------|
+| **Characters** | Meshy (solid) | Hero, Vera, NPCs, faction members |
+| **Vehicles** | Meshy (solid) | Boats, barges, cable cars |
+| **Landmarks** | Meshy (solid) | Academy towers, shrine elements |
+| **Shelters** | Procedural shell + Meshy details | Tarps, containers, platforms |
+| **Bridges** | Procedural + anchor points | Plank, scaffold, cable bridges |
+| **Terrain** | Procedural surfaces | Rooftop floors, territory bounds |
+| **Water** | Procedural shader | Flooded streets, surrounding sea |
+| **Props** | Meshy (solid) + procedural placement | Equipment, salvage, furniture |
+
+**Integration Rules**:
+1. Solid assets define their bounding box and anchor points
+2. Procedural systems query valid placement zones
+3. Navigation mesh regenerates around placed solids
+4. Rail paths avoid solid geometry with clearance buffers
+5. LOD transitions happen at territory boundaries
 
 ---
 
-### 3. Stats-Driven JRPG Combat
+### 3. Territory-Based Open World
+
+**Principle**: The world is procedural but anchored by canonical territories.
+
+**How We Achieve This**:
+- **10 Canonical Territories**: Fixed locations with seeded variation
+- **Connection Graph**: Bridges and boat routes form navigable network
+- **Progressive Loading**: Current + adjacent territories in memory
+- **Seed Reproducibility**: Same seed = same world, shareable
+- **Story Anchors**: Key locations fixed for narrative beats
+
+**Territory Generation Flow**:
+```
+masterSeed
+    |
+    +-> Territory Seed (kurenai_academy, market_collective, etc.)
+    |       |
+    |       +-> Surface generation (rooftop geometry)
+    |       +-> Shelter placement (DDL catalog selection)
+    |       +-> Equipment placement (faction-appropriate)
+    |       +-> NPC distribution (schedule-based)
+    |
+    +-> Connection Seed
+            |
+            +-> Bridge generation (span, type, anchors)
+            +-> Boat route generation (docks, paths)
+```
+
+**Anti-Patterns We Avoid**:
+- Infinite procedural sprawl (no sense of place)
+- Random disconnected areas (no navigable world)
+- Fixed linear levels (no exploration freedom)
+- Copy-paste territories (each must feel distinct)
+
+---
+
+### 4. Stats-Driven JRPG Combat (PRESERVED)
 
 **Principle**: Every number matters, every choice counts.
 
-**How We Achieve This**:
-- **Four Core Stats**: Structure, Ignition, Logic, Flow (not 20+ stats)
-- **Clear Formulas**: Damage = (ATK × 2) - (DEF × 0.5) ± variance
-- **Visible Calculations**: Show damage numbers, explain criticals
-- **Meaningful Progression**: Each level-up noticeably impacts gameplay
-- **Counter Systems**: Rock-paper-scissors elemental/type advantages
+**The Four Stats**:
 
-**Anti-Patterns We Avoid**:
-- Hidden stats players can't understand
-- Exponential scaling that trivializes content
-- Pay-to-win stat boosts
-- Grinding without strategic depth
+| Stat | Purpose | Flooded World Context |
+|------|---------|----------------------|
+| **Structure** | HP, Defense | Survival in harsh conditions |
+| **Ignition** | Attack, Criticals | Aggressive, passionate fighting |
+| **Logic** | Skills, Special | Tactical, environmental use |
+| **Flow** | Speed, Evasion | Water movement, agility |
 
-**Inspiration Sources**:
-- Persona (confidant-boosted stats)
-- Fire Emblem (visible damage previews)
-- Chrono Trigger (meaningful progression)
+**Combat Arenas by Territory**:
 
-**Stats Design**:
+| Territory Type | Arena Characteristics |
+|----------------|----------------------|
+| Academy | Training platforms, fair ground |
+| Market | Cluttered, environmental objects |
+| Refuge | Tight spaces, civilian concerns |
+| Factory | Industrial hazards, machines |
+| Ruin | Unstable, collapsing sections |
+| Water | Floating platforms, submersion risk |
 
-| Stat | Purpose | Feel |
-|------|---------|------|
-| **Structure** | HP, Defense | Tanky, durable |
-| **Ignition** | Attack, Criticals | Aggressive, explosive |
-| **Logic** | Skills, Special | Tactical, calculated |
-| **Flow** | Speed, Evasion | Fluid, responsive |
+**Spin-Out Combat**:
+- Combat transitions to dedicated arena view
+- Arena type determined by territory
+- Environmental hazards from procedural elements
+- Solid character models on procedural surfaces
 
 ---
 
-### 4. Narrative Through Rivalry
+### 5. Narrative Through Rivalry (PRESERVED)
 
 **Principle**: Character relationships drive player engagement.
 
-**How We Achieve This**:
-- **Named Rivals**: Kai vs Vera, not "Player vs Enemy"
-- **Visual Novel Dialogue**: Character portraits, emotional beats
-- **Academy Factions**: Crimson (passion) vs Azure (logic)
-- **Evolving Relationships**: Rivalry can become respect, alliance, or enmity
-- **Story Integration**: Cutscenes reward exploration and combat
+**Core Narrative Anchors** (preserved through all pivots):
 
-**Anti-Patterns We Avoid**:
-- Generic unnamed enemies
-- Skippable story (if skipped, why include?)
-- Dialogue dumps without character
-- Rival arcs without resolution
-
-**Inspiration Sources**:
-- Persona (social links as gameplay)
-- Fire Emblem (support conversations)
-- Pokemon (rival character growth)
-
-**Faction Design**:
-
-| Academy | Philosophy | Color | Weapon Style |
-|---------|------------|-------|--------------|
-| **Kurenai** | "Ignition" - Passion | Crimson/Gold | The Redline Piston (hammer) |
-| **Azure** | "Calculation" - Logic | Cobalt/Silver | The Null Set (lance) |
+| Element | Original | Flooded Adaptation |
+|---------|----------|--------------------|
+| **Hero** | Kai, academy student | Kai, Kurenai orphan survivor |
+| **Rival** | Vera, Azure star | Vera, Azure engineering prodigy |
+| **Academies** | Schools | Survival training communities |
+| **Factions** | Street gangs | Syndicate, Runners, Collective, Drowned |
+| **Tournament** | Academy competition | Territory championship |
 
 **Alignment Scale**:
-
-The player's choices shift alignment between the two philosophies:
-
-```text
--1.0 ←——— Kurenai ——— 0 ——— Azure ———→ +1.0
+```
+-1.0 <——— Kurenai ——— 0 ——— Azure ———> +1.0
           Passion       Neutral      Logic
 ```
 
-| Threshold | State | Effect |
-|-----------|-------|--------|
-| -1.0 to -0.6 | Extreme Kurenai | +2 Ignition, Kurenai-exclusive quests |
-| -0.6 to -0.3 | Strong Kurenai | +1 Ignition, passion dialogue options |
-| -0.3 to +0.3 | Neutral | Balanced options, both paths open |
-| +0.3 to +0.6 | Strong Azure | +1 Logic, calculation dialogue options |
-| +0.6 to +1.0 | Extreme Azure | +2 Logic, Azure-exclusive quests |
-
-**Alignment Shift Sources**:
-- Quest completion methods: ±0.1 to ±0.4
-- Dialogue choices: ±0.1 to ±0.2
-- Combat approach (aggressive vs tactical): ±0.05 per encounter
-- Side quest alignment bias: ±0.1
+The flooded world intensifies this: Kurenai's passion drives bold action in crisis; Azure's logic ensures calculated survival.
 
 ---
 
-### 5. Browser-First, Not Browser-Limited
+### 6. Mobile-First Performance
 
-**Principle**: Web constraints should inspire innovation, not excuse mediocrity.
-
-**How We Achieve This**:
-- **Instant Play**: No downloads, no installs, click and play
-- **Progressive Loading**: Core game loads first, assets stream in
-- **60 FPS Target**: Smooth gameplay on mid-tier devices
-- **Mobile Ready**: Touch controls via Capacitor wrapper
-- **Offline Capable**: Service worker for basic offline play
-
-**Anti-Patterns We Avoid**:
-- "It's just a web game" as quality excuse
-- Desktop-only experiences
-- Megabyte-heavy initial loads
-- Browser-specific hacks
+**Principle**: Every feature must run at 60 FPS on baseline devices.
 
 **Performance Targets**:
 
@@ -174,6 +190,49 @@ The player's choices shift alignment between the two philosophies:
 | Interactive | < 3.5s | Game playable |
 | Frame Rate | 60 FPS | Consistent, no drops |
 | Memory | < 200MB | Heap budget |
+| Draw Calls | < 150 | Per territory |
+
+**Baseline Device**: Pixel 8a
+
+**LOD Strategy**:
+- Current territory: Full detail
+- Adjacent territories: Medium LOD
+- Distant: Silhouette/skybox only
+- Water: Shader quality scales with device
+
+---
+
+## Playground Primitive Requirements
+
+### Existing Components (Flooded World Ready)
+
+| Component | Status | Notes |
+|-----------|--------|-------|
+| `Water` | Ready | Murky presets, reflections |
+| `TexturedWall` | Ready | Weathered materials |
+| `Wall` | Ready | Basic geometry |
+| `Floor` | Ready | Territory surfaces |
+| `Roof` | Ready | Rooftop bases |
+| `Platform` | Ready | Elevated surfaces |
+| `RailPath` | Ready | Boat/ferry routes |
+| `Hero` | Ready | Character placement |
+| `NavMesh` | Ready | Navigation |
+
+### New Components Required (Flooded World)
+
+| Component | Purpose | Solid/Procedural |
+|-----------|---------|------------------|
+| `Shelter` | Makeshift housing (tarps, containers) | Procedural shell + solid props |
+| `MakeshiftBridge` | Plank, scaffold, cable bridges | Procedural span + solid anchors |
+| `Dock` | Boat landing points | Solid + procedural attachment |
+| `Boat` | Vessels for water navigation | Solid on procedural rails |
+| `SolarPanel` | Power collection arrays | Solid + procedural placement |
+| `WaterCollector` | Rainwater cisterns | Solid + procedural placement |
+| `RooftopGarden` | Food production patches | Procedural bounds + solid plants |
+| `Antenna` | Canopy zone structures | Solid + procedural height |
+| `Debris` | Floating water debris | Procedural placement |
+| `Lantern` | Night lighting source | Solid + procedural placement |
+| `Bonfire` | Gathering light source | Solid + procedural placement |
 
 ---
 
@@ -181,58 +240,57 @@ The player's choices shift alignment between the two philosophies:
 
 When making design choices, evaluate against these questions:
 
-1. **Quality**: Does this meet production standards?
-2. **Clarity**: Can players understand this immediately?
-3. **Depth**: Does this add meaningful strategic choice?
-4. **Character**: Does this serve the narrative?
-5. **Performance**: Does this run smoothly on target devices?
+1. **Survival**: Does this fit a world of scarcity?
+2. **Solid/Procedural**: Is this the right generation approach?
+3. **Performance**: Does this run at 60 FPS on Pixel 8a?
+4. **Narrative**: Does this serve the hero's journey?
+5. **Reproducibility**: Can this be seeded deterministically?
 
 If a feature fails multiple criteria, reconsider or simplify.
 
 ---
 
+## What We Are Building
+
+- **Flooded open world** with 10 canonical territories
+- **Procedural generation** using Dagster-style factory patterns
+- **Survival aesthetic** with weathered, makeshift visuals
+- **Seamless solid/procedural** integration
+- **Mobile-first** browser experience
+- **Preserved narrative** with adapted setting
+
 ## What We Are NOT Building
 
-To maintain focus, we explicitly exclude:
-
-- **MMO Features**: No persistent servers, no real-time multiplayer
-- **Gacha/P2W**: No paid randomization, no stat purchases
-- **Open World**: No procedural terrain, no endless exploration
-- **Realistic Graphics**: No photorealism, embrace cel-shading
-- **Competitive Esports**: No ranked ladders, no balance patches
+- **Cyberpunk neon** - power is scarce
+- **Clean high-tech** - everything is salvaged
+- **Infinite procedural** - territories are bounded
+- **MMO multiplayer** - single-player focused
+- **Pay-to-win** - no stat purchases
 
 ---
 
-## Evolution Path
+## Inspiration Sources
 
-### Phase 1: MVP (Current)
-- Single isometric diorama scene
-- Kai character playable
-- Basic combat framework
-- GenAI pipeline complete
+### Visual
+- **Waterworld** (1995) - Floating settlements, salvage culture
+- **Wind Waker** - Flooded world, island hopping
+- **Kowloon Walled City** - Dense vertical living
+- **Studio Ghibli** - Weathered beauty, environmental themes
 
-### Phase 2: Story
-- Vera rival introduction
-- Academy hub world
-- Dialogue system
-- Full B-story characters
+### Mechanical
+- **Daggerfall** - Procedural world with anchored narrative
+- **Dagster** - Declarative factory patterns
+- **Persona** - Character-driven JRPG systems
 
-### Phase 3: Polish
-- Sound design
-- Visual effects
-- Save/load system
-- Mobile optimization
-
-### Phase 4: Expansion (Future)
-- Additional academies
-- Navigation mesh (Babylon.js migration)
-- New Game+ mode
-- Community features
+### Thematic
+- **Venice** - Water-based urban life
+- **Subnautica** - Underwater exploration atmosphere
+- **Mad Max** - Scarcity-driven aesthetics
 
 ---
 
-*"In Neo-Tokyo, your rival is your mirror. In defeating them, you discover yourself."*
+*"The city drowned, but we learned to swim. The old world sank, but we built bridges. In the water's reflection, we see who we've become."*
 
 ---
 
-Last Updated: 2026-01-16
+Last Updated: 2026-01-19

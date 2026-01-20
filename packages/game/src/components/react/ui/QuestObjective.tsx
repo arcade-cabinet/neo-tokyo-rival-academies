@@ -1,5 +1,5 @@
-import React, { useMemo } from 'react';
 import { useQuestStore } from '@neo-tokyo/core';
+import { useMemo } from 'react';
 
 export function QuestObjective() {
   // Use stable selector - get the Map directly, then derive currentQuest in useMemo
@@ -32,13 +32,22 @@ export function QuestObjective() {
         <span
           style={{
             fontSize: '10px',
-            color: currentQuest.type === 'main' ? '#f59e0b' : currentQuest.type === 'secret' ? '#8b5cf6' : '#64748b',
+            color:
+              currentQuest.type === 'main'
+                ? '#f59e0b'
+                : currentQuest.type === 'secret'
+                  ? '#8b5cf6'
+                  : '#64748b',
             textTransform: 'uppercase',
             fontWeight: 'bold',
             letterSpacing: '0.05em',
           }}
         >
-          {currentQuest.type === 'main' ? '⭐ Main Quest' : currentQuest.type === 'secret' ? '✨ Secret' : '📋 Side Quest'}
+          {currentQuest.type === 'main'
+            ? '⭐ Main Quest'
+            : currentQuest.type === 'secret'
+              ? '✨ Secret'
+              : '📋 Side Quest'}
         </span>
       </div>
 
@@ -56,7 +65,14 @@ export function QuestObjective() {
           borderRadius: '4px',
         }}
       >
-        <div style={{ fontSize: '10px', color: '#94a3b8', marginBottom: '4px', textTransform: 'uppercase' }}>
+        <div
+          style={{
+            fontSize: '10px',
+            color: '#94a3b8',
+            marginBottom: '4px',
+            textTransform: 'uppercase',
+          }}
+        >
           Objective:
         </div>
         <div style={{ fontSize: '12px', color: '#e2e8f0', lineHeight: 1.4 }}>
@@ -65,7 +81,16 @@ export function QuestObjective() {
       </div>
 
       {/* Location */}
-      <div style={{ marginTop: '8px', fontSize: '11px', color: '#64748b', display: 'flex', alignItems: 'center', gap: '6px' }}>
+      <div
+        style={{
+          marginTop: '8px',
+          fontSize: '11px',
+          color: '#64748b',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '6px',
+        }}
+      >
         <span>📍</span>
         <span>{currentQuest.location}</span>
       </div>

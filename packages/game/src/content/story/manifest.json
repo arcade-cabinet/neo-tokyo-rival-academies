@@ -1,42 +1,42 @@
 {
-	"intro_01": {
-		"description": "A rain-slicked rooftop in Neo-Tokyo Sector 0. Thunder roars. Neon signs reflect in puddles.",
-		"prompt": "Anime style, cel shaded, 8k masterpiece, detailed, neo-tokyo cyberpunk. A rain-slicked rooftop in Neo-Tokyo Sector 0. Thunder roars. Neon signs reflect in puddles. Kai slams his weapon down, cracking the concrete with sparks flying. Vera hovers calmly, looking at a holographic display. --style raw",
-		"imagePath": "/assets/story/intro_01.png"
-	},
-	"intro_02": {
-		"description": "Cinematic close-up, split screen effect.",
-		"prompt": "Anime style, cel shaded, 8k masterpiece, detailed, neo-tokyo cyberpunk. Cinematic close-up, split screen effect. Kai shouts excitedly with a fiery aura. Vera adjusts her glasses with a disdainful icy glare. --style raw",
-		"imagePath": "/assets/story/intro_02.png"
-	},
-	"boss_intro": {
-		"description": "Mid-air above a shattered bridge. Debris falling.",
-		"prompt": "Anime style, cel shaded, 8k masterpiece, detailed, neo-tokyo cyberpunk. Mid-air above a shattered bridge. Debris falling. Vera drops from the sky, her weapon glowing with azure energy, surrounded by drone swarms. --style raw",
-		"imagePath": "/assets/story/boss_intro.png"
-	},
-	"boss_mid": {
-		"description": "The bridge is collapsing. Digital grids overlay the vision.",
-		"prompt": "Anime style, cel shaded, 8k masterpiece, detailed, neo-tokyo cyberpunk. The bridge is collapsing. Digital grids overlay the vision. Vera unleashes a barrage of geometric lasers. Kai dodges narrowly. --style raw",
-		"imagePath": "/assets/story/boss_mid.png"
-	},
-	"rooftop_chase": {
-		"description": "Running vertically up a skyscraper side. Motion blur.",
-		"prompt": "Anime style, cel shaded, 8k masterpiece, detailed, neo-tokyo cyberpunk. Running vertically up a skyscraper side. Motion blur. Kai sprints up the side of a building, smashing a window to enter a shortcut. --style raw",
-		"imagePath": "/assets/story/rooftop_chase.png"
-	},
-	"summit_view": {
-		"description": "Above the clouds. The massive space elevator structure pierces the sky.",
-		"prompt": "Anime style, cel shaded, 8k masterpiece, detailed, neo-tokyo cyberpunk. Above the clouds. The massive space elevator structure pierces the sky. Both racers are side-by-side, exhausted but pushing limits. The \"Data Core\" glows at the top. --style raw",
-		"imagePath": "/assets/story/summit_view.png"
-	},
-	"final_clash": {
-		"description": "The peak of the tower. Storm clouds swirling below.",
-		"prompt": "Anime style, cel shaded, 8k masterpiece, detailed, neo-tokyo cyberpunk. The peak of the tower. Storm clouds swirling below. Kai swings his hammer with maximum force. Vera parries with a focused energy shield. Shockwave ripples. --style raw",
-		"imagePath": "/assets/story/final_clash.png"
-	},
-	"victory_kai": {
-		"description": "Kai holding the glowing Data Core triumphantly.",
-		"prompt": "Anime style, cel shaded, 8k masterpiece, detailed, neo-tokyo cyberpunk. Kai holding the glowing Data Core triumphantly. Kai grins, thumbs up. Vera floats in the background, analyzing data on a screen, looking annoyed but impressed. --style raw",
-		"imagePath": "/assets/story/victory_kai.png"
-	}
+  "intro_01": {
+    "description": "A rain-slicked rooftop in Neo-Tokyo Sector 0. Thunder roars. Neon signs reflect in puddles.",
+    "prompt": "Anime style, cel shaded, 8k masterpiece, detailed, neo-tokyo cyberpunk. A rain-slicked rooftop in Neo-Tokyo Sector 0. Thunder roars. Neon signs reflect in puddles. Kai slams his weapon down, cracking the concrete with sparks flying. Vera hovers calmly, looking at a holographic display. --style raw",
+    "imagePath": "/assets/story/intro_01.png"
+  },
+  "intro_02": {
+    "description": "Cinematic close-up, split screen effect.",
+    "prompt": "Anime style, cel shaded, 8k masterpiece, detailed, neo-tokyo cyberpunk. Cinematic close-up, split screen effect. Kai shouts excitedly with a fiery aura. Vera adjusts her glasses with a disdainful icy glare. --style raw",
+    "imagePath": "/assets/story/intro_02.png"
+  },
+  "boss_intro": {
+    "description": "Mid-air above a shattered bridge. Debris falling.",
+    "prompt": "Anime style, cel shaded, 8k masterpiece, detailed, neo-tokyo cyberpunk. Mid-air above a shattered bridge. Debris falling. Vera drops from the sky, her weapon glowing with azure energy, surrounded by drone swarms. --style raw",
+    "imagePath": "/assets/story/boss_intro.png"
+  },
+  "boss_mid": {
+    "description": "The bridge is collapsing. Digital grids overlay the vision.",
+    "prompt": "Anime style, cel shaded, 8k masterpiece, detailed, neo-tokyo cyberpunk. The bridge is collapsing. Digital grids overlay the vision. Vera unleashes a barrage of geometric lasers. Kai dodges narrowly. --style raw",
+    "imagePath": "/assets/story/boss_mid.png"
+  },
+  "rooftop_chase": {
+    "description": "Running vertically up a skyscraper side. Motion blur.",
+    "prompt": "Anime style, cel shaded, 8k masterpiece, detailed, neo-tokyo cyberpunk. Running vertically up a skyscraper side. Motion blur. Kai sprints up the side of a building, smashing a window to enter a shortcut. --style raw",
+    "imagePath": "/assets/story/rooftop_chase.png"
+  },
+  "summit_view": {
+    "description": "Above the clouds. The massive space elevator structure pierces the sky.",
+    "prompt": "Anime style, cel shaded, 8k masterpiece, detailed, neo-tokyo cyberpunk. Above the clouds. The massive space elevator structure pierces the sky. Both racers are side-by-side, exhausted but pushing limits. The \"Data Core\" glows at the top. --style raw",
+    "imagePath": "/assets/story/summit_view.png"
+  },
+  "final_clash": {
+    "description": "The peak of the tower. Storm clouds swirling below.",
+    "prompt": "Anime style, cel shaded, 8k masterpiece, detailed, neo-tokyo cyberpunk. The peak of the tower. Storm clouds swirling below. Kai swings his hammer with maximum force. Vera parries with a focused energy shield. Shockwave ripples. --style raw",
+    "imagePath": "/assets/story/final_clash.png"
+  },
+  "victory_kai": {
+    "description": "Kai holding the glowing Data Core triumphantly.",
+    "prompt": "Anime style, cel shaded, 8k masterpiece, detailed, neo-tokyo cyberpunk. Kai holding the glowing Data Core triumphantly. Kai grins, thumbs up. Vera floats in the background, analyzing data on a screen, looking annoyed but impressed. --style raw",
+    "imagePath": "/assets/story/victory_kai.png"
+  }
 }

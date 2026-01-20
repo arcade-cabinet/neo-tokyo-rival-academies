@@ -1,144 +1,144 @@
 .hudContainer {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	z-index: 10;
-	pointer-events: none;
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .topBar {
-	padding: 2vmin;
-	display: flex;
-	justify-content: space-between;
-	align-items: flex-start;
-	background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), transparent);
+  padding: 2vmin;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), transparent);
 }
 
 .hudBox {
-	background: rgba(180, 0, 0, 0.7);
-	border: 1px solid rgba(255, 255, 255, 0.2);
-	padding: 1vmin 2vmin;
-	color: #fff;
-	transform: skewX(-15deg);
-	backdrop-filter: blur(5px);
-	box-shadow: 0 0 15px rgba(255, 0, 0, 0.2);
+  background: rgba(180, 0, 0, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 1vmin 2vmin;
+  color: #fff;
+  transform: skewX(-15deg);
+  backdrop-filter: blur(5px);
+  box-shadow: 0 0 15px rgba(255, 0, 0, 0.2);
 }
 
 .hudLabel {
-	font-size: 1.5vmin;
-	color: #ffba00;
-	text-transform: uppercase;
-	letter-spacing: 2px;
-	margin-bottom: 2px;
+  font-size: 1.5vmin;
+  color: #ffba00;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 2px;
 }
 
 .hudVal {
-	font-size: 3vmin;
-	font-weight: 900;
-	color: #fff;
-	text-shadow: 2px 2px #000;
-	font-style: italic;
+  font-size: 3vmin;
+  font-weight: 900;
+  color: #fff;
+  text-shadow: 2px 2px #000;
+  font-style: italic;
 }
 
 /* Dialogue Toast Styles */
 .dialogueToast {
-	position: absolute;
-	top: 12%;
-	left: 50%;
-	transform: translateX(-50%);
-	background: rgba(0, 0, 10, 0.9);
-	border: 2px solid #0ff;
-	border-radius: 8px;
-	padding: 1.5vmin 3vmin;
-	color: #fff;
-	z-index: 100;
-	max-width: 90%;
-	min-width: 40%;
-	pointer-events: none;
-	text-align: center;
-	box-shadow: 0 0 10px #0ff;
+  position: absolute;
+  top: 12%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 10, 0.9);
+  border: 2px solid #0ff;
+  border-radius: 8px;
+  padding: 1.5vmin 3vmin;
+  color: #fff;
+  z-index: 100;
+  max-width: 90%;
+  min-width: 40%;
+  pointer-events: none;
+  text-align: center;
+  box-shadow: 0 0 10px #0ff;
 }
 
 .dialogueSpeaker {
-	font-size: 3vmin;
-	font-weight: bold;
-	text-transform: uppercase;
-	margin-bottom: 0.5vmin;
+  font-size: 3vmin;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-bottom: 0.5vmin;
 }
 
 .dialogueSpeakerRival {
-	color: #0ff;
+  color: #0ff;
 }
 
 .dialogueSpeakerOther {
-	color: #f0f;
+  color: #f0f;
 }
 
 .dialogueText {
-	font-size: 3vmin;
-	font-family: monospace;
+  font-size: 3vmin;
+  font-family: monospace;
 }
 
 .touchControls {
-	height: 40%;
-	width: 100%;
-	display: flex;
-	pointer-events: auto;
-	padding-bottom: 2vmin;
+  height: 40%;
+  width: 100%;
+  display: flex;
+  pointer-events: auto;
+  padding-bottom: 2vmin;
 }
 
 .controlZone {
-	flex: 1;
-	position: relative;
-	display: flex;
-	align-items: flex-end;
-	justify-content: center;
-	gap: 2vmin;
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 2vmin;
 }
 
 .touchBtn {
-	width: 18vmin;
-	height: 18vmin;
-	background: rgba(255, 255, 255, 0.1);
-	border: 2px solid rgba(255, 255, 255, 0.2);
-	border-radius: 50%;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	font-size: 2vmin;
-	font-weight: 800;
-	color: rgba(255, 255, 255, 0.8);
-	backdrop-filter: blur(4px);
-	touch-action: manipulation;
-	user-select: none;
-	transition:
-		transform 0.1s,
-		background 0.1s;
+  width: 18vmin;
+  height: 18vmin;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2vmin;
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(4px);
+  touch-action: manipulation;
+  user-select: none;
+  transition:
+    transform 0.1s,
+    background 0.1s;
 }
 
 .touchBtn:active,
 .touchBtnPressed {
-	background: rgba(255, 0, 0, 0.4);
-	border-color: #f00;
-	transform: scale(0.95);
-	box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+  background: rgba(255, 0, 0, 0.4);
+  border-color: #f00;
+  transform: scale(0.95);
+  box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
 }
 
 /* Specific button styles */
 .btnRun {
-	border-color: #f0f;
+  border-color: #f0f;
 }
 .btnSlide {
-	border-color: #ff0;
+  border-color: #ff0;
 }
 .btnJump {
-	border-color: #0ff;
+  border-color: #0ff;
 }
 .btnAttack {
-	border-color: #f00;
+  border-color: #f00;
 }

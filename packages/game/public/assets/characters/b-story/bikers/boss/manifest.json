@@ -1,134 +1,134 @@
 {
-	"id": "biker-boss",
-	"name": "Biker Gang Leader",
-	"type": "character",
-	"description": "Bosozoku gang leader, veteran street fighter.",
-	"textToImageTask": {
-		"prompt": "Adult Japanese man in early thirties, large muscular build with massive shoulders and thick arms covered in full sleeve tattoos visible, barrel chest, dark tanned skin with battle scars. HANDS: two hands with five distinct fingers each, proper finger proportions with defined knuckles, natural finger spacing, thumbs positioned correctly. FACE: small well-shaped ears, straight nose with defined bridge, distinct naturally shaped lips with goatee, intense eyes with scarred eyebrow, strong square jaw. Long black hair tied back in loose ponytail with shaved sides. Heavy customized leather vest with gang patches over bare tattooed chest, black leather pants with silver chain belt hanging loose, steel-toed boots with metal plates on toes, feet with normal proportions. Cocky confident smirk, dominant wide stance with arms at sides. Anime cel-shaded art style with heavy metal aesthetic and anatomically correct extremities.",
-		"generateMultiView": true,
-		"poseMode": "a-pose"
-	},
-	"multiImageTo3DTask": {
-		"topology": "quad",
-		"targetPolycount": 30000,
-		"symmetryMode": "auto",
-		"shouldRemesh": true,
-		"shouldTexture": true,
-		"enablePbr": false,
-		"poseMode": "a-pose"
-	},
-	"riggingTask": {
-		"heightMeters": 1.88
-	},
-	"animationTask": {
-		"preset": "boss"
-	},
-	"tasks": {
-		"concept": {
-			"taskId": "019bc456-7b90-79e0-8000-438a6070ac01",
-			"status": "SUCCEEDED",
-			"completedAt": 1768525597445,
-			"outputs": {
-				"taskId": "019bc456-7b90-79e0-8000-438a6070ac01",
-				"imageUrls": [
-					"https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/uploads/multi_view_image_019bc457-07c5-7fc7-b3c2-2e926701bb10_part_0.png?Expires=1768784797&Signature=RtvVAnr0su24n-8DJk57bbzQynP7ZT0PVlWd8p-Z6hq6FCMqzP71SATChY4408DDScuIuiA4DAT1YiqF1T3o-QOJrrpxsKUoUaJoMr949Yh-OXyJQ2dwLq7YS3prunbJW1ivcPNYoVvz-Kau9dG9YKr0Yn5bOj7sVHgFsTUCjqZ1CpbJgXDy27eI2ZkiplXdWJNhKjWkDpk~qsV4X7tYIkTL0F7~h8tdwa3q58kxICzf-4IwySiIpRtcCxahGSImrFcSk-CwPUjtHCaixYKy3TIv3fqNyUWa30z8GhrKIBxKuvVye4spscpEtEbWH3-JY5EQtU4EhsNk6eDJDkyU6Q__&Key-Pair-Id=KL5I0C8H7HX83",
-					"https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/uploads/multi_view_image_019bc457-07c5-7fc7-b3c2-2e926701bb10_part_1.png?Expires=1768784797&Signature=cn7DKR2AqXTtfelBKAY88rUdHqrpWzr9c4PvUorP4XJw0iakTaO7sZpPwghqN0T8oi~~TkjJTeTYrflbjfKuexxnR50-tQ~lbaV6K7upqHeCLocAtVwXnEN~e6HIO1BZwzySrF6J5hGt85DD7HeUmZO6n73UQ8DFpRzKGWWul3lCIGT~GxPGEYJPqg17NtbwupufmwagjhAiuqomy6yR-Oxd95y7ZmBQouGJNjtQma31iLg1ZUeT3Py9LE~Tyu9jPShsdWOZmKxmN-0Ot9vTrbG3fjGOrKm0Ge6yZTOR4cO4GUybj5kS2f6ylV0hku4goeEmyoxda1bxXKD78XqtIA__&Key-Pair-Id=KL5I0C8H7HX83",
-					"https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/uploads/multi_view_image_019bc457-07c5-7fc7-b3c2-2e926701bb10_part_2.png?Expires=1768784797&Signature=gF5RAlNXlpnGSqEZ5WC3Fla-RmhkmISxG1OTwbFopuFvBYP5-tY8PKgZ1DC2hDLA4CyM-v9ZucWn8X3r-gvsRnNsE6Psn-JCgHbkeSWednYsmewSM2BayK0CyQBdpYSvxJ8UNJAvvVBwHujOxyXXJEMAqaTJyc3abkJUmI1zkAok5ePWZloxuP75Ir2Dwesn03OHjnxPeCTBbasMpmZ3WSvhD48BRZOsAwtIQqVgXGcpRZ7c6VXvQ2JdOuQ-qQhODcsVA7UE5jgx60aG4zJREFCN9nx82cxVBjkiSiOjq3R5n4k6xnhoVL2kpZJa~OuYakd85c5yvbyMirGUOhyd~w__&Key-Pair-Id=KL5I0C8H7HX83"
-				]
-			},
-			"artifacts": {}
-		},
-		"model": {
-			"taskId": "019bc457-0bac-7343-a8eb-3ce6628c8b5e",
-			"status": "SUCCEEDED",
-			"completedAt": 1768525739598,
-			"outputs": {
-				"taskId": "019bc457-0bac-7343-a8eb-3ce6628c8b5e",
-				"model": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019bc457-0bac-7343-a8eb-3ce6628c8b5e/output/model.glb?Expires=1768784939&Signature=M5oLY2MYi5SHIQzsj9BXgd-8ah7E5fGmcQwZ0O2Gq43A~AeiR-VdB24oD~MX71e0y8Dp7iR0dj06ULqe9eU9SOdyXp~N70uTXMUrqVqPrlLCNnpurKlzJP8p0UqXystsoxgcnXLlp3kKbBdSHrC9WWauxUtndSaJmsodvv-lXYZc78FnS~~R-ml~BOaaxHL-K5V61kzmgMSwS7VOIukZUhYqHSqdenL6ari6yCDo43YgGUPb0kP6C~u497Q~MgNZimG2niEOD2r0thINISarwF0HJNA93CFq9G22byR6erQ3Z-1g1bj6W-D-d5rAN1IGcn1NwrwICGcCiavZc9ucNQ__&Key-Pair-Id=KL5I0C8H7HX83",
-				"textures": [
-					{
-						"base_color": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019bc457-0bac-7343-a8eb-3ce6628c8b5e/output/texture_0.png?Expires=1768784939&Signature=nPCWu6PceaTJ~URgpSxOfYk0TCQ7tfMnokS3kgRA1BYzFu1Aj2AABL~HeeoJKesoMsjZesY19cuEDCeTqdTqSu0d5uIU9ltii3V1HiP0lf75h4lSK-K-W1~v~zWXZWFEtdjTyKfpmdBaCdKIMGSYcV3ESMtEj2NvxryGTj9xo5wA72t~IOLmuBSIXT1kNWe309wMymktjI-lRMwD6ZOYs-BAPF3Opdy1u4COb8vHsXSOsOCjcuEjpoIJ4k9anEGZ5ZZ~CQbAlOyF52i~63S85tqRkTqiN8RAr9~QdEbXO1z6bwqJ6pb5GNEK3Wo9oHcNpSclSGTqzglCrKIpdCzAtw__&Key-Pair-Id=KL5I0C8H7HX83"
-					}
-				],
-				"textureUrl": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019bc457-0bac-7343-a8eb-3ce6628c8b5e/output/texture_0.png?Expires=1768784939&Signature=nPCWu6PceaTJ~URgpSxOfYk0TCQ7tfMnokS3kgRA1BYzFu1Aj2AABL~HeeoJKesoMsjZesY19cuEDCeTqdTqSu0d5uIU9ltii3V1HiP0lf75h4lSK-K-W1~v~zWXZWFEtdjTyKfpmdBaCdKIMGSYcV3ESMtEj2NvxryGTj9xo5wA72t~IOLmuBSIXT1kNWe309wMymktjI-lRMwD6ZOYs-BAPF3Opdy1u4COb8vHsXSOsOCjcuEjpoIJ4k9anEGZ5ZZ~CQbAlOyF52i~63S85tqRkTqiN8RAr9~QdEbXO1z6bwqJ6pb5GNEK3Wo9oHcNpSclSGTqzglCrKIpdCzAtw__&Key-Pair-Id=KL5I0C8H7HX83"
-			},
-			"artifacts": {}
-		},
-		"rigging": {
-			"taskId": "019bc459-36ec-7833-a485-a3065eab889e",
-			"status": "SUCCEEDED",
-			"completedAt": 1768525760903,
-			"outputs": {
-				"taskId": "019bc459-36ec-7833-a485-a3065eab889e",
-				"riggedModel": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019bc459-36ec-7833-a485-a3065eab889e/output/Character_output.glb?Expires=1768784960&Signature=MKYUNi-nSlp06FMq4CCGySwz~iin60RGquEzEosoc-9hYLQhOPEnMMZYO-4G85HmcocBmnAty-YCqwfP4lcFRTI2IrsyLk2QqW1LVMEhK~605mymNmzemcEQn0ybbheztaW1~hD6Ies-Q30mzSKmW4eQcw4Am5kdGB4yYjsK2h5khEDVFXe7DUBDSLhhtdIzoE8dyRRhfA7k54bS7IU9rhCKmHfDQ9h7Mz-NJurBlRGdWk4lMMy1T1FG3i2nMNHGLI6mfKKLmjPcPPws1S6qZck5TIxLZtZQ-TW1-nrFHEC99s26mpEzTPmu0mzpHlPY7PcoEKAm0mJ12KzIyi5sEg__&Key-Pair-Id=KL5I0C8H7HX83"
-			},
-			"artifacts": {}
-		},
-		"animations": [
-			{
-				"taskId": "019bc459-8a29-7366-9c6d-187f27c8dac1",
-				"status": "SUCCEEDED",
-				"animationName": "COMBAT_STANCE",
-				"completedAt": 1768525771962,
-				"outputs": {
-					"animations/combat_stance.glb": "animations/combat_stance.glb"
-				}
-			},
-			{
-				"taskId": "019bc459-b55b-7a1b-930f-c481091327cd",
-				"status": "SUCCEEDED",
-				"animationName": "RUNFAST",
-				"completedAt": 1768525781923,
-				"outputs": {
-					"animations/runfast.glb": "animations/runfast.glb"
-				}
-			},
-			{
-				"taskId": "019bc459-dc40-7a1c-b3db-5bb99016ebad",
-				"status": "SUCCEEDED",
-				"animationName": "DOUBLE_COMBO_ATTACK",
-				"completedAt": 1768525794423,
-				"outputs": {
-					"animations/double_combo_attack.glb": "animations/double_combo_attack.glb"
-				}
-			},
-			{
-				"taskId": "019bc45a-0d1b-7788-9987-feae2ffba8f1",
-				"status": "SUCCEEDED",
-				"animationName": "KUNG_FU_PUNCH",
-				"completedAt": 1768525816150,
-				"outputs": {
-					"animations/kung_fu_punch.glb": "animations/kung_fu_punch.glb"
-				}
-			},
-			{
-				"taskId": "019bc45a-61f8-7a31-9fe8-f210808d1509",
-				"status": "SUCCEEDED",
-				"animationName": "BEHIT_FLYUP",
-				"completedAt": 1768525826332,
-				"outputs": {
-					"animations/behit_flyup.glb": "animations/behit_flyup.glb"
-				}
-			},
-			{
-				"taskId": "019bc45a-89c1-778d-bc0c-b80dc479a3ea",
-				"status": "SUCCEEDED",
-				"animationName": "DEAD",
-				"completedAt": 1768525844605,
-				"outputs": {
-					"animations/dead.glb": "animations/dead.glb"
-				}
-			},
-			{
-				"taskId": "019bc45a-d11c-7a32-917a-e621fa789c9d",
-				"status": "SUCCEEDED",
-				"animationName": "BLOCK1",
-				"completedAt": 1768525857727,
-				"outputs": {
-					"animations/block1.glb": "animations/block1.glb"
-				}
-			}
-		]
-	},
-	"seed": 3091421041
+  "id": "biker-boss",
+  "name": "Biker Gang Leader",
+  "type": "character",
+  "description": "Bosozoku gang leader, veteran street fighter.",
+  "textToImageTask": {
+    "prompt": "Adult Japanese man in early thirties, large muscular build with massive shoulders and thick arms covered in full sleeve tattoos visible, barrel chest, dark tanned skin with battle scars. HANDS: two hands with five distinct fingers each, proper finger proportions with defined knuckles, natural finger spacing, thumbs positioned correctly. FACE: small well-shaped ears, straight nose with defined bridge, distinct naturally shaped lips with goatee, intense eyes with scarred eyebrow, strong square jaw. Long black hair tied back in loose ponytail with shaved sides. Heavy customized leather vest with gang patches over bare tattooed chest, black leather pants with silver chain belt hanging loose, steel-toed boots with metal plates on toes, feet with normal proportions. Cocky confident smirk, dominant wide stance with arms at sides. Anime cel-shaded art style with heavy metal aesthetic and anatomically correct extremities.",
+    "generateMultiView": true,
+    "poseMode": "a-pose"
+  },
+  "multiImageTo3DTask": {
+    "topology": "quad",
+    "targetPolycount": 30000,
+    "symmetryMode": "auto",
+    "shouldRemesh": true,
+    "shouldTexture": true,
+    "enablePbr": false,
+    "poseMode": "a-pose"
+  },
+  "riggingTask": {
+    "heightMeters": 1.88
+  },
+  "animationTask": {
+    "preset": "boss"
+  },
+  "tasks": {
+    "concept": {
+      "taskId": "019bc456-7b90-79e0-8000-438a6070ac01",
+      "status": "SUCCEEDED",
+      "completedAt": 1768525597445,
+      "outputs": {
+        "taskId": "019bc456-7b90-79e0-8000-438a6070ac01",
+        "imageUrls": [
+          "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/uploads/multi_view_image_019bc457-07c5-7fc7-b3c2-2e926701bb10_part_0.png?Expires=1768784797&Signature=RtvVAnr0su24n-8DJk57bbzQynP7ZT0PVlWd8p-Z6hq6FCMqzP71SATChY4408DDScuIuiA4DAT1YiqF1T3o-QOJrrpxsKUoUaJoMr949Yh-OXyJQ2dwLq7YS3prunbJW1ivcPNYoVvz-Kau9dG9YKr0Yn5bOj7sVHgFsTUCjqZ1CpbJgXDy27eI2ZkiplXdWJNhKjWkDpk~qsV4X7tYIkTL0F7~h8tdwa3q58kxICzf-4IwySiIpRtcCxahGSImrFcSk-CwPUjtHCaixYKy3TIv3fqNyUWa30z8GhrKIBxKuvVye4spscpEtEbWH3-JY5EQtU4EhsNk6eDJDkyU6Q__&Key-Pair-Id=KL5I0C8H7HX83",
+          "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/uploads/multi_view_image_019bc457-07c5-7fc7-b3c2-2e926701bb10_part_1.png?Expires=1768784797&Signature=cn7DKR2AqXTtfelBKAY88rUdHqrpWzr9c4PvUorP4XJw0iakTaO7sZpPwghqN0T8oi~~TkjJTeTYrflbjfKuexxnR50-tQ~lbaV6K7upqHeCLocAtVwXnEN~e6HIO1BZwzySrF6J5hGt85DD7HeUmZO6n73UQ8DFpRzKGWWul3lCIGT~GxPGEYJPqg17NtbwupufmwagjhAiuqomy6yR-Oxd95y7ZmBQouGJNjtQma31iLg1ZUeT3Py9LE~Tyu9jPShsdWOZmKxmN-0Ot9vTrbG3fjGOrKm0Ge6yZTOR4cO4GUybj5kS2f6ylV0hku4goeEmyoxda1bxXKD78XqtIA__&Key-Pair-Id=KL5I0C8H7HX83",
+          "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/uploads/multi_view_image_019bc457-07c5-7fc7-b3c2-2e926701bb10_part_2.png?Expires=1768784797&Signature=gF5RAlNXlpnGSqEZ5WC3Fla-RmhkmISxG1OTwbFopuFvBYP5-tY8PKgZ1DC2hDLA4CyM-v9ZucWn8X3r-gvsRnNsE6Psn-JCgHbkeSWednYsmewSM2BayK0CyQBdpYSvxJ8UNJAvvVBwHujOxyXXJEMAqaTJyc3abkJUmI1zkAok5ePWZloxuP75Ir2Dwesn03OHjnxPeCTBbasMpmZ3WSvhD48BRZOsAwtIQqVgXGcpRZ7c6VXvQ2JdOuQ-qQhODcsVA7UE5jgx60aG4zJREFCN9nx82cxVBjkiSiOjq3R5n4k6xnhoVL2kpZJa~OuYakd85c5yvbyMirGUOhyd~w__&Key-Pair-Id=KL5I0C8H7HX83"
+        ]
+      },
+      "artifacts": {}
+    },
+    "model": {
+      "taskId": "019bc457-0bac-7343-a8eb-3ce6628c8b5e",
+      "status": "SUCCEEDED",
+      "completedAt": 1768525739598,
+      "outputs": {
+        "taskId": "019bc457-0bac-7343-a8eb-3ce6628c8b5e",
+        "model": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019bc457-0bac-7343-a8eb-3ce6628c8b5e/output/model.glb?Expires=1768784939&Signature=M5oLY2MYi5SHIQzsj9BXgd-8ah7E5fGmcQwZ0O2Gq43A~AeiR-VdB24oD~MX71e0y8Dp7iR0dj06ULqe9eU9SOdyXp~N70uTXMUrqVqPrlLCNnpurKlzJP8p0UqXystsoxgcnXLlp3kKbBdSHrC9WWauxUtndSaJmsodvv-lXYZc78FnS~~R-ml~BOaaxHL-K5V61kzmgMSwS7VOIukZUhYqHSqdenL6ari6yCDo43YgGUPb0kP6C~u497Q~MgNZimG2niEOD2r0thINISarwF0HJNA93CFq9G22byR6erQ3Z-1g1bj6W-D-d5rAN1IGcn1NwrwICGcCiavZc9ucNQ__&Key-Pair-Id=KL5I0C8H7HX83",
+        "textures": [
+          {
+            "base_color": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019bc457-0bac-7343-a8eb-3ce6628c8b5e/output/texture_0.png?Expires=1768784939&Signature=nPCWu6PceaTJ~URgpSxOfYk0TCQ7tfMnokS3kgRA1BYzFu1Aj2AABL~HeeoJKesoMsjZesY19cuEDCeTqdTqSu0d5uIU9ltii3V1HiP0lf75h4lSK-K-W1~v~zWXZWFEtdjTyKfpmdBaCdKIMGSYcV3ESMtEj2NvxryGTj9xo5wA72t~IOLmuBSIXT1kNWe309wMymktjI-lRMwD6ZOYs-BAPF3Opdy1u4COb8vHsXSOsOCjcuEjpoIJ4k9anEGZ5ZZ~CQbAlOyF52i~63S85tqRkTqiN8RAr9~QdEbXO1z6bwqJ6pb5GNEK3Wo9oHcNpSclSGTqzglCrKIpdCzAtw__&Key-Pair-Id=KL5I0C8H7HX83"
+          }
+        ],
+        "textureUrl": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019bc457-0bac-7343-a8eb-3ce6628c8b5e/output/texture_0.png?Expires=1768784939&Signature=nPCWu6PceaTJ~URgpSxOfYk0TCQ7tfMnokS3kgRA1BYzFu1Aj2AABL~HeeoJKesoMsjZesY19cuEDCeTqdTqSu0d5uIU9ltii3V1HiP0lf75h4lSK-K-W1~v~zWXZWFEtdjTyKfpmdBaCdKIMGSYcV3ESMtEj2NvxryGTj9xo5wA72t~IOLmuBSIXT1kNWe309wMymktjI-lRMwD6ZOYs-BAPF3Opdy1u4COb8vHsXSOsOCjcuEjpoIJ4k9anEGZ5ZZ~CQbAlOyF52i~63S85tqRkTqiN8RAr9~QdEbXO1z6bwqJ6pb5GNEK3Wo9oHcNpSclSGTqzglCrKIpdCzAtw__&Key-Pair-Id=KL5I0C8H7HX83"
+      },
+      "artifacts": {}
+    },
+    "rigging": {
+      "taskId": "019bc459-36ec-7833-a485-a3065eab889e",
+      "status": "SUCCEEDED",
+      "completedAt": 1768525760903,
+      "outputs": {
+        "taskId": "019bc459-36ec-7833-a485-a3065eab889e",
+        "riggedModel": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019bc459-36ec-7833-a485-a3065eab889e/output/Character_output.glb?Expires=1768784960&Signature=MKYUNi-nSlp06FMq4CCGySwz~iin60RGquEzEosoc-9hYLQhOPEnMMZYO-4G85HmcocBmnAty-YCqwfP4lcFRTI2IrsyLk2QqW1LVMEhK~605mymNmzemcEQn0ybbheztaW1~hD6Ies-Q30mzSKmW4eQcw4Am5kdGB4yYjsK2h5khEDVFXe7DUBDSLhhtdIzoE8dyRRhfA7k54bS7IU9rhCKmHfDQ9h7Mz-NJurBlRGdWk4lMMy1T1FG3i2nMNHGLI6mfKKLmjPcPPws1S6qZck5TIxLZtZQ-TW1-nrFHEC99s26mpEzTPmu0mzpHlPY7PcoEKAm0mJ12KzIyi5sEg__&Key-Pair-Id=KL5I0C8H7HX83"
+      },
+      "artifacts": {}
+    },
+    "animations": [
+      {
+        "taskId": "019bc459-8a29-7366-9c6d-187f27c8dac1",
+        "status": "SUCCEEDED",
+        "animationName": "COMBAT_STANCE",
+        "completedAt": 1768525771962,
+        "outputs": {
+          "animations/combat_stance.glb": "animations/combat_stance.glb"
+        }
+      },
+      {
+        "taskId": "019bc459-b55b-7a1b-930f-c481091327cd",
+        "status": "SUCCEEDED",
+        "animationName": "RUNFAST",
+        "completedAt": 1768525781923,
+        "outputs": {
+          "animations/runfast.glb": "animations/runfast.glb"
+        }
+      },
+      {
+        "taskId": "019bc459-dc40-7a1c-b3db-5bb99016ebad",
+        "status": "SUCCEEDED",
+        "animationName": "DOUBLE_COMBO_ATTACK",
+        "completedAt": 1768525794423,
+        "outputs": {
+          "animations/double_combo_attack.glb": "animations/double_combo_attack.glb"
+        }
+      },
+      {
+        "taskId": "019bc45a-0d1b-7788-9987-feae2ffba8f1",
+        "status": "SUCCEEDED",
+        "animationName": "KUNG_FU_PUNCH",
+        "completedAt": 1768525816150,
+        "outputs": {
+          "animations/kung_fu_punch.glb": "animations/kung_fu_punch.glb"
+        }
+      },
+      {
+        "taskId": "019bc45a-61f8-7a31-9fe8-f210808d1509",
+        "status": "SUCCEEDED",
+        "animationName": "BEHIT_FLYUP",
+        "completedAt": 1768525826332,
+        "outputs": {
+          "animations/behit_flyup.glb": "animations/behit_flyup.glb"
+        }
+      },
+      {
+        "taskId": "019bc45a-89c1-778d-bc0c-b80dc479a3ea",
+        "status": "SUCCEEDED",
+        "animationName": "DEAD",
+        "completedAt": 1768525844605,
+        "outputs": {
+          "animations/dead.glb": "animations/dead.glb"
+        }
+      },
+      {
+        "taskId": "019bc45a-d11c-7a32-917a-e621fa789c9d",
+        "status": "SUCCEEDED",
+        "animationName": "BLOCK1",
+        "completedAt": 1768525857727,
+        "outputs": {
+          "animations/block1.glb": "animations/block1.glb"
+        }
+      }
+    ]
+  },
+  "seed": 3091421041
 }

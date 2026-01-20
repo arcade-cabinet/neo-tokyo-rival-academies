@@ -1,4 +1,3 @@
-import React from 'react';
 import type { Quest } from '@neo-tokyo/core';
 
 interface QuestAcceptDialogProps {
@@ -8,12 +7,7 @@ interface QuestAcceptDialogProps {
   onDecline: () => void;
 }
 
-export function QuestAcceptDialog({
-  isOpen,
-  quest,
-  onAccept,
-  onDecline,
-}: QuestAcceptDialogProps) {
+export function QuestAcceptDialog({ isOpen, quest, onAccept, onDecline }: QuestAcceptDialogProps) {
   if (!isOpen || !quest) return null;
 
   const getQuestTypeColor = (type: Quest['type']) => {
@@ -89,7 +83,11 @@ export function QuestAcceptDialog({
               marginBottom: '10px',
             }}
           >
-            {quest.type === 'main' ? '⭐ MAIN QUEST' : quest.type === 'secret' ? '✨ SECRET QUEST' : '📋 SIDE QUEST'}
+            {quest.type === 'main'
+              ? '⭐ MAIN QUEST'
+              : quest.type === 'secret'
+                ? '✨ SECRET QUEST'
+                : '📋 SIDE QUEST'}
           </div>
           <h2
             style={{
@@ -174,9 +172,7 @@ export function QuestAcceptDialog({
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <span style={{ fontSize: '14px' }}>📍</span>
-            <span style={{ fontSize: '13px', color: '#94a3b8' }}>
-              {quest.location}
-            </span>
+            <span style={{ fontSize: '13px', color: '#94a3b8' }}>{quest.location}</span>
           </div>
           <div
             style={{
@@ -212,9 +208,7 @@ export function QuestAcceptDialog({
           <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
               <span style={{ fontSize: '16px' }}>⭐</span>
-              <span style={{ fontSize: '14px', color: '#fbbf24' }}>
-                {quest.rewards.xp} XP
-              </span>
+              <span style={{ fontSize: '14px', color: '#fbbf24' }}>{quest.rewards.xp} XP</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
               <span style={{ fontSize: '16px' }}>💰</span>

@@ -1,18 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { useCombatStore } from '@neo-tokyo/core';
 import type { CombatAction } from '@neo-tokyo/core';
+import { useCombatStore } from '@neo-tokyo/core';
+import { useEffect, useState } from 'react';
 
 export function CombatArena() {
-  const {
-    inCombat,
-    phase,
-    player,
-    enemies,
-    combatLog,
-    playerAction,
-    enemyTurn,
-    endCombat,
-  } = useCombatStore();
+  const { inCombat, phase, player, enemies, combatLog, playerAction, enemyTurn, endCombat } =
+    useCombatStore();
 
   const [selectedTargetId, setSelectedTargetId] = useState<string | null>(null);
   const [showVictory, setShowVictory] = useState(false);
@@ -109,9 +101,7 @@ export function CombatArena() {
             }}
           >
             <div style={{ fontSize: '64px', marginBottom: '20px' }}>🏆</div>
-            <h2 style={{ fontSize: '32px', color: '#10b981', margin: '0 0 20px 0' }}>
-              VICTORY!
-            </h2>
+            <h2 style={{ fontSize: '32px', color: '#10b981', margin: '0 0 20px 0' }}>VICTORY!</h2>
             <button
               type="button"
               onClick={handleVictoryContinue}
@@ -160,9 +150,7 @@ export function CombatArena() {
             }}
           >
             <div style={{ fontSize: '64px', marginBottom: '20px' }}>💀</div>
-            <h2 style={{ fontSize: '32px', color: '#ef4444', margin: '0 0 20px 0' }}>
-              DEFEATED
-            </h2>
+            <h2 style={{ fontSize: '32px', color: '#ef4444', margin: '0 0 20px 0' }}>DEFEATED</h2>
             <button
               type="button"
               onClick={handleDefeatReload}
@@ -204,9 +192,7 @@ export function CombatArena() {
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', padding: '20px' }}>
         {/* Player Section */}
         <div style={{ marginBottom: '30px' }}>
-          <div style={{ fontSize: '12px', color: '#64748b', marginBottom: '10px' }}>
-            PLAYER
-          </div>
+          <div style={{ fontSize: '12px', color: '#64748b', marginBottom: '10px' }}>PLAYER</div>
           <div
             style={{
               backgroundColor: 'rgba(14, 165, 233, 0.1)',
@@ -223,7 +209,15 @@ export function CombatArena() {
                 {player.currentHP} / {player.maxHP} HP
               </span>
             </div>
-            <div style={{ width: '100%', height: '8px', backgroundColor: '#334155', borderRadius: '4px', overflow: 'hidden' }}>
+            <div
+              style={{
+                width: '100%',
+                height: '8px',
+                backgroundColor: '#334155',
+                borderRadius: '4px',
+                overflow: 'hidden',
+              }}
+            >
               <div
                 style={{
                   width: `${(player.currentHP / player.maxHP) * 100}%`,
@@ -238,9 +232,7 @@ export function CombatArena() {
 
         {/* Enemies Section */}
         <div style={{ marginBottom: '30px' }}>
-          <div style={{ fontSize: '12px', color: '#64748b', marginBottom: '10px' }}>
-            ENEMIES
-          </div>
+          <div style={{ fontSize: '12px', color: '#64748b', marginBottom: '10px' }}>ENEMIES</div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             {enemies.map((enemy) => (
               <button
@@ -248,7 +240,10 @@ export function CombatArena() {
                 key={enemy.id}
                 onClick={() => setSelectedTargetId(enemy.id)}
                 style={{
-                  backgroundColor: selectedTargetId === enemy.id ? 'rgba(239, 68, 68, 0.2)' : 'rgba(239, 68, 68, 0.1)',
+                  backgroundColor:
+                    selectedTargetId === enemy.id
+                      ? 'rgba(239, 68, 68, 0.2)'
+                      : 'rgba(239, 68, 68, 0.1)',
                   border: '2px solid',
                   borderColor: selectedTargetId === enemy.id ? '#ef4444' : '#7f1d1d',
                   borderRadius: '8px',
@@ -258,7 +253,9 @@ export function CombatArena() {
                   textAlign: 'left',
                 }}
               >
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
+                <div
+                  style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}
+                >
                   <span style={{ fontSize: '16px', color: '#e2e8f0', fontWeight: 'bold' }}>
                     {enemy.name}
                   </span>
@@ -266,7 +263,15 @@ export function CombatArena() {
                     {enemy.currentHP} / {enemy.maxHP} HP
                   </span>
                 </div>
-                <div style={{ width: '100%', height: '8px', backgroundColor: '#334155', borderRadius: '4px', overflow: 'hidden' }}>
+                <div
+                  style={{
+                    width: '100%',
+                    height: '8px',
+                    backgroundColor: '#334155',
+                    borderRadius: '4px',
+                    overflow: 'hidden',
+                  }}
+                >
                   <div
                     style={{
                       width: `${(enemy.currentHP / enemy.maxHP) * 100}%`,
@@ -297,16 +302,21 @@ export function CombatArena() {
                 <>
                   <span style={{ color: '#0ea5e9', fontWeight: 'bold' }}>
                     {latestLog.attackerName}
-                  </span>
-                  {' '}attacks{' '}
+                  </span>{' '}
+                  attacks{' '}
                   <span style={{ color: '#ef4444', fontWeight: 'bold' }}>
                     {latestLog.defenderName}
-                  </span>
-                  {' '}for{' '}
-                  <span style={{ color: latestLog.critical ? '#f59e0b' : '#e2e8f0', fontWeight: 'bold' }}>
+                  </span>{' '}
+                  for{' '}
+                  <span
+                    style={{
+                      color: latestLog.critical ? '#f59e0b' : '#e2e8f0',
+                      fontWeight: 'bold',
+                    }}
+                  >
                     {latestLog.damage}
-                  </span>
-                  {' '}damage{latestLog.critical && ' (CRITICAL!)'}
+                  </span>{' '}
+                  damage{latestLog.critical && ' (CRITICAL!)'}
                 </>
               ) : (
                 <>

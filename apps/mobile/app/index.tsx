@@ -2,10 +2,10 @@
  * Main menu screen for Neo-Tokyo: Rival Academies.
  */
 
+import { CORE_VERSION } from '@neo-tokyo/core';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { CORE_VERSION } from '@neo-tokyo/core';
 
 export default function MainMenu() {
   const router = useRouter();

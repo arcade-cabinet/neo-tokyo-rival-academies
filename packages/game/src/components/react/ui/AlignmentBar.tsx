@@ -1,4 +1,3 @@
-import React from 'react';
 import { useAlignmentStore } from '@neo-tokyo/core';
 
 export function AlignmentBar() {

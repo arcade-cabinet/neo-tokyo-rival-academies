@@ -1,168 +1,164 @@
 .container {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	pointer-events: none;
-	font-family: "Courier New", Courier, monospace;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  font-family: "Courier New", Courier, monospace;
 }
 
 .minimap {
-	position: absolute;
-	top: 20px;
-	right: 20px;
-	width: 200px;
-	height: 150px;
-	background: rgba(0, 20, 40, 0.8);
-	border: 2px solid #0ff;
-	border-radius: 8px;
-	box-shadow: 0 0 10px #0ff;
-	overflow: hidden;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 200px;
+  height: 150px;
+  background: rgba(0, 20, 40, 0.8);
+  border: 2px solid #0ff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px #0ff;
+  overflow: hidden;
 }
 
 .statusFrame {
-	position: absolute;
-	top: 20px;
-	left: 20px;
-	display: flex;
-	gap: 15px;
-	background: linear-gradient(
-		90deg,
-		rgba(0, 0, 0, 0.8) 0%,
-		rgba(0, 0, 0, 0) 100%
-	);
-	padding: 10px;
-	border-left: 4px solid #f00;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  gap: 15px;
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0) 100%);
+  padding: 10px;
+  border-left: 4px solid #f00;
 }
 
 .portrait {
-	width: 60px;
-	height: 60px;
-	background: #333;
-	border: 1px solid #fff;
-	overflow: hidden;
+  width: 60px;
+  height: 60px;
+  background: #333;
+  border: 1px solid #fff;
+  overflow: hidden;
 }
 
 .stats {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	gap: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
 }
 
 .barContainer {
-	width: 150px;
-	height: 10px;
-	background: #111;
-	border: 1px solid #444;
+  width: 150px;
+  height: 10px;
+  background: #111;
+  border: 1px solid #444;
 }
 
 .hpBar {
-	height: 100%;
-	background: #f00;
-	transition: width 0.3s;
+  height: 100%;
+  background: #f00;
+  transition: width 0.3s;
 }
 
 .xpBar {
-	height: 100%;
-	background: #ff0;
-	transition: width 0.3s;
+  height: 100%;
+  background: #ff0;
+  transition: width 0.3s;
 }
 
 .dialogueBox {
-	position: absolute;
-	bottom: 20px;
-	left: 50%;
-	transform: translateX(-50%);
-	width: 60%;
-	min-height: 100px;
-	background: rgba(0, 10, 20, 0.9);
-	border: 2px solid #fff;
-	border-radius: 4px;
-	padding: 15px;
-	color: #fff;
-	display: flex;
-	flex-direction: column;
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  min-height: 100px;
+  background: rgba(0, 10, 20, 0.9);
+  border: 2px solid #fff;
+  border-radius: 4px;
+  padding: 15px;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
 }
 
 .speaker {
-	font-weight: bold;
-	color: #0ff;
-	margin-bottom: 5px;
-	text-transform: uppercase;
+  font-weight: bold;
+  color: #0ff;
+  margin-bottom: 5px;
+  text-transform: uppercase;
 }
 
 .text {
-	font-size: 1.1rem;
-	line-height: 1.4;
+  font-size: 1.1rem;
+  line-height: 1.4;
 }
 
 .controls {
-	pointer-events: auto;
-	position: absolute;
-	bottom: 40px;
-	width: 100%;
-	display: flex;
-	justify-content: space-between;
-	padding: 0 40px;
-	box-sizing: border-box;
+  pointer-events: auto;
+  position: absolute;
+  bottom: 40px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 40px;
+  box-sizing: border-box;
 }
 
 .dpad {
-	position: relative;
-	width: 150px;
-	height: 150px;
+  position: relative;
+  width: 150px;
+  height: 150px;
 }
 
 .dpadBtn {
-	position: absolute;
-	width: 50px;
-	height: 50px;
-	background: rgba(255, 255, 255, 0.1);
-	border: 1px solid rgba(255, 255, 255, 0.3);
-	border-radius: 8px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	color: #fff;
-	user-select: none;
-	touch-action: none;
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  user-select: none;
+  touch-action: none;
 }
 
 .dpadBtn:active {
-	background: rgba(0, 255, 255, 0.3);
+  background: rgba(0, 255, 255, 0.3);
 }
 
 .actionBtn {
-	width: 70px;
-	height: 70px;
-	border-radius: 50%;
-	background: rgba(255, 0, 0, 0.2);
-	border: 2px solid rgba(255, 0, 0, 0.5);
-	color: #fff;
-	font-weight: bold;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	user-select: none;
-	touch-action: none;
-	margin-left: 10px;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: rgba(255, 0, 0, 0.2);
+  border: 2px solid rgba(255, 0, 0, 0.5);
+  color: #fff;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  touch-action: none;
+  margin-left: 10px;
 }
 
 .actionBtn:active {
-	background: rgba(255, 0, 0, 0.5);
-	transform: scale(0.95);
+  background: rgba(255, 0, 0, 0.5);
+  transform: scale(0.95);
 }
 
 .questTracker {
-	position: absolute;
-	top: 180px;
-	right: 20px;
-	width: 200px;
-	background: rgba(0, 0, 0, 0.5);
-	padding: 10px;
-	color: #eee;
-	font-size: 0.8rem;
-	border-left: 2px solid #ff0;
+  position: absolute;
+  top: 180px;
+  right: 20px;
+  width: 200px;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 10px;
+  color: #eee;
+  font-size: 0.8rem;
+  border-left: 2px solid #ff0;
 }
