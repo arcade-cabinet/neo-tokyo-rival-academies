@@ -49,7 +49,7 @@ export function Crate({
 	position,
 	type = "wooden",
 	size = "medium",
-	stacked = false,
+	_stacked = false,
 	rotation = 0,
 	damage = 0,
 	seed,

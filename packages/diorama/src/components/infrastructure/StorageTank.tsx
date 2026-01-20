@@ -62,7 +62,7 @@ export function StorageTank({
 	height = 5,
 	hasLadder = true,
 	hasPiping = true,
-	fillLevel = 0.7,
+	_fillLevel = 0.7,
 	condition = 0.8,
 	rotation = 0,
 	seed,

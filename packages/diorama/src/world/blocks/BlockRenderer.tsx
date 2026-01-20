@@ -44,7 +44,7 @@ export function SnapPointVisualizer({
 	snapPoint,
 	blockPosition,
 	blockRotation,
-	showLabels = false,
+	_showLabels = false,
 }: SnapPointVisualizerProps) {
 	const scene = useScene();
 	const meshRef = useRef<AbstractMesh | null>(null);

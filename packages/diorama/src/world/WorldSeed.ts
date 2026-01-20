@@ -216,9 +216,9 @@ export function isValidSeedPhrase(phrase: string): phrase is SeedPhrase {
 
 	const [adj, noun, loc] = parts;
 	return (
-		WORD_POOLS.adjectives.includes(adj as any) &&
-		WORD_POOLS.nouns.includes(noun as any) &&
-		WORD_POOLS.locations.includes(loc as any)
+		(WORD_POOLS.adjectives as readonly string[]).includes(adj) &&
+		(WORD_POOLS.nouns as readonly string[]).includes(noun) &&
+		(WORD_POOLS.locations as readonly string[]).includes(loc)
 	);
 }
 

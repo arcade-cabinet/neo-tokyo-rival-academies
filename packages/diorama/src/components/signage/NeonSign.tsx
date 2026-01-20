@@ -100,7 +100,7 @@ export function NeonSign({
 	mount = "wall",
 	intensity = 3.0,
 	secondaryColor = null,
-	flicker = false,
+	_flicker = false,
 	onReady,
 }: NeonSignProps) {
 	const scene = useScene();

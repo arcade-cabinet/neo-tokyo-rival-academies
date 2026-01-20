@@ -1,150 +1,150 @@
 {
-	"kai": [
-		{
-			"id": "kai_lightning_strike",
-			"name": "Lightning Strike",
-			"description": "A powerful melee attack that deals high damage and breaks stability",
-			"cost": 20,
-			"cooldown": 5000,
-			"effectType": "damage",
-			"effectValue": 50,
-			"properties": {
-				"stabilityDamage": 100,
-				"animation": "kung_fu_punch"
-			}
-		},
-		{
-			"id": "kai_dragon_rush",
-			"name": "Dragon Rush",
-			"description": "A rapid dash attack that hits multiple times",
-			"cost": 15,
-			"cooldown": 8000,
-			"effectType": "damage",
-			"effectValue": 30,
-			"properties": {
-				"hits": 3,
-				"dashDistance": 5,
-				"animation": "runfast"
-			}
-		}
-	],
-	"vera": [
-		{
-			"id": "vera_tech_barrier",
-			"name": "Tech Barrier",
-			"description": "Creates a temporary barrier that grants invincibility",
-			"cost": 30,
-			"cooldown": 10000,
-			"effectType": "buff",
-			"effectValue": 3000,
-			"properties": {
-				"invincibilityDuration": 3000,
-				"visualEffect": "blue_shield"
-			}
-		},
-		{
-			"id": "vera_plasma_shot",
-			"name": "Plasma Shot",
-			"description": "Fires a high-tech plasma projectile",
-			"cost": 10,
-			"cooldown": 3000,
-			"effectType": "damage",
-			"effectValue": 40,
-			"properties": {
-				"projectileSpeed": 20,
-				"range": 15,
-				"usesLogicStat": true
-			}
-		}
-	],
-	"bikers_grunt": [
-		{
-			"id": "biker_chain_whip",
-			"name": "Chain Whip",
-			"description": "Swings a chain in a wide arc",
-			"cost": 0,
-			"cooldown": 4000,
-			"effectType": "damage",
-			"effectValue": 25,
-			"properties": {
-				"range": 3,
-				"arc": 180
-			}
-		}
-	],
-	"bikers_boss": [
-		{
-			"id": "biker_boss_rage",
-			"name": "Biker Rage",
-			"description": "Enters a rage state, increasing damage and speed",
-			"cost": 0,
-			"cooldown": 15000,
-			"effectType": "buff",
-			"effectValue": 5000,
-			"properties": {
-				"damageMultiplier": 1.5,
-				"speedMultiplier": 1.3,
-				"duration": 5000
-			}
-		}
-	],
-	"yakuza_grunt": [
-		{
-			"id": "yakuza_katana_slash",
-			"name": "Katana Slash",
-			"description": "A precise katana strike",
-			"cost": 0,
-			"cooldown": 3000,
-			"effectType": "damage",
-			"effectValue": 30,
-			"properties": {
-				"critChanceBonus": 0.2
-			}
-		}
-	],
-	"yakuza_boss": [
-		{
-			"id": "yakuza_boss_honor_strike",
-			"name": "Honor Strike",
-			"description": "A devastating honor-bound attack",
-			"cost": 0,
-			"cooldown": 12000,
-			"effectType": "damage",
-			"effectValue": 80,
-			"properties": {
-				"guaranteedCrit": true,
-				"stabilityDamage": 150
-			}
-		}
-	],
-	"alien_humanoid": [
-		{
-			"id": "alien_energy_blast",
-			"name": "Energy Blast",
-			"description": "Fires an alien energy projectile",
-			"cost": 0,
-			"cooldown": 5000,
-			"effectType": "damage",
-			"effectValue": 35,
-			"properties": {
-				"projectileSpeed": 15,
-				"homingEnabled": true
-			}
-		}
-	],
-	"tentacle": [
-		{
-			"id": "tentacle_grab",
-			"name": "Tentacle Grab",
-			"description": "Grabs and restrains the target",
-			"cost": 0,
-			"cooldown": 6000,
-			"effectType": "debuff",
-			"effectValue": 2000,
-			"properties": {
-				"stunDuration": 2000,
-				"pullDistance": 3
-			}
-		}
-	]
+  "kai": [
+    {
+      "id": "kai_lightning_strike",
+      "name": "Lightning Strike",
+      "description": "A powerful melee attack that deals high damage and breaks stability",
+      "cost": 20,
+      "cooldown": 5000,
+      "effectType": "damage",
+      "effectValue": 50,
+      "properties": {
+        "stabilityDamage": 100,
+        "animation": "kung_fu_punch"
+      }
+    },
+    {
+      "id": "kai_dragon_rush",
+      "name": "Dragon Rush",
+      "description": "A rapid dash attack that hits multiple times",
+      "cost": 15,
+      "cooldown": 8000,
+      "effectType": "damage",
+      "effectValue": 30,
+      "properties": {
+        "hits": 3,
+        "dashDistance": 5,
+        "animation": "runfast"
+      }
+    }
+  ],
+  "vera": [
+    {
+      "id": "vera_tech_barrier",
+      "name": "Tech Barrier",
+      "description": "Creates a temporary barrier that grants invincibility",
+      "cost": 30,
+      "cooldown": 10000,
+      "effectType": "buff",
+      "effectValue": 3000,
+      "properties": {
+        "invincibilityDuration": 3000,
+        "visualEffect": "blue_shield"
+      }
+    },
+    {
+      "id": "vera_plasma_shot",
+      "name": "Plasma Shot",
+      "description": "Fires a high-tech plasma projectile",
+      "cost": 10,
+      "cooldown": 3000,
+      "effectType": "damage",
+      "effectValue": 40,
+      "properties": {
+        "projectileSpeed": 20,
+        "range": 15,
+        "usesLogicStat": true
+      }
+    }
+  ],
+  "bikers_grunt": [
+    {
+      "id": "biker_chain_whip",
+      "name": "Chain Whip",
+      "description": "Swings a chain in a wide arc",
+      "cost": 0,
+      "cooldown": 4000,
+      "effectType": "damage",
+      "effectValue": 25,
+      "properties": {
+        "range": 3,
+        "arc": 180
+      }
+    }
+  ],
+  "bikers_boss": [
+    {
+      "id": "biker_boss_rage",
+      "name": "Biker Rage",
+      "description": "Enters a rage state, increasing damage and speed",
+      "cost": 0,
+      "cooldown": 15000,
+      "effectType": "buff",
+      "effectValue": 5000,
+      "properties": {
+        "damageMultiplier": 1.5,
+        "speedMultiplier": 1.3,
+        "duration": 5000
+      }
+    }
+  ],
+  "yakuza_grunt": [
+    {
+      "id": "yakuza_katana_slash",
+      "name": "Katana Slash",
+      "description": "A precise katana strike",
+      "cost": 0,
+      "cooldown": 3000,
+      "effectType": "damage",
+      "effectValue": 30,
+      "properties": {
+        "critChanceBonus": 0.2
+      }
+    }
+  ],
+  "yakuza_boss": [
+    {
+      "id": "yakuza_boss_honor_strike",
+      "name": "Honor Strike",
+      "description": "A devastating honor-bound attack",
+      "cost": 0,
+      "cooldown": 12000,
+      "effectType": "damage",
+      "effectValue": 80,
+      "properties": {
+        "guaranteedCrit": true,
+        "stabilityDamage": 150
+      }
+    }
+  ],
+  "alien_humanoid": [
+    {
+      "id": "alien_energy_blast",
+      "name": "Energy Blast",
+      "description": "Fires an alien energy projectile",
+      "cost": 0,
+      "cooldown": 5000,
+      "effectType": "damage",
+      "effectValue": 35,
+      "properties": {
+        "projectileSpeed": 15,
+        "homingEnabled": true
+      }
+    }
+  ],
+  "tentacle": [
+    {
+      "id": "tentacle_grab",
+      "name": "Tentacle Grab",
+      "description": "Grabs and restrains the target",
+      "cost": 0,
+      "cooldown": 6000,
+      "effectType": "debuff",
+      "effectValue": 2000,
+      "properties": {
+        "stunDuration": 2000,
+        "pullDistance": 3
+      }
+    }
+  ]
 }

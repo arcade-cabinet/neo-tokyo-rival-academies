@@ -1,6 +1,5 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { YukaAgent } from '../AISystem';
-import { State, StateMachine } from 'yuka';
 
 // Mock the ECS and world objects
 vi.mock('@/state/ecs', () => ({
@@ -22,7 +21,7 @@ vi.mock('@/state/ecs', () => ({
 }));
 
 describe('YukaAgent', () => {
-  let agent;
+  let agent: YukaAgent;
 
   describe('Enemy Faction', () => {
     beforeEach(() => {

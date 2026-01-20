@@ -7,78 +7,78 @@
  * - Start game with deterministic world
  */
 
-import { useCallback, useEffect, useState } from "react";
 import {
-	generateSeedPhrase,
-	isValidSeedPhrase,
-	suggestCompletions,
-	type SeedPhrase,
-} from "@neo-tokyo/diorama";
+  generateSeedPhrase,
+  isValidSeedPhrase,
+  type SeedPhrase,
+  suggestCompletions,
+} from '@neo-tokyo/diorama';
+import { useCallback, useEffect, useState } from 'react';
 
 interface FloodedWorldMenuProps {
-	onStartGame: (seedPhrase: SeedPhrase) => void;
+  onStartGame: (seedPhrase: SeedPhrase) => void;
 }
 
 export function FloodedWorldMenu({ onStartGame }: FloodedWorldMenuProps) {
-	const [seedInput, setSeedInput] = useState("");
-	const [generatedSeed, setGeneratedSeed] = useState<SeedPhrase | null>(null);
-	const [isValid, setIsValid] = useState(false);
-	const [suggestions, setSuggestions] = useState<{
-		adjectives: string[];
-		nouns: string[];
-		locations: string[];
-	}>({ adjectives: [], nouns: [], locations: [] });
+  const [seedInput, setSeedInput] = useState('');
+  const [_generatedSeed, setGeneratedSeed] = useState<SeedPhrase | null>(null);
+  const [isValid, setIsValid] = useState(false);
+  const [suggestions, setSuggestions] = useState<{
+    adjectives: string[];
+    nouns: string[];
+    locations: string[];
+  }>({ adjectives: [], nouns: [], locations: [] });
 
-	// Generate initial seed on mount
-	useEffect(() => {
-		const seed = generateSeedPhrase();
-		setGeneratedSeed(seed);
-		setSeedInput(seed);
-		setIsValid(true);
-	}, []);
+  // Generate initial seed on mount
+  useEffect(() => {
+    const seed = generateSeedPhrase();
+    setGeneratedSeed(seed);
+    setSeedInput(seed);
+    setIsValid(true);
+  }, []);
 
-	// Validate and suggest as user types
-	useEffect(() => {
-		const valid = isValidSeedPhrase(seedInput);
-		setIsValid(valid);
+  // Validate and suggest as user types
+  useEffect(() => {
+    const valid = isValidSeedPhrase(seedInput);
+    setIsValid(valid);
 
-		if (!valid && seedInput.length > 0) {
-			setSuggestions(suggestCompletions(seedInput));
-		} else {
-			setSuggestions({ adjectives: [], nouns: [], locations: [] });
-		}
-	}, [seedInput]);
+    if (!valid && seedInput.length > 0) {
+      setSuggestions(suggestCompletions(seedInput));
+    } else {
+      setSuggestions({ adjectives: [], nouns: [], locations: [] });
+    }
+  }, [seedInput]);
 
-	const handleGenerateNew = useCallback(() => {
-		const seed = generateSeedPhrase();
-		setGeneratedSeed(seed);
-		setSeedInput(seed);
-		setIsValid(true);
-	}, []);
+  const handleGenerateNew = useCallback(() => {
+    const seed = generateSeedPhrase();
+    setGeneratedSeed(seed);
+    setSeedInput(seed);
+    setIsValid(true);
+  }, []);
 
-	const handleStart = useCallback(() => {
-		if (isValid) {
-			onStartGame(seedInput as SeedPhrase);
-		}
-	}, [isValid, seedInput, onStartGame]);
+  const handleStart = useCallback(() => {
+    if (isValid) {
+      onStartGame(seedInput as SeedPhrase);
+    }
+  }, [isValid, seedInput, onStartGame]);
 
-	const handleSuggestionClick = useCallback(
-		(word: string) => {
-			const parts = seedInput.split("-");
-			parts[parts.length - 1] = word;
-			const newInput = parts.join("-");
-			setSeedInput(newInput);
-		},
-		[seedInput],
-	);
+  const handleSuggestionClick = useCallback(
+    (word: string) => {
+      const parts = seedInput.split('-');
+      parts[parts.length - 1] = word;
+      const newInput = parts.join('-');
+      setSeedInput(newInput);
+    },
+    [seedInput]
+  );
 
-	// Parse seed for visual display
-	const seedParts = seedInput.split("-");
-	const [adjective, noun, location] = seedParts;
+  // Parse seed for visual display
+  const seedParts = seedInput.split('-');
+  const [adjective, noun, location] = seedParts;
 
-	return (
-		<div className="flooded-world-menu">
-			<style>{`
+  return (
+    <div className="flooded-world-menu">
+      <style>{`
         .flooded-world-menu {
           position: fixed;
           inset: 0;
@@ -162,7 +162,7 @@ export function FloodedWorldMenu({ onStartGame }: FloodedWorldMenuProps) {
           font-size: 1.2rem;
           font-family: inherit;
           background: rgba(0, 0, 0, 0.6);
-          border: 2px solid ${isValid ? "rgba(0, 255, 100, 0.5)" : "rgba(255, 100, 0, 0.5)"};
+          border: 2px solid ${isValid ? 'rgba(0, 255, 100, 0.5)' : 'rgba(255, 100, 0, 0.5)'};
           border-radius: 4px;
           color: #fff;
           text-align: center;
@@ -171,7 +171,7 @@ export function FloodedWorldMenu({ onStartGame }: FloodedWorldMenuProps) {
 
         .seed-input:focus {
           outline: none;
-          border-color: ${isValid ? "rgba(0, 255, 100, 0.8)" : "rgba(255, 100, 0, 0.8)"};
+          border-color: ${isValid ? 'rgba(0, 255, 100, 0.8)' : 'rgba(255, 100, 0, 0.8)'};
         }
 
         .suggestions {
@@ -278,85 +278,73 @@ export function FloodedWorldMenu({ onStartGame }: FloodedWorldMenuProps) {
         }
       `}</style>
 
-			<div className="alpha-badge">ALPHA</div>
+      <div className="alpha-badge">ALPHA</div>
 
-			<h1 className="menu-title">Flooded World</h1>
-			<p className="menu-subtitle">Neo-Tokyo Rival Academies</p>
+      <h1 className="menu-title">Flooded World</h1>
+      <p className="menu-subtitle">Neo-Tokyo Rival Academies</p>
 
-			<div className="seed-display">
-				<div className="seed-part">
-					<div className="seed-part-label">Adjective</div>
-					<div className={`seed-part-value ${!adjective ? "empty" : ""}`}>
-						{adjective || "---"}
-					</div>
-				</div>
-				<div className="seed-part">
-					<div className="seed-part-label">Noun</div>
-					<div className={`seed-part-value ${!noun ? "empty" : ""}`}>
-						{noun || "---"}
-					</div>
-				</div>
-				<div className="seed-part">
-					<div className="seed-part-label">Location</div>
-					<div className={`seed-part-value ${!location ? "empty" : ""}`}>
-						{location || "---"}
-					</div>
-				</div>
-			</div>
+      <div className="seed-display">
+        <div className="seed-part">
+          <div className="seed-part-label">Adjective</div>
+          <div className={`seed-part-value ${!adjective ? 'empty' : ''}`}>{adjective || '---'}</div>
+        </div>
+        <div className="seed-part">
+          <div className="seed-part-label">Noun</div>
+          <div className={`seed-part-value ${!noun ? 'empty' : ''}`}>{noun || '---'}</div>
+        </div>
+        <div className="seed-part">
+          <div className="seed-part-label">Location</div>
+          <div className={`seed-part-value ${!location ? 'empty' : ''}`}>{location || '---'}</div>
+        </div>
+      </div>
 
-			<div className="seed-input-container">
-				<input
-					type="text"
-					className="seed-input"
-					value={seedInput}
-					onChange={(e) => setSeedInput(e.target.value.toLowerCase())}
-					placeholder="crimson-phoenix-academy"
-					spellCheck={false}
-				/>
+      <div className="seed-input-container">
+        <input
+          type="text"
+          className="seed-input"
+          value={seedInput}
+          onChange={(e) => setSeedInput(e.target.value.toLowerCase())}
+          placeholder="crimson-phoenix-academy"
+          spellCheck={false}
+        />
 
-				{(suggestions.adjectives.length > 0 ||
-					suggestions.nouns.length > 0 ||
-					suggestions.locations.length > 0) && (
-					<div className="suggestions">
-						{[
-							...suggestions.adjectives,
-							...suggestions.nouns,
-							...suggestions.locations,
-						].map((word) => (
-							<button
-								key={word}
-								className="suggestion"
-								onClick={() => handleSuggestionClick(word)}
-								type="button"
-							>
-								{word}
-							</button>
-						))}
-					</div>
-				)}
-			</div>
+        {(suggestions.adjectives.length > 0 ||
+          suggestions.nouns.length > 0 ||
+          suggestions.locations.length > 0) && (
+          <div className="suggestions">
+            {[...suggestions.adjectives, ...suggestions.nouns, ...suggestions.locations].map(
+              (word) => (
+                <button
+                  key={word}
+                  className="suggestion"
+                  onClick={() => handleSuggestionClick(word)}
+                  type="button"
+                >
+                  {word}
+                </button>
+              )
+            )}
+          </div>
+        )}
+      </div>
 
-			<div className="button-row">
-				<button
-					className="menu-button secondary"
-					onClick={handleGenerateNew}
-					type="button"
-				>
-					Generate New
-				</button>
-				<button
-					className="menu-button primary"
-					onClick={handleStart}
-					disabled={!isValid}
-					type="button"
-				>
-					Enter World
-				</button>
-			</div>
+      <div className="button-row">
+        <button className="menu-button secondary" onClick={handleGenerateNew} type="button">
+          Generate New
+        </button>
+        <button
+          className="menu-button primary"
+          onClick={handleStart}
+          disabled={!isValid}
+          type="button"
+        >
+          Enter World
+        </button>
+      </div>
 
-			<div className="water-effect" />
-		</div>
-	);
+      <div className="water-effect" />
+    </div>
+  );
 }
 
 export default FloodedWorldMenu;

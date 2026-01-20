@@ -43,7 +43,7 @@ export function Carcass({
 	type = "sedan",
 	state = "rusted",
 	hasWheels = false,
-	missingPanels = 2,
+	_missingPanels = 2,
 	condition = 0.3,
 	rotation = 0,
 	seed,

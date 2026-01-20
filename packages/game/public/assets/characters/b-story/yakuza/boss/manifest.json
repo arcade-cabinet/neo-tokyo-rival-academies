@@ -1,132 +1,132 @@
 {
-	"id": "yakuza-boss",
-	"name": "Yakuza Boss",
-	"type": "character",
-	"description": "High-ranking Yakuza lieutenant, dangerous and calculating.",
-	"textToImageTask": {
-		"prompt": "Middle-aged Japanese man, tall imposing build with broad powerful shoulders, thick muscular arms, defined chest visible through shirt, olive skin tone with slight weathering. HANDS: two hands with five distinct fingers each, proper finger proportions with defined knuckles, natural finger spacing, thumbs positioned correctly. FACE: small well-shaped ears with defined curves, straight nose with defined bridge, distinct naturally shaped lips, sharp calculating eyes with crow's feet, strong angular jawline with thin scar across cheek. Slicked-back black hair with grey streaks at temples. Expensive charcoal grey suit jacket draped over shoulders like a cape not worn properly, white dress shirt unbuttoned at collar showing chest, black suit pants with perfect tailoring falling straight, black Italian leather shoes with flat soles, feet with normal proportions. Cold confident expression, commanding stance with arms at sides. Anime cel-shaded art style with dramatic noir lighting feel and anatomically correct extremities.",
-		"generateMultiView": true,
-		"poseMode": "a-pose"
-	},
-	"multiImageTo3DTask": {
-		"topology": "quad",
-		"targetPolycount": 30000,
-		"symmetryMode": "auto",
-		"shouldRemesh": true,
-		"shouldTexture": true,
-		"enablePbr": false,
-		"poseMode": "a-pose"
-	},
-	"riggingTask": {
-		"heightMeters": 1.85
-	},
-	"animationTask": {
-		"preset": "boss"
-	},
-	"tasks": {
-		"concept": {
-			"taskId": "019bc44b-f395-794a-9626-ca3b58181ce1",
-			"status": "SUCCEEDED",
-			"completedAt": 1768524908689,
-			"outputs": {
-				"taskId": "019bc44b-f395-794a-9626-ca3b58181ce1",
-				"imageUrls": [
-					"https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/uploads/multi_view_image_019bc44c-870a-76b8-8fab-bb2fe55bcbc9_part_0.png?Expires=1768784108&Signature=GNCWJGn9k1WDSulW6dfCVkbSWqTt-fotJheXBPHJIWj~EhNdJ6cAVfGycYgdKm3JwvERehVSdh4-44dSDC5EmScp0Qvtu3trbyMJ6YXvRABQKalTrdlgvYbeH-ndQoHZjyJtXdau9-MrAf4wspV5fvh1mn7boG2PCobAGLnZfQo3tYUOCRGhKx7GZgHENDn3One28BGHIxXjnCHlBoPFJgwjl8vt7y7uGLKHePRuMrxylh6QCI150YykhNEjCvrl8WO6hTcVOvrNXuAP6j75zp7oHDvdRR-1r9lqKdwEzFgg5njKpjTqXhLHJaPnFiYlnNZHsLCdCCKJK4ANAdZBsg__&Key-Pair-Id=KL5I0C8H7HX83"
-				]
-			},
-			"artifacts": {}
-		},
-		"model": {
-			"taskId": "019bc44c-8935-794f-a9e8-90773c9f8230",
-			"status": "SUCCEEDED",
-			"completedAt": 1768525097305,
-			"outputs": {
-				"taskId": "019bc44c-8935-794f-a9e8-90773c9f8230",
-				"model": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019bc44c-8935-794f-a9e8-90773c9f8230/output/model.glb?Expires=1768784297&Signature=Gzzho4l8zzt1LKj0~UdOJajXzygDNiRfLgiyEXWhFPP-BQBUptkUOovSqFq-g90eUgJiuZGaeCrLEF07BswqivVrwFN19Deb0B~GWo9hBphS1UZCWC5kdLFMzR~pUNXeNtkZ5-UfexxnVP~-Kll7IQbkpOa3JY5uAne61kowesOATUYqmFcA9qjm0w2Kc9jKpRXOzMwvwIdBJ7DmLXkMlKTAKPknmZ7qGZZ3Kt~tjQnpcR6U5MbFnTeGxUQ~EOrj~KrwjVK3CZ3t4Os-wBh3tAPUug2CIKgb2VGB7AnHw4mQXSVeOlqQGoYpJufoFjpaY7mAcRGJvWkcUSG1baBSXA__&Key-Pair-Id=KL5I0C8H7HX83",
-				"textures": [
-					{
-						"base_color": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019bc44c-8935-794f-a9e8-90773c9f8230/output/texture_0.png?Expires=1768784297&Signature=iv14Z8pbK7vzSCHCyVd~s65w8IF-WpI0tpL5Fq0ozBmnMgNbkMegGghwSszhKTlCRenrEScyKnEOZwbGRHUU~Bdhr-fLxnrqjnrZ4jehNtfBV9YljDJxc-y~GadAzeQgEi464z70fjlAvUdQ8ktaFSQqFIMm9DEwcJzBS94fZ34OWUshPTMDg~h8Z5FKGMkO7PYhO8k2IRbRK~tBghdC8AvIWZV-QfO7IHY1L1WtZbx~Z41Rd3zXk3plId65hsuwQa2iy1uZavJW-y3OEiYLD-pAPzAckXmOHgsGuwuTqjlFRQg8llTzhL5dH6y2DRpse-ubHDtPt9xuKv7y1imNGg__&Key-Pair-Id=KL5I0C8H7HX83"
-					}
-				],
-				"textureUrl": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019bc44c-8935-794f-a9e8-90773c9f8230/output/texture_0.png?Expires=1768784297&Signature=iv14Z8pbK7vzSCHCyVd~s65w8IF-WpI0tpL5Fq0ozBmnMgNbkMegGghwSszhKTlCRenrEScyKnEOZwbGRHUU~Bdhr-fLxnrqjnrZ4jehNtfBV9YljDJxc-y~GadAzeQgEi464z70fjlAvUdQ8ktaFSQqFIMm9DEwcJzBS94fZ34OWUshPTMDg~h8Z5FKGMkO7PYhO8k2IRbRK~tBghdC8AvIWZV-QfO7IHY1L1WtZbx~Z41Rd3zXk3plId65hsuwQa2iy1uZavJW-y3OEiYLD-pAPzAckXmOHgsGuwuTqjlFRQg8llTzhL5dH6y2DRpse-ubHDtPt9xuKv7y1imNGg__&Key-Pair-Id=KL5I0C8H7HX83"
-			},
-			"artifacts": {}
-		},
-		"rigging": {
-			"taskId": "019bc44f-6a00-72db-9f0b-c7a95cab4196",
-			"status": "SUCCEEDED",
-			"completedAt": 1768525124454,
-			"outputs": {
-				"taskId": "019bc44f-6a00-72db-9f0b-c7a95cab4196",
-				"riggedModel": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019bc44f-6a00-72db-9f0b-c7a95cab4196/output/Character_output.glb?Expires=1768784324&Signature=YOHpe4FDN7e2Wd5d5ZIdqh-c~8aZfHbyaZYXCZ4TY6IrYR6JIeiTPsIu8mHH2~k3u5g26YqpeuEtfDTLM4510-7olFDJb43uU7NuQJ2vqJq3EIlnPjZfYh3P3CAaQYFwxh8OFFwOEeQ5bkG1O1fDBx-1LFdTIprAOatq3cmXufgAv875y13KxSdOOXY-zY0Z757OfXcZncR6KcFGbCu4ngi1QuFXEZWMG5HXT65Tr45oJ5HBMkA4jSJQ-dgSYOJhQcv3paob2IWXTbUudwm6tOHCjwJdE9HcVSGXnutmQyNJGvCLtmIdTM-a9UL-0UKWHlz4Dve3Yckdn6KGPF3mhw__&Key-Pair-Id=KL5I0C8H7HX83"
-			},
-			"artifacts": {}
-		},
-		"animations": [
-			{
-				"taskId": "019bc44f-d40e-797a-8348-222233044759",
-				"status": "SUCCEEDED",
-				"animationName": "COMBAT_STANCE",
-				"completedAt": 1768525134502,
-				"outputs": {
-					"animations/combat_stance.glb": "animations/combat_stance.glb"
-				}
-			},
-			{
-				"taskId": "019bc44f-fb45-72e2-810a-b10eadbdc544",
-				"status": "SUCCEEDED",
-				"animationName": "RUNFAST",
-				"completedAt": 1768525147041,
-				"outputs": {
-					"animations/runfast.glb": "animations/runfast.glb"
-				}
-			},
-			{
-				"taskId": "019bc450-2c3d-7717-bfca-c980129a9d58",
-				"status": "SUCCEEDED",
-				"animationName": "DOUBLE_COMBO_ATTACK",
-				"completedAt": 1768525159525,
-				"outputs": {
-					"animations/double_combo_attack.glb": "animations/double_combo_attack.glb"
-				}
-			},
-			{
-				"taskId": "019bc450-5d06-7717-a003-848f166a9c1c",
-				"status": "SUCCEEDED",
-				"animationName": "KUNG_FU_PUNCH",
-				"completedAt": 1768525188203,
-				"outputs": {
-					"animations/kung_fu_punch.glb": "animations/kung_fu_punch.glb"
-				}
-			},
-			{
-				"taskId": "019bc450-cd0b-7718-af04-1005c9bef0fc",
-				"status": "SUCCEEDED",
-				"animationName": "BEHIT_FLYUP",
-				"completedAt": 1768525202625,
-				"outputs": {
-					"animations/behit_flyup.glb": "animations/behit_flyup.glb"
-				}
-			},
-			{
-				"taskId": "019bc451-0565-72f7-89cb-b2ba860b2fcb",
-				"status": "SUCCEEDED",
-				"animationName": "DEAD",
-				"completedAt": 1768525246978,
-				"outputs": {
-					"animations/dead.glb": "animations/dead.glb"
-				}
-			},
-			{
-				"taskId": "019bc451-b29f-7989-a155-8fc28fc58f89",
-				"status": "SUCCEEDED",
-				"animationName": "BLOCK1",
-				"completedAt": 1768525261730,
-				"outputs": {
-					"animations/block1.glb": "animations/block1.glb"
-				}
-			}
-		]
-	},
-	"seed": 3425000527
+  "id": "yakuza-boss",
+  "name": "Yakuza Boss",
+  "type": "character",
+  "description": "High-ranking Yakuza lieutenant, dangerous and calculating.",
+  "textToImageTask": {
+    "prompt": "Middle-aged Japanese man, tall imposing build with broad powerful shoulders, thick muscular arms, defined chest visible through shirt, olive skin tone with slight weathering. HANDS: two hands with five distinct fingers each, proper finger proportions with defined knuckles, natural finger spacing, thumbs positioned correctly. FACE: small well-shaped ears with defined curves, straight nose with defined bridge, distinct naturally shaped lips, sharp calculating eyes with crow's feet, strong angular jawline with thin scar across cheek. Slicked-back black hair with grey streaks at temples. Expensive charcoal grey suit jacket draped over shoulders like a cape not worn properly, white dress shirt unbuttoned at collar showing chest, black suit pants with perfect tailoring falling straight, black Italian leather shoes with flat soles, feet with normal proportions. Cold confident expression, commanding stance with arms at sides. Anime cel-shaded art style with dramatic noir lighting feel and anatomically correct extremities.",
+    "generateMultiView": true,
+    "poseMode": "a-pose"
+  },
+  "multiImageTo3DTask": {
+    "topology": "quad",
+    "targetPolycount": 30000,
+    "symmetryMode": "auto",
+    "shouldRemesh": true,
+    "shouldTexture": true,
+    "enablePbr": false,
+    "poseMode": "a-pose"
+  },
+  "riggingTask": {
+    "heightMeters": 1.85
+  },
+  "animationTask": {
+    "preset": "boss"
+  },
+  "tasks": {
+    "concept": {
+      "taskId": "019bc44b-f395-794a-9626-ca3b58181ce1",
+      "status": "SUCCEEDED",
+      "completedAt": 1768524908689,
+      "outputs": {
+        "taskId": "019bc44b-f395-794a-9626-ca3b58181ce1",
+        "imageUrls": [
+          "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/uploads/multi_view_image_019bc44c-870a-76b8-8fab-bb2fe55bcbc9_part_0.png?Expires=1768784108&Signature=GNCWJGn9k1WDSulW6dfCVkbSWqTt-fotJheXBPHJIWj~EhNdJ6cAVfGycYgdKm3JwvERehVSdh4-44dSDC5EmScp0Qvtu3trbyMJ6YXvRABQKalTrdlgvYbeH-ndQoHZjyJtXdau9-MrAf4wspV5fvh1mn7boG2PCobAGLnZfQo3tYUOCRGhKx7GZgHENDn3One28BGHIxXjnCHlBoPFJgwjl8vt7y7uGLKHePRuMrxylh6QCI150YykhNEjCvrl8WO6hTcVOvrNXuAP6j75zp7oHDvdRR-1r9lqKdwEzFgg5njKpjTqXhLHJaPnFiYlnNZHsLCdCCKJK4ANAdZBsg__&Key-Pair-Id=KL5I0C8H7HX83"
+        ]
+      },
+      "artifacts": {}
+    },
+    "model": {
+      "taskId": "019bc44c-8935-794f-a9e8-90773c9f8230",
+      "status": "SUCCEEDED",
+      "completedAt": 1768525097305,
+      "outputs": {
+        "taskId": "019bc44c-8935-794f-a9e8-90773c9f8230",
+        "model": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019bc44c-8935-794f-a9e8-90773c9f8230/output/model.glb?Expires=1768784297&Signature=Gzzho4l8zzt1LKj0~UdOJajXzygDNiRfLgiyEXWhFPP-BQBUptkUOovSqFq-g90eUgJiuZGaeCrLEF07BswqivVrwFN19Deb0B~GWo9hBphS1UZCWC5kdLFMzR~pUNXeNtkZ5-UfexxnVP~-Kll7IQbkpOa3JY5uAne61kowesOATUYqmFcA9qjm0w2Kc9jKpRXOzMwvwIdBJ7DmLXkMlKTAKPknmZ7qGZZ3Kt~tjQnpcR6U5MbFnTeGxUQ~EOrj~KrwjVK3CZ3t4Os-wBh3tAPUug2CIKgb2VGB7AnHw4mQXSVeOlqQGoYpJufoFjpaY7mAcRGJvWkcUSG1baBSXA__&Key-Pair-Id=KL5I0C8H7HX83",
+        "textures": [
+          {
+            "base_color": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019bc44c-8935-794f-a9e8-90773c9f8230/output/texture_0.png?Expires=1768784297&Signature=iv14Z8pbK7vzSCHCyVd~s65w8IF-WpI0tpL5Fq0ozBmnMgNbkMegGghwSszhKTlCRenrEScyKnEOZwbGRHUU~Bdhr-fLxnrqjnrZ4jehNtfBV9YljDJxc-y~GadAzeQgEi464z70fjlAvUdQ8ktaFSQqFIMm9DEwcJzBS94fZ34OWUshPTMDg~h8Z5FKGMkO7PYhO8k2IRbRK~tBghdC8AvIWZV-QfO7IHY1L1WtZbx~Z41Rd3zXk3plId65hsuwQa2iy1uZavJW-y3OEiYLD-pAPzAckXmOHgsGuwuTqjlFRQg8llTzhL5dH6y2DRpse-ubHDtPt9xuKv7y1imNGg__&Key-Pair-Id=KL5I0C8H7HX83"
+          }
+        ],
+        "textureUrl": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019bc44c-8935-794f-a9e8-90773c9f8230/output/texture_0.png?Expires=1768784297&Signature=iv14Z8pbK7vzSCHCyVd~s65w8IF-WpI0tpL5Fq0ozBmnMgNbkMegGghwSszhKTlCRenrEScyKnEOZwbGRHUU~Bdhr-fLxnrqjnrZ4jehNtfBV9YljDJxc-y~GadAzeQgEi464z70fjlAvUdQ8ktaFSQqFIMm9DEwcJzBS94fZ34OWUshPTMDg~h8Z5FKGMkO7PYhO8k2IRbRK~tBghdC8AvIWZV-QfO7IHY1L1WtZbx~Z41Rd3zXk3plId65hsuwQa2iy1uZavJW-y3OEiYLD-pAPzAckXmOHgsGuwuTqjlFRQg8llTzhL5dH6y2DRpse-ubHDtPt9xuKv7y1imNGg__&Key-Pair-Id=KL5I0C8H7HX83"
+      },
+      "artifacts": {}
+    },
+    "rigging": {
+      "taskId": "019bc44f-6a00-72db-9f0b-c7a95cab4196",
+      "status": "SUCCEEDED",
+      "completedAt": 1768525124454,
+      "outputs": {
+        "taskId": "019bc44f-6a00-72db-9f0b-c7a95cab4196",
+        "riggedModel": "https://assets.meshy.ai/b0dbbbaf-b086-4bee-9845-d9c2576d26db/tasks/019bc44f-6a00-72db-9f0b-c7a95cab4196/output/Character_output.glb?Expires=1768784324&Signature=YOHpe4FDN7e2Wd5d5ZIdqh-c~8aZfHbyaZYXCZ4TY6IrYR6JIeiTPsIu8mHH2~k3u5g26YqpeuEtfDTLM4510-7olFDJb43uU7NuQJ2vqJq3EIlnPjZfYh3P3CAaQYFwxh8OFFwOEeQ5bkG1O1fDBx-1LFdTIprAOatq3cmXufgAv875y13KxSdOOXY-zY0Z757OfXcZncR6KcFGbCu4ngi1QuFXEZWMG5HXT65Tr45oJ5HBMkA4jSJQ-dgSYOJhQcv3paob2IWXTbUudwm6tOHCjwJdE9HcVSGXnutmQyNJGvCLtmIdTM-a9UL-0UKWHlz4Dve3Yckdn6KGPF3mhw__&Key-Pair-Id=KL5I0C8H7HX83"
+      },
+      "artifacts": {}
+    },
+    "animations": [
+      {
+        "taskId": "019bc44f-d40e-797a-8348-222233044759",
+        "status": "SUCCEEDED",
+        "animationName": "COMBAT_STANCE",
+        "completedAt": 1768525134502,
+        "outputs": {
+          "animations/combat_stance.glb": "animations/combat_stance.glb"
+        }
+      },
+      {
+        "taskId": "019bc44f-fb45-72e2-810a-b10eadbdc544",
+        "status": "SUCCEEDED",
+        "animationName": "RUNFAST",
+        "completedAt": 1768525147041,
+        "outputs": {
+          "animations/runfast.glb": "animations/runfast.glb"
+        }
+      },
+      {
+        "taskId": "019bc450-2c3d-7717-bfca-c980129a9d58",
+        "status": "SUCCEEDED",
+        "animationName": "DOUBLE_COMBO_ATTACK",
+        "completedAt": 1768525159525,
+        "outputs": {
+          "animations/double_combo_attack.glb": "animations/double_combo_attack.glb"
+        }
+      },
+      {
+        "taskId": "019bc450-5d06-7717-a003-848f166a9c1c",
+        "status": "SUCCEEDED",
+        "animationName": "KUNG_FU_PUNCH",
+        "completedAt": 1768525188203,
+        "outputs": {
+          "animations/kung_fu_punch.glb": "animations/kung_fu_punch.glb"
+        }
+      },
+      {
+        "taskId": "019bc450-cd0b-7718-af04-1005c9bef0fc",
+        "status": "SUCCEEDED",
+        "animationName": "BEHIT_FLYUP",
+        "completedAt": 1768525202625,
+        "outputs": {
+          "animations/behit_flyup.glb": "animations/behit_flyup.glb"
+        }
+      },
+      {
+        "taskId": "019bc451-0565-72f7-89cb-b2ba860b2fcb",
+        "status": "SUCCEEDED",
+        "animationName": "DEAD",
+        "completedAt": 1768525246978,
+        "outputs": {
+          "animations/dead.glb": "animations/dead.glb"
+        }
+      },
+      {
+        "taskId": "019bc451-b29f-7989-a155-8fc28fc58f89",
+        "status": "SUCCEEDED",
+        "animationName": "BLOCK1",
+        "completedAt": 1768525261730,
+        "outputs": {
+          "animations/block1.glb": "animations/block1.glb"
+        }
+      }
+    ]
+  },
+  "seed": 3425000527
 }

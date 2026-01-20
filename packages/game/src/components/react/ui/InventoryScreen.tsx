@@ -1,5 +1,5 @@
-import React from 'react';
 import type { InventoryItem } from '@neo-tokyo/core';
+import React from 'react';
 
 interface InventoryScreenProps {
   isOpen: boolean;
@@ -17,14 +17,14 @@ export function InventoryScreen({
   onUseItem,
 }: InventoryScreenProps) {
   const [selectedItem, setSelectedItem] = React.useState<InventoryItem | null>(null);
-  const [filter, setFilter] = React.useState<'all' | 'weapon' | 'accessory' | 'consumable' | 'key_item'>('all');
+  const [filter, setFilter] = React.useState<
+    'all' | 'weapon' | 'accessory' | 'consumable' | 'key_item'
+  >('all');
 
   if (!isOpen) return null;
 
   const filteredInventory =
-    filter === 'all'
-      ? inventory
-      : inventory.filter((item) => item.type === filter);
+    filter === 'all' ? inventory : inventory.filter((item) => item.type === filter);
 
   const getItemTypeColor = (type: InventoryItem['type']) => {
     switch (type) {
@@ -88,7 +88,15 @@ export function InventoryScreen({
       >
         <div>
           <h2 style={{ margin: '0 0 5px 0', fontSize: '24px', color: '#0ea5e9' }}>Inventory</h2>
-          <div style={{ fontSize: '14px', color: '#fbbf24', display: 'flex', alignItems: 'center', gap: '6px' }}>
+          <div
+            style={{
+              fontSize: '14px',
+              color: '#fbbf24',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+            }}
+          >
             <span>💰</span>
             <span>{credits.toLocaleString()} Credits</span>
           </div>
@@ -173,9 +181,17 @@ export function InventoryScreen({
                 key={item.id}
                 onClick={() => setSelectedItem(item)}
                 style={{
-                  backgroundColor: selectedItem?.id === item.id ? 'rgba(14, 165, 233, 0.2)' : 'rgba(15, 23, 42, 0.8)',
+                  backgroundColor:
+                    selectedItem?.id === item.id
+                      ? 'rgba(14, 165, 233, 0.2)'
+                      : 'rgba(15, 23, 42, 0.8)',
                   border: '2px solid',
-                  borderColor: selectedItem?.id === item.id ? '#0ea5e9' : item.equipped ? '#10b981' : '#334155',
+                  borderColor:
+                    selectedItem?.id === item.id
+                      ? '#0ea5e9'
+                      : item.equipped
+                        ? '#10b981'
+                        : '#334155',
                   borderRadius: '8px',
                   padding: '12px',
                   cursor: 'pointer',
@@ -219,9 +235,7 @@ export function InventoryScreen({
 
                 {/* Quantity */}
                 {item.quantity > 1 && (
-                  <div style={{ fontSize: '11px', color: '#94a3b8' }}>
-                    ×{item.quantity}
-                  </div>
+                  <div style={{ fontSize: '11px', color: '#94a3b8' }}>×{item.quantity}</div>
                 )}
               </button>
             ))}
@@ -250,7 +264,14 @@ export function InventoryScreen({
               >
                 {getItemTypeIcon(selectedItem.type)}
               </div>
-              <h3 style={{ margin: '0 0 8px 0', fontSize: '18px', color: '#0ea5e9', textAlign: 'center' }}>
+              <h3
+                style={{
+                  margin: '0 0 8px 0',
+                  fontSize: '18px',
+                  color: '#0ea5e9',
+                  textAlign: 'center',
+                }}
+              >
                 {selectedItem.name}
               </h3>
               <div style={{ textAlign: 'center' }}>
@@ -322,23 +343,24 @@ export function InventoryScreen({
                 </div>
               )}
 
-              {(selectedItem.type === 'weapon' || selectedItem.type === 'accessory') && !selectedItem.equipped && (
-                <button
-                  type="button"
-                  style={{
-                    backgroundColor: 'transparent',
-                    border: '1px solid #0ea5e9',
-                    borderRadius: '6px',
-                    color: '#0ea5e9',
-                    padding: '12px',
-                    cursor: 'pointer',
-                    fontSize: '14px',
-                    fontFamily: 'inherit',
-                  }}
-                >
-                  Equip
-                </button>
-              )}
+              {(selectedItem.type === 'weapon' || selectedItem.type === 'accessory') &&
+                !selectedItem.equipped && (
+                  <button
+                    type="button"
+                    style={{
+                      backgroundColor: 'transparent',
+                      border: '1px solid #0ea5e9',
+                      borderRadius: '6px',
+                      color: '#0ea5e9',
+                      padding: '12px',
+                      cursor: 'pointer',
+                      fontSize: '14px',
+                      fontFamily: 'inherit',
+                    }}
+                  >
+                    Equip
+                  </button>
+                )}
             </div>
           </div>
         )}

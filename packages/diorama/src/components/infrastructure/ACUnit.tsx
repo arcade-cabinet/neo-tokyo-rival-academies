@@ -48,7 +48,7 @@ export function ACUnit({
 	id,
 	position,
 	size = "medium",
-	running = false,
+	_running = false,
 	age = 0,
 	rotation = 0,
 	wallMounted = false,

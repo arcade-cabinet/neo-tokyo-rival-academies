@@ -1,5 +1,5 @@
-import React, { useMemo } from 'react';
 import { useQuestStore } from '@neo-tokyo/core';
+import React, { useMemo } from 'react';
 
 interface QuestLogProps {
   isOpen: boolean;
@@ -37,7 +37,14 @@ export function QuestLog({ isOpen, onClose }: QuestLogProps) {
       }}
     >
       {/* Header */}
-      <div style={{ marginBottom: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <div
+        style={{
+          marginBottom: '20px',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}
+      >
         <h2 style={{ margin: 0, fontSize: '24px', color: '#0ea5e9' }}>Quest Log</h2>
         <button
           type="button"
@@ -57,7 +64,14 @@ export function QuestLog({ isOpen, onClose }: QuestLogProps) {
       </div>
 
       {/* Tabs */}
-      <div style={{ display: 'flex', gap: '10px', marginBottom: '20px', borderBottom: '1px solid #334155' }}>
+      <div
+        style={{
+          display: 'flex',
+          gap: '10px',
+          marginBottom: '20px',
+          borderBottom: '1px solid #334155',
+        }}
+      >
         <button
           type="button"
           onClick={() => setTab('active')}
@@ -111,12 +125,24 @@ export function QuestLog({ isOpen, onClose }: QuestLogProps) {
                 padding: '15px',
               }}
             >
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '8px' }}>
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'start',
+                  marginBottom: '8px',
+                }}
+              >
                 <h3 style={{ margin: 0, fontSize: '18px', color: '#0ea5e9' }}>{quest.title}</h3>
                 <span
                   style={{
                     fontSize: '12px',
-                    color: quest.type === 'main' ? '#f59e0b' : quest.type === 'secret' ? '#8b5cf6' : '#64748b',
+                    color:
+                      quest.type === 'main'
+                        ? '#f59e0b'
+                        : quest.type === 'secret'
+                          ? '#8b5cf6'
+                          : '#64748b',
                     textTransform: 'uppercase',
                     fontWeight: 'bold',
                   }}
@@ -125,10 +151,22 @@ export function QuestLog({ isOpen, onClose }: QuestLogProps) {
                 </span>
               </div>
 
-              <p style={{ margin: '8px 0', fontSize: '14px', color: '#cbd5e1', lineHeight: 1.6 }}>{quest.description}</p>
+              <p style={{ margin: '8px 0', fontSize: '14px', color: '#cbd5e1', lineHeight: 1.6 }}>
+                {quest.description}
+              </p>
 
-              <div style={{ marginTop: '12px', padding: '10px', backgroundColor: 'rgba(6, 78, 59, 0.3)', borderLeft: '3px solid #10b981', borderRadius: '4px' }}>
-                <div style={{ fontSize: '12px', color: '#94a3b8', marginBottom: '4px' }}>Objective:</div>
+              <div
+                style={{
+                  marginTop: '12px',
+                  padding: '10px',
+                  backgroundColor: 'rgba(6, 78, 59, 0.3)',
+                  borderLeft: '3px solid #10b981',
+                  borderRadius: '4px',
+                }}
+              >
+                <div style={{ fontSize: '12px', color: '#94a3b8', marginBottom: '4px' }}>
+                  Objective:
+                </div>
                 <div style={{ fontSize: '14px', color: '#e2e8f0' }}>{quest.objective}</div>
               </div>
 
@@ -141,7 +179,11 @@ export function QuestLog({ isOpen, onClose }: QuestLogProps) {
                   <span style={{ color: '#fbbf24' }}>💰 {quest.rewards.credits} credits</span>
                   <span style={{ color: '#60a5fa' }}>⭐ {quest.rewards.xp} XP</span>
                   {quest.rewards.alignmentShift && (
-                    <span style={{ color: quest.rewards.alignmentShift.kurenai ? '#ef4444' : '#3b82f6' }}>
+                    <span
+                      style={{
+                        color: quest.rewards.alignmentShift.kurenai ? '#ef4444' : '#3b82f6',
+                      }}
+                    >
                       {quest.rewards.alignmentShift.kurenai ? '🔥' : '⚡'} Reputation
                     </span>
                   )}

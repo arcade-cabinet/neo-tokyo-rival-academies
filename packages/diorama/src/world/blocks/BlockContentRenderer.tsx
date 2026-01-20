@@ -74,7 +74,10 @@ import {
 /**
  * Maps component names to actual React components
  */
-const COMPONENT_REGISTRY: Record<string, React.ComponentType<any>> = {
+const COMPONENT_REGISTRY: Record<
+	string,
+	React.ComponentType<Record<string, unknown>>
+> = {
 	// Structure
 	Floor,
 	TexturedWall,
@@ -374,14 +377,18 @@ export function BlockContentRenderer({
 			)}
 
 			{/* Render all spawned content */}
-			{spawns.map((spawn, index) => (
-				<SpawnRenderer
-					key={`${blockId}_spawn_${index}`}
-					spawn={spawn}
-					index={index}
-					blockId={blockId}
-				/>
-			))}
+			{spawns.map((spawn, index) => {
+				// Create unique key from spawn properties (component + position + seed)
+				const spawnKey = `${blockId}_${spawn.component}_${spawn.position.x.toFixed(2)}_${spawn.position.y.toFixed(2)}_${spawn.position.z.toFixed(2)}_${spawn.seed}`;
+				return (
+					<SpawnRenderer
+						key={spawnKey}
+						spawn={spawn}
+						index={index}
+						blockId={blockId}
+					/>
+				);
+			})}
 		</>
 	);
 }

@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { StageSystem } from '../StageSystem';
 
 // Mock the STAGES configuration
@@ -19,7 +19,7 @@ vi.mock('@/content/stages', () => ({
 }));
 
 describe('StageSystem', () => {
-  let stageSystem;
+  let stageSystem: StageSystem;
 
   beforeEach(() => {
     stageSystem = new StageSystem();

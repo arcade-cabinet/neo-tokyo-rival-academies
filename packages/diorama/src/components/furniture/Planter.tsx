@@ -338,7 +338,11 @@ export function Planter({
 			const wallThickness = material === "wood" ? 0.08 : 0.1;
 
 			for (const side of ["front", "back", "left", "right"]) {
-				let wallW, wallH, wallD, wallX, wallZ;
+				let wallW: number,
+					wallH: number,
+					wallD: number,
+					wallX: number,
+					wallZ: number;
 
 				if (side === "front" || side === "back") {
 					wallW = bedWidth;

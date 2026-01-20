@@ -1,4 +1,3 @@
-import React from 'react';
 import type { SaveSlot } from '@neo-tokyo/core';
 
 interface SaveSlotSelectProps {
@@ -54,7 +53,14 @@ export function SaveSlotSelect({
       }}
     >
       {/* Header */}
-      <div style={{ marginBottom: '30px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <div
+        style={{
+          marginBottom: '30px',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}
+      >
         <h2 style={{ margin: 0, fontSize: '28px', color: '#0ea5e9' }}>
           {mode === 'save' ? 'Save Game' : 'Load Game'}
         </h2>
@@ -95,7 +101,15 @@ export function SaveSlotSelect({
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
               <div>
-                <div style={{ fontSize: '12px', color: '#3b82f6', marginBottom: '8px', textTransform: 'uppercase', fontWeight: 'bold' }}>
+                <div
+                  style={{
+                    fontSize: '12px',
+                    color: '#3b82f6',
+                    marginBottom: '8px',
+                    textTransform: 'uppercase',
+                    fontWeight: 'bold',
+                  }}
+                >
                   💾 Auto-Save
                 </div>
                 {slots[0].data ? (
@@ -104,7 +118,8 @@ export function SaveSlotSelect({
                       Level {slots[0].data.level} • Act {slots[0].data.act}
                     </div>
                     <div style={{ fontSize: '14px', color: '#94a3b8' }}>
-                      {slots[0].data.currentDistrictId.replace('district_', 'District ')} • {formatPlaytime(slots[0].data.playtimeMinutes)}
+                      {slots[0].data.currentDistrictId.replace('district_', 'District ')} •{' '}
+                      {formatPlaytime(slots[0].data.playtimeMinutes)}
                     </div>
                   </>
                 ) : (
@@ -150,7 +165,15 @@ export function SaveSlotSelect({
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
               <div>
-                <div style={{ fontSize: '12px', color: '#0ea5e9', marginBottom: '8px', textTransform: 'uppercase', fontWeight: 'bold' }}>
+                <div
+                  style={{
+                    fontSize: '12px',
+                    color: '#0ea5e9',
+                    marginBottom: '8px',
+                    textTransform: 'uppercase',
+                    fontWeight: 'bold',
+                  }}
+                >
                   Slot {slot.slotNumber}
                 </div>
                 {slot.data ? (
@@ -161,10 +184,25 @@ export function SaveSlotSelect({
                     <div style={{ fontSize: '14px', color: '#94a3b8', marginBottom: '6px' }}>
                       {slot.data.currentDistrictId.replace('district_', 'District ')}
                     </div>
-                    <div style={{ fontSize: '13px', color: '#64748b', display: 'flex', gap: '12px' }}>
+                    <div
+                      style={{ fontSize: '13px', color: '#64748b', display: 'flex', gap: '12px' }}
+                    >
                       <span>⏱️ {formatPlaytime(slot.data.playtimeMinutes)}</span>
-                      <span style={{ color: slot.data.alignment > 0.2 ? '#3b82f6' : slot.data.alignment < -0.2 ? '#ef4444' : '#94a3b8' }}>
-                        {slot.data.alignment > 0.2 ? '⚡ Azure' : slot.data.alignment < -0.2 ? '🔥 Kurenai' : '⚖️ Neutral'}
+                      <span
+                        style={{
+                          color:
+                            slot.data.alignment > 0.2
+                              ? '#3b82f6'
+                              : slot.data.alignment < -0.2
+                                ? '#ef4444'
+                                : '#94a3b8',
+                        }}
+                      >
+                        {slot.data.alignment > 0.2
+                          ? '⚡ Azure'
+                          : slot.data.alignment < -0.2
+                            ? '🔥 Kurenai'
+                            : '⚖️ Neutral'}
                       </span>
                     </div>
                   </>
