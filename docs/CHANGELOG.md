@@ -1,19 +1,174 @@
 # Changelog
 
-## [Unreleased] - JRPG Transformation
+All notable changes to Neo-Tokyo: Rival Academies will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+---
+
+## [2.0.0] - 2026-01-25 - Unity 6 Migration
+
+### BREAKING CHANGES
+
+- **Runtime Engine**: Complete migration from TypeScript/Babylon.js to Unity 6 DOTS
+- **TypeScript Runtime Archived**: All game runtime code moved to `_reference/typescript-runtime/`
+- **Build System**: Changed from Vite/PNPM to Unity build pipeline
+- **Mobile Deployment**: Changed from Capacitor to Unity native builds
 
 ### Added
-- **Monorepo Structure**: Split into `game`, `content-gen`, and `e2e` packages.
-- **ECS Architecture**: Migrated core logic to Miniplex systems (`CombatSystem`, `ProgressionSystem`).
-- **GenAI Pipeline**: Added `content-gen` package for procedural narrative and assets using Google Gemini.
-- **Mobile Support**: integrated Capacitor for Android/iOS builds.
-- **E2E Testing**: Added Playwright test suite with visual verification.
+
+#### Unity 6 Foundation
+- Unity 6000.3.5f1 project scaffold with DOTS packages
+- URP (Universal Render Pipeline) configuration
+- Input System configured for mobile touch + keyboard/mouse
+- CI/CD integration with GitHub Actions using game-ci/unity-test-runner
+
+#### DOTS Component Hierarchy
+- `Assets/Scripts/Components/Core/` - PlayerTag, Transform, WorldObjectTags
+- `Assets/Scripts/Components/Combat/` - Health, DamageEvent, Hitbox, CombatStats, ArenaComponents
+- `Assets/Scripts/Components/Stats/` - RPGStats (Structure, Ignition, Logic, Flow)
+- `Assets/Scripts/Components/Faction/` - Reputation
+- `Assets/Scripts/Components/AI/` - ThreatComponents, SwarmComponents, PerceptionComponents
+- `Assets/Scripts/Components/Abilities/` - AbilityComponents
+- `Assets/Scripts/Components/Navigation/` - NavigationComponents
+- `Assets/Scripts/Components/Equipment/` - EquipmentComponents
+- `Assets/Scripts/Components/Dialogue/` - DialogueComponents, AlignmentGateComponents
+- `Assets/Scripts/Components/World/` - WeatherComponents, SeedComponents, WaterComponents, TerritoryComponents
+- `Assets/Scripts/Components/Quest/` - QuestComponents
+- `Assets/Scripts/Components/Save/` - SaveComponents
+
+#### DOTS Systems (25+ Implemented)
+- **Combat**: CombatSystem, HitDetectionSystem, BreakSystem, HazardSystem, ArenaSystem, WaterCombatSystem, CombatLogicSystem
+- **AI**: AIStateMachineSystem, AISystem, ThreatSystem, SteeringSystem, CrowdSystem, EnemyAISystem, SwarmCoordinationSystem, PerceptionSystem, TentacleSwarmSystem
+- **Progression**: ReputationSystem, ProgressionSystem, AlignmentBonusSystem, AlignmentGateSystem, StatAllocationSystem
+- **World**: HexGridSystem, TerritorySystem, WaterSystem, WeatherSystem, BoatSystem, StageSystem, ManifestSpawnerSystem, ProceduralGenerationSystem
+- **Other**: AbilitySystem, NavigationSystem, EquipmentSystem, DialogueSystem, QuestSystem, QuestGeneratorSystem, SaveSystem
+
+#### Authoring Components
+- `PlayerAuthoring.cs` - Player entity setup with stats and combat components
+- `EnemyAuthoring.cs` - Enemy entity with AI components
+- `NPCAuthoring.cs` - Non-combat NPC entities
+- `HexTileAuthoring.cs` - Terrain tile entities
+- `AbilityAuthoring.cs` - Ability definitions
+- `CrowdMemberAuthoring.cs` - Crowd NPC entities
+- `ArenaAuthoring.cs` - Combat arena zones
+
+#### MonoBehaviours (UI/Input/Camera Only)
+- `IsometricCameraController.cs` - Isometric camera movement
+- `CameraBounds.cs` - Camera boundary constraints
+- `TouchInputManager.cs` - Mobile touch handling
+- `InputActions.cs` - Input action mappings
+- `HUDController.cs` - Health, XP, stats display
+- `DialogueUI.cs` - Dialogue system UI
+
+#### Data & Utilities
+- `ManifestSchemas.cs` - JSON manifest definitions
+- `ManifestLoader.cs` - TypeScript manifest bridge
+- `TerritoryDefinitions.cs` - Territory data
+- `FactionRelationships.cs` - Faction interaction rules
+- `EquipmentDatabase.cs` - Equipment definitions
+- `ArenaTemplates.cs` - Combat arena templates
+- `QuestTemplates.cs` - Quest definitions
+- `SeedHelpers.cs` - Seeded RNG utilities
 
 ### Changed
-- **Framework**: Migrated from Astro (MPA) to Vite + React (SPA) for better game loop control and mobile compatibility.
-- **Genre**: Shifted from "3D Platformer" to "Action JRPG" (added Stats, Leveling, Inventory).
-- **Physics**: Refactored collision logic to support RPG combat stats.
+
+- **ECS Architecture**: Migrated from Miniplex (TypeScript) to Unity DOTS Entities
+- **State Management**: Migrated from Zustand to DOTS singletons and ScriptableObjects
+- **Navigation**: Migrated from YukaJS to Unity AI Navigation package
+- **Rendering**: Migrated from Babylon.js/Reactylon to Unity URP
+- **Physics**: Migrated from Rapier to Unity Physics
+- **Mobile**: Migrated from Capacitor to Unity native builds
 
 ### Removed
-- **Legacy Scripts**: Removed Python verification scripts (`verify_game.py`) in favor of TypeScript/Playwright.
-- **Astro Components**: Removed `.astro` files; game is now purely React-driven.
+
+- **TypeScript Runtime**: Entire game runtime archived (see `_reference/typescript-runtime/`)
+- **Babylon.js/Reactylon**: Replaced by Unity URP
+- **Miniplex ECS**: Replaced by Unity DOTS Entities
+- **Zustand Stores**: Replaced by DOTS patterns
+- **YukaJS Navigation**: Replaced by Unity AI Navigation
+- **Capacitor Mobile Wrapper**: Replaced by Unity native builds
+- **Vite Dev Server (game)**: Replaced by Unity Editor
+
+### Preserved
+
+- **TypeScript Dev Tools**: `dev-tools/content-gen`, `dev-tools/e2e`, `dev-tools/types`
+- **Manifest Pipeline**: JSON manifests generated by TypeScript, consumed by Unity
+- **Asset Generation**: Meshy/Gemini pipeline unchanged
+- **Playwright E2E Tests**: Adapted for Unity builds
+
+---
+
+## [1.2.0] - 2026-01-19 - Flooded World Integration
+
+### Added
+- Flooded Neo-Tokyo world setting
+- Water components and systems
+- Territory-based world structure (replacing districts)
+- Boat navigation system
+- Salvage economy concepts
+
+### Changed
+- Aesthetic shift from cyberpunk neon to flooded post-apocalyptic
+- Lighting from neon to natural (sunlight, lanterns, bonfires)
+- UI colors from pink/green to blues + rust/amber
+
+### Removed
+- Cyberpunk neon aesthetic
+- High-tech display elements
+- "Midnight Exam" race storyline
+
+---
+
+## [1.1.0] - 2026-01-17 - Architecture Pivot
+
+### Added
+- Babylon.js 8.46.2 + Reactylon 3.5.2 integration
+- Hex grid rendering with instanced tiles
+- Isometric camera system
+- Character model loading with animations
+
+### Changed
+- Migrated from Three.js to Babylon.js
+- Updated monorepo structure (apps/, packages/)
+
+### Removed
+- Three.js and React Three Fiber dependencies
+
+---
+
+## [1.0.0] - 2026-01-15 - JRPG Transformation
+
+### Added
+- **ECS Architecture**: Miniplex entity component system
+- **Stats System**: Structure, Ignition, Logic, Flow
+- **Combat System**: Stats-based damage calculation
+- **Visual Novel**: Dialogue overlay system
+- **GenAI Pipeline**: Meshy AI integration for character generation
+- **9 Characters Generated**: Kai, Vera, faction NPCs
+
+### Changed
+- **Genre**: Transformed from 3D Platformer to Action JRPG
+- **Framework**: Migrated from Astro (MPA) to Vite + React (SPA)
+- **Physics**: Refactored collision logic to support RPG combat stats
+
+### Removed
+- **Legacy Scripts**: Python verification scripts replaced with TypeScript/Playwright
+- **Astro Components**: Game is now purely React-driven
+
+---
+
+## [0.1.0] - 2026-01-13 - Initial Prototype
+
+### Added
+- POC.html 3D platformer scaffold
+- Android/Capacitor mobile wrapper
+- Original storyboard ("The Midnight Exam")
+- Character designs: Kai & Vera
+- Three.js + React Three Fiber rendering
+- Basic player movement and platforming
+
+---
+
+*For detailed technical documentation, see [UNITY_6_ARCHITECTURE.md](UNITY_6_ARCHITECTURE.md)*

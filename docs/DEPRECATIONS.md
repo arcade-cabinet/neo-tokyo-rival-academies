@@ -1,6 +1,6 @@
 # Deprecations & Ignore Guide
 
-**Last Updated**: January 25, 2026
+**Last Updated**: January 26, 2026
 
 ---
 
@@ -24,6 +24,25 @@ The following are **ARCHIVED** in `_reference/` and must **NOT** be used:
 | **Capacitor (runtime)** | Unity native builds |
 
 **Location of archived code**: `_reference/typescript-runtime/`
+
+### Migration Paths (TypeScript to Unity)
+
+For agents needing to understand how old TypeScript patterns map to Unity:
+
+| TypeScript Pattern | Unity 6 Equivalent | Notes |
+|-------------------|-------------------|-------|
+| `Miniplex world` | `World` (DOTS) | Entity management |
+| `world.add(entity, component)` | `ecb.AddComponent<T>(entity)` | Use EntityCommandBuffer |
+| `useQuery<T>()` | `SystemAPI.Query<T>()` | Burst-compiled iteration |
+| `createSystem()` | `partial struct : ISystem` | DOTS systems |
+| `Zustand store` | `ScriptableObject` or singleton | State management |
+| `useFrame()` | `OnUpdate(ref SystemState)` | Per-frame logic |
+| `<mesh>` JSX | Unity Prefab | Visual elements |
+| `Rapier physics` | Havok Physics | Built into Unity 6 |
+| `YukaJS pathfinding` | AI Navigation | Unity NavMesh |
+| `seedrandom` | `Unity.Mathematics.Random` | Deterministic RNG |
+| `Vite dev server` | Unity Editor | Development environment |
+| `Capacitor` | Unity native builds | Mobile deployment |
 
 ### What REMAINS in TypeScript (Build-Time Tools Only)
 
@@ -156,6 +175,21 @@ For agents needing to understand the old TypeScript patterns for context:
 | `Zustand store` | `ScriptableObject` or DOTS singleton |
 | `useFrame()` | `OnUpdate(ref SystemState)` |
 | `<mesh>` JSX | Unity Prefab |
+
+---
+
+## Archived Documentation
+
+The following documentation files are archived and marked with `[ARCHIVED]` or `[HISTORICAL]` prefixes:
+
+| File | Status | Notes |
+|------|--------|-------|
+| `BABYLON_MIGRATION_PLAN.md` | ARCHIVED | Planned Babylon.js migration, superseded by Unity |
+| `REACTYLON_MIGRATION.md` | ARCHIVED | Reactylon evaluation, superseded by Unity |
+| `ARCHITECTURE_PIVOT_NATIVE.md` | HISTORICAL | Babylon Native pivot, superseded by Unity |
+| `MOBILE_WEB_GUIDE.md` | DELETED | Replaced by MOBILE_NATIVE_GUIDE.md (Unity) |
+
+These files are kept for historical reference to understand the project's evolution.
 
 ---
 

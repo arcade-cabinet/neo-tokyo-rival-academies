@@ -1,7 +1,48 @@
 # Flooded Neo-Tokyo: World Design Document v1.0
 
 **Date**: January 19, 2026
+**Updated**: January 26, 2026
+**Status**: IMPLEMENTED in Unity 6 DOTS
 **Purpose**: Definitive world-building guide for the flooded Neo-Tokyo setting
+
+---
+
+## Unity 6 Implementation
+
+### Key Files
+
+```
+Assets/Scripts/Systems/Water/
+├── WaterSystem.cs            # Water rendering, tides, current simulation
+├── BoatSystem.cs             # Watercraft navigation, physics, docking
+├── WaterCombatSystem.cs      # Combat modifications for water/boat scenarios
+└── Components/
+    ├── WaterComponents.cs    # WaterVolume, Tide, Current ECS components
+    └── TerritoryComponents.cs # Territory, RooftopZone, VerticalLayer components
+```
+
+### Water Mechanics Implementation
+
+```csharp
+// WaterComponents.cs
+public struct WaterVolume : IComponentData {
+    public float SurfaceLevel;       // Y=0 is waterline
+    public float Visibility;         // Murky water = 1-2m
+    public WaterDanger DangerLevel;  // Pollution, currents, creatures
+}
+
+public struct Tide : IComponentData {
+    public float CurrentOffset;      // Tidal shift from base level
+    public float CycleProgress;      // 0-1 through tidal cycle
+}
+
+// TerritoryComponents.cs
+public struct Territory : IComponentData {
+    public TerritoryType Type;       // Academy, Market, Refuge, Factory, Ruin, Shrine
+    public Faction ControllingFaction;
+    public float ElevationAboveWater;
+}
+```
 
 ---
 
@@ -65,6 +106,28 @@ Instead of "strata," we have **water-relative zones:**
 - **Ferries**: Larger craft connecting distant territories
 - **Salvage Barges**: Work boats with cranes for underwater retrieval
 - **Academy Boats**: Marked vessels for rival academy patrols
+
+#### Unity Boat System
+
+```csharp
+// BoatSystem.cs - Watercraft navigation and physics
+public partial class BoatSystem : SystemBase {
+    protected override void OnUpdate() {
+        Entities.ForEach((ref Boat boat, ref LocalTransform transform, in BoatInput input) => {
+            // Apply water current effects
+            // Handle docking logic
+            // Process boat-to-boat collision
+        }).Schedule();
+    }
+}
+
+public struct Boat : IComponentData {
+    public BoatType Type;            // Skiff, Ferry, Barge, AcademyPatrol
+    public float Speed;
+    public int Capacity;
+    public Entity DockedAt;          // Null if moving
+}
+```
 
 ---
 
@@ -328,6 +391,25 @@ All procedural elements derive deterministically from seeds:
 - **Boat combat** - Unstable, water hazards
 - **Flooded interiors** - Partially submerged, limited movement
 
+#### Unity Water Combat System
+
+```csharp
+// WaterCombatSystem.cs - Combat modifications for water scenarios
+public partial class WaterCombatSystem : SystemBase {
+    protected override void OnUpdate() {
+        // Apply movement penalties in flooded areas
+        // Handle boat instability during combat
+        // Process water hazard damage (falling overboard, currents)
+    }
+}
+
+public struct WaterCombatModifier : IComponentData {
+    public float MovementPenalty;    // 0.5 = half speed in shallows
+    public float AccuracyPenalty;    // Boat instability affects aim
+    public bool FallHazard;          // Bridge/boat edge danger
+}
+```
+
 ---
 
 ## Artistic References
@@ -368,4 +450,4 @@ To maintain thematic coherence, we explicitly avoid:
 
 ---
 
-Last Updated: 2026-01-19
+Last Updated: 2026-01-26

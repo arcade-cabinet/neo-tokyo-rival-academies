@@ -5,112 +5,127 @@
 **A futuristic 3D Action JRPG set in the neon-lit streets of Neo-Tokyo**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue)](https://www.typescriptlang.org/)
-[![React](https://img.shields.io/badge/React-19.0-61DAFB)](https://react.dev/)
-[![Babylon.js](https://img.shields.io/badge/Babylon.js-8.46-E0684B)](https://www.babylonjs.com/)
+[![Unity](https://img.shields.io/badge/Unity-6-000000?logo=unity)](https://unity.com/)
+[![DOTS](https://img.shields.io/badge/DOTS-Entities%201.3-blue)](https://docs.unity3d.com/Packages/com.unity.entities@1.3/)
+[![Build Status](https://img.shields.io/badge/Build-Passing-brightgreen)]()
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-[Play Demo](https://neo-tokyo.vercel.app) • [Documentation](./docs/) • [Roadmap](./docs/ROADMAP_1.0.md) • [Changelog](./CHANGELOG.md)
+[Documentation](./docs/) | [Roadmap](./docs/ROADMAP_1.0.md) | [Changelog](./CHANGELOG.md)
 
 </div>
 
 ---
 
-## 🎮 About
+## About
 
-**Neo-Tokyo: Rival Academies** is a web-based 3D Action JRPG where rival academies compete in the Midnight Exam. Navigate the Academy Gate Slums, complete procedurally generated quests, and choose your allegiance between the passion-driven Kurenai faction or the logic-based Azure faction.
+**Neo-Tokyo: Rival Academies** is a 3D Action JRPG where rival academies compete in the Midnight Exam. Navigate the Academy Gate Slums, complete procedurally generated quests, and choose your allegiance between the passion-driven Kurenai faction or the logic-based Azure faction.
 
 ### Key Features
 
-- **🗺️ Procedural World Generation** - Seeded RNG creates deterministic districts and quests
-- **⚔️ Strategic Combat** - Real-time combat with stat-based formulas (Damage, Critical, Hit/Evade)
-- **⚖️ Dual Faction System** - Kurenai vs Azure alignment affects stats, quests, and story
-- **📈 Deep Progression** - Level-based growth, equipment system, and quest rewards
-- **💾 Complete Persistence** - 4-slot save system with localStorage
-- **🎨 Cyberpunk Aesthetic** - Cel-shaded 3D graphics with scanline effects
+- **Procedural World Generation** - Seeded RNG creates deterministic districts and quests
+- **Strategic Combat** - Real-time combat with stat-based formulas (Damage, Critical, Hit/Evade)
+- **Dual Faction System** - Kurenai vs Azure alignment affects stats, quests, and story
+- **Deep Progression** - Level-based growth, equipment system, and quest rewards
+- **Complete Persistence** - Multi-slot save system
+- **Cyberpunk Aesthetic** - Cel-shaded 3D graphics with scanline effects
 
 ---
 
-## 🚀 Tech Stack
+## Tech Stack
 
 ### Core Technologies
-- **Frontend**: [Vite](https://vitejs.dev/) 7.3 + [React](https://react.dev/) 19.0
-- **3D Engine**: [Babylon.js](https://www.babylonjs.com/) 8.46.2 + [Reactylon](https://github.com/brianzinn/react-babylonjs) 3.5.2
-- **State Management**: [Zustand](https://github.com/pmndrs/zustand) 5.0
-- **Language**: [TypeScript](https://www.typescriptlang.org/) 5.9 (strict mode)
-- **Build Tool**: [Vite](https://vitejs.dev/) 7.3
-- **Package Manager**: [PNPM](https://pnpm.io/) 10.28
+
+| Technology | Version | Purpose |
+|------------|---------|---------|
+| **Unity** | 6.0 | Game Engine |
+| **Entities** | 1.3.5 | ECS Framework |
+| **Burst** | 1.8.18 | High-performance compilation |
+| **Jobs** | 0.70.2 | Multi-threaded job system |
+| **Collections** | 2.5.1 | Native containers |
+| **Mathematics** | 1.3.2 | SIMD math library |
 
 ### Architecture
-- **Monorepo**: PNPM Workspaces
-- **Game Logic**: Platform-agnostic `@neo-tokyo/core` package
-- **Rendering**: Babylon.js with imperative setup
-- **State**: Multiple Zustand stores (world, quest, alignment, player, combat)
+
+- **Data-Oriented Design** - Unity DOTS for high-performance gameplay
+- **Hybrid Workflow** - TypeScript dev tools generate JSON consumed by Unity runtime
+- **ECS Pattern** - Components (data) + Systems (logic) + Authoring (editor)
+- **Mobile First** - Android/iOS via Unity's build pipeline
 
 ### Development Tools
-- **Linter/Formatter**: [Biome](https://biomejs.dev/) 2.3
-- **Testing**: [Vitest](https://vitest.dev/) 4.0 (unit) + [Playwright](https://playwright.dev/) (e2e)
-- **Type Checking**: TypeScript strict mode
-- **CI/CD**: GitHub Actions (future)
+
+- **IDE**: JetBrains Rider / Visual Studio 2022
+- **Testing**: Unity Test Framework (EditMode + PlayMode)
+- **CI/CD**: GitHub Actions + GameCI
+- **Content Pipeline**: TypeScript CLI for procedural content generation
 
 ---
 
-## 🏗️ Project Structure
+## Project Structure
 
 ```
 neo-tokyo-rival-academies/
-├── packages/
-│   ├── core/                # @neo-tokyo/core - Platform-agnostic game logic
-│   │   ├── src/
-│   │   │   ├── systems/     # WorldGenerator, QuestGenerator, CombatSystem
-│   │   │   ├── state/       # Zustand stores (world, quest, alignment, player, combat)
-│   │   │   ├── types/       # TypeScript interfaces
-│   │   │   └── data/        # Quest grammar, district profiles
-│   │   └── package.json
+├── Assets/
+│   ├── Scripts/
+│   │   ├── Components/          # IComponentData structs
+│   │   │   ├── PlayerComponent.cs
+│   │   │   ├── EnemyComponent.cs
+│   │   │   ├── CombatStatsComponent.cs
+│   │   │   └── ...
+│   │   ├── Systems/             # ISystem implementations
+│   │   │   ├── MovementSystem.cs
+│   │   │   ├── CombatSystem.cs
+│   │   │   ├── QuestSystem.cs
+│   │   │   └── ...
+│   │   ├── Authoring/           # MonoBehaviour bakers
+│   │   │   ├── PlayerAuthoring.cs
+│   │   │   ├── EnemyAuthoring.cs
+│   │   │   └── ...
+│   │   ├── Aspects/             # Aspect definitions
+│   │   ├── Jobs/                # IJobEntity implementations
+│   │   └── Utilities/           # Helper classes
 │   │
-│   ├── game/                # Main web application
-│   │   ├── src/
-│   │   │   ├── components/
-│   │   │   │   ├── react/
-│   │   │   │   │   ├── babylon/     # Babylon.js scene components
-│   │   │   │   │   ├── ui/          # React UI components
-│   │   │   │   │   └── scenes/      # Game views (Menu, Intro, Game)
-│   │   │   ├── systems/     # SaveSystem
-│   │   │   ├── types/       # Game-specific types
-│   │   │   ├── utils/       # Utilities
-│   │   │   └── content/     # Story scripts, manifests
-│   │   ├── public/          # Static assets
-│   │   ├── dist/            # Build output
-│   │   ├── package.json
-│   │   └── vercel.json      # Deployment config
+│   ├── Scenes/
+│   │   ├── MainMenu.unity
+│   │   ├── GameWorld.unity
+│   │   └── SubScenes/           # Entity subscenes
 │   │
-│   ├── content-gen/         # Procedural content generation CLI (future)
-│   └── e2e/                 # End-to-end tests (future)
+│   ├── Resources/               # Runtime-loaded assets
+│   ├── StreamingAssets/         # JSON data from content-gen
+│   ├── Prefabs/                 # Entity prefabs
+│   ├── Materials/               # Cel-shaded materials
+│   ├── Shaders/                 # Custom shaders
+│   └── Tests/
+│       ├── EditMode/            # Editor tests
+│       └── PlayMode/            # Runtime tests
 │
-├── docs/                    # Documentation
-│   ├── GOLDEN_RECORD_MASTER.md
-│   ├── ROADMAP_1.0.md
-│   ├── MOBILE_WEB_GUIDE.md
+├── Packages/
+│   └── manifest.json            # Unity package dependencies
+│
+├── packages/                    # TypeScript dev tools
+│   └── content-gen/             # Procedural content CLI
+│
+├── docs/                        # Documentation
+│   ├── ARCHITECTURE.md
+│   ├── TECH_ARCHITECTURE.md
+│   ├── TESTING_STRATEGY.md
 │   └── ...
 │
-├── .github/                 # GitHub configuration
-├── TEST_PLAN.md             # Comprehensive test plan
-├── CHANGELOG.md             # Version history
-├── CLAUDE.md                # AI assistant context
-├── package.json             # Root workspace config
-├── pnpm-workspace.yaml      # Workspace definition
-└── README.md                # This file
+├── ProjectSettings/             # Unity project settings
+├── CHANGELOG.md
+├── CLAUDE.md
+└── README.md
 ```
 
 ---
 
-## 🛠️ Getting Started
+## Getting Started
 
 ### Prerequisites
 
-- **Node.js** 20+ (LTS recommended)
-- **PNPM** 10+ (`npm install -g pnpm`)
+- **Unity Hub** with Unity 6.0 installed
+- **Rider** or **Visual Studio 2022** with Unity support
 - **Git** 2.40+
+- **Node.js** 20+ (for content-gen tools)
 
 ### Installation
 
@@ -119,61 +134,64 @@ neo-tokyo-rival-academies/
 git clone https://github.com/arcade-cabinet/neo-tokyo-rival-academies.git
 cd neo-tokyo-rival-academies
 
-# Install dependencies
-pnpm install
+# Open in Unity Hub
+# 1. Open Unity Hub
+# 2. Click "Add" -> "Add project from disk"
+# 3. Select the neo-tokyo-rival-academies folder
+# 4. Open with Unity 6.0
 
-# Start development server
-pnpm dev
-
-# Open browser to http://localhost:4322/
+# Install content-gen dependencies (optional)
+cd packages/content-gen
+npm install
 ```
+
+### Running in Unity Editor
+
+1. Open the project in Unity 6
+2. Navigate to `Assets/Scenes/MainMenu.unity`
+3. Press Play in the Editor
 
 ### Build Commands
 
 ```bash
-# Development
-pnpm dev              # Start dev server (packages/game)
-pnpm build            # Build all packages
-pnpm test             # Run unit tests
-pnpm check            # Lint and format check
-pnpm check:fix        # Auto-fix linting/formatting
+# Build for Android
+# Unity Editor: File -> Build Settings -> Android -> Build
 
-# Package-specific
-pnpm --filter @neo-tokyo/core build
-pnpm --filter @neo-tokyo/game dev
-pnpm --filter @neo-tokyo/content-gen build
+# Build for iOS
+# Unity Editor: File -> Build Settings -> iOS -> Build
+
+# Run content generation (TypeScript tools)
+cd packages/content-gen
+npm run generate
 ```
 
 ---
 
-## 🎯 Game Systems
+## Game Systems
 
 ### World Generation
-- **DistrictManager** - Manages district loading/unloading
+- **DistrictManager** - Manages district loading/unloading via subscenes
 - **WorldGenerator** - Creates deterministic districts from master seed
 - **10 District Profiles** - Academy Gate Slums, Neon Spire, Chrome Gardens, etc.
-- **Seeded RNG** - Reproducible world generation with `seedrandom`
+- **Seeded RNG** - Reproducible world generation
 
 ### Quest System
-- **QuestGenerator** - Grammar-based procedural quest generation
+- **QuestSystem** - Grammar-based procedural quest generation
 - **100+ Grammar Entries** - Nouns, verbs, adjectives, landmarks
 - **Quest Clusters** - 1 main + 2 sides + 1 secret per district
 - **Alignment-Biased** - Quests shift toward Kurenai or Azure
 - **Rewards** - XP, credits, alignment shifts, items
 
-### Alignment & Reputation
+### Alignment and Reputation
 - **Dual Reputation Meters** - Kurenai (0-100) and Azure (0-100)
 - **Derived Alignment Scale** - (-1.0 to +1.0) = (Azure - Kurenai) / 100
-- **Stat Bonuses** - At ±0.6 threshold:
-  - Kurenai >60: +10% Ignition, +10% Flow
-  - Azure >60: +10% Structure, +10% Logic
+- **Stat Bonuses** - At threshold values, faction bonuses apply
 - **7 Alignment Labels** - Devotee, Leaning, Slightly, Neutral
 
 ### Combat System
-- **Real-Time Combat** - Strategic turn-based with stat formulas
+- **Real-Time Combat** - ECS-driven with stat formulas
 - **Damage Formula**: `max(1, floor(Ignition * 2 - Structure * 0.5))`
 - **Critical Chance**: `min(0.5, Ignition * 0.01)`
-- **Hit Chance**: `0.8 + (Flow - Flow) * 0.05`
 - **5 Enemy Types** - Street Thug, Scavenger, Elite Guard, Rogue AI, Boss
 - **5 Encounter Templates** - Street Patrol, Mixed Gang, Elite Patrol, AI Swarm, Boss Fight
 
@@ -182,214 +200,135 @@ pnpm --filter @neo-tokyo/content-gen build
 - **Auto-Leveling** - Stats increase by +2 per level automatically
 - **Credits Economy** - Earned from quests and combat
 - **Inventory System** - Weapons, accessories, consumables, key items
-- **Equipment Bonuses** - Stat modifiers from equipped items
-
-### Save/Load
-- **4 Save Slots** - 1 auto-save (slot 0) + 3 manual (slots 1-3)
-- **Complete State** - Player, alignment, quests, world, inventory
-- **LocalStorage Persistence** - Client-side only, no backend required
-- **Export/Import** - Backup saves as JSON
-- **Validation** - Type-safe save data with `validateSaveData()`
 
 ---
 
-## 🎨 UI Components
-
-### Main Menu
-- Title screen with mission briefing
-- "INITIATE STORY MODE" button
-- "ARCHIVES [LOCKED]" (deferred to v2.0)
-
-### Intro Narrative
-- 5-dialogue character introduction
-- Kai (Kurenai) vs Vera (Azure)
-- Character portraits
-- "MIDNIGHT EXAM INITIATED. GO!" trigger
-
-### Game HUD
-- **Quest Objective Panel** (top-right) - Current main quest
-- **Alignment Bar** (top-left) - Gradient visualization with dual meters
-- **Touch Controls** (bottom) - D-pad + action button
-- **Quest Log Button** (bottom-left) - "📋 Quests (Q)"
-
-### Quest Log
-- **Active Tab** - Shows all active quests with full details
-- **Completed Tab** - Historical quest list
-- **Quest Details** - Title, description, objective, location, rewards
-- **Quest Type Badges** - ⭐ Main, 📋 Side, ✨ Secret
-
-### Combat Arena
-- **HP Bars** - Player and enemy health visualization
-- **Target Selection** - Click to select enemy
-- **Action Buttons** - ⚔️ Attack, 🛡️ Defend
-- **Combat Log** - Real-time action feed
-- **Victory/Defeat** - Animated overlays with rewards
-
-### Inventory
-- **Grid Layout** - Visual item display
-- **Type Filter** - Weapon, Accessory, Consumable, Key Item
-- **Item Details** - Stats, description, quantity
-- **Actions** - Equip, Use, Drop
-
-### Save Slots
-- **Slot Metadata** - Level, Act, District, Playtime, Alignment, Timestamp
-- **Auto-Save** - Slot 0, updated automatically
-- **Manual Saves** - Slots 1-3, user-triggered
-- **Load/Save Modes** - Toggle between operations
-
----
-
-## 📝 Development Workflow
+## Development Workflow
 
 ### 1. Feature Development
+
 ```bash
 # Create feature branch
 git checkout -b feat/your-feature
 
-# Make changes in packages/core or packages/game
-# Follow TypeScript strict mode (no 'any')
-# Use Biome for formatting
+# Make changes in Assets/Scripts/
+# Follow C# coding conventions
+# Use DOTS patterns (Components, Systems, Jobs)
 
 # Test your changes
-pnpm --filter @neo-tokyo/core test
-pnpm --filter @neo-tokyo/game build
+# Unity Editor: Window -> General -> Test Runner
+# Run EditMode and PlayMode tests
 
 # Commit with conventional commits
-git commit -m "feat(core): add new combat ability system"
+git commit -m "feat(combat): add new ability system"
 ```
 
 ### 2. Code Quality
-```bash
-# Lint and format
-pnpm check:fix
 
-# Type check
-pnpm --filter @neo-tokyo/core build
-pnpm --filter @neo-tokyo/game build
-
-# Run tests
-pnpm test
-```
+- Use Rider/VS analyzers for code quality
+- Follow Unity DOTS best practices
+- Ensure Burst compatibility for performance-critical code
+- Run tests before committing
 
 ### 3. Pull Request
-- Create PR to `release/1.0` or `main`
+
+- Create PR to `main`
 - Fill out PR template
-- Wait for CI checks (if configured)
+- Wait for CI checks (GameCI)
 - Request review
 
 ---
 
-## 🚢 Deployment
+## Building for Mobile
 
-### Vercel (Recommended)
+### Android
 
-```bash
-# Install Vercel CLI
-npm i -g vercel
+1. Open Unity Editor
+2. File -> Build Settings
+3. Select Android platform
+4. Configure Player Settings (package name, version, etc.)
+5. Click Build or Build and Run
 
-# Deploy from packages/game
-cd packages/game
-vercel --prod
+Requirements:
+- Android SDK installed via Unity Hub
+- Minimum API Level: 26 (Android 8.0)
+- Target API Level: 34 (Android 14)
 
-# Or use Vercel GitHub integration
-# Connect repository at https://vercel.com/new
-```
+### iOS
 
-### Netlify
+1. Open Unity Editor
+2. File -> Build Settings
+3. Select iOS platform
+4. Configure Player Settings (bundle ID, version, etc.)
+5. Click Build
+6. Open generated Xcode project
+7. Build and run from Xcode
 
-```bash
-# Build command: pnpm --filter @neo-tokyo/game build
-# Publish directory: packages/game/dist
-# Node version: 20
-
-# Deploy
-npx netlify-cli deploy --prod
-```
-
-### Manual/Custom Server
-
-```bash
-# Build production bundle
-pnpm build
-
-# Serve packages/game/dist with any static host
-# Ensure fallback to index.html for SPA routing
-```
+Requirements:
+- macOS with Xcode installed
+- Apple Developer account for device deployment
 
 ---
 
-## 🧪 Testing
+## Testing
 
-### Unit Tests (Vitest)
 ```bash
-# Run all tests
-pnpm test
+# Run all tests from Unity Editor
+# Window -> General -> Test Runner
 
-# Watch mode
-pnpm --filter @neo-tokyo/core test:watch
+# EditMode tests (fast, no Play mode required)
+# Tests/EditMode/
 
-# Coverage
-pnpm test --coverage
+# PlayMode tests (requires Play mode)
+# Tests/PlayMode/
+
+# CI runs tests via GameCI
 ```
 
-### E2E Tests (Playwright - Future)
-```bash
-# Install Playwright
-pnpm --filter @neo-tokyo/e2e playwright install
-
-# Run E2E tests
-pnpm --filter @neo-tokyo/e2e test
-```
-
-### Manual Testing
-- See [TEST_PLAN.md](./TEST_PLAN.md) for comprehensive test cases
-- 33 test scenarios covering all game systems
-- Critical path defined for v1.0 release
+See [TESTING_STRATEGY.md](./docs/TESTING_STRATEGY.md) for comprehensive test documentation.
 
 ---
 
-## 📚 Documentation
+## Documentation
 
-- **[GOLDEN_RECORD_MASTER.md](./docs/GOLDEN_RECORD_MASTER.md)** - Master design document
-- **[ROADMAP_1.0.md](./docs/ROADMAP_1.0.md)** - 10-week development sprint
-- **[MOBILE_WEB_GUIDE.md](./docs/MOBILE_WEB_GUIDE.md)** - Mobile-first constraints
+- **[ARCHITECTURE.md](./docs/ARCHITECTURE.md)** - System architecture and data flow
+- **[TECH_ARCHITECTURE.md](./docs/TECH_ARCHITECTURE.md)** - Unity 6 DOTS stack details
+- **[TESTING_STRATEGY.md](./docs/TESTING_STRATEGY.md)** - Testing framework and strategy
+- **[ROADMAP_1.0.md](./docs/ROADMAP_1.0.md)** - Development roadmap
 - **[CLAUDE.md](./CLAUDE.md)** - AI assistant context and guidelines
 - **[CHANGELOG.md](./CHANGELOG.md)** - Version history
-- **[TEST_PLAN.md](./TEST_PLAN.md)** - Comprehensive testing strategy
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome! Please read [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines.
 
 ### Development Principles
-1. **Mobile First** - All features must run at 30+ FPS on Pixel 8a
-2. **Zero Stubs** - Fully implement logic, no placeholders
-3. **Strict Types** - No `any` types, comprehensive interfaces
-4. **Platform Agnostic** - Core logic has no rendering dependencies
-5. **Monorepo Awareness** - Use `pnpm --filter` for package-specific commands
+
+1. **Mobile First** - All features must run at 60 FPS on mid-range devices
+2. **DOTS Patterns** - Use ECS, Jobs, and Burst for performance
+3. **Zero Stubs** - Fully implement logic, no placeholders
+4. **Strict Types** - No `object` or `dynamic` types
+5. **Burst Compatible** - Performance-critical code must be Burst-compiled
 
 ---
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see [LICENSE](./LICENSE) for details.
 
 ---
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
-- **Babylon.js** - Powerful 3D engine
-- **React** - UI framework
-- **Zustand** - Elegant state management
-- **Vite** - Lightning-fast build tool
-- **PNPM** - Efficient package manager
+- **Unity Technologies** - Unity 6 and DOTS framework
+- **GameCI** - CI/CD for Unity projects
 - **Claude Code** - AI pair programmer
 
 ---
 
-## 📬 Contact
+## Contact
 
 - **GitHub**: [@arcade-cabinet](https://github.com/arcade-cabinet)
 - **Issues**: [GitHub Issues](https://github.com/arcade-cabinet/neo-tokyo-rival-academies/issues)
@@ -399,8 +338,8 @@ This project is licensed under the MIT License - see [LICENSE](./LICENSE) for de
 
 <div align="center">
 
-**Built with ❤️ by the Arcade Cabinet team**
+**Built by the Arcade Cabinet team**
 
-⭐ Star this repo if you find it useful!
+Star this repo if you find it useful!
 
 </div>

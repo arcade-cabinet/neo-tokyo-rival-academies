@@ -1,6 +1,6 @@
-# Project Evolution: Platformer to JRPG
+# Project Evolution: Platformer to JRPG to Unity 6
 
-This document captures the **chronological evolution** of Neo-Tokyo: Rival Academies from its origins as a 3D platformer to its current state as a 3D Action JRPG. This history was extracted from Jules AI development sessions.
+This document captures the **chronological evolution** of Neo-Tokyo: Rival Academies from its origins as a 3D platformer through its transformation to a 3D Action JRPG, and finally to its current Unity 6 DOTS implementation.
 
 ---
 
@@ -28,8 +28,15 @@ Jan 15, 2026    SYSTEMS REFINEMENT
     ├── GenAI pipeline (Meshy AI)
     ├── 9 characters generated
     │
+Jan 17-25, 2026 UNITY 6 MIGRATION ★
+    │
+    ├── Full migration to Unity 6 DOTS
+    ├── 25+ systems implemented in C#
+    ├── TypeScript runtime archived
+    ├── Dev tools preserved (content-gen, e2e)
+    │
     ↓
-CURRENT STATE (Isometric Diorama JRPG)
+CURRENT STATE (Unity 6 DOTS Action JRPG)
 ```
 
 ---
@@ -291,84 +298,172 @@ with defined bridge, distinct naturally shaped lips.
 
 ---
 
+## Phase 5: Unity 6 Migration (January 17-25, 2026)
+
+**The Pivotal Decision**
+
+After evaluating the TypeScript/Babylon.js stack's limitations (particularly navigation mesh support and mobile performance), the decision was made to migrate to Unity 6 with DOTS.
+
+### Migration Timeline
+
+| Date | Milestone |
+|------|-----------|
+| Jan 17, 2026 | Unity 6 project scaffold created |
+| Jan 18-19, 2026 | Component hierarchy designed and implemented |
+| Jan 20-22, 2026 | Core systems ported (Combat, AI, Progression) |
+| Jan 23-24, 2026 | World systems implemented (Hex, Territory, Water) |
+| Jan 25, 2026 | CI/CD integration; TypeScript runtime archived |
+
+### What Was Migrated
+
+**From TypeScript to Unity C#:**
+
+| TypeScript Pattern | Unity Pattern |
+|-------------------|---------------|
+| `ECSEntity` type | `Entity` struct |
+| `world.add(entity, component)` | `ecb.AddComponent<T>(entity)` |
+| `useQuery<T>()` | `SystemAPI.Query<T>()` |
+| `createSystem()` | `partial struct : ISystem` |
+| `Zustand store` | `ScriptableObject` or DOTS singleton |
+| `useFrame()` | `OnUpdate(ref SystemState)` |
+| `<mesh>` JSX | Unity Prefab |
+
+### What Was Preserved
+
+TypeScript development tools remain active for build-time content generation:
+
+| Tool | Purpose | Status |
+|------|---------|--------|
+| `dev-tools/content-gen` | Meshy/Gemini asset generation | ACTIVE |
+| `dev-tools/e2e` | Playwright E2E tests | ACTIVE |
+| `dev-tools/types` | Shared type definitions | ACTIVE |
+
+### Why Unity 6?
+
+1. **DOTS Performance**: Burst-compiled systems for mobile 60 FPS
+2. **Navigation**: Built-in AI Navigation package
+3. **Native Builds**: Direct iOS/Android builds without Capacitor wrapper
+4. **Mature Tooling**: Profiler, debugging, asset management
+5. **Physics**: Unity Physics with Havok backend option
+
+---
+
 ## Current Architecture (January 2026)
 
-### Isometric Diorama View
+### Unity 6 DOTS Structure
 
-The final prototype direction chose the **Isometric Diorama** approach over the alternative "Cinematic Side-Scroll":
-
-```tsx
-// IsometricScene.tsx structure
-<ReactylonProvider>
-  <Canvas>
-    <Scene>
-      <HemisphericLight />
-      <IsometricCamera />
-      <HexTileGrid radius={10} tileSize={1.0} />
-      <BackgroundPanels />
-      <KaiCharacter />
-    </Scene>
-  </Canvas>
-</ReactylonProvider>
+```csharp
+// System example (CombatSystem.cs)
+[BurstCompile]
+[UpdateInGroup(typeof(SimulationSystemGroup))]
+public partial struct CombatSystem : ISystem
+{
+    [BurstCompile]
+    public void OnUpdate(ref SystemState state)
+    {
+        foreach (var (health, damageBuffer, entity) in
+            SystemAPI.Query<RefRW<Health>, DynamicBuffer<DamageEvent>>()
+                .WithEntityAccess())
+        {
+            // Process damage events
+        }
+    }
+}
 ```
 
-### Hex Grid System
+### Implemented Systems (25+)
 
-Implemented comprehensive hex utilities from Red Blob Games research:
-- **Coordinate Systems**: Axial (q,r), Cube (q,r,s), Offset (col,row)
-- **Algorithms**: Distance, neighbors, rings, pathfinding
-- **Rendering**: Instanced meshes with texture variety
+| Category | Systems |
+|----------|---------|
+| **Combat** | CombatSystem, HitDetectionSystem, BreakSystem, HazardSystem, ArenaSystem, WaterCombatSystem, CombatLogicSystem |
+| **AI** | AIStateMachineSystem, ThreatSystem, SteeringSystem, CrowdSystem, EnemyAISystem, SwarmCoordinationSystem, PerceptionSystem, TentacleSwarmSystem |
+| **Progression** | ReputationSystem, ProgressionSystem, AlignmentBonusSystem, AlignmentGateSystem, StatAllocationSystem |
+| **World** | HexGridSystem, TerritorySystem, WaterSystem, WeatherSystem, BoatSystem, StageSystem, ManifestSpawnerSystem, ProceduralGenerationSystem |
+| **Other** | AbilitySystem, NavigationSystem, EquipmentSystem, DialogueSystem, QuestSystem, QuestGeneratorSystem, SaveSystem |
 
-### Technology Stack (Final)
+### Technology Stack (Current)
 
 | Layer | Technology | Status |
 |-------|------------|--------|
-| **Build** | Vite 6.x | Working |
-| **3D Engine** | Three.js 0.182 | Working |
-| **React Binding** | React Three Fiber 9.x | Working |
-| **Physics** | Rapier (react-three-rapier) | Working |
-| **ECS** | Miniplex | Working |
-| **State** | Zustand | Working |
-| **GenAI** | Meshy AI | Fully integrated |
-| **Mobile** | Capacitor 8 | Configured |
+| **Engine** | Unity 6000.3.5f1 | Active |
+| **ECS** | Unity Entities 1.3.x | Active |
+| **Compiler** | Burst 1.8.x | Active |
+| **Rendering** | URP | Active |
+| **Physics** | Unity Physics | Active |
+| **Navigation** | AI Navigation | Active |
+| **Input** | Input System | Active |
+| **Build Tools** | TypeScript (content-gen) | Active |
+| **Testing** | NUnit + Playwright | Active |
 
 ---
 
 ## Lessons Learned
 
 ### What Worked Well
-1. **ECS Architecture**: Miniplex enabled clean separation of rendering and logic
-2. **Declarative Pipelines**: JSON-based GenAI definitions are resumable and idempotent
-3. **Dual Prototype Strategy**: Testing both perspectives before committing
+1. **ECS Architecture**: Both Miniplex (TypeScript) and DOTS (Unity) enabled clean separation
+2. **Declarative Pipelines**: JSON-based GenAI definitions survived the migration unchanged
+3. **Hybrid Approach**: TypeScript for content generation + Unity for runtime
+4. **Documentation**: Comprehensive docs made migration smoother
 
 ### What Could Be Improved
-1. **Documentation**: Development history was scattered across AI sessions
-2. **Testing**: Test coverage lagged behind feature development
-3. **Asset Organization**: Initial manifest structure needed iteration
+1. **Earlier Unity Evaluation**: Navigation needs should have been identified sooner
+2. **Testing During Migration**: Some tests needed rewriting
+3. **Asset Format**: Some Babylon.js-specific assets needed conversion
 
 ### Future Considerations
-1. **Babylon.js Migration**: Under evaluation for navigation mesh support
-2. **Multiplayer**: Original competitive modes still in roadmap
-3. **Voice Acting**: LLM-generated dialogue could be voiced
+1. **Multiplayer**: Original competitive modes still in roadmap
+2. **Voice Acting**: LLM-generated dialogue could be voiced
+3. **Procedural Generation**: Full 10-territory generation system
 
 ---
 
-## Jules Sessions Reference
+## Development Sessions Reference
+
+### Jules AI Sessions (TypeScript Era)
 
 | Session ID | Description | Date | Status |
 |------------|-------------|------|--------|
-| `12852271386532315666` | POC.html → Initial build | Jan 13 | Paused |
-| `107803072628449215` | JRPG transformation | Jan 14 | Planning |
-| `7166703209184058505` | CollectibleSystem | Jan 15 | Completed |
-| `9325261586465291625` | Limb refactor | Jan 15 | Completed |
-| `15231540528192839108` | Performance opt 1 | Jan 15 | Completed |
-| `6650948937526831592` | Performance opt 2 | Jan 15 | Completed |
-| `2580391778710306181` | Performance opt 3 | Jan 15 | Completed |
-| `4817043573452165920` | Performance opt 4 | Jan 15 | Completed |
-| `12152494961931594197` | Gemini CLI clone | Jan 15 | Completed |
+| `12852271386532315666` | POC.html - Initial build | Jan 13 | Archived |
+| `107803072628449215` | JRPG transformation | Jan 14 | Archived |
+| `7166703209184058505` | CollectibleSystem | Jan 15 | Archived |
+| `9325261586465291625` | Limb refactor | Jan 15 | Archived |
+| `15231540528192839108` | Performance opt 1 | Jan 15 | Archived |
+| `6650948937526831592` | Performance opt 2 | Jan 15 | Archived |
+| `2580391778710306181` | Performance opt 3 | Jan 15 | Archived |
+| `4817043573452165920` | Performance opt 4 | Jan 15 | Archived |
+| `12152494961931594197` | Gemini CLI clone | Jan 15 | Archived |
+
+### Unity 6 Migration (January 2026)
+
+| Milestone | Description | Date | Status |
+|-----------|-------------|------|--------|
+| Project Setup | Unity 6 + DOTS packages | Jan 17 | Complete |
+| Architecture | Component/System hierarchy | Jan 18-19 | Complete |
+| Combat Systems | CombatSystem, HitDetection, Break | Jan 20 | Complete |
+| AI Systems | AIStateMachine, Threat, Steering | Jan 21 | Complete |
+| Progression | Reputation, Alignment, Stats | Jan 22 | Complete |
+| World Systems | Hex, Territory, Water, Weather | Jan 23-24 | Complete |
+| CI/CD | GitHub Actions integration | Jan 25 | Complete |
+| Archive | TypeScript runtime archived | Jan 25 | Complete |
 
 ---
 
-This document was generated from Jules AI session history on 2026-01-15.
+## Archived Code Location
 
-Last Updated: 2026-01-16
+The TypeScript runtime has been preserved for reference:
+
+```
+_reference/typescript-runtime/
+├── packages/
+│   ├── game/          # Original Babylon.js game
+│   ├── playground/    # Prototype components
+│   └── core/          # Shared logic
+├── src/               # Original source
+└── README.md          # Archive notes
+```
+
+---
+
+This document was generated from development session history.
+
+Last Updated: 2026-01-26

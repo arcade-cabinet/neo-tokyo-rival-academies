@@ -1,7 +1,9 @@
 # Neo-Tokyo: Rival Academies - Master Design Plan
 
+> **Updated**: January 26, 2026 | **Platform**: Unity 6 DOTS
+
 ## 1. Vision Statement
-A high-fidelity 3D Action-JRPG set in a cyberpunk Neo-Tokyo. The game combines the narrative depth of Persona with the kinetic platforming of Prince of Persia, rendered in a beautiful **Isometric Diorama** or **Cinematic Side-Scroll** style (TBD via prototype).
+A high-fidelity 3D Action-JRPG set in a flooded Neo-Tokyo. The game combines the narrative depth of Persona with kinetic combat and exploration, rendered in a beautiful **Isometric** style with Unity 6's URP rendering.
 
 **Core Pillars:**
 *   **Production Quality:** No placeholders. High-quality GLB assets, rigorous animations, and polished UI.

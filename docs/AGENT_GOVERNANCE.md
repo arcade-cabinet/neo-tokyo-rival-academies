@@ -1,5 +1,7 @@
 # Agent Governance & Workflow
 
+> **Updated**: January 26, 2026 | **Platform**: Unity 6 DOTS
+
 **Purpose**: Define how AI agents and human developers coordinate using GitHub to ensure the "Golden Record" is executed accurately.
 
 ## 1. The GitHub Project Board
@@ -40,8 +42,9 @@ All work MUST be tracked on the **Neo-Tokyo: Rival Academies** GitHub Project bo
   - Verification: How was this tested? (e.g., "Ran unit tests", "Manual playtest on Pixel 8a").
   - Linked Issue.
 - **Checks**:
-  - CI must pass (`pnpm test`, `pnpm check`).
-  - No new linter errors.
+  - CI must pass (Unity EditMode tests, PlayMode tests).
+  - No compile errors or warnings.
+  - See `.github/workflows/unity-tests.yml` for CI configuration.
 
 ## 4. Documentation First
 

@@ -1,6 +1,20 @@
 # Physical Testing Checklist
 
+> **Updated**: January 26, 2026 | **Platform**: Unity 6 Native Builds
 > **Purpose**: Define mandatory device testing gates for each development phase.
+
+## Build Instructions
+
+```bash
+# Android APK (debug)
+Unity -batchmode -buildTarget Android -executeMethod BuildScript.BuildAndroid
+
+# Android APK (release)
+Unity -batchmode -buildTarget Android -executeMethod BuildScript.BuildAndroidRelease
+
+# Install to device
+adb install -r Builds/Android/NeoTokyo.apk
+```
 
 ## Target Devices
 

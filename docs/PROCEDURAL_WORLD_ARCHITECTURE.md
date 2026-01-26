@@ -1,8 +1,39 @@
 # Procedural World Architecture
 
 **Date**: January 19, 2026
+**Updated**: January 26, 2026
+**Status**: IMPLEMENTED in Unity 6 DOTS
 **Purpose**: Comprehensive technical specification for Daggerfall-scale procedural world generation
 **Baseline**: The Elder Scrolls II: Daggerfall (1996) via Daggerfall Unity
+
+---
+
+## Unity 6 Implementation Overview
+
+### Key Files
+
+```
+Assets/Scripts/Systems/Procedural/
+├── ProceduralGenerationSystem.cs  # Main generation orchestrator
+├── StreamingWorldSystem.cs        # Region loading/unloading
+├── BlockAssemblySystem.cs         # RTB/SRB/WTB block instantiation
+└── Components/
+    ├── SeedComponents.cs          # WorldSeed, RegionSeed, DerivedSeed
+    ├── SeedHelpers.cs             # Deterministic seed utilities
+    ├── RegionComponents.cs        # LoadedRegion, RegionState
+    └── BlockComponents.cs         # RTBBlock, SRBBlock, WTBBlock
+```
+
+### Architecture Summary
+
+The Daggerfall-inspired architecture has been fully implemented in Unity 6 DOTS:
+
+| Daggerfall Concept | Unity Implementation |
+|--------------------|---------------------|
+| Streaming World | `StreamingWorldSystem.cs` with floating origin compensation |
+| RMB/RDB Blocks | RTB/SRB/WTB blocks in `BlockAssemblySystem.cs` |
+| Seed-based NPCs | `NPCGenerationSystem.cs` with deterministic generation |
+| Quest Templates | `QuestGeneratorSystem.cs` with grammar tables |
 
 ---
 
@@ -313,9 +344,40 @@ const block = selectAsset(pool.blocks.rtb, blockSeed, {
 
 ## Part 4: Streaming World Implementation
 
-### 4.1 Babylon.js Streaming Architecture
+> **Note**: The Babylon.js architecture below has been migrated to Unity 6. See `StreamingWorldSystem.cs` for the DOTS implementation.
+
+### 4.1 Unity 6 Streaming Architecture
+
+```csharp
+// StreamingWorldSystem.cs - Unity DOTS implementation
+public partial class StreamingWorldSystem : SystemBase {
+    private NativeHashMap<int2, Entity> _loadedRegions;
+    private float3 _worldOffset;
+    private const float REBASE_THRESHOLD = 10000f;
+    private const int LOAD_DISTANCE = 4;
+
+    protected override void OnUpdate() {
+        var playerPos = SystemAPI.GetSingleton<PlayerPosition>().Value;
+
+        // Floating origin compensation
+        if (math.length(playerPos) > REBASE_THRESHOLD) {
+            RebaseOrigin(playerPos);
+        }
+
+        // Determine needed regions
+        var currentRegion = WorldToRegion(playerPos);
+        var neededRegions = GetRegionsInRange(currentRegion, LOAD_DISTANCE);
+
+        // Unload distant, load new (async via jobs)
+        ScheduleRegionUpdates(neededRegions);
+    }
+}
+```
+
+### 4.1b Original Babylon.js Design (Reference)
 
 ```typescript
+// DEPRECATED - See Unity implementation above
 class StreamingWorld {
   private loadedRegions: Map<string, LoadedRegion>;
   private playerPosition: Vector3;
@@ -869,44 +931,46 @@ TARGET LOADING TIMES:
 
 ## Part 9: Implementation Phases
 
-### Phase 1: Foundation (Weeks 1-4)
-- [ ] Implement streaming world architecture
-- [ ] Create coordinate system and conversion functions
-- [ ] Build basic RTB block loading from GLB
-- [ ] Implement floating origin compensation
-- [ ] Create water plane system
+> **Status Update (January 2026)**: Core systems implemented in Unity 6 DOTS.
 
-### Phase 2: Asset Pipeline (Weeks 5-8)
-- [ ] Define GenAI prompt templates for blocks
-- [ ] Generate initial seed pool (1,000 blocks)
-- [ ] Build asset manifest compiler
-- [ ] Implement deterministic asset selection
-- [ ] Create LOD system
+### Phase 1: Foundation (Weeks 1-4) - COMPLETE
+- [x] Implement streaming world architecture (`StreamingWorldSystem.cs`)
+- [x] Create coordinate system and conversion functions (`SeedHelpers.cs`)
+- [x] Build basic RTB block loading (`BlockAssemblySystem.cs`)
+- [x] Implement floating origin compensation
+- [x] Create water plane system (`WaterSystem.cs`)
 
-### Phase 3: World Generation (Weeks 9-12)
-- [ ] Implement region type determination
-- [ ] Build block layout generator
-- [ ] Create NavMesh compilation
-- [ ] Implement faction territory system
-- [ ] Add climate/weather variation
+### Phase 2: Asset Pipeline (Weeks 5-8) - COMPLETE
+- [x] Define GenAI prompt templates for blocks
+- [x] Generate initial seed pool (1,000 blocks)
+- [x] Build asset manifest compiler
+- [x] Implement deterministic asset selection (`SeedHelpers.cs`)
+- [x] Create LOD system
 
-### Phase 4: NPC System (Weeks 13-16)
-- [ ] Build seed-based NPC generation
-- [ ] Implement scheduling system
-- [ ] Create state persistence for interacted NPCs
-- [ ] Add dialogue system integration
-- [ ] Build faction reputation system
+### Phase 3: World Generation (Weeks 9-12) - COMPLETE
+- [x] Implement region type determination
+- [x] Build block layout generator (`ProceduralGenerationSystem.cs`)
+- [x] Create NavMesh compilation
+- [x] Implement faction territory system (`TerritoryComponents.cs`)
+- [x] Add climate/weather variation (`WaterSystem.cs`)
 
-### Phase 5: Quest Integration (Weeks 17-20)
-- [ ] Implement quest template system
-- [ ] Build procedural quest generation
-- [ ] Create location reference resolution
-- [ ] Add quest state persistence
-- [ ] Integrate with NPC dialogue
+### Phase 4: NPC System (Weeks 13-16) - COMPLETE
+- [x] Build seed-based NPC generation
+- [x] Implement scheduling system
+- [x] Create state persistence for interacted NPCs
+- [x] Add dialogue system integration
+- [x] Build faction reputation system (`AlignmentGateSystem.cs`)
 
-### Phase 6: Multi-City (Weeks 21-24)
-- [ ] Implement inter-city ferry system
-- [ ] Create city transition loading
+### Phase 5: Quest Integration (Weeks 17-20) - COMPLETE
+- [x] Implement quest template system (`QuestComponents.cs`)
+- [x] Build procedural quest generation (`QuestGeneratorSystem.cs`)
+- [x] Create location reference resolution
+- [x] Add quest state persistence
+- [x] Integrate with NPC dialogue
+
+### Phase 6: Multi-City (Weeks 21-24) - IN PROGRESS
+- [x] Implement inter-city ferry system (`BoatSystem.cs`)
+- [x] Create city transition loading
 - [ ] Add city-specific variations
 - [ ] Build trade/economy between cities
 - [ ] Polish and optimize
@@ -1084,4 +1148,4 @@ This approach:
 
 ---
 
-Last Updated: 2026-01-19
+Last Updated: 2026-01-26

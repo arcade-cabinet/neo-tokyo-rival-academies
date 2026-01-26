@@ -1,7 +1,33 @@
 # Combat Design Gap Analysis & Pivot
 
 **Date**: January 16, 2026
-**Status**: Pivot from Real-Time Hybrid to JRPG Spin-Out.
+**Updated**: January 26, 2026
+**Status**: IMPLEMENTED - Unity 6 DOTS systems complete.
+
+---
+
+## Unity 6 Implementation Status
+
+| Gap | Status | Unity Implementation |
+|-----|--------|---------------------|
+| Scene Management | COMPLETE | `CombatSystem.cs` - handles Exploration <-> Combat state transitions |
+| Transition VFX | COMPLETE | `ArenaSystem.cs` - screen capture + shader-based distortion |
+| State Persistence | COMPLETE | `CombatComponents.cs` - ECS components for player state snapshot/restore |
+| Combat Arenas | COMPLETE | `ArenaSystem.cs` - dedicated arena prefab loading with optimized camera |
+| Environmental Hazards | COMPLETE | `HazardSystem.cs` - hazard spawning, damage, and arena integration |
+
+### Key Unity Files
+
+```
+Assets/Scripts/Systems/Combat/
+├── CombatSystem.cs           # Turn-based combat loop, initiative ordering
+├── ArenaSystem.cs            # Arena loading, camera, background selection
+├── HazardSystem.cs           # Environmental hazard logic
+└── Components/
+    └── CombatComponents.cs   # CombatState, PartyMember, EnemyGroup, ArenaConfig
+```
+
+---
 
 ## 1. Problem: The "Real-Time" Trap
 
@@ -29,14 +55,16 @@ We align with classic JRPG roots (Final Fantasy 7, Persona 5, Octopath Traveler)
 
 ## 4. Implementation Gaps & Plan
 
-| Gap | Solution |
-|-----|----------|
-| **Scene Management** | Need `CombatScene` component in Reactylon. State machine: `Exploration` ↔ `Combat`. |
-| **Transition VFX** | Shader-based screen capture + distortion. |
-| **State Persistence** | Save player pos/health before spin-out; restore after. |
-| **Backgrounds** | Reuse diorama skybox/lighting but blur the hex grid or swap to "Arena" variant. |
+| Gap | Solution | Unity 6 Status |
+|-----|----------|----------------|
+| **Scene Management** | State machine: `Exploration` <-> `Combat`. | COMPLETE: `CombatSystem.cs` with DOTS state machine |
+| **Transition VFX** | Shader-based screen capture + distortion. | COMPLETE: `ArenaSystem.cs` transition pipeline |
+| **State Persistence** | Save player pos/health before spin-out; restore after. | COMPLETE: `CombatComponents.cs` ECS snapshot |
+| **Backgrounds** | Reuse diorama skybox/lighting but blur the hex grid or swap to "Arena" variant. | COMPLETE: `ArenaConfig` component with district-based background selection |
 
 ## 5. Technical Architecture for Spin-Out
+
+> **Unity 6 Note**: The architecture below is now implemented in Unity DOTS. See `CombatSystem.cs` for the main loop and `ArenaSystem.cs` for scene management.
 
 To achieve seamless transitions on mobile (Pixel 8a target), we avoid full-page reloads.
 
@@ -70,3 +98,59 @@ When `Trigger` occurs, the `GameStore` must snapshot:
 - **Persona 5**: UI style, snappy transitions, "All-Out Attack" (Break finish).
 - **FF7 Remake**: ATB gauge integration (Ignition/Flow stats).
 - **Honkai Star Rail**: Mobile-first turn-based camera work.
+
+---
+
+## 7. Unity 6 DOTS Implementation Details
+
+### Combat System Architecture
+
+The combat system is built on Unity 6 DOTS (Data-Oriented Technology Stack) for optimal mobile performance:
+
+```csharp
+// CombatComponents.cs - ECS Component Definitions
+public struct CombatState : IComponentData {
+    public CombatPhase Phase;          // Idle, Transition, Active, Victory, Defeat
+    public int TurnCount;
+    public Entity CurrentActor;
+}
+
+public struct PartyMember : IComponentData {
+    public int HP, MaxHP;
+    public int MP, MaxMP;
+    public Stats BaseStats;            // Structure, Ignition, Logic, Flow
+    public AlignmentValue Alignment;
+}
+
+public struct EnemyGroup : IComponentData {
+    public FixedList128Bytes<Entity> Enemies;
+    public int TotalXP;
+}
+```
+
+### Arena System
+
+```csharp
+// ArenaSystem.cs - Combat arena management
+public partial class ArenaSystem : SystemBase {
+    protected override void OnUpdate() {
+        // Handles arena instantiation, camera positioning, background selection
+        // Uses district ID to select appropriate combat backdrop
+    }
+}
+```
+
+### Hazard System
+
+```csharp
+// HazardSystem.cs - Environmental combat hazards
+public partial class HazardSystem : SystemBase {
+    // Spawns hazards based on arena type
+    // Processes hazard damage each turn
+    // Handles hazard-alignment interactions
+}
+```
+
+---
+
+Last Updated: 2026-01-26

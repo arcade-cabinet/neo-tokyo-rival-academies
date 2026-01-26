@@ -1,5 +1,42 @@
 # Combat & Progression System v1.0
 
+**Updated**: January 26, 2026
+**Status**: IMPLEMENTED in Unity 6 DOTS
+
+---
+
+## Unity 6 Implementation
+
+### Key Files
+
+```
+Assets/Scripts/Systems/Progression/
+├── ProgressionSystem.cs      # XP calculation, level-up processing
+├── StatAllocationSystem.cs   # Stat point distribution, alignment bonuses
+└── Components/
+    └── ProgressionComponents.cs  # Stats, Experience, LevelUp ECS components
+```
+
+### ECS Component Structure
+
+```csharp
+// Stats as ECS components for cache-friendly access
+public struct Stats : IComponentData {
+    public int Structure;   // HP, Defense
+    public int Ignition;    // Attack, Criticals
+    public int Logic;       // Skills, Special
+    public int Flow;        // Speed, Evasion
+}
+
+public struct Experience : IComponentData {
+    public int CurrentXP;
+    public int Level;
+    public int UnallocatedPoints;
+}
+```
+
+---
+
 ## Stats Design
 
 | Stat | Purpose | Feel |
@@ -45,11 +82,36 @@
    - **Combat Screen**: Dark alley/sewer.
    - **Hook**: Unique enemy variants.
 
-## Progression System (Zustand Store)
+## Progression System (Unity 6 DOTS)
 
-- **XP Curve**: `xpToNext = level * 500 + 500` (linear-ish, ~15–20 levels)
+> **Note**: Original Zustand store design has been migrated to Unity ECS. See `ProgressionSystem.cs` and `StatAllocationSystem.cs`.
+
+- **XP Curve**: `xpToNext = level * 500 + 500` (linear-ish, ~15-20 levels)
 - **Level-Up**: +4 points (choice) + 1 fixed (alignment bias)
 - **Inventory**: 12 slots, equip 1 weapon + 2 accessories.
+
+### Unity Implementation
+
+```csharp
+// ProgressionSystem.cs - XP and level processing
+public partial class ProgressionSystem : SystemBase {
+    protected override void OnUpdate() {
+        Entities.ForEach((ref Experience exp, in Stats stats) => {
+            int xpToNext = exp.Level * 500 + 500;
+            if (exp.CurrentXP >= xpToNext) {
+                exp.Level++;
+                exp.CurrentXP -= xpToNext;
+                exp.UnallocatedPoints += 4;
+            }
+        }).Schedule();
+    }
+}
+
+// StatAllocationSystem.cs - Point distribution with alignment bonus
+public partial class StatAllocationSystem : SystemBase {
+    // Applies alignment-based bonus point (+1 to Ignition/Flow for Kurenai, Logic/Structure for Azure)
+}
+```
 
 ## Item System (Alignment-Biased Drops)
 
@@ -62,3 +124,7 @@
 | Accessory  | Cursed Overgrowth Vine        | +Flow                       | Evasion +15%, risk of status debuff     | Kurenai       |
 | Consumable | Neon Adrenaline Shot          | Temp +Ignition              | Burst damage turn                       | Kurenai       |
 | Key Item   | Encrypted Passcode            | None                        | Progression unlock (elevator/door)      | Quest-specific|
+
+---
+
+Last Updated: 2026-01-26

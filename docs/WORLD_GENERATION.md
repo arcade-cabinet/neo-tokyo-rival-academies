@@ -1,7 +1,54 @@
 # World Generation System v2.0 (Flooded Neo-Tokyo)
 
 **Date**: January 19, 2026
+**Updated**: January 26, 2026
+**Status**: IMPLEMENTED in Unity 6 DOTS
 **Purpose**: Deterministic procedural generation for flooded rooftop territories
+
+---
+
+## Unity 6 Implementation
+
+### Key Files
+
+```
+Assets/Scripts/Systems/Procedural/
+├── ProceduralGenerationSystem.cs  # Main generation orchestrator
+└── Components/
+    ├── SeedComponents.cs          # WorldSeed, RegionSeed, DerivedSeed components
+    └── SeedHelpers.cs             # Deterministic seed combination utilities
+```
+
+### Seeded Generation in Unity
+
+```csharp
+// SeedComponents.cs
+public struct WorldSeed : IComponentData {
+    public uint Value;               // Master seed for entire world
+    public FixedString64Bytes Format; // "neo-tokyo-flooded-v2-alpha"
+}
+
+public struct RegionSeed : IComponentData {
+    public uint TerritorySeed;
+    public uint ConnectionSeed;
+    public uint PopulationSeed;
+    public uint QuestSeed;
+    public uint WeatherSeed;
+    public uint EventSeed;
+}
+
+// SeedHelpers.cs - Deterministic seed utilities
+public static class SeedHelpers {
+    public static uint CombineSeeds(uint seed1, uint seed2, string salt) {
+        // Mulberry32-based combination for reproducibility
+        return Hash32(seed1 ^ seed2 ^ StringToSeed(salt));
+    }
+
+    public static uint DeriveRegionSeed(uint masterSeed, int regionX, int regionY) {
+        return CombineSeeds(masterSeed, (uint)(regionX * 1000 + regionY), "region");
+    }
+}
+```
 
 ---
 
@@ -330,7 +377,10 @@ Example: "neo-tokyo-flooded-v2-alpha"
 
 ### Derived Seeds
 
+> **Note**: Original TypeScript implementation migrated to Unity. See `SeedHelpers.cs`.
+
 ```typescript
+// DEPRECATED - See Unity implementation in SeedHelpers.cs
 function deriveMasterSeeds(masterSeed: string): MasterSeeds {
   return {
     territorySeed: `${masterSeed}-territories`,
@@ -340,6 +390,27 @@ function deriveMasterSeeds(masterSeed: string): MasterSeeds {
     weatherSeed: `${masterSeed}-weather`,
     eventSeed: `${masterSeed}-events`,
   };
+}
+```
+
+### Unity Seed Derivation
+
+```csharp
+// ProceduralGenerationSystem.cs
+public partial class ProceduralGenerationSystem : SystemBase {
+    protected override void OnCreate() {
+        var masterSeed = SystemAPI.GetSingleton<WorldSeed>();
+
+        // Derive all subsystem seeds deterministically
+        var regionSeeds = new RegionSeed {
+            TerritorySeed = SeedHelpers.CombineSeeds(masterSeed.Value, 0, "territories"),
+            ConnectionSeed = SeedHelpers.CombineSeeds(masterSeed.Value, 0, "connections"),
+            PopulationSeed = SeedHelpers.CombineSeeds(masterSeed.Value, 0, "population"),
+            QuestSeed = SeedHelpers.CombineSeeds(masterSeed.Value, 0, "quests"),
+            WeatherSeed = SeedHelpers.CombineSeeds(masterSeed.Value, 0, "weather"),
+            EventSeed = SeedHelpers.CombineSeeds(masterSeed.Value, 0, "events"),
+        };
+    }
 }
 ```
 
@@ -423,4 +494,4 @@ function TerritoryTestScene() {
 
 ---
 
-Last Updated: 2026-01-19
+Last Updated: 2026-01-26

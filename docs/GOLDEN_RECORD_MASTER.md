@@ -1,8 +1,34 @@
-# Neo-Tokyo: Rival Academies - Golden Record v2.0
+# Neo-Tokyo: Rival Academies - Golden Record v2.1
 
-**Date**: January 19, 2026
+**Date**: January 26, 2026
 **Author**: Creative Realignment (Flooded World Pivot)
 **Purpose**: Complete, canonical spec for the Flooded Neo-Tokyo Action-JRPG
+
+---
+
+## UNITY 6 IMPLEMENTATION COMPLETE (January 2026)
+
+The game runtime has been **fully migrated to Unity 6 DOTS**. All core systems are now implemented in C# using the Entity Component System architecture.
+
+**Technical Documentation**: [UNITY_6_ARCHITECTURE.md](UNITY_6_ARCHITECTURE.md)
+
+### Implemented Systems (25+)
+
+| Category | Systems | Status |
+|----------|---------|--------|
+| **Combat** | CombatSystem, HitDetectionSystem, BreakSystem, HazardSystem, ArenaSystem, WaterCombatSystem | COMPLETE |
+| **AI** | AIStateMachineSystem, ThreatSystem, SteeringSystem, CrowdSystem, EnemyAISystem, SwarmCoordinationSystem, PerceptionSystem, TentacleSwarmSystem | COMPLETE |
+| **Progression** | ReputationSystem, ProgressionSystem, AlignmentBonusSystem, AlignmentGateSystem, StatAllocationSystem | COMPLETE |
+| **World** | HexGridSystem, TerritorySystem, WaterSystem, WeatherSystem, BoatSystem, StageSystem, ManifestSpawnerSystem, ProceduralGenerationSystem | COMPLETE |
+| **Other** | AbilitySystem, NavigationSystem, EquipmentSystem, DialogueSystem, QuestSystem, QuestGeneratorSystem, SaveSystem | COMPLETE |
+
+### TypeScript Dev Tools (Preserved)
+
+| Package | Purpose | Status |
+|---------|---------|--------|
+| `dev-tools/content-gen` | Meshy/Gemini asset generation | ACTIVE |
+| `dev-tools/e2e` | Playwright E2E tests | ACTIVE |
+| `dev-tools/types` | Shared type definitions | ACTIVE |
 
 ---
 
@@ -207,51 +233,64 @@ masterSeed → territorySeeds[] → connectionSeeds[] → populationSeeds[]
 
 ### Mobile-First (PRESERVED)
 - **Baseline**: Pixel 8a at 60 FPS
-- **Target**: PWA + Capacitor native wrapper
+- **Target**: Unity native builds (iOS/Android)
 - **Performance**: < 200MB memory, < 3.5s interactive
+
+### Unity 6 DOTS Architecture
+- **ECS**: Unity Entities 1.3.x with Burst compilation
+- **Rendering**: URP with custom shaders
+- **Physics**: Unity Physics
+- **Navigation**: AI Navigation package
+- **Input**: New Input System with touch support
 
 ### Rendering Approach (ADAPTED)
 - **NO NEON**: Power is scarce, displays wasteful
-- **Weathered Aesthetic**: Rust, water stains, patched materials
+- **Weathered Aesthetic**: Rust, water stains, patched materials (URP shaders)
 - **Natural Lighting**: Sunlight, overcast, lanterns, bonfires
-- **Water Shaders**: Murky, reflective, dynamic
+- **Water Shaders**: Murky, reflective, dynamic (WaterSystem integration)
 
 ### Asset Pipeline (PRESERVED)
-- Build-time GenAI via Meshy
+- Build-time GenAI via Meshy (TypeScript CLI)
 - Seeded deterministic generation
-- Manifest-driven asset loading
+- Manifest-driven asset loading (ManifestLoader -> ManifestSpawnerSystem)
 
 ---
 
-## Phase Roadmap (UPDATED)
+## Phase Roadmap (UPDATED - Post Unity 6 Migration)
 
-### Phase 1: Foundation (Current - Mar 31)
-- [x] Playground primitives (walls, floors, water, etc.)
-- [x] Neon removal (thematic alignment)
-- [ ] Territory factory implementation
-- [ ] Connection factory (bridges, boats)
-- [ ] Academy territory prototype
-- [ ] Hero spawn and movement
-- [ ] Basic combat arena
+### Phase 1: Foundation - COMPLETE (Jan 15-25, 2026)
+- [x] Unity 6 DOTS architecture implementation
+- [x] 25+ core systems (Combat, AI, Progression, World)
+- [x] Component hierarchy (see UNITY_6_ARCHITECTURE.md)
+- [x] CI/CD integration (GitHub Actions)
+- [x] TypeScript dev tools preserved (content-gen, e2e)
+- [x] ManifestLoader bridge (TypeScript -> Unity)
 
-### Phase 2: Story (Apr - Jun)
-- [ ] Kurenai Academy full territory
-- [ ] Azure Academy territory
-- [ ] Market Collective territory
-- [ ] Act 1 quest implementation
-- [ ] Vera introduction
-- [ ] Syndicate faction quests
+### Phase 2: Content & Gameplay (Feb - Mar 2026)
+- [ ] Kurenai Academy territory complete
+- [ ] Azure Academy territory complete
+- [ ] Quest system integration
+- [ ] Combat polish and balancing
+- [ ] Save/load system integration
+- [ ] Physical device testing (Pixel 8a)
 
-### Phase 3: Polish (Jul - Sep)
+### Phase 3: Story & Expansion (Apr - Jun 2026)
 - [ ] All 10 territories
 - [ ] Full 3-act story
-- [ ] Sound design (water ambience, etc.)
-- [ ] Weather systems
-- [ ] Save/load system
+- [ ] Vera rivalry arc
+- [ ] Multiple endings
+- [ ] Faction reputation consequences
 
-### Phase 4: Launch (Oct - Dec)
+### Phase 4: Polish (Jul - Sep 2026)
+- [ ] Sound design (water ambience, etc.)
+- [ ] Weather system visuals
+- [ ] Particle effects
 - [ ] Performance optimization
-- [ ] Mobile testing validation
+- [ ] Extended playtesting
+
+### Phase 5: Launch (Oct - Dec 2026)
+- [ ] App store submissions
+- [ ] Desktop release
 - [ ] Beta testing
 - [ ] Public release
 - [ ] Seed sharing features
@@ -262,17 +301,27 @@ masterSeed → territorySeeds[] → connectionSeeds[] → populationSeeds[]
 
 When implementing features:
 
-1. **Read** [FLOODED_WORLD.md](FLOODED_WORLD.md) for thematic guidance
-2. **Use** [PROCEDURAL_ARCHITECTURE.md](PROCEDURAL_ARCHITECTURE.md) for factory patterns
-3. **Preserve** narrative anchors (hero, rival, academies, factions)
-4. **Avoid** neon, clean tech, abundance - this is survival
-5. **Test** on physical devices (Pixel 8a baseline)
+1. **Read** [UNITY_6_ARCHITECTURE.md](UNITY_6_ARCHITECTURE.md) for technical patterns
+2. **Read** [FLOODED_WORLD.md](FLOODED_WORLD.md) for thematic guidance
+3. **Use** [PROCEDURAL_ARCHITECTURE.md](PROCEDURAL_ARCHITECTURE.md) for generation patterns
+4. **Preserve** narrative anchors (hero, rival, academies, factions)
+5. **Avoid** neon, clean tech, abundance - this is survival
+6. **Test** on physical devices (Pixel 8a baseline)
+7. **Follow** DOTS patterns: Components are data, Systems are logic
 
-### Key Files
-- `packages/playground/` - Primitive components for world building
-- `packages/game/` - Main game implementation
+### Key Files (Unity 6)
+- `Assets/Scripts/Components/` - ECS component definitions
+- `Assets/Scripts/Systems/` - DOTS systems (ISystem structs)
+- `Assets/Scripts/Authoring/` - GameObject -> Entity bakers
+- `Assets/Scripts/MonoBehaviours/` - UI, Input, Camera only
+- `Assets/Scripts/Data/` - Static data, manifest schemas
+- `dev-tools/content-gen/` - TypeScript asset generation CLI
+
+### Key Documentation
+- `docs/UNITY_6_ARCHITECTURE.md` - Technical architecture
 - `docs/FLOODED_WORLD.md` - World design bible
 - `docs/PROCEDURAL_ARCHITECTURE.md` - Generation patterns
+- `docs/DEPRECATIONS.md` - What NOT to use
 
 ---
 
@@ -280,4 +329,4 @@ When implementing features:
 
 ---
 
-Last Updated: 2026-01-19
+Last Updated: 2026-01-26
