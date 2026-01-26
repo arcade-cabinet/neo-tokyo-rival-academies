@@ -1,0 +1,199 @@
+name: Unity Build Validation
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  workflow_dispatch:
+    inputs:
+      build_targets:
+        description: 'Build targets (comma-separated: linux,android,webgl)'
+        required: false
+        default: 'linux'
+
+env:
+  UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+  # Unity 6 version - keep in sync with ProjectSettings/ProjectVersion.txt
+  UNITY_VERSION: 6000.3.5f1
+
+concurrency:
+  group: unity-build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-linux:
+    name: Build Linux (Validation)
+    runs-on: ubuntu-latest
+    if: |
+      github.event_name != 'workflow_dispatch' ||
+      contains(github.event.inputs.build_targets, 'linux')
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Cache Unity Library
+        uses: actions/cache@v4
+        with:
+          path: Library
+          key: Library-Build-Linux-${{ runner.os }}-${{ hashFiles('Assets/**', 'Packages/manifest.json', 'ProjectSettings/ProjectVersion.txt') }}
+          restore-keys: |
+            Library-Build-Linux-${{ runner.os }}-
+            Library-Build-${{ runner.os }}-
+            Library-${{ runner.os }}-
+
+      - name: Build StandaloneLinux64
+        uses: game-ci/unity-builder@v4
+        id: build
+        with:
+          unityVersion: ${{ env.UNITY_VERSION }}
+          targetPlatform: StandaloneLinux64
+          buildName: NeoTokyo
+          versioning: Semantic
+          allowDirtyBuild: true
+
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-linux64
+          path: build/StandaloneLinux64
+          retention-days: 7
+
+      - name: Build Summary
+        run: |
+          echo "## Linux Build Complete" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Platform:** StandaloneLinux64" >> $GITHUB_STEP_SUMMARY
+          echo "- **Unity Version:** ${{ env.UNITY_VERSION }}" >> $GITHUB_STEP_SUMMARY
+          if [ -d "build/StandaloneLinux64" ]; then
+            SIZE=$(du -sh build/StandaloneLinux64 | cut -f1)
+            echo "- **Build Size:** ${SIZE}" >> $GITHUB_STEP_SUMMARY
+          fi
+
+  build-android:
+    name: Build Android (Validation)
+    runs-on: ubuntu-latest
+    if: |
+      github.event_name == 'workflow_dispatch' &&
+      contains(github.event.inputs.build_targets, 'android')
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Setup Java (Android SDK requirement)
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Cache Unity Library
+        uses: actions/cache@v4
+        with:
+          path: Library
+          key: Library-Build-Android-${{ runner.os }}-${{ hashFiles('Assets/**', 'Packages/manifest.json', 'ProjectSettings/ProjectVersion.txt') }}
+          restore-keys: |
+            Library-Build-Android-${{ runner.os }}-
+            Library-Build-${{ runner.os }}-
+            Library-${{ runner.os }}-
+
+      - name: Build Android APK
+        uses: game-ci/unity-builder@v4
+        id: build
+        with:
+          unityVersion: ${{ env.UNITY_VERSION }}
+          targetPlatform: Android
+          buildName: NeoTokyo
+          versioning: Semantic
+          allowDirtyBuild: true
+          androidAppBundle: false
+          androidKeystoreName: ${{ secrets.ANDROID_KEYSTORE_NAME }}
+          androidKeystoreBase64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          androidKeystorePass: ${{ secrets.ANDROID_KEYSTORE_PASS }}
+          androidKeyaliasName: ${{ secrets.ANDROID_KEYALIAS_NAME }}
+          androidKeyaliasPass: ${{ secrets.ANDROID_KEYALIAS_PASS }}
+
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-android
+          path: build/Android
+          retention-days: 7
+
+      - name: Build Summary
+        run: |
+          echo "## Android Build Complete" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Platform:** Android" >> $GITHUB_STEP_SUMMARY
+          echo "- **Unity Version:** ${{ env.UNITY_VERSION }}" >> $GITHUB_STEP_SUMMARY
+          if [ -f "build/Android/*.apk" ]; then
+            SIZE=$(du -sh build/Android/*.apk | cut -f1)
+            echo "- **APK Size:** ${SIZE}" >> $GITHUB_STEP_SUMMARY
+          fi
+
+  build-webgl:
+    name: Build WebGL (Validation)
+    runs-on: ubuntu-latest
+    if: |
+      github.event_name == 'workflow_dispatch' &&
+      contains(github.event.inputs.build_targets, 'webgl')
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Cache Unity Library
+        uses: actions/cache@v4
+        with:
+          path: Library
+          key: Library-Build-WebGL-${{ runner.os }}-${{ hashFiles('Assets/**', 'Packages/manifest.json', 'ProjectSettings/ProjectVersion.txt') }}
+          restore-keys: |
+            Library-Build-WebGL-${{ runner.os }}-
+            Library-Build-${{ runner.os }}-
+            Library-${{ runner.os }}-
+
+      - name: Build WebGL
+        uses: game-ci/unity-builder@v4
+        id: build
+        with:
+          unityVersion: ${{ env.UNITY_VERSION }}
+          targetPlatform: WebGL
+          buildName: NeoTokyo
+          versioning: Semantic
+          allowDirtyBuild: true
+
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-webgl
+          path: build/WebGL
+          retention-days: 7
+
+      - name: Build Summary
+        run: |
+          echo "## WebGL Build Complete" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Platform:** WebGL" >> $GITHUB_STEP_SUMMARY
+          echo "- **Unity Version:** ${{ env.UNITY_VERSION }}" >> $GITHUB_STEP_SUMMARY
+          if [ -d "build/WebGL" ]; then
+            SIZE=$(du -sh build/WebGL | cut -f1)
+            echo "- **Build Size:** ${SIZE}" >> $GITHUB_STEP_SUMMARY
+          fi
+
+  build-status:
+    name: Build Status Check
+    runs-on: ubuntu-latest
+    needs: [build-linux]
+    if: always()
+    steps:
+      - name: Check Build Results
+        run: |
+          if [ "${{ needs.build-linux.result }}" == "failure" ]; then
+            echo "Linux build failed!"
+            exit 1
+          fi
+          echo "All required builds passed!"

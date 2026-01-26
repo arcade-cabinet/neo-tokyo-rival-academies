@@ -1,8 +1,9 @@
 # Neo-Tokyo: Rival Academies - UI Design System
 
-**Version**: 1.0
+**Version**: 2.0
 **Status**: Active Development
-**Last Updated**: 2026-01-16
+**Last Updated**: 2026-01-26
+**Platform**: Unity 6 (UI Toolkit / uGUI)
 
 ---
 

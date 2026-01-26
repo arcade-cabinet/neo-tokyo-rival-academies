@@ -42,5 +42,31 @@ Entities will possess the following stats:
 ## Implementation Guidelines
 
 - **Zero Stubs**: All systems must be fully functional.
-- **Modularity**: Use Miniplex ECS for all game logic.
-- **State**: Use Zustand for UI state (Inventory, Pause Menu).
+- **Modularity**: Use Unity DOTS ECS for all game logic.
+- **State**: Use ECS components for game state, ScriptableObjects for UI configuration.
+
+---
+
+## Unity 6 Implementation Status
+
+> **Updated**: January 26, 2026 | **Status**: IMPLEMENTED
+
+All core mechanics are now implemented in Unity 6 DOTS:
+
+| Mechanic | Unity Implementation |
+|----------|---------------------|
+| Stats System | `RPGStats.cs` - Structure, Ignition, Logic, Flow |
+| Progression | `ProgressionSystem.cs`, `StatAllocationSystem.cs` |
+| Combat | `CombatSystem.cs`, `BreakSystem.cs`, `HitDetectionSystem.cs` |
+| Break System | `StabilityState`, `BreakState` components |
+| Dialogue | `DialogueSystem.cs`, `DialogueComponents.cs` |
+| GenAI Pipeline | `dev-tools/content-gen/` → JSON → `ManifestLoader.cs` |
+
+### Key Files
+
+```
+Assets/Scripts/Components/Stats/RPGStats.cs       # Four-stat system
+Assets/Scripts/Systems/Combat/CombatSystem.cs     # Damage formula
+Assets/Scripts/Systems/Combat/BreakSystem.cs      # Stability/stagger
+Assets/Scripts/Systems/Dialogue/DialogueSystem.cs # Visual novel overlay
+```

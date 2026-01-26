@@ -1,6 +1,8 @@
-# Persistence & Save System v1.0
+# Persistence & Save System v2.0
 
-**Philosophy**: Browser-First (localStorage), Seeded Repro, NG+ Cycles.
+> **Updated**: January 26, 2026 | **Status**: IMPLEMENTED in Unity 6
+
+**Philosophy**: Platform-Native (PlayerPrefs/Files), Seeded Repro, NG+ Cycles.
 
 ## Save Data Structure (JSON)
 ```json
@@ -24,17 +26,32 @@
 - **Auto-Save**: On quest completion, stratum transition, or boss defeat.
 - **Manual Slots**: 3 slots + auto.
 - **Load Flow**: Restore state → regenerate world from seed → apply progress overrides.
-- **Zustand Store**:
-  ```ts
-  const useSaveStore = create((set) => ({
-    saveSlot: (slot = 'auto') => {
-      const state = { ...usePlayerStore.getState(), ...useQuestStore.getState() };
-      localStorage.setItem(`neoTokyo-save-${slot}`, JSON.stringify(state));
-    },
-    loadSlot: (slot = 'auto') => { /* ... */ },
-    hasSave: () => !!localStorage.getItem('neoTokyo-save-auto'),
-  }));
+- **Unity Save System**:
+  ```csharp
+  // Assets/Scripts/Systems/Save/SaveSystem.cs
+  public partial struct SaveSystem : ISystem
+  {
+      public void OnUpdate(ref SystemState state)
+      {
+          // Process SaveGameRequest and LoadGameRequest buffers
+          // Serialize to PlayerPrefs (mobile) or JSON files (desktop)
+      }
+  }
   ```
+
+### Unity Implementation
+
+| Component | File |
+|-----------|------|
+| Save Request | `SaveComponents.cs` - `SaveGameRequest`, `LoadGameRequest` |
+| Save Data | `SaveComponents.cs` - `GameSaveData`, `PlayerProgressSnapshot` |
+| Save System | `SaveSystem.cs` - Processes requests, serializes state |
+
+```csharp
+// Example: Trigger save
+var saveRequest = new SaveGameRequest { SlotIndex = 0, IsAutoSave = true };
+EntityManager.GetBuffer<SaveGameRequest>(playerEntity).Add(saveRequest);
+```
 
 ## New Game+ Hooks
 - **Trigger**: On ending credits → "Continue?" prompt.

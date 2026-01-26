@@ -1,6 +1,63 @@
 # Quest Generation System v1.0
 
-**Philosophy**: Noun-verb-adjective grammar tables + alignment bias → seeded, reproducible quest clusters.
+**Updated**: January 26, 2026
+**Status**: IMPLEMENTED in Unity 6 DOTS
+
+**Philosophy**: Noun-verb-adjective grammar tables + alignment bias -> seeded, reproducible quest clusters.
+
+---
+
+## Unity 6 Implementation
+
+### Key Files
+
+```
+Assets/Scripts/Systems/Quest/
+├── QuestSystem.cs            # Quest state machine, completion tracking
+├── QuestGeneratorSystem.cs   # Grammar-based procedural quest generation
+└── Components/
+    └── QuestComponents.cs    # Quest, QuestCluster, QuestObjective ECS components
+```
+
+### Grammar-Based Generation in Unity
+
+The quest generator uses the grammar tables defined below, implemented as NativeArrays for burst-compiled generation:
+
+```csharp
+// QuestGeneratorSystem.cs
+public partial class QuestGeneratorSystem : SystemBase {
+    private NativeArray<FixedString64Bytes> _nouns;
+    private NativeArray<FixedString64Bytes> _verbs;
+    private NativeArray<FixedString64Bytes> _adjectives;
+
+    protected override void OnUpdate() {
+        var seed = SystemAPI.GetSingleton<WorldSeed>().Value;
+        var alignment = SystemAPI.GetSingleton<PlayerAlignment>().Value;
+
+        // Bias verb selection based on alignment
+        // Generate deterministic quest clusters per district
+    }
+}
+
+// QuestComponents.cs
+public struct Quest : IComponentData {
+    public FixedString128Bytes Id;
+    public FixedString256Bytes Title;
+    public QuestType Type;           // Main, Side, Secret
+    public float AlignmentShift;
+    public int XPReward;
+    public bool Completed;
+}
+
+public struct QuestCluster : IComponentData {
+    public FixedString64Bytes DistrictId;
+    public Entity MainQuest;
+    public FixedList128Bytes<Entity> SideQuests;
+    public Entity SecretQuest;
+}
+```
+
+---
 
 ## Grammar Tables
 
@@ -44,9 +101,14 @@
 | Narrative       | learn a corporate secret, expose a betrayal, uncover a hidden truth | Dialogue / branch flag |
 | Risk/Failure    | trigger alarm, attract enforcers, lose reputation | Combat / chase |
 
-## Quest Generator Implementation (Zustand + Seeded RNG)
+## Quest Generator Implementation
+
+> **Note**: Original TypeScript/Zustand implementation has been migrated to Unity DOTS. See `QuestGeneratorSystem.cs`.
+
+### Original Design (TypeScript Reference)
 
 ```ts
+// DEPRECATED - See Unity implementation in QuestGeneratorSystem.cs
 // packages/game/src/systems/QuestGenerator.ts
 import seedrandom from 'seedrandom';
 import create from 'zustand';
@@ -113,3 +175,42 @@ const useQuestStore = create<QuestStore>((set, get) => ({
   // ...
 }));
 ```
+
+---
+
+## Unity 6 Quest System Details
+
+### Quest State Machine
+
+```csharp
+// QuestSystem.cs - Quest lifecycle management
+public enum QuestState {
+    Available,      // Can be accepted
+    Active,         // In progress
+    ReadyToTurn,    // Objectives complete, needs turn-in
+    Completed,      // Finished
+    Failed          // Time-out or failure condition
+}
+
+public partial class QuestSystem : SystemBase {
+    protected override void OnUpdate() {
+        // Process quest objective updates
+        // Handle quest completion triggers
+        // Apply alignment shifts and rewards
+    }
+}
+```
+
+### Seeded Generation
+
+Quest generation uses the same deterministic seeding as world generation:
+
+```csharp
+// Same seed + district = same quests, always
+var questSeed = SeedHelpers.CombineSeeds(worldSeed, districtSeed, "quests");
+var rng = new Unity.Mathematics.Random(questSeed);
+```
+
+---
+
+Last Updated: 2026-01-26

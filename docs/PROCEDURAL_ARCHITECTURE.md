@@ -1,7 +1,21 @@
 # Procedural Generation Architecture
 
-**Date**: January 19, 2026
+**Date**: January 19, 2026 | **Updated**: January 26, 2026
 **Purpose**: Define Dagster-inspired factory patterns for deterministic world generation
+**Status**: IMPLEMENTED in Unity 6 DOTS
+
+## Unity 6 Implementation
+
+The procedural generation system is now implemented in Unity:
+
+| Concept | Unity Implementation |
+|---------|---------------------|
+| Factory Patterns | `ProceduralGenerationSystem.cs` |
+| Seed Hierarchy | `SeedComponents.cs`, `SeedHelpers.cs` |
+| Territory DDL | `TerritoryComponents.cs`, `TerritoryDefinitions.cs` |
+| Asset Spawning | `ManifestSpawnerSystem.cs` |
+
+---
 
 ---
 
