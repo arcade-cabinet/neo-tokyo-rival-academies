@@ -34,12 +34,16 @@ namespace NeoTokyo.Systems.Combat
         public void OnCreate(ref SystemState state)
         {
             state.RequireForUpdate<DamageRequest>();
+            state.RequireForUpdate<EndSimulationEntityCommandBufferSystem.Singleton>();
         }
 
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            var ecb = new EntityCommandBuffer(Allocator.TempJob);
+            // Note: ECB not actively used in this method after review, but keeping singleton pattern
+            // for consistency and future extensibility
+            var ecb = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>()
+                .CreateCommandBuffer(state.WorldUnmanaged);
 
             // Process all damage requests
             foreach (var (requests, results, entity) in
@@ -84,9 +88,6 @@ namespace NeoTokyo.Systems.Combat
 
                 requests.Clear();
             }
-
-            ecb.Playback(state.EntityManager);
-            ecb.Dispose();
         }
 
         /// <summary>

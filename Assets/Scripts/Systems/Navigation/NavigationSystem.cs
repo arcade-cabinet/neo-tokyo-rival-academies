@@ -138,11 +138,13 @@ namespace NeoTokyo.Systems.Navigation
         public void OnCreate(ref SystemState state)
         {
             state.RequireForUpdate<PathRequest>();
+            state.RequireForUpdate<EndSimulationEntityCommandBufferSystem.Singleton>();
         }
 
         public void OnUpdate(ref SystemState state)
         {
-            var ecb = new EntityCommandBuffer(Allocator.TempJob);
+            var ecb = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>()
+                .CreateCommandBuffer(state.WorldUnmanaged);
 
             // Build hex tile lookup
             var hexTiles = new NativeHashMap<int2, Entity>(256, Allocator.TempJob);
@@ -192,8 +194,6 @@ namespace NeoTokyo.Systems.Navigation
             }
 
             hexTiles.Dispose();
-            ecb.Playback(state.EntityManager);
-            ecb.Dispose();
         }
 
         private NativeList<float3> FindPath(

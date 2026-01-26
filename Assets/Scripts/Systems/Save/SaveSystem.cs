@@ -23,11 +23,13 @@ namespace NeoTokyo.Systems.Save
         protected override void OnCreate()
         {
             RequireForUpdate<SaveGameRequest>();
+            RequireForUpdate<EndSimulationEntityCommandBufferSystem.Singleton>();
         }
 
         protected override void OnUpdate()
         {
-            var ecb = new EntityCommandBuffer(Allocator.TempJob);
+            var ecb = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>()
+                .CreateCommandBuffer(World.Unmanaged);
 
             // Process save requests
             foreach (var (request, entity) in
@@ -46,9 +48,6 @@ namespace NeoTokyo.Systems.Save
                 PerformLoad(request.ValueRO.SlotId.ToString());
                 ecb.DestroyEntity(entity);
             }
-
-            ecb.Playback(EntityManager);
-            ecb.Dispose();
         }
 
         private void PerformSave(string slotId)

@@ -20,12 +20,14 @@ namespace NeoTokyo.Systems.Combat
         public void OnCreate(ref SystemState state)
         {
             state.RequireForUpdate<Health>();
+            state.RequireForUpdate<EndSimulationEntityCommandBufferSystem.Singleton>();
         }
 
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            var ecb = new EntityCommandBuffer(Allocator.TempJob);
+            var ecb = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>()
+                .CreateCommandBuffer(state.WorldUnmanaged);
 
             foreach (var (health, invincibility, damageBuffer, entity) in
                 SystemAPI.Query<RefRW<Health>, RefRW<InvincibilityState>, DynamicBuffer<DamageEvent>>()
@@ -57,9 +59,6 @@ namespace NeoTokyo.Systems.Combat
 
                 damageBuffer.Clear();
             }
-
-            ecb.Playback(state.EntityManager);
-            ecb.Dispose();
         }
     }
 
@@ -69,11 +68,13 @@ namespace NeoTokyo.Systems.Combat
     public struct DeadTag : IComponentData { }
 
     /// <summary>
-    /// Updates invincibility timers each frame.
+    /// Updates InvincibilityState timers each frame.
+    /// Note: This handles InvincibilityState component (used with DamageEvent buffer).
+    /// HitDetectionSystem.cs has InvincibilitySystem for the Invincibility component.
     /// </summary>
     [BurstCompile]
     [UpdateInGroup(typeof(SimulationSystemGroup))]
-    public partial struct InvincibilitySystem : ISystem
+    public partial struct InvincibilityStateSystem : ISystem
     {
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
@@ -95,26 +96,6 @@ namespace NeoTokyo.Systems.Combat
         }
     }
 
-    /// <summary>
-    /// Hit detection system - checks for collisions and generates damage events.
-    /// Equivalent to TypeScript: HitDetection.ts
-    /// </summary>
-    [BurstCompile]
-    [UpdateInGroup(typeof(SimulationSystemGroup))]
-    public partial struct HitDetectionSystem : ISystem
-    {
-        [BurstCompile]
-        public void OnCreate(ref SystemState state)
-        {
-            // Will use Unity Physics for actual collision detection
-            // For now, this is a placeholder for the system structure
-        }
-
-        [BurstCompile]
-        public void OnUpdate(ref SystemState state)
-        {
-            // Collision detection will be implemented with Unity Physics
-            // This system will query collision events and generate DamageEvents
-        }
-    }
+    // NOTE: HitDetectionSystem is now fully implemented in HitDetectionSystem.cs
+    // It uses AABB hitbox overlap detection and properly damages Health.Current
 }

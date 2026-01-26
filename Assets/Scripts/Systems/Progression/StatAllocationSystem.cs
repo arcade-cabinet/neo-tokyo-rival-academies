@@ -48,9 +48,15 @@ namespace NeoTokyo.Systems.Progression
         // Maximum points per stat
         private const int MAX_STAT_VALUE = 100;
 
+        protected override void OnCreate()
+        {
+            RequireForUpdate<EndSimulationEntityCommandBufferSystem.Singleton>();
+        }
+
         protected override void OnUpdate()
         {
-            var ecb = new EntityCommandBuffer(Allocator.TempJob);
+            var ecb = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>()
+                .CreateCommandBuffer(World.Unmanaged);
 
             // Process allocation requests
             foreach (var (request, entity) in
@@ -60,9 +66,6 @@ namespace NeoTokyo.Systems.Progression
                 ProcessAllocation(request.ValueRO, ref ecb);
                 ecb.DestroyEntity(entity);
             }
-
-            ecb.Playback(EntityManager);
-            ecb.Dispose();
         }
 
         private void ProcessAllocation(AllocateStatPointRequest request, ref EntityCommandBuffer ecb)

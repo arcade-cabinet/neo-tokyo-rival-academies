@@ -18,11 +18,13 @@ namespace NeoTokyo.Systems.AI
         public void OnCreate(ref SystemState state)
         {
             state.RequireForUpdate<ThreatGeneratedEvent>();
+            state.RequireForUpdate<EndSimulationEntityCommandBufferSystem.Singleton>();
         }
 
         public void OnUpdate(ref SystemState state)
         {
-            var ecb = new EntityCommandBuffer(Allocator.TempJob);
+            var ecb = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>()
+                .CreateCommandBuffer(state.WorldUnmanaged);
             float currentTime = (float)SystemAPI.Time.ElapsedTime;
 
             // Process threat events
@@ -80,9 +82,6 @@ namespace NeoTokyo.Systems.AI
 
                 ecb.DestroyEntity(eventEntity);
             }
-
-            ecb.Playback(state.EntityManager);
-            ecb.Dispose();
         }
 
         private float CalculateThreatAmount(ThreatGeneratedEvent evt)

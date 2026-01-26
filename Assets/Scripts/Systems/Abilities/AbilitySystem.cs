@@ -4,6 +4,7 @@ using Unity.Entities;
 using Unity.Mathematics;
 using NeoTokyo.Components.Abilities;
 using NeoTokyo.Components.Stats;
+using static Unity.Mathematics.math;
 
 namespace NeoTokyo.Systems.Abilities
 {
@@ -51,11 +52,13 @@ namespace NeoTokyo.Systems.Abilities
         public void OnCreate(ref SystemState state)
         {
             state.RequireForUpdate<AbilityExecuteRequest>();
+            state.RequireForUpdate<EndSimulationEntityCommandBufferSystem.Singleton>();
         }
 
         public void OnUpdate(ref SystemState state)
         {
-            var ecb = new EntityCommandBuffer(Allocator.TempJob);
+            var ecb = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>()
+                .CreateCommandBuffer(state.WorldUnmanaged);
 
             foreach (var (request, entity) in
                 SystemAPI.Query<RefRO<AbilityExecuteRequest>>()
@@ -63,9 +66,6 @@ namespace NeoTokyo.Systems.Abilities
             {
                 ProcessAbilityRequest(ref state, request.ValueRO, entity, ref ecb);
             }
-
-            ecb.Playback(state.EntityManager);
-            ecb.Dispose();
         }
 
         private void ProcessAbilityRequest(
@@ -146,23 +146,23 @@ namespace NeoTokyo.Systems.Abilities
             switch (ability.EffectType)
             {
                 case AbilityEffectType.Damage:
-                    if (SystemAPI.HasComponent<RPGStats>(target))
+                    // Damage reduces Health.Current (not Structure which is base defense/HP capacity)
+                    if (SystemAPI.HasComponent<Health>(target))
                     {
-                        var stats = SystemAPI.GetComponent<RPGStats>(target);
-                        // Damage reduces Structure (HP)
-                        stats.Structure = math.max(0, stats.Structure - ability.EffectValue);
-                        ecb.SetComponent(target, stats);
+                        var health = SystemAPI.GetComponent<Health>(target);
+                        health.Current = math.max(0, health.Current - ability.EffectValue);
+                        ecb.SetComponent(target, health);
                         return true;
                     }
                     break;
 
                 case AbilityEffectType.Heal:
-                    if (SystemAPI.HasComponent<RPGStats>(target))
+                    // Heal restores Health.Current up to max
+                    if (SystemAPI.HasComponent<Health>(target))
                     {
-                        var stats = SystemAPI.GetComponent<RPGStats>(target);
-                        // Heal restores Structure up to max (we'd need max tracking)
-                        stats.Structure += ability.EffectValue;
-                        ecb.SetComponent(target, stats);
+                        var health = SystemAPI.GetComponent<Health>(target);
+                        health.Current = math.min(health.Max, health.Current + ability.EffectValue);
+                        ecb.SetComponent(target, health);
                         return true;
                     }
                     break;

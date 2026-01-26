@@ -150,12 +150,14 @@ namespace NeoTokyo.Systems.AI
         public void OnCreate(ref SystemState state)
         {
             state.RequireForUpdate<SwarmCoordinator>();
+            state.RequireForUpdate<EndSimulationEntityCommandBufferSystem.Singleton>();
         }
 
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            var ecb = new EntityCommandBuffer(Allocator.TempJob);
+            var ecb = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>()
+                .CreateCommandBuffer(state.WorldUnmanaged);
             float deltaTime = SystemAPI.Time.DeltaTime;
 
             // Get player position and entity
@@ -229,9 +231,6 @@ namespace NeoTokyo.Systems.AI
 
                 attackRequests.Clear();
             }
-
-            ecb.Playback(state.EntityManager);
-            ecb.Dispose();
         }
     }
 
@@ -252,9 +251,16 @@ namespace NeoTokyo.Systems.AI
         }
 
         [BurstCompile]
+        public void OnCreate(ref SystemState state)
+        {
+            state.RequireForUpdate<EndSimulationEntityCommandBufferSystem.Singleton>();
+        }
+
+        [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            var ecb = new EntityCommandBuffer(Allocator.TempJob);
+            var ecb = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>()
+                .CreateCommandBuffer(state.WorldUnmanaged);
 
             foreach (var (coordinator, members, entity) in
                 SystemAPI.Query<RefRO<SwarmCoordinator>, DynamicBuffer<SwarmMemberElement>>()
@@ -284,9 +290,6 @@ namespace NeoTokyo.Systems.AI
                     });
                 }
             }
-
-            ecb.Playback(state.EntityManager);
-            ecb.Dispose();
         }
     }
 

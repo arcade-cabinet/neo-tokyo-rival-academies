@@ -65,6 +65,8 @@ namespace NeoTokyo.Systems.World
     {
         protected override void OnCreate()
         {
+            RequireForUpdate<EndSimulationEntityCommandBufferSystem.Singleton>();
+
             // Create singleton if not exists
             if (!SystemAPI.HasSingleton<StageManagerSingleton>())
             {
@@ -82,7 +84,8 @@ namespace NeoTokyo.Systems.World
 
         protected override void OnUpdate()
         {
-            var ecb = new EntityCommandBuffer(Allocator.TempJob);
+            var ecb = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>()
+                .CreateCommandBuffer(World.Unmanaged);
 
             // Process load stage requests
             ProcessLoadRequests(ref ecb);
@@ -92,9 +95,6 @@ namespace NeoTokyo.Systems.World
 
             // Update stage progress
             UpdateStageProgress();
-
-            ecb.Playback(EntityManager);
-            ecb.Dispose();
         }
 
         private void ProcessLoadRequests(ref EntityCommandBuffer ecb)

@@ -160,6 +160,8 @@ namespace NeoTokyo.Systems.World
 
         protected override void OnCreate()
         {
+            RequireForUpdate<EndSimulationEntityCommandBufferSystem.Singleton>();
+
             // Create singleton
             var singletonEntity = EntityManager.CreateEntity();
             EntityManager.AddComponentData(singletonEntity, new ManifestSpawnerSingleton
@@ -182,7 +184,8 @@ namespace NeoTokyo.Systems.World
 
         protected override void OnUpdate()
         {
-            var ecb = new EntityCommandBuffer(Allocator.TempJob);
+            var ecb = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>()
+                .CreateCommandBuffer(World.Unmanaged);
 
             // Process load requests
             ProcessLoadRequests(ref ecb);
@@ -192,9 +195,6 @@ namespace NeoTokyo.Systems.World
 
             // Process spawn queue (rate-limited)
             ProcessSpawnQueue(ref ecb);
-
-            ecb.Playback(EntityManager);
-            ecb.Dispose();
         }
 
         #region Load Request Processing

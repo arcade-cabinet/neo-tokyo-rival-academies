@@ -36,12 +36,14 @@ namespace NeoTokyo.Systems.Progression
         public void OnCreate(ref SystemState state)
         {
             state.RequireForUpdate<LevelProgress>();
+            state.RequireForUpdate<EndSimulationEntityCommandBufferSystem.Singleton>();
         }
 
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            var ecb = new EntityCommandBuffer(Allocator.TempJob);
+            var ecb = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>()
+                .CreateCommandBuffer(state.WorldUnmanaged);
 
             foreach (var (level, stats, xpBuffer, entity) in
                 SystemAPI.Query<RefRW<LevelProgress>, RefRW<RPGStats>, DynamicBuffer<XPGainEvent>>()
@@ -86,9 +88,6 @@ namespace NeoTokyo.Systems.Progression
                     });
                 }
             }
-
-            ecb.Playback(state.EntityManager);
-            ecb.Dispose();
         }
     }
 
@@ -98,17 +97,20 @@ namespace NeoTokyo.Systems.Progression
     [UpdateInGroup(typeof(LateSimulationSystemGroup))]
     public partial struct LevelUpEventCleanupSystem : ISystem
     {
+        public void OnCreate(ref SystemState state)
+        {
+            state.RequireForUpdate<EndSimulationEntityCommandBufferSystem.Singleton>();
+        }
+
         public void OnUpdate(ref SystemState state)
         {
-            var ecb = new EntityCommandBuffer(Allocator.TempJob);
+            var ecb = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>()
+                .CreateCommandBuffer(state.WorldUnmanaged);
 
             foreach (var (_, entity) in SystemAPI.Query<LevelUpEvent>().WithEntityAccess())
             {
                 ecb.RemoveComponent<LevelUpEvent>(entity);
             }
-
-            ecb.Playback(state.EntityManager);
-            ecb.Dispose();
         }
     }
 }

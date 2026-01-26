@@ -11,18 +11,21 @@ namespace NeoTokyo.Systems.Dialogue
     [UpdateInGroup(typeof(SimulationSystemGroup))]
     public partial class DialogueManagementSystem : SystemBase
     {
+        protected override void OnCreate()
+        {
+            RequireForUpdate<EndSimulationEntityCommandBufferSystem.Singleton>();
+        }
+
         protected override void OnUpdate()
         {
-            var ecb = new EntityCommandBuffer(Allocator.TempJob);
+            var ecb = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>()
+                .CreateCommandBuffer(World.Unmanaged);
 
             // Process start dialogue requests
             ProcessStartRequests(ref ecb);
 
             // Process advance dialogue requests
             ProcessAdvanceRequests(ref ecb);
-
-            ecb.Playback(EntityManager);
-            ecb.Dispose();
         }
 
         private void ProcessStartRequests(ref EntityCommandBuffer ecb)
@@ -115,9 +118,15 @@ namespace NeoTokyo.Systems.Dialogue
     [UpdateAfter(typeof(DialogueManagementSystem))]
     public partial class DialogueEndSystem : SystemBase
     {
+        protected override void OnCreate()
+        {
+            RequireForUpdate<EndSimulationEntityCommandBufferSystem.Singleton>();
+        }
+
         protected override void OnUpdate()
         {
-            var ecb = new EntityCommandBuffer(Allocator.TempJob);
+            var ecb = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>()
+                .CreateCommandBuffer(World.Unmanaged);
 
             // Check for dialogues that should end
             foreach (var (dialogueState, entity) in
@@ -135,9 +144,6 @@ namespace NeoTokyo.Systems.Dialogue
                     ecb.RemoveComponent<InDialogue>(entity);
                 }
             }
-
-            ecb.Playback(EntityManager);
-            ecb.Dispose();
         }
     }
 

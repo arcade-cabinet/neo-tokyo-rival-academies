@@ -57,6 +57,17 @@ namespace NeoTokyo.Systems.Combat
     }
 
     /// <summary>
+    /// Component that defines an entity as a source of damage.
+    /// Used by HitDetectionSystem to determine damage output.
+    /// </summary>
+    public struct DamageSource : IComponentData
+    {
+        public int BaseDamage;
+        public float StabilityDamage;
+        public Entity OwnerEntity; // The entity responsible for this damage
+    }
+
+    /// <summary>
     /// System that manages hitbox activation and timing
     /// </summary>
     [BurstCompile]
@@ -134,9 +145,15 @@ namespace NeoTokyo.Systems.Combat
     [UpdateAfter(typeof(HitboxTimingSystem))]
     public partial class HitDetectionSystem : SystemBase
     {
+        protected override void OnCreate()
+        {
+            RequireForUpdate<EndSimulationEntityCommandBufferSystem.Singleton>();
+        }
+
         protected override void OnUpdate()
         {
-            var ecb = new EntityCommandBuffer(Allocator.TempJob);
+            var ecb = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>()
+                .CreateCommandBuffer(World.Unmanaged);
             float currentTime = (float)SystemAPI.Time.ElapsedTime;
 
             // Collect all active hitboxes (attackers)
@@ -159,9 +176,9 @@ namespace NeoTokyo.Systems.Combat
                 }
             }
 
-            // Check each attacker against potential targets
-            foreach (var (transform, invincibility, stats, targetEntity) in
-                SystemAPI.Query<RefRO<LocalTransform>, RefRW<Invincibility>, RefRW<RPGStats>>()
+            // Check each attacker against potential targets (enemies)
+            foreach (var (transform, invincibility, health, targetEntity) in
+                SystemAPI.Query<RefRO<LocalTransform>, RefRW<Invincibility>, RefRW<Health>>()
                     .WithAll<EnemyTag>()
                     .WithEntityAccess())
             {
@@ -176,8 +193,8 @@ namespace NeoTokyo.Systems.Combat
                 {
                     if (CheckHitboxOverlap(attacker, targetPos, targetRadius))
                     {
-                        // Register hit
-                        stats.ValueRW.Structure = math.max(0, stats.ValueRO.Structure - attacker.Damage);
+                        // Register hit - damage Health.Current (not Structure which is base defense/HP capacity)
+                        health.ValueRW.Current = math.max(0, health.ValueRO.Current - attacker.Damage);
 
                         // Apply invincibility frames (0.5 seconds)
                         invincibility.ValueRW = Invincibility.Apply(0.5f, currentTime);
@@ -198,8 +215,8 @@ namespace NeoTokyo.Systems.Combat
             }
 
             // Also check player being hit by enemies
-            foreach (var (transform, invincibility, stats, playerEntity) in
-                SystemAPI.Query<RefRO<LocalTransform>, RefRW<Invincibility>, RefRW<RPGStats>>()
+            foreach (var (transform, invincibility, health, playerEntity) in
+                SystemAPI.Query<RefRO<LocalTransform>, RefRW<Invincibility>, RefRW<Health>>()
                     .WithAll<PlayerTag>()
                     .WithEntityAccess())
             {
@@ -225,7 +242,8 @@ namespace NeoTokyo.Systems.Combat
 
                     if (CheckHitboxOverlap(attackerData, transform.ValueRO.Position, 0.5f))
                     {
-                        stats.ValueRW.Structure = math.max(0, stats.ValueRO.Structure - attackerData.Damage);
+                        // Damage Health.Current (not Structure which is base defense/HP capacity)
+                        health.ValueRW.Current = math.max(0, health.ValueRO.Current - attackerData.Damage);
                         invincibility.ValueRW = Invincibility.Apply(0.5f, currentTime);
 
                         var hitEventEntity = ecb.CreateEntity();
@@ -243,8 +261,6 @@ namespace NeoTokyo.Systems.Combat
             }
 
             attackerList.Dispose();
-            ecb.Playback(EntityManager);
-            ecb.Dispose();
         }
 
         private struct AttackerData
@@ -282,9 +298,15 @@ namespace NeoTokyo.Systems.Combat
     [UpdateInGroup(typeof(LateSimulationSystemGroup))]
     public partial class HitEventCleanupSystem : SystemBase
     {
+        protected override void OnCreate()
+        {
+            RequireForUpdate<EndSimulationEntityCommandBufferSystem.Singleton>();
+        }
+
         protected override void OnUpdate()
         {
-            var ecb = new EntityCommandBuffer(Allocator.TempJob);
+            var ecb = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>()
+                .CreateCommandBuffer(World.Unmanaged);
 
             foreach (var (evt, entity) in
                 SystemAPI.Query<RefRO<HitEvent>>()
@@ -292,9 +314,6 @@ namespace NeoTokyo.Systems.Combat
             {
                 ecb.DestroyEntity(entity);
             }
-
-            ecb.Playback(EntityManager);
-            ecb.Dispose();
         }
     }
 }

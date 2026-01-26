@@ -48,6 +48,8 @@ namespace NeoTokyo.Components.Faction
     /// Equivalent to TypeScript: ReputationState in ReputationSystem.ts
     ///
     /// Golden Record specifies 0-100 range for reputation meters.
+    /// NOTE: This legacy struct tracks only Kurenai/Azure for backward compatibility.
+    /// Use ExtendedReputation for full 8-faction tracking.
     /// </summary>
     public struct Reputation : IComponentData
     {
@@ -74,7 +76,7 @@ namespace NeoTokyo.Components.Faction
         /// </summary>
         public ReputationLevel GetAzureLevel() => GetLevel(Azure);
 
-        private static ReputationLevel GetLevel(int value)
+        public static ReputationLevel GetLevel(int value)
         {
             if (value <= 10) return ReputationLevel.Hated;
             if (value <= 25) return ReputationLevel.Hostile;
@@ -99,6 +101,148 @@ namespace NeoTokyo.Components.Faction
             if (value <= 75) return 0.75f; // Friendly
             return 0.5f;                    // Honored/Revered
         }
+    }
+
+    /// <summary>
+    /// Extended reputation tracking for all 8 factions in Neo-Tokyo.
+    /// Golden Record specifies 0-100 range for reputation meters.
+    ///
+    /// Faction relationships and spillover effects are defined in FactionRelationships.
+    /// </summary>
+    public struct ExtendedReputation : IComponentData
+    {
+        /// <summary>Standing with Kurenai Academy (passion/red)</summary>
+        public int Kurenai;
+
+        /// <summary>Standing with Azure Academy (logic/blue)</summary>
+        public int Azure;
+
+        /// <summary>Standing with the Syndicate (criminal organization)</summary>
+        public int Syndicate;
+
+        /// <summary>Standing with the Runners (speedboat racers)</summary>
+        public int Runners;
+
+        /// <summary>Standing with the Collective (market traders)</summary>
+        public int Collective;
+
+        /// <summary>Standing with the Drowned (mysterious cult)</summary>
+        public int Drowned;
+
+        /// <summary>Standing with the Council of Seven (governance)</summary>
+        public int Council;
+
+        /// <summary>Standing with Civilians (neutral population)</summary>
+        public int Civilian;
+
+        public static ExtendedReputation Default => new ExtendedReputation
+        {
+            Kurenai = 50,
+            Azure = 50,
+            Syndicate = 30,   // Slightly hostile by default
+            Runners = 50,
+            Collective = 50,
+            Drowned = 25,     // Mysterious, starts unfriendly
+            Council = 40,     // Bureaucratic, slightly skeptical
+            Civilian = 50
+        };
+
+        /// <summary>
+        /// Get reputation value for a specific faction
+        /// </summary>
+        public int GetReputation(FactionType faction)
+        {
+            return faction switch
+            {
+                FactionType.Kurenai => Kurenai,
+                FactionType.Azure => Azure,
+                FactionType.Syndicate => Syndicate,
+                FactionType.Runners => Runners,
+                FactionType.Collective => Collective,
+                FactionType.Drowned => Drowned,
+                FactionType.Council => Council,
+                FactionType.Neutral => Civilian,
+                _ => 50
+            };
+        }
+
+        /// <summary>
+        /// Set reputation value for a specific faction (clamped to 0-100)
+        /// </summary>
+        public void SetReputation(FactionType faction, int value)
+        {
+            value = Unity.Mathematics.math.clamp(value, 0, 100);
+
+            switch (faction)
+            {
+                case FactionType.Kurenai: Kurenai = value; break;
+                case FactionType.Azure: Azure = value; break;
+                case FactionType.Syndicate: Syndicate = value; break;
+                case FactionType.Runners: Runners = value; break;
+                case FactionType.Collective: Collective = value; break;
+                case FactionType.Drowned: Drowned = value; break;
+                case FactionType.Council: Council = value; break;
+                case FactionType.Neutral: Civilian = value; break;
+            }
+        }
+
+        /// <summary>
+        /// Get reputation level for any faction
+        /// </summary>
+        public ReputationLevel GetLevel(FactionType faction)
+        {
+            return Reputation.GetLevel(GetReputation(faction));
+        }
+
+        /// <summary>
+        /// Get aggression multiplier for any faction
+        /// </summary>
+        public float GetAggressionMultiplier(FactionType faction)
+        {
+            int value = GetReputation(faction);
+
+            if (value <= 25) return 2.0f;  // Hated/Hostile
+            if (value <= 40) return 1.5f;  // Unfriendly
+            if (value <= 60) return 1.0f;  // Neutral
+            if (value <= 75) return 0.75f; // Friendly
+            return 0.5f;                    // Honored/Revered
+        }
+
+        /// <summary>
+        /// Convert to legacy Reputation for backward compatibility
+        /// </summary>
+        public Reputation ToLegacyReputation()
+        {
+            return new Reputation
+            {
+                Kurenai = Kurenai,
+                Azure = Azure
+            };
+        }
+
+        /// <summary>
+        /// Create from legacy Reputation, with defaults for other factions
+        /// </summary>
+        public static ExtendedReputation FromLegacy(Reputation legacy)
+        {
+            var extended = Default;
+            extended.Kurenai = legacy.Kurenai;
+            extended.Azure = legacy.Azure;
+            return extended;
+        }
+    }
+
+    /// <summary>
+    /// Buffer element for pending extended reputation changes.
+    /// Processed by ExtendedReputationSystem each frame.
+    /// Supports spillover effects via FactionRelationships.
+    /// </summary>
+    public struct ExtendedReputationChangeElement : IBufferElementData
+    {
+        public FactionType Faction;
+        public int Amount;
+        public FixedString64Bytes Reason;
+        public bool ApplySpillover;  // Whether to apply relationship spillover effects
     }
 
     /// <summary>
