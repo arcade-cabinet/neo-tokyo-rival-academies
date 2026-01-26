@@ -1,0 +1,215 @@
+name: Unity Tests
+
+on:
+  push:
+    branches: [main, develop, 'feat/**']
+  pull_request:
+    branches: [main, develop]
+  workflow_dispatch:
+
+env:
+  UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+  # Unity 6 version - keep in sync with ProjectSettings/ProjectVersion.txt
+  UNITY_VERSION: 6000.3.5f1
+
+concurrency:
+  group: unity-tests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test-editmode:
+    name: EditMode Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Cache Unity Library
+        uses: actions/cache@v4
+        with:
+          path: Library
+          key: Library-EditMode-${{ runner.os }}-${{ hashFiles('Assets/**', 'Packages/manifest.json', 'ProjectSettings/ProjectVersion.txt') }}
+          restore-keys: |
+            Library-EditMode-${{ runner.os }}-
+            Library-${{ runner.os }}-
+
+      - name: Run EditMode Tests
+        uses: game-ci/unity-test-runner@v4
+        id: tests
+        with:
+          unityVersion: ${{ env.UNITY_VERSION }}
+          testMode: EditMode
+          artifactsPath: test-results
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          checkName: EditMode Test Results
+          coverageOptions: 'generateAdditionalMetrics;generateHtmlReport;generateBadgeReport;assemblyFilters:+NeoTokyo.*,-*Tests,-*Editor'
+
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: editmode-test-results
+          path: test-results
+          retention-days: 14
+
+      - name: Upload Coverage Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage-report-editmode
+          path: CodeCoverage
+          retention-days: 14
+
+      - name: Publish Coverage to Summary
+        if: always()
+        run: |
+          if [ -f "CodeCoverage/Report/Summary.xml" ]; then
+            echo "## Code Coverage Summary" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            # Extract coverage percentage from Summary.xml
+            COVERAGE=$(grep -oE 'LineCoverage>[0-9.]+' CodeCoverage/Report/Summary.xml | head -1 | cut -d'>' -f2 || echo "N/A")
+            echo "**Line Coverage:** ${COVERAGE}%" >> $GITHUB_STEP_SUMMARY
+          fi
+
+  test-playmode:
+    name: PlayMode Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Cache Unity Library
+        uses: actions/cache@v4
+        with:
+          path: Library
+          key: Library-PlayMode-${{ runner.os }}-${{ hashFiles('Assets/**', 'Packages/manifest.json', 'ProjectSettings/ProjectVersion.txt') }}
+          restore-keys: |
+            Library-PlayMode-${{ runner.os }}-
+            Library-${{ runner.os }}-
+
+      - name: Run PlayMode Tests
+        uses: game-ci/unity-test-runner@v4
+        id: tests
+        with:
+          unityVersion: ${{ env.UNITY_VERSION }}
+          testMode: PlayMode
+          artifactsPath: test-results
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          checkName: PlayMode Test Results
+          coverageOptions: 'generateAdditionalMetrics;generateHtmlReport;assemblyFilters:+NeoTokyo.*,-*Tests,-*Editor'
+
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playmode-test-results
+          path: test-results
+          retention-days: 14
+
+      - name: Upload Coverage Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage-report-playmode
+          path: CodeCoverage
+          retention-days: 14
+
+  test-graphics:
+    name: Graphics Tests (Visual Regression)
+    runs-on: ubuntu-latest
+    # Graphics tests are optional - don't block PRs if baseline images don't exist
+    continue-on-error: true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Cache Unity Library
+        uses: actions/cache@v4
+        with:
+          path: Library
+          key: Library-Graphics-${{ runner.os }}-${{ hashFiles('Assets/**', 'Packages/manifest.json', 'ProjectSettings/ProjectVersion.txt') }}
+          restore-keys: |
+            Library-Graphics-${{ runner.os }}-
+            Library-${{ runner.os }}-
+
+      - name: Run Graphics Tests
+        uses: game-ci/unity-test-runner@v4
+        id: tests
+        with:
+          unityVersion: ${{ env.UNITY_VERSION }}
+          testMode: PlayMode
+          artifactsPath: test-results
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          checkName: Graphics Test Results
+          customParameters: '-testCategory Graphics'
+
+      - name: Upload Graphics Test Results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: graphics-test-results
+          path: test-results
+          retention-days: 14
+
+      - name: Upload Reference Image Diffs
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: graphics-diffs
+          path: |
+            test-results/**/ActualImages
+            test-results/**/DiffImages
+          retention-days: 30
+
+  merge-coverage:
+    name: Merge Coverage Reports
+    runs-on: ubuntu-latest
+    needs: [test-editmode, test-playmode]
+    if: always() && (needs.test-editmode.result == 'success' || needs.test-playmode.result == 'success')
+    steps:
+      - name: Download EditMode Coverage
+        uses: actions/download-artifact@v4
+        with:
+          name: coverage-report-editmode
+          path: coverage-editmode
+        continue-on-error: true
+
+      - name: Download PlayMode Coverage
+        uses: actions/download-artifact@v4
+        with:
+          name: coverage-report-playmode
+          path: coverage-playmode
+        continue-on-error: true
+
+      - name: Generate Coverage Badge
+        run: |
+          # Find the highest coverage from available reports
+          COVERAGE=0
+          for report in coverage-*/Report/Summary.xml; do
+            if [ -f "$report" ]; then
+              LINE_COV=$(grep -oE 'LineCoverage>[0-9.]+' "$report" | head -1 | cut -d'>' -f2 || echo "0")
+              if [ "$(echo "$LINE_COV > $COVERAGE" | bc -l 2>/dev/null || echo 0)" = "1" ]; then
+                COVERAGE=$LINE_COV
+              fi
+            fi
+          done
+
+          echo "## Combined Coverage" >> $GITHUB_STEP_SUMMARY
+          echo "**Best Line Coverage:** ${COVERAGE}%" >> $GITHUB_STEP_SUMMARY
+
+          # Determine badge color
+          if [ "$(echo "$COVERAGE >= 80" | bc -l 2>/dev/null || echo 0)" = "1" ]; then
+            COLOR="brightgreen"
+          elif [ "$(echo "$COVERAGE >= 60" | bc -l 2>/dev/null || echo 0)" = "1" ]; then
+            COLOR="yellow"
+          else
+            COLOR="red"
+          fi
+
+          echo "Coverage: ${COVERAGE}% (${COLOR})"

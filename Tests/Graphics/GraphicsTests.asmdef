@@ -1,0 +1,30 @@
+{
+    "name": "NeoTokyo.Tests.Graphics",
+    "rootNamespace": "NeoTokyo.Tests.Graphics",
+    "references": [
+        "NeoTokyo",
+        "Unity.Entities",
+        "Unity.Mathematics",
+        "Unity.RenderPipelines.Core.Runtime",
+        "Unity.TestFramework.Graphics"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "nunit.framework.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS"
+    ],
+    "versionDefines": [
+        {
+            "name": "com.unity.testframework.graphics",
+            "expression": "",
+            "define": "GRAPHICS_TESTS_ENABLED"
+        }
+    ],
+    "noEngineReferences": false
+}

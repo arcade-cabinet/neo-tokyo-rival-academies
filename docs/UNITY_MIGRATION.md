@@ -1,8 +1,9 @@
 # Unity 6 Migration Plan
 
 > **Branch**: `feat/unity-6-migration`
-> **Status**: PLANNING
+> **Status**: IN PROGRESS
 > **Created**: 2026-01-25
+> **Last Updated**: 2026-01-25
 
 ## Executive Summary
 
@@ -34,26 +35,31 @@ This document outlines the migration strategy from Babylon.js/Reactylon to Unity
 
 ## Migration Scope
 
-### KEEP in TypeScript (packages/)
+### KEEP in TypeScript (dev-tools/)
 
 | Package | Purpose | Rationale |
 |---------|---------|-----------|
-| `content-gen` | GenAI CLI (Meshy, Gemini) | Node.js APIs, build-time only |
-| `world-gen` | Procedural generation algorithms | Outputs JSON manifests |
-| `e2e` | Playwright visual testing | Browser automation |
-| `types` | Shared TypeScript types | Generate C# equivalents |
-| `shared-assets` | Textures, asset manifests | Unity import pipeline |
-| `config` | Shared constants | Generate Unity ScriptableObjects |
+| `dev-tools/content-gen` | GenAI CLI (Meshy, Gemini) | Node.js APIs, build-time only |
+| `dev-tools/e2e` | Playwright visual testing | Browser automation |
+| `dev-tools/types` | Shared TypeScript types | Generate C# equivalents |
+| `dev-tools/shared-assets` | Textures, asset manifests | Unity import pipeline |
+| `dev-tools/config` | Shared constants | Generate Unity ScriptableObjects |
 
-### MIGRATE to Unity 6 (new package: game-unity/)
+### REFERENCE (Old TypeScript Runtime)
+
+| Location | Purpose |
+|----------|---------|
+| `_reference/typescript-runtime/` | Original Babylon.js runtime for migration reference |
+
+### MIGRATE to Unity 6 (Repository ROOT)
 
 | TypeScript Source | Unity Equivalent |
 |-------------------|------------------|
-| `packages/game/src/state/ecs.ts` | Unity DOTS `IComponentData` |
-| `packages/game/src/systems/*.ts` | Unity DOTS `ISystem` |
-| `packages/core/src/state/*Store.ts` | Unity ScriptableObject singletons |
-| `packages/diorama/src/components/*` | Unity Prefabs + Addressables |
-| `packages/game/src/scenes/*` | Unity Scenes |
+| `_reference/typescript-runtime/game/src/state/ecs.ts` | Unity DOTS `IComponentData` |
+| `_reference/typescript-runtime/game/src/systems/*.ts` | Unity DOTS `ISystem` |
+| `_reference/typescript-runtime/core/src/state/*Store.ts` | Unity ScriptableObject singletons |
+| `_reference/typescript-runtime/diorama/src/components/*` | Unity Prefabs + Addressables |
+| `_reference/typescript-runtime/game/src/scenes/*` | Unity Scenes |
 
 ## Headless Package Management
 
@@ -63,9 +69,7 @@ Unity packages are managed headlessly using `openupm-cli` (like pnpm for Unity):
 # Install openupm-cli (requires Node.js 18+)
 npm install -g openupm-cli
 
-# In Unity project folder
-cd packages/game-unity
-
+# Unity project is at repository ROOT
 # Add packages from Unity Registry
 openupm add com.unity.entities
 openupm add com.unity.render-pipelines.universal
@@ -84,13 +88,16 @@ openupm remove <package-name>
 After modifying `Packages/manifest.json`, resolve packages without opening the Editor:
 
 ```bash
-# macOS
+# macOS (Unity project at ROOT)
 /Applications/Unity/Hub/Editor/6000.3.5f1/Unity.app/Contents/MacOS/Unity \
-  -batchmode -quit -projectPath packages/game-unity -logFile -
+  -batchmode -quit -projectPath . -logFile -
+
+# Or use the helper script
+./scripts/resolve-packages.sh
 
 # Linux (CI)
 xvfb-run unity-editor \
-  -batchmode -quit -projectPath packages/game-unity -logFile -
+  -batchmode -quit -projectPath . -logFile -
 ```
 
 ### Unity 6.3 Signature Warnings
@@ -102,8 +109,10 @@ Unity 6.3+ validates package signatures. If you see "invalid signature" warnings
 
 ## Unity 6 Project Structure
 
+Unity project is at repository ROOT (not in a subdirectory):
+
 ```
-packages/game-unity/
+neo-tokyo-rival-academies/  (REPOSITORY ROOT = Unity Project)
 ├── Assets/
 │   ├── _Generated/           # Output from TypeScript tools
 │   │   ├── Manifests/        # JSON world definitions

@@ -1,0 +1,23 @@
+{
+    "name": "NeoTokyo.Authoring",
+    "rootNamespace": "NeoTokyo.Authoring",
+    "references": [
+        "Unity.Entities",
+        "Unity.Entities.Hybrid",
+        "Unity.Mathematics",
+        "Unity.Collections",
+        "Unity.Burst",
+        "Unity.Transforms",
+        "NeoTokyo.Components",
+        "NeoTokyo.Systems"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
