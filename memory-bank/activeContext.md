@@ -29,6 +29,8 @@
    - Replaced multi-city geography with single-city rooftop district scope
 6. **Legacy App Archival**
    - Moved deprecated multi-app shells from `apps/` into `_legacy/apps/`
+7. **Electron Cleanup**
+   - Removed legacy Electron Capacitor scripts; desktop target will be reintroduced explicitly later
 
 ## Known Constraints
 

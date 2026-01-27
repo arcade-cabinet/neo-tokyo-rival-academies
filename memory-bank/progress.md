@@ -30,6 +30,7 @@
 - [x] Moved obsolete handoffs and process docs into `/docs/legacy/process`
 - [x] Moved legacy story transformation doc into `/docs/legacy/story`
 - [x] Archived deprecated multi-app shells into `_legacy/apps`
+- [x] Removed legacy Electron scripts from root `package.json`
 
 **Babylon Scene Port**
 - [x] Imperative Babylon scene service (camera, lighting, grid, background)
