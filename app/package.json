@@ -38,7 +38,7 @@
     "@capacitor/keyboard": "^8.0.0",
     "@capacitor/screen-orientation": "^8.0.0",
     "@capacitor/status-bar": "^8.0.0",
-    "@dimforge/rapier3d-compat": "^0.16.4",
+    "@dimforge/rapier3d-compat": "^0.19.3",
     "@ionic/angular": "^8.0.0",
     "@neo-tokyo/config": "workspace:*",
     "@neo-tokyo/content-gen": "workspace:*",
