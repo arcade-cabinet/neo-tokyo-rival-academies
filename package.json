@@ -17,9 +17,7 @@
     "cap:add:android": "cap add android",
     "cap:add:ios": "cap add ios",
     "cap:open:android": "cap open android",
-    "cap:open:ios": "cap open ios",
-    "cap:add:electron": "cap add @capacitor-community/electron",
-    "cap:open:electron": "cap open @capacitor-community/electron"
+    "cap:open:ios": "cap open ios"
   },
   "dependencies": {
     "@angular/animations": "^20.0.0",
