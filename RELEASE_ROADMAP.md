@@ -2,7 +2,9 @@
 
 **Branch**: `release/1.0`
 **Target**: Production-ready Android APK & iOS TestFlight Build
-**Status**: In Progress
+**Status**: Legacy (superseded)
+
+**Note**: This roadmap reflects the deprecated React Native + Babylon Native pivot. Current roadmap lives at `/docs/00-golden/PHASE_ROADMAP.md`.
 
 ## Release Vision
 
@@ -27,7 +29,7 @@ Architecture pivot from Capacitor to React Native + Babylon Native.
 | #34 | Phase 1: Reactylon Setup & Mobile Init Flow | P0 |
 
 **Exit Criteria**:
-- [ ] `apps/mobile` runs on Android emulator with Babylon Native
+- [ ] `_legacy/apps/mobile` runs on Android emulator with Babylon Native (legacy)
 - [ ] `packages/core` contains all ECS systems
 - [ ] Web fallback builds and runs in browser
 
@@ -80,7 +82,7 @@ Testing, performance, and security hardening.
 
 **Exit Criteria**:
 - [ ] >70% code coverage on game systems
-- [ ] E2E tests cover intro → combat → save flow
+- [ ] E2E tests cover intro -> combat -> save flow
 - [ ] No high/critical security vulnerabilities
 - [ ] 60 FPS sustained on Pixel 8a
 

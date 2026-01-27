@@ -27,6 +27,8 @@
    - Rewrote core design/gameplay/world docs to align with flooded-world scope
    - Moved obsolete process/story handoffs into `/docs/legacy/process` and `/docs/legacy/story`
    - Replaced multi-city geography with single-city rooftop district scope
+6. **Legacy App Archival**
+   - Moved deprecated multi-app shells from `apps/` into `_legacy/apps/`
 
 ## Known Constraints
 

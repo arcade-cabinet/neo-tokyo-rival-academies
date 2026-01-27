@@ -29,6 +29,7 @@
 - [x] Rewrote design/gameplay/world docs to flooded-world scope
 - [x] Moved obsolete handoffs and process docs into `/docs/legacy/process`
 - [x] Moved legacy story transformation doc into `/docs/legacy/story`
+- [x] Archived deprecated multi-app shells into `_legacy/apps`
 
 **Babylon Scene Port**
 - [x] Imperative Babylon scene service (camera, lighting, grid, background)

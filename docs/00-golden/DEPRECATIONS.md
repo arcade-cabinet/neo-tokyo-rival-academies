@@ -19,7 +19,7 @@ Unity 6 documentation is preserved only for historical/reference purposes in `/d
 - **Unity 6 DOTS runtime**: legacy-only, archived in `/docs/legacy/unity/`.
 - **React/Reactylon runtime**: deprecated; Babylon rendering is imperative in Angular.
 - **Expo / React Native app shells**: deprecated; single web bundle only.
-- **Multi-app packages** in `apps/`: deprecated; we ship one unified app.
+- **Multi-app packages** in `_legacy/apps/`: deprecated; we ship one unified app.
 
 ### Code + Content
 
