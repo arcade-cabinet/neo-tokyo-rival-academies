@@ -20,11 +20,13 @@ Unity 6 documentation is preserved only for historical/reference purposes in `/d
 - **React/Reactylon runtime**: deprecated; Babylon rendering is imperative in Angular.
 - **Expo / React Native app shells**: deprecated; single web bundle only.
 - **Multi-app packages** in `_legacy/apps/`: deprecated; we ship one unified app.
+- **Tech stack split docs**: `TECH_ARCHITECTURE.md` and `ARCHITECTURE_PIVOT_NATIVE.md` were merged into `/docs/tech/ARCHITECTURE.md`.
 
 ### Code + Content
 
 - `_reference/typescript-runtime/`: historical snapshot only.
 - Any docs claiming "Unity migration complete" or "Unity is current."
+- **Combat gap analysis**: `COMBAT_DESIGN_GAP_ANALYSIS.md` merged into `/docs/gameplay/COMBAT_PROGRESSION.md`.
 
 ### Aesthetic/Story
 

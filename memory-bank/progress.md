@@ -29,6 +29,8 @@
 - [x] Rewrote design/gameplay/world docs to flooded-world scope
 - [x] Moved obsolete handoffs and process docs into `/docs/legacy/process`
 - [x] Moved legacy story transformation doc into `/docs/legacy/story`
+- [x] Consolidated tech architecture docs and combat gap analysis into canonical docs
+- [x] Added `/docs/legacy/README.md` usage guidance
 - [x] Archived deprecated multi-app shells into `_legacy/apps`
 - [x] Removed legacy Electron scripts from root `package.json`
 
@@ -37,19 +39,21 @@
 - [x] Character loading + animation controller
 - [x] Quest marker + data shard managers
 - [x] Player controller with touch input support
+- [x] Flooded rooftop scene generation integrated into Babylon runtime
 
 **UI/HUD Port**
 - [x] Main menu, narrative overlay, splash screen
 - [x] JRPG HUD, alignment bar, quest log, quest objective
 - [x] Inventory screen, quest dialogs, save slot select, stat allocation modal
 - [x] Seed phrase menu and Continue flow integrated into main menu
+- [x] Combat arena UI ported to Angular
 
 ---
 
 ## In Progress
 
 ### Unified App Implementation
-- [ ] Integrate remaining legacy UI (combat arena, flooded world menu, game HUD)
+- [ ] Integrate remaining legacy UI (game HUD)
 - [ ] Wire dialogue system + ECS data to Angular services
 - [ ] Configure Electron target (optional)
 - [ ] Remove/archive legacy React/Expo apps

@@ -27,12 +27,17 @@
    - Rewrote core design/gameplay/world docs to align with flooded-world scope
    - Moved obsolete process/story handoffs into `/docs/legacy/process` and `/docs/legacy/story`
    - Replaced multi-city geography with single-city rooftop district scope
+   - Consolidated tech and combat docs to remove duplicates; added legacy README
 6. **Legacy App Archival**
    - Moved deprecated multi-app shells from `apps/` into `_legacy/apps/`
 7. **Electron Cleanup**
    - Removed legacy Electron Capacitor scripts; desktop target will be reintroduced explicitly later
 8. **Menu Seed Port**
    - Ported Flooded World seed menu into Angular main menu with diorama seed generation
+9. **Flooded World + Combat Arena Port**
+   - Added procedural rooftop scene builder and combat arena UI in Angular runtime
+10. **Dependency Fix**
+   - Switched root Biome dependency to @biomejs/biome to restore installs
 
 ## Known Constraints
 

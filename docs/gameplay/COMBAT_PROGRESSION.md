@@ -24,6 +24,28 @@
   - **Turn Order**: Determined by Flow.
   - **Victory**: XP/Loot summary -> return to scene.
 
+## Why Spin-Out Combat (Design Rationale)
+
+- **Mobile clarity**: touch controls stay readable on small screens.
+- **Presentation**: dedicated arena improves UI legibility and VFX staging.
+- **Pacing**: clean rhythm for JRPG encounters and rivalry beats.
+
+### Transition Protocol
+1. Freeze exploration input and pause exploration tick.
+2. Capture player state and encounter group.
+3. Load arena background and combat UI.
+4. Run turn loop until victory/defeat.
+5. Apply rewards, restore exploration state.
+
+### Required Systems
+| Gap | Solution | Target Implementation |
+|-----|----------|-----------------------|
+| Scene management | Exploration ↔ Combat state machine | Angular view state + Babylon scene toggle |
+| Transition VFX | Screen shatter/swirl + audio | Babylon post-process + UI overlay |
+| State persistence | Snapshot player/enemy state | Zustand store snapshot + SaveSystem hooks |
+| Backgrounds | Scene-specific combat backdrops | Story/scene metadata selects assets |
+| Hazards | Arena hazards and buffs/debuffs | CombatSystem extensions |
+
 ---
 
 ## Combat Formulas

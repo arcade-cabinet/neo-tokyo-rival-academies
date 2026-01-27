@@ -2,6 +2,18 @@
 
 **Scope**: Runtime architecture for the unified Ionic Angular + Babylon.js app.
 
+## Core Stack (Current)
+
+| Layer | Technology | Notes |
+|-------|------------|-------|
+| UI | **Ionic + Angular (zoneless)** | Mobile-first UI, routing, accessibility |
+| 3D | **Babylon.js** | WebGL scene, toon shading |
+| ECS/Logic | **Miniplex + Zustand** | Systems + state in `packages/core` |
+| Physics | **Rapier** | Deterministic physics where needed |
+| Native | **Capacitor 8** | Android/iOS wrapper |
+| Build | **Angular CLI (Vite-based)** | Production and dev builds |
+| Tests | **Vitest, Playwright** | Unit + E2E |
+
 ## System Overview
 
 ```
@@ -54,12 +66,47 @@
 - `packages/content-gen/`: Build-time content pipeline (manifests, audio, story).
 - `src/assets/`: Runtime assets and story JSON.
 
+## Package Map
+
+- `packages/core`: ECS systems, stores, types.
+- `packages/content-gen`: Build-time generators (music, story, manifests).
+- `packages/shared-assets`: Shared asset manifests and helpers.
+- `e2e/`: Playwright test suite.
+
 ## Runtime Principles
 
 - **Single app**: one web bundle, wrapped by Capacitor for Android/iOS.
 - **Fixed story, procedural scenes**: authored beats, but rooftop layouts and props are generated per scene seed.
 - **Cel-shaded rendering**: Babylon toon-style materials for characters and props.
 - **Mobile-first**: 60 FPS on Pixel 8a baseline.
+
+## Runtime Targets
+
+- **Web**: SPA served from `www` after `ng build`.
+- **Android/iOS**: `cap sync` uses the same `www` bundle.
+- **Desktop**: Optional Electron target via Capacitor community plugin.
+
+## Build & Test Commands
+
+- `pnpm start` — local dev server.
+- `pnpm build` — production build.
+- `pnpm test` — unit tests.
+- `pnpm test:e2e` — Playwright E2E.
+- `pnpm check` — lint/format (Biome).
+
+## Decision: Single Unified App
+
+### Why We Dropped Multi-App Shells
+Multiple app shells (web, React Native, desktop) created divergent behavior and higher maintenance cost.
+
+### Unified App Standard
+We ship **one** Ionic Angular app and wrap it with Capacitor for Android/iOS. Desktop uses the same web bundle.
+
+### Migration Steps (Current Scope)
+1. Port React/Reactylon UI and Babylon scene code to Angular + Babylon imperative.
+2. Wire ECS packages into the app.
+3. Archive legacy React/Expo apps and Unity runtime notes.
+4. Keep Electron optional and non-divergent.
 
 ## Related Docs
 

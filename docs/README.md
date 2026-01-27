@@ -19,7 +19,6 @@
 ## Gameplay Systems
 - `/docs/gameplay/ALIGNMENT_SYSTEM.md`
 - `/docs/gameplay/COMBAT_PROGRESSION.md`
-- `/docs/gameplay/COMBAT_DESIGN_GAP_ANALYSIS.md`
 - `/docs/gameplay/QUEST_SYSTEM.md`
 - `/docs/gameplay/PERSISTENCE.md`
 
@@ -31,8 +30,6 @@
 
 ## Tech
 - `/docs/tech/ARCHITECTURE.md`
-- `/docs/tech/TECH_ARCHITECTURE.md`
-- `/docs/tech/ARCHITECTURE_PIVOT_NATIVE.md`
 
 ## Procedural
 - `/docs/procedural/PROCEDURAL_ARCHITECTURE.md`
@@ -50,6 +47,7 @@
 - `/docs/process/CHANGELOG.md`
 
 ## Legacy (Reference Only)
+- `/docs/legacy/README.md`
 - `/docs/legacy/unity/`
 - `/docs/legacy/react/`
 - `/docs/legacy/mobile/`

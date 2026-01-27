@@ -59,7 +59,7 @@ Reference: `/docs/pipeline/GENAI_PIPELINE.md`
 - **Logic**: Miniplex ECS + Zustand stores (`packages/core`).
 - **Native**: Capacitor 8 for Android/iOS; optional Electron target.
 
-Reference: `/docs/tech/TECH_ARCHITECTURE.md`
+Reference: `/docs/tech/ARCHITECTURE.md`
 
 ---
 
