@@ -1,7 +1,7 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { QuestStoreService } from '../state/quest-store.service';
+import { Component, type OnDestroy, type OnInit } from '@angular/core';
 import type { Quest } from '@neo-tokyo/core';
+import { Subscription } from 'rxjs';
+import type { QuestStoreService } from '../state/quest-store.service';
 
 @Component({
   selector: 'app-quest-objective',
@@ -19,7 +19,7 @@ export class QuestObjectiveComponent implements OnInit, OnDestroy {
       this.questStore.watchActiveQuests().subscribe((quests) => {
         const mainQuest = quests.find((quest) => quest.type === 'main');
         this.currentQuest = mainQuest || quests[0] || null;
-      }),
+      })
     );
   }
 

@@ -2,5 +2,5 @@
  * Diorama Type Definitions
  */
 
-export * from "./grid";
-export * from "./tiles";
+export * from './grid';
+export * from './tiles';

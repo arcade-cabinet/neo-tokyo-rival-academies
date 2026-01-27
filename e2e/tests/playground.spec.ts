@@ -10,7 +10,7 @@
  * - Performance (FPS within acceptable range)
  */
 
-import { test, expect, type Page, type ConsoleMessage } from '@playwright/test';
+import { type ConsoleMessage, expect, type Page, test } from '@playwright/test';
 
 // Test page definitions with expected behaviors
 const TEST_PAGES = {
@@ -182,8 +182,6 @@ const TEST_PAGES = {
     expectations: ['UI components', 'typography'],
   },
 } as const;
-
-type TestPageKey = keyof typeof TEST_PAGES;
 
 // Collect console errors during test
 interface TestContext {

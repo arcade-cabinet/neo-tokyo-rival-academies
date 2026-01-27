@@ -47,6 +47,7 @@
 - [x] Inventory screen, quest dialogs, save slot select, stat allocation modal
 - [x] Seed phrase menu and Continue flow integrated into main menu
 - [x] Combat arena UI ported to Angular
+- [x] Local seed phrase utilities added to drop diorama dependency
 
 ---
 
@@ -57,6 +58,7 @@
 - [ ] Wire dialogue system + ECS data to Angular services
 - [ ] Configure Electron target (optional)
 - [ ] Remove/archive legacy React/Expo apps
+- [ ] Replace remaining React/Reactylon codepaths in packages
 
 ---
 

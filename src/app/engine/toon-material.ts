@@ -10,7 +10,7 @@ export interface ToonMaterialOptions {
 export function createToonMaterial(
   name: string,
   scene: Scene,
-  options: ToonMaterialOptions = {},
+  options: ToonMaterialOptions = {}
 ): CellMaterial {
   const material = new CellMaterial(name, scene);
   material.diffuseColor = options.diffuseColor || new Color3(1, 1, 1);
@@ -20,14 +20,16 @@ export function createToonMaterial(
     material.diffuseTexture = new Texture(options.diffuseTexture, scene);
   }
 
-  material.specularColor = new Color3(0, 0, 0);
+  if ('specularColor' in material) {
+    (material as { specularColor: Color3 }).specularColor = new Color3(0, 0, 0);
+  }
   return material;
 }
 
 export function createCharacterMaterial(
   name: string,
   scene: Scene,
-  skinTone: 'light' | 'medium' | 'dark' = 'medium',
+  skinTone: 'light' | 'medium' | 'dark' = 'medium'
 ): CellMaterial {
   const skinColors = {
     light: new Color3(1.0, 0.9, 0.85),
@@ -54,6 +56,8 @@ export function createEffectMaterial(name: string, scene: Scene, color: Color3):
     computeHighLevel: false,
   });
 
-  material.emissiveColor = color.scale(0.3);
+  if ('emissiveColor' in material) {
+    (material as { emissiveColor: Color3 }).emissiveColor = color.scale(0.3);
+  }
   return material;
 }

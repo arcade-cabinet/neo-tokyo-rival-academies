@@ -101,7 +101,10 @@ export class MeshyClient {
   // Core HTTP Methods
   // --------------------------------------------------------------------------
 
-  async get<T = unknown>(path: string, query?: Record<string, string | number | boolean>): Promise<T> {
+  async get<T = unknown>(
+    path: string,
+    query?: Record<string, string | number | boolean>
+  ): Promise<T> {
     return this.request<T>('GET', path, undefined, query);
   }
 
@@ -126,8 +129,8 @@ export class MeshyClient {
     const response = await fetch(url, {
       method: 'GET',
       headers: {
-        'Authorization': `Bearer ${this.apiKey}`,
-        'Accept': 'text/event-stream',
+        Authorization: `Bearer ${this.apiKey}`,
+        Accept: 'text/event-stream',
       },
       signal: AbortSignal.timeout(this.streamTimeoutMs),
     });
@@ -203,7 +206,7 @@ export class MeshyClient {
         const response = await fetch(url, {
           method,
           headers: {
-            'Authorization': `Bearer ${this.apiKey}`,
+            Authorization: `Bearer ${this.apiKey}`,
             'Content-Type': 'application/json',
           },
           body: body ? JSON.stringify(body) : undefined,
@@ -221,7 +224,7 @@ export class MeshyClient {
 
         // Only retry on rate limit errors
         if (error instanceof RateLimitError && attempt < this.maxRetries) {
-          const delay = this.retryDelayMs * Math.pow(2, attempt);
+          const delay = this.retryDelayMs * 2 ** attempt;
           console.log(`  Rate limited. Retrying in ${delay}ms...`);
           await this.sleep(delay);
           continue;
@@ -254,7 +257,7 @@ export class MeshyClient {
 
     let message = 'Unknown error';
     try {
-      const body = await response.json() as { message?: string };
+      const body = (await response.json()) as { message?: string };
       message = body.message ?? message;
     } catch {
       message = await response.text().catch(() => message);
@@ -273,6 +276,6 @@ export class MeshyClient {
   }
 
   private sleep(ms: number): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 }

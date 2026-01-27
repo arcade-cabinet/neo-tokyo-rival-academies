@@ -1,7 +1,7 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Component, EventEmitter, Input, type OnDestroy, type OnInit, Output } from '@angular/core';
 import type { Quest } from '@neo-tokyo/core';
-import { QuestStoreService } from '../state/quest-store.service';
+import { Subscription } from 'rxjs';
+import type { QuestStoreService } from '../state/quest-store.service';
 
 @Component({
   selector: 'app-quest-log',
@@ -21,9 +21,15 @@ export class QuestLogComponent implements OnInit, OnDestroy {
   constructor(private readonly questStore: QuestStoreService) {}
 
   ngOnInit(): void {
-    this.sub.add(this.questStore.watchActiveQuests().subscribe((quests) => (this.activeQuests = quests)));
     this.sub.add(
-      this.questStore.watchCompletedQuests().subscribe((quests) => (this.completedQuests = quests)),
+      this.questStore.watchActiveQuests().subscribe((quests) => {
+        this.activeQuests = quests;
+      })
+    );
+    this.sub.add(
+      this.questStore.watchCompletedQuests().subscribe((quests) => {
+        this.completedQuests = quests;
+      })
     );
   }
 

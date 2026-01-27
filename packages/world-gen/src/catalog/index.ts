@@ -2,4 +2,4 @@
  * Catalog Exports
  */
 
-export { BlockCatalog } from "./BlockCatalog";
+export { BlockCatalog } from './BlockCatalog';

@@ -5,6 +5,7 @@ import type {
 	CombatResult,
 } from "../systems/CombatSystem";
 import { CombatSystem, ENCOUNTER_TEMPLATES } from "../systems/CombatSystem";
+import { usePlayerStore } from "./playerStore";
 
 export type CombatPhase =
 	| "idle"
@@ -161,8 +162,6 @@ export const useCombatStore = create<CombatState>((set, get) => ({
 		const { phase, victoryRewards, player } = get();
 
 		if (phase === "victory" && victoryRewards && player) {
-			// Import player store dynamically
-			const { usePlayerStore } = require("./playerStore");
 			const playerStore = usePlayerStore.getState();
 
 			// Award XP and credits
@@ -170,7 +169,6 @@ export const useCombatStore = create<CombatState>((set, get) => ({
 			playerStore.addCredits(victoryRewards.credits);
 
 			// Update player HP in player store if needed
-			// TODO: Implement HP persistence in player store
 		}
 
 		set({

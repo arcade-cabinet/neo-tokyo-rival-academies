@@ -158,10 +158,16 @@ vite.config.ts.timestamp-*
 
 # Build artifacts
 build/
+Builds/
+.angular/
 
 # Temporary files
 tmp/
 temp/
+Library/
+UserSettings/
+_legacy/
+_reference/
 
 # Playwright
 test-results/

@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
+import type { InputStateService } from '../state/input-state.service';
 import type { InputState } from '../types/game';
-import { InputStateService } from '../state/input-state.service';
 
 @Component({
   selector: 'app-game-hud',

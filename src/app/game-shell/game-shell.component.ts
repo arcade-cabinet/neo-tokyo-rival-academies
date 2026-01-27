@@ -1,10 +1,10 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { MusicSynth } from '@neo-tokyo/content-gen';
+import { Component, type OnDestroy, type OnInit } from '@angular/core';
 import { DistrictManager, QuestGenerator, useQuestStore } from '@neo-tokyo/core';
-import { InputStateService } from '../state/input-state.service';
+import { MusicSynth } from '../audio/music-synth';
 import { INTRO_SCRIPT } from '../content/intro-script';
+import type { BabylonSceneService } from '../engine/babylon-scene.service';
+import type { InputStateService } from '../state/input-state.service';
 import { SaveSystem } from '../systems/save-system';
-import { BabylonSceneService } from '../engine/babylon-scene.service';
 import type { InputState } from '../types/game';
 import type { MenuStartPayload } from '../ui/main-menu.component';
 
@@ -23,12 +23,11 @@ export class GameShellComponent implements OnInit, OnDestroy {
 
   private readonly music = new MusicSynth();
   private worldInitialized = false;
-  private districtManager: DistrictManager | null = null;
   private pendingSeed: string | null = null;
 
   constructor(
     private readonly inputState: InputStateService,
-    private readonly sceneService: BabylonSceneService,
+    private readonly sceneService: BabylonSceneService
   ) {}
 
   ngOnInit(): void {
@@ -59,20 +58,21 @@ export class GameShellComponent implements OnInit, OnDestroy {
       const districtManager = new DistrictManager(masterSeed);
       await districtManager.initialize(true);
 
+      this.sceneService.loadFloodedWorld(masterSeed);
+
       const currentDistrict = districtManager.getCurrentDistrict();
       if (currentDistrict) {
         const questGenerator = new QuestGenerator(currentDistrict.seed);
         const cluster = questGenerator.generateCluster(
           currentDistrict.profile,
           currentDistrict.id,
-          currentDistrict.name,
+          currentDistrict.name
         );
 
         useQuestStore.getState().addCluster(cluster);
         useQuestStore.getState().activateQuest(cluster.main.id);
       }
 
-      this.districtManager = districtManager;
       this.worldInitialized = true;
       this.pendingSeed = null;
     }

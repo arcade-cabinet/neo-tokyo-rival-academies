@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { usePlayerStore } from '@neo-tokyo/core';
 import type { RPGStats } from '@neo-tokyo/core';
+import { usePlayerStore } from '@neo-tokyo/core';
+import { BehaviorSubject } from 'rxjs';
 
 interface PlayerSnapshot {
   level: number;

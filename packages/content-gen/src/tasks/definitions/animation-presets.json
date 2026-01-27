@@ -15,13 +15,7 @@
     },
     "enemy": {
       "description": "Standard enemy NPC animation set",
-      "animations": [
-        "Combat_Stance",
-        "RunFast",
-        "Double_Combo_Attack",
-        "BeHit_FlyUp",
-        "Dead"
-      ]
+      "animations": ["Combat_Stance", "RunFast", "Double_Combo_Attack", "BeHit_FlyUp", "Dead"]
     },
     "boss": {
       "description": "Enhanced animation set for boss characters",
@@ -37,9 +31,7 @@
     },
     "prop": {
       "description": "Minimal animation for animated props/hazards",
-      "animations": [
-        "Idle"
-      ]
+      "animations": ["Idle"]
     }
   },
   "default": "enemy"

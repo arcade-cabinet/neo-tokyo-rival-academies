@@ -11,8 +11,16 @@
       "inputs": {
         "prompt": { "source": "manifest", "path": "textToImageTask.prompt" },
         "ai_model": { "value": "nano-banana-pro" },
-        "generate_multi_view": { "source": "manifest", "path": "textToImageTask.generateMultiView", "default": true },
-        "pose_mode": { "source": "manifest", "path": "textToImageTask.poseMode", "default": "a-pose" }
+        "generate_multi_view": {
+          "source": "manifest",
+          "path": "textToImageTask.generateMultiView",
+          "default": true
+        },
+        "pose_mode": {
+          "source": "manifest",
+          "path": "textToImageTask.poseMode",
+          "default": "a-pose"
+        }
       },
       "outputs": {
         "taskId": "$.id",
@@ -27,13 +35,41 @@
       "inputs": {
         "image_urls": { "source": "step", "step": "concept", "path": "imageUrls" },
         "ai_model": { "value": "latest" },
-        "topology": { "source": "manifest", "path": "multiImageTo3DTask.topology", "default": "quad" },
-        "target_polycount": { "source": "manifest", "path": "multiImageTo3DTask.targetPolycount", "default": 30000 },
-        "symmetry_mode": { "source": "manifest", "path": "multiImageTo3DTask.symmetryMode", "default": "auto" },
-        "should_remesh": { "source": "manifest", "path": "multiImageTo3DTask.shouldRemesh", "default": true },
-        "should_texture": { "source": "manifest", "path": "multiImageTo3DTask.shouldTexture", "default": true },
-        "enable_pbr": { "source": "manifest", "path": "multiImageTo3DTask.enablePbr", "default": false },
-        "pose_mode": { "source": "manifest", "path": "multiImageTo3DTask.poseMode", "default": "a-pose" },
+        "topology": {
+          "source": "manifest",
+          "path": "multiImageTo3DTask.topology",
+          "default": "quad"
+        },
+        "target_polycount": {
+          "source": "manifest",
+          "path": "multiImageTo3DTask.targetPolycount",
+          "default": 30000
+        },
+        "symmetry_mode": {
+          "source": "manifest",
+          "path": "multiImageTo3DTask.symmetryMode",
+          "default": "auto"
+        },
+        "should_remesh": {
+          "source": "manifest",
+          "path": "multiImageTo3DTask.shouldRemesh",
+          "default": true
+        },
+        "should_texture": {
+          "source": "manifest",
+          "path": "multiImageTo3DTask.shouldTexture",
+          "default": true
+        },
+        "enable_pbr": {
+          "source": "manifest",
+          "path": "multiImageTo3DTask.enablePbr",
+          "default": false
+        },
+        "pose_mode": {
+          "source": "manifest",
+          "path": "multiImageTo3DTask.poseMode",
+          "default": "a-pose"
+        },
         "texture_prompt": { "source": "manifest", "path": "multiImageTo3DTask.texturePrompt" }
       },
       "outputs": {
@@ -50,7 +86,11 @@
       "dependsOn": ["model"],
       "inputs": {
         "input_task_id": { "source": "step", "step": "model", "path": "taskId" },
-        "height_meters": { "source": "manifest", "path": "riggingTask.heightMeters", "default": 1.7 },
+        "height_meters": {
+          "source": "manifest",
+          "path": "riggingTask.heightMeters",
+          "default": 1.7
+        },
         "texture_image_url": { "source": "step", "step": "model", "path": "textureUrl" }
       },
       "outputs": {

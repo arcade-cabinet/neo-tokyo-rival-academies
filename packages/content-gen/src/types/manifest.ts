@@ -14,7 +14,13 @@ import { z } from 'zod';
 // TASK STATE SCHEMAS
 // ============================================================================
 
-export const TaskStatusSchema = z.enum(['PENDING', 'IN_PROGRESS', 'SUCCEEDED', 'FAILED', 'CANCELED']);
+export const TaskStatusSchema = z.enum([
+  'PENDING',
+  'IN_PROGRESS',
+  'SUCCEEDED',
+  'FAILED',
+  'CANCELED',
+]);
 
 /**
  * Generic task state record
@@ -165,10 +171,12 @@ export const AnimationTaskSchema = z.object({
   animations: z.array(z.string()).optional(),
 
   /** Post-processing options */
-  postProcess: z.object({
-    operationType: z.enum(['change_fps', 'fbx2usdz', 'extract_armature']).optional(),
-    fps: z.enum(['24', '25', '30', '60']).optional(),
-  }).optional(),
+  postProcess: z
+    .object({
+      operationType: z.enum(['change_fps', 'fbx2usdz', 'extract_armature']).optional(),
+      fps: z.enum(['24', '25', '30', '60']).optional(),
+    })
+    .optional(),
 });
 
 /**
@@ -224,15 +232,17 @@ export const AssetManifestSchema = z.object({
   retextureTask: RetextureTaskSchema.optional(),
 
   // --- Task Execution State ---
-  tasks: z.object({
-    'text-to-image': TaskStateSchema.optional(),
-    'multi-image-to-3d': TaskStateSchema.optional(),
-    'text-to-3d-preview': TaskStateSchema.optional(),
-    'text-to-3d-refine': TaskStateSchema.optional(),
-    rigging: TaskStateSchema.optional(),
-    animations: z.array(AnimationTaskStateSchema).optional(),
-    retexture: TaskStateSchema.optional(),
-  }).default({}),
+  tasks: z
+    .object({
+      'text-to-image': TaskStateSchema.optional(),
+      'multi-image-to-3d': TaskStateSchema.optional(),
+      'text-to-3d-preview': TaskStateSchema.optional(),
+      'text-to-3d-refine': TaskStateSchema.optional(),
+      rigging: TaskStateSchema.optional(),
+      animations: z.array(AnimationTaskStateSchema).optional(),
+      retexture: TaskStateSchema.optional(),
+    })
+    .default({}),
 });
 
 // ============================================================================

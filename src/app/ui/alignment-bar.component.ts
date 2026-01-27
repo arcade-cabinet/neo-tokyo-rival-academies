@@ -1,6 +1,6 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, type OnDestroy, type OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { AlignmentStoreService } from '../state/alignment-store.service';
+import type { AlignmentStoreService } from '../state/alignment-store.service';
 
 @Component({
   selector: 'app-alignment-bar',
@@ -18,10 +18,26 @@ export class AlignmentBarComponent implements OnInit, OnDestroy {
   constructor(private readonly alignmentStore: AlignmentStoreService) {}
 
   ngOnInit(): void {
-    this.sub.add(this.alignmentStore.watchAlignment().subscribe((value) => (this.alignment = value)));
-    this.sub.add(this.alignmentStore.watchLabel().subscribe((value) => (this.alignmentLabel = value)));
-    this.sub.add(this.alignmentStore.watchKurenaiRep().subscribe((value) => (this.kurenaiRep = value)));
-    this.sub.add(this.alignmentStore.watchAzureRep().subscribe((value) => (this.azureRep = value)));
+    this.sub.add(
+      this.alignmentStore.watchAlignment().subscribe((value) => {
+        this.alignment = value;
+      })
+    );
+    this.sub.add(
+      this.alignmentStore.watchLabel().subscribe((value) => {
+        this.alignmentLabel = value;
+      })
+    );
+    this.sub.add(
+      this.alignmentStore.watchKurenaiRep().subscribe((value) => {
+        this.kurenaiRep = value;
+      })
+    );
+    this.sub.add(
+      this.alignmentStore.watchAzureRep().subscribe((value) => {
+        this.azureRep = value;
+      })
+    );
   }
 
   ngOnDestroy(): void {

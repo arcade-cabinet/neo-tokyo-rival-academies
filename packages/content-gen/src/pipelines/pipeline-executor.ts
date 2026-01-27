@@ -5,13 +5,12 @@
  * Handles input/output mapping, step dependencies, and forEach loops.
  */
 
-import fs from 'node:fs';
+import fs, { createWriteStream } from 'node:fs';
 import path from 'node:path';
 import { pipeline as streamPipeline } from 'node:stream/promises';
-import { createWriteStream } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import seedrandom from 'seedrandom';
-import { MeshyClient, type TaskResult } from '../api/meshy-client';
+import { MeshyClient } from '../api/meshy-client';
 import { ANIMATION_IDS } from '../tasks/registry';
 import type { AnimationTaskState, AssetManifest } from '../types/manifest';
 
@@ -197,7 +196,7 @@ export class PipelineExecutor {
 
     // Determine which steps to run
     const stepsToRun = options?.step
-      ? pipeline.steps.filter(s => s.id === options.step)
+      ? pipeline.steps.filter((s) => s.id === options.step)
       : pipeline.steps;
 
     // Execute steps
@@ -272,8 +271,8 @@ export class PipelineExecutor {
       // Check if already completed
       const itemId = String(value).toLowerCase();
       const existingResults = this.getAnimationResults(context.manifest);
-      const existing = existingResults.find(r =>
-        (r.outputs?.animationName as string)?.toLowerCase() === itemId
+      const existing = existingResults.find(
+        (r) => (r.outputs?.animationName as string)?.toLowerCase() === itemId
       );
 
       if (existing?.status === 'SUCCEEDED') {
@@ -330,12 +329,18 @@ export class PipelineExecutor {
     if (result.status !== 'SUCCEEDED') {
       const error = result.task_error?.message ?? JSON.stringify(result);
       console.log(`  ❌ Failed: ${error}`);
-      this.updateManifestState(step, pipeline, context, {
-        taskId,
-        status: result.status,
-        outputs: {},
-        artifacts: {},
-      }, iterationLabel);
+      this.updateManifestState(
+        step,
+        pipeline,
+        context,
+        {
+          taskId,
+          status: result.status,
+          outputs: {},
+          artifacts: {},
+        },
+        iterationLabel
+      );
       return context.manifest;
     }
 
@@ -373,7 +378,9 @@ export class PipelineExecutor {
     // Extract outputs (URLs stay in memory, only filenames go to manifest)
     const outputs: Record<string, unknown> = { taskId };
     for (const [name, jsonPath] of Object.entries(step.outputs)) {
-      outputs[name] = this.extractJsonPath(result, jsonPath) ?? this.extractJsonPath({ result: taskId }, jsonPath);
+      outputs[name] =
+        this.extractJsonPath(result, jsonPath) ??
+        this.extractJsonPath({ result: taskId }, jsonPath);
     }
 
     // Add iteration-specific outputs
@@ -449,15 +456,17 @@ export class PipelineExecutor {
         return this.extractPath(context.manifest, resolvedPath);
 
       case 'step': {
-        const stepResult = context.stepResults.get(binding.step!);
-        if (!stepResult || !resolvedPath) return undefined;
+        if (!binding.step || !resolvedPath) return undefined;
+        const stepResult = context.stepResults.get(binding.step);
+        if (!stepResult) return undefined;
         return this.extractPath(stepResult.outputs, resolvedPath);
       }
 
       case 'lookup': {
-        const table = LOOKUP_TABLES[binding.table!];
+        if (!binding.table || !resolvedKey) return undefined;
+        const table = LOOKUP_TABLES[binding.table];
         if (!table) return undefined;
-        return table[resolvedKey!];
+        return table[resolvedKey];
       }
 
       default:
@@ -533,8 +542,8 @@ export class PipelineExecutor {
       'image-to-3d': '/v1/image-to-3d',
       'text-to-3d-preview': '/v2/text-to-3d',
       'text-to-3d-refine': '/v2/text-to-3d',
-      'rigging': '/v1/rigging',
-      'animation': '/v1/animations',
+      rigging: '/v1/rigging',
+      animation: '/v1/animations',
     };
     return mapping[task] ?? `/v1/${task}`;
   }
@@ -553,7 +562,7 @@ export class PipelineExecutor {
       fs.mkdirSync(dir, { recursive: true });
     }
 
-    // @ts-ignore - Node streams
+    // @ts-expect-error - Node streams
     await streamPipeline(response.body, createWriteStream(dest));
   }
 
@@ -582,13 +591,16 @@ export class PipelineExecutor {
   private getExistingStepResult(
     stepId: string,
     manifest: AssetManifest,
-    pipeline: PipelineDefinition
+    _pipeline: PipelineDefinition
   ): StepResult | undefined {
     // Direct access to task state in manifest
     const tasks = manifest.tasks as Record<string, unknown>;
-    const stateKey = stepId === 'preview' ? 'text-to-3d-preview'
-      : stepId === 'refine' ? 'text-to-3d-refine'
-      : stepId;
+    const stateKey =
+      stepId === 'preview'
+        ? 'text-to-3d-preview'
+        : stepId === 'refine'
+          ? 'text-to-3d-refine'
+          : stepId;
 
     const state = tasks[stateKey] as Record<string, unknown> | undefined;
     if (!state) return undefined;
@@ -611,10 +623,12 @@ export class PipelineExecutor {
    * Get animation results from manifest
    */
   private getAnimationResults(manifest: AssetManifest): StepResult[] {
-    const animations = (manifest.tasks as Record<string, unknown>).animations as Array<Record<string, unknown>> | undefined;
+    const animations = (manifest.tasks as Record<string, unknown>).animations as
+      | Array<Record<string, unknown>>
+      | undefined;
     if (!animations) return [];
 
-    return animations.map(a => ({
+    return animations.map((a) => ({
       taskId: a.taskId as string,
       status: a.status as string,
       outputs: a,
@@ -627,7 +641,7 @@ export class PipelineExecutor {
    */
   private updateManifestState(
     step: PipelineStep,
-    pipeline: PipelineDefinition,
+    _pipeline: PipelineDefinition,
     context: ExecutionContext,
     result: StepResult,
     iterationLabel?: string
@@ -662,9 +676,12 @@ export class PipelineExecutor {
     }
 
     // Regular steps - persist URLs (small, needed for handoff) but NEVER base64 data
-    const stateKey = step.id === 'preview' ? 'text-to-3d-preview'
-      : step.id === 'refine' ? 'text-to-3d-refine'
-      : step.id;
+    const stateKey =
+      step.id === 'preview'
+        ? 'text-to-3d-preview'
+        : step.id === 'refine'
+          ? 'text-to-3d-refine'
+          : step.id;
 
     (manifest.tasks as Record<string, unknown>)[stateKey] = {
       taskId: result.taskId,

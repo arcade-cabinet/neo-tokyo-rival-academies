@@ -2,5 +2,5 @@
  * Diorama Materials Exports
  */
 
-export * from "./tile-materials";
-export * from "./toon-material";
+export * from './tile-materials';
+export * from './toon-material';

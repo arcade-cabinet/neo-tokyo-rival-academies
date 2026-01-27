@@ -1,7 +1,13 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { BabylonSceneService } from './babylon-scene.service';
-import { InputStateService } from '../state/input-state.service';
+import {
+  type AfterViewInit,
+  Component,
+  type ElementRef,
+  type OnDestroy,
+  ViewChild,
+} from '@angular/core';
+import type { Subscription } from 'rxjs';
+import type { InputStateService } from '../state/input-state.service';
+import type { BabylonSceneService } from './babylon-scene.service';
 
 @Component({
   selector: 'app-babylon-canvas',
@@ -15,7 +21,7 @@ export class BabylonCanvasComponent implements AfterViewInit, OnDestroy {
 
   constructor(
     private readonly sceneService: BabylonSceneService,
-    private readonly inputStateService: InputStateService,
+    private readonly inputStateService: InputStateService
   ) {}
 
   async ngAfterViewInit(): Promise<void> {

@@ -1,12 +1,12 @@
 import {
+  type AbstractMesh,
   Color3,
+  type Material,
   MeshBuilder,
+  type Scene,
   StandardMaterial,
   Texture,
   Vector3,
-  type AbstractMesh,
-  type Material,
-  type Scene,
 } from '@babylonjs/core';
 
 export type BackgroundTheme = 'flooded' | 'overcast' | 'sunset';
@@ -37,7 +37,13 @@ export class BackgroundPanels {
 
   constructor(private readonly scene: Scene) {}
 
-  build({ minX, maxX, height = 30, theme = 'flooded', sector = 'sector0' }: BackgroundPanelsOptions) {
+  build({
+    minX,
+    maxX,
+    height = 30,
+    theme = 'flooded',
+    sector = 'sector0',
+  }: BackgroundPanelsOptions) {
     const tint = THEME_TINTS[theme];
     const emissiveIntensity = THEME_EMISSIVE[theme];
     const meshes: AbstractMesh[] = [];
@@ -47,12 +53,19 @@ export class BackgroundPanels {
 
     const farWidth = sceneWidth * 3;
     const farHeight = height * 0.6;
-    const farPanel = MeshBuilder.CreatePlane('parallaxFar', { width: farWidth, height: farHeight }, this.scene);
+    const farPanel = MeshBuilder.CreatePlane(
+      'parallaxFar',
+      { width: farWidth, height: farHeight },
+      this.scene
+    );
     farPanel.position = new Vector3(0, farHeight * 0.8 + 5, -60);
     farPanel.rotation.x = -Math.PI / 12;
 
     const farMaterial = new StandardMaterial('parallaxFarMat', this.scene);
-    farMaterial.diffuseTexture = new Texture(`/assets/backgrounds/${sector}/parallax_far/concept.png`, this.scene);
+    farMaterial.diffuseTexture = new Texture(
+      `/assets/backgrounds/${sector}/parallax_far/concept.png`,
+      this.scene
+    );
     farMaterial.specularColor = new Color3(0, 0, 0);
     farMaterial.emissiveColor = tint.scale(emissiveIntensity * 0.8);
     farMaterial.backFaceCulling = false;
@@ -62,12 +75,19 @@ export class BackgroundPanels {
 
     const midWidth = sceneWidth * 2.5;
     const midHeight = height * 0.5;
-    const midPanel = MeshBuilder.CreatePlane('parallaxMid', { width: midWidth, height: midHeight }, this.scene);
+    const midPanel = MeshBuilder.CreatePlane(
+      'parallaxMid',
+      { width: midWidth, height: midHeight },
+      this.scene
+    );
     midPanel.position = new Vector3(0, midHeight * 0.6 + 3, -45);
     midPanel.rotation.x = -Math.PI / 16;
 
     const midMaterial = new StandardMaterial('parallaxMidMat', this.scene);
-    midMaterial.diffuseTexture = new Texture(`/assets/backgrounds/${sector}/parallax_mid/concept.png`, this.scene);
+    midMaterial.diffuseTexture = new Texture(
+      `/assets/backgrounds/${sector}/parallax_mid/concept.png`,
+      this.scene
+    );
     midMaterial.specularColor = new Color3(0, 0, 0);
     midMaterial.emissiveColor = tint.scale(emissiveIntensity);
     midMaterial.backFaceCulling = false;
@@ -78,12 +98,19 @@ export class BackgroundPanels {
     const wallHeight = height * 0.7;
     const wallWidth = wallHeight * (9 / 16);
 
-    const leftPanel = MeshBuilder.CreatePlane('wallLeft', { width: wallWidth, height: wallHeight }, this.scene);
+    const leftPanel = MeshBuilder.CreatePlane(
+      'wallLeft',
+      { width: wallWidth, height: wallHeight },
+      this.scene
+    );
     leftPanel.position = new Vector3(minX - 15, wallHeight * 0.35, -30);
     leftPanel.rotation.y = Math.PI / 5;
 
     const leftMaterial = new StandardMaterial('wallLeftMat', this.scene);
-    leftMaterial.diffuseTexture = new Texture(`/assets/backgrounds/${sector}/wall_left/concept.png`, this.scene);
+    leftMaterial.diffuseTexture = new Texture(
+      `/assets/backgrounds/${sector}/wall_left/concept.png`,
+      this.scene
+    );
     leftMaterial.specularColor = new Color3(0, 0, 0);
     leftMaterial.emissiveColor = tint.scale(emissiveIntensity * 1.2);
     leftMaterial.backFaceCulling = false;
@@ -91,12 +118,19 @@ export class BackgroundPanels {
     meshes.push(leftPanel);
     materials.push(leftMaterial);
 
-    const rightPanel = MeshBuilder.CreatePlane('wallRight', { width: wallWidth, height: wallHeight }, this.scene);
+    const rightPanel = MeshBuilder.CreatePlane(
+      'wallRight',
+      { width: wallWidth, height: wallHeight },
+      this.scene
+    );
     rightPanel.position = new Vector3(maxX + 15, wallHeight * 0.35, -30);
     rightPanel.rotation.y = -Math.PI / 5;
 
     const rightMaterial = new StandardMaterial('wallRightMat', this.scene);
-    rightMaterial.diffuseTexture = new Texture(`/assets/backgrounds/${sector}/wall_right/concept.png`, this.scene);
+    rightMaterial.diffuseTexture = new Texture(
+      `/assets/backgrounds/${sector}/wall_right/concept.png`,
+      this.scene
+    );
     rightMaterial.specularColor = new Color3(0, 0, 0);
     rightMaterial.emissiveColor = tint.scale(emissiveIntensity * 1.2);
     rightMaterial.backFaceCulling = false;
@@ -106,12 +140,19 @@ export class BackgroundPanels {
 
     const backWidth = sceneWidth * 1.5;
     const backHeight = height * 0.35;
-    const backPanel = MeshBuilder.CreatePlane('rooftopEdge', { width: backWidth, height: backHeight }, this.scene);
+    const backPanel = MeshBuilder.CreatePlane(
+      'rooftopEdge',
+      { width: backWidth, height: backHeight },
+      this.scene
+    );
     backPanel.position = new Vector3(0, backHeight * 0.3 + 1, -32);
     backPanel.rotation.x = -Math.PI / 10;
 
     const backMaterial = new StandardMaterial('rooftopEdgeMat', this.scene);
-    backMaterial.diffuseTexture = new Texture(`/assets/backgrounds/${sector}/rooftop/concept.png`, this.scene);
+    backMaterial.diffuseTexture = new Texture(
+      `/assets/backgrounds/${sector}/rooftop/concept.png`,
+      this.scene
+    );
     backMaterial.specularColor = new Color3(0, 0, 0);
     backMaterial.emissiveColor = tint.scale(emissiveIntensity * 0.9);
     backMaterial.backFaceCulling = false;

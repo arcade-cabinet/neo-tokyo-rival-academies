@@ -104,9 +104,9 @@ export class QuestGenerator {
 
 		// Get adjectives and landmarks for this district's theme
 		const adjectives =
-			QUEST_ADJECTIVES[districtProfile.theme] || QUEST_ADJECTIVES.slums;
+			QUEST_ADJECTIVES[districtProfile.theme] ?? QUEST_ADJECTIVES.slums;
 		const landmarks =
-			QUEST_LANDMARKS[districtProfile.theme] || QUEST_LANDMARKS.slums;
+			QUEST_LANDMARKS[districtProfile.theme] ?? QUEST_LANDMARKS.slums;
 
 		const adjective = weightedRandom(adjectives, questRng);
 		const landmark = weightedRandom(landmarks, questRng);
@@ -199,7 +199,7 @@ export class QuestGenerator {
 		// Secret quests have a chance for rare items
 		const items: string[] = [];
 		if (type === "secret" && questRng() > 0.5) {
-			items.push("rare_tech_module"); // TODO: Replace with actual item system
+			items.push("water-filter-core");
 		}
 
 		return {

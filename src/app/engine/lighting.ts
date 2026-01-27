@@ -1,5 +1,12 @@
-import { Color3, DirectionalLight, HemisphericLight, PointLight, ShadowGenerator, Vector3 } from '@babylonjs/core';
 import type { AbstractMesh, Scene } from '@babylonjs/core';
+import {
+  Color3,
+  DirectionalLight,
+  HemisphericLight,
+  PointLight,
+  ShadowGenerator,
+  Vector3,
+} from '@babylonjs/core';
 
 export interface DirectionalLightOptions {
   position?: Vector3;
@@ -26,7 +33,11 @@ export class DirectionalLightWithShadows {
       name = 'sunLight',
     } = options;
 
-    const light = new DirectionalLight(name, direction || position.negate().normalize(), this.scene);
+    const light = new DirectionalLight(
+      name,
+      direction || position.negate().normalize(),
+      this.scene
+    );
     light.position = position;
     light.intensity = intensity;
     light.diffuse = new Color3(1, 0.98, 0.95);

@@ -16,7 +16,7 @@ export interface AllocationResult<TStats> {
 
 export function validateAllocation(
   allocation: StatAllocation,
-  availablePoints: number,
+  availablePoints: number
 ): { valid: boolean; error?: string } {
   const totalPoints =
     allocation.structure + allocation.ignition + allocation.logic + allocation.flow;
@@ -42,7 +42,7 @@ export function validateAllocation(
 
 export function getRecommendedAllocation(
   role: 'tank' | 'melee_dps' | 'ranged_dps' | 'balanced',
-  points: number,
+  points: number
 ): StatAllocation {
   const weights: Record<typeof role, [number, number, number, number]> = {
     tank: [0.5, 0.2, 0.1, 0.2],
@@ -63,7 +63,13 @@ export function getRecommendedAllocation(
   const remainder = points - total;
   if (remainder > 0) {
     const primaryStat: keyof StatAllocation =
-      role === 'tank' ? 'structure' : role === 'melee_dps' ? 'ignition' : role === 'ranged_dps' ? 'logic' : 'structure';
+      role === 'tank'
+        ? 'structure'
+        : role === 'melee_dps'
+          ? 'ignition'
+          : role === 'ranged_dps'
+            ? 'logic'
+            : 'structure';
     allocation[primaryStat] += remainder;
   }
 
@@ -73,7 +79,7 @@ export function getRecommendedAllocation(
 export function applyAllocation<TStats extends StatAllocation>(
   stats: TStats,
   allocation: StatAllocation,
-  availablePoints: number,
+  availablePoints: number
 ): AllocationResult<TStats> {
   const validation = validateAllocation(allocation, availablePoints);
   if (!validation.valid) {

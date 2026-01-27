@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import type { DistrictTheme } from "../data/questGrammar";
 
 export interface District {
 	id: string;
@@ -11,7 +12,7 @@ export interface District {
 
 export interface DistrictProfile {
 	name: string;
-	theme: string;
+	theme: DistrictTheme;
 	tileDistribution: Record<string, number>;
 	enemyTypes: string[];
 	landmarkCount: number;

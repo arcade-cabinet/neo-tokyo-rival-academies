@@ -1,4 +1,12 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  type OnChanges,
+  Output,
+  type SimpleChange,
+  type SimpleChanges,
+} from '@angular/core';
 import type { NarrativeLine } from '../content/intro-script';
 
 @Component({
@@ -17,7 +25,8 @@ export class NarrativeOverlayComponent implements OnChanges {
   advanceTimeout: number | null = null;
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['script']) {
+    const { script } = changes as Record<string, SimpleChange>;
+    if (script) {
       this.reset();
       if (!this.script || this.script.length === 0) {
         this.complete.emit();

@@ -2,4 +2,4 @@
  * RTB (Rooftop Territory Block) Exports
  */
 
-export * from "./ShelterBlock";
+export * from './ShelterBlock';

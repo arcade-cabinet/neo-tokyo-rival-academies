@@ -57,7 +57,7 @@
         <button
           class="suggestion"
           type="button"
-          *ngFor="let word of [...suggestions.adjectives, ...suggestions.nouns, ...suggestions.locations]"
+          *ngFor="let word of allSuggestions"
           (click)="handleSuggestionClick(word)"
         >
           {{ word }}

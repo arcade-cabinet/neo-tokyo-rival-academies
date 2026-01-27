@@ -7,6 +7,6 @@
  * This package has NO runtime dependencies - pure configuration objects.
  */
 
-export * from "./game-constants";
-export * from "./quality-settings";
-export * from "./world-constants";
+export * from './game-constants';
+export * from './quality-settings';
+export * from './world-constants';

@@ -17,6 +17,7 @@ export class InventoryScreenComponent {
 
   selectedItem: InventoryItem | null = null;
   filter: FilterType = 'all';
+  filters: FilterType[] = ['all', 'weapon', 'accessory', 'consumable', 'key_item'];
 
   setFilter(filter: FilterType) {
     this.filter = filter;

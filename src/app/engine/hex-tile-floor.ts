@@ -1,9 +1,9 @@
-import { Color3, MeshBuilder, type AbstractMesh, type Scene } from '@babylonjs/core';
-import type { GridBounds } from './grid-types';
-import { createAllTileMaterials } from './tile-materials';
+import { type AbstractMesh, Color3, MeshBuilder, type Scene } from '@babylonjs/core';
 import { applyLeftClipping, applyRightClipping } from './clipping-planes';
+import type { GridBounds } from './grid-types';
 import { createHexMatrix, HEX_SIZE } from './hex-grid';
 import { HexGridSystem } from './hex-grid-system';
+import { createAllTileMaterials } from './tile-materials';
 import { TileType } from './tiles';
 
 export interface HexTileFloorOptions {
@@ -48,7 +48,7 @@ export class HexTileFloor {
         diameter: HEX_SIZE * 2 * tileScale,
         tessellation: 6,
       },
-      this.scene,
+      this.scene
     );
     masterHex.rotation.y = Math.PI / 6;
     masterHex.isVisible = false;
@@ -59,7 +59,8 @@ export class HexTileFloor {
       if (typeTiles.length === 0) continue;
 
       const tileType = type as TileType;
-      const instanceMesh = masterHex.clone(`hex_${tileType}`)!;
+      const instanceMesh = masterHex.clone(`hex_${tileType}`);
+      if (!instanceMesh) continue;
       instanceMesh.isVisible = true;
       instanceMesh.material = materials[tileType];
 
@@ -100,7 +101,7 @@ export class HexTileFloor {
           height: 0.1,
           depth: bounds.maxZ - bounds.minZ,
         },
-        this.scene,
+        this.scene
       );
       boundsBox.position.x = (bounds.minX + bounds.maxX) / 2;
       boundsBox.position.z = (bounds.minZ + bounds.maxZ) / 2;

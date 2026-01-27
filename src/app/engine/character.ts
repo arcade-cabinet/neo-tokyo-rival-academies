@@ -1,7 +1,7 @@
 import type { AnimationGroup } from '@babylonjs/core/Animations/animationGroup';
-import type { AbstractMesh } from '@babylonjs/core/Meshes/abstractMesh';
 import { SceneLoader } from '@babylonjs/core/Loading/sceneLoader';
 import { Vector3 } from '@babylonjs/core/Maths/math.vector';
+import type { AbstractMesh } from '@babylonjs/core/Meshes/abstractMesh';
 import type { Scene } from '@babylonjs/core/scene';
 import '@babylonjs/loaders/glTF';
 
@@ -20,7 +20,9 @@ export class CharacterLoader {
 
   constructor(private readonly scene: Scene) {}
 
-  async load(options: CharacterOptions): Promise<{ meshes: AbstractMesh[]; animations: AnimationGroup[] }> {
+  async load(
+    options: CharacterOptions
+  ): Promise<{ meshes: AbstractMesh[]; animations: AnimationGroup[] }> {
     const {
       modelPath,
       animationPaths = [],
@@ -121,7 +123,10 @@ export class CharacterAnimationController {
   }
 }
 
-function findAnimationByPattern(animations: AnimationGroup[], pattern: string): AnimationGroup | null {
+function findAnimationByPattern(
+  animations: AnimationGroup[],
+  pattern: string
+): AnimationGroup | null {
   const lowerPattern = pattern.toLowerCase();
   return animations.find((anim) => anim.name.toLowerCase().includes(lowerPattern)) || null;
 }

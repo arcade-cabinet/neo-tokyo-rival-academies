@@ -5,12 +5,11 @@
  * Handles the common pattern: POST → stream → download outputs.
  */
 
-import fs from 'node:fs';
+import fs, { createWriteStream } from 'node:fs';
 import path from 'node:path';
 import { pipeline } from 'node:stream/promises';
-import { createWriteStream } from 'node:fs';
-import { MeshyClient, type TaskResult } from '../api/meshy-client';
-import type { TaskDefinition, TaskContext, TaskRecord, TaskInputDef } from './types';
+import type { MeshyClient } from '../api/meshy-client';
+import type { TaskContext, TaskDefinition, TaskInputDef, TaskRecord } from './types';
 
 // ============================================================================
 // TASK EXECUTOR
@@ -31,7 +30,7 @@ export class TaskExecutor {
     context: TaskContext,
     additionalInputs?: Record<string, unknown>
   ): Promise<TaskRecord> {
-    const { assetDir, manifest, completedTasks, log } = context;
+    const { assetDir, log } = context;
 
     log(`\n[${definition.name}] Starting...`);
 
@@ -45,7 +44,9 @@ export class TaskExecutor {
     const createResponse = await this.client.post<{ result: string }>(createPath, requestBody);
 
     if (!createResponse.result) {
-      throw new Error(`Failed to create ${definition.type} task: ${JSON.stringify(createResponse)}`);
+      throw new Error(
+        `Failed to create ${definition.type} task: ${JSON.stringify(createResponse)}`
+      );
     }
 
     const taskId = createResponse.result;
@@ -141,11 +142,20 @@ export class TaskExecutor {
 
     switch (inputDef.source) {
       case 'manifest':
-        return this.extractValue(manifest, inputDef.sourcePath!);
+        if (!inputDef.sourcePath) {
+          throw new Error(`Missing sourcePath for manifest input '${inputDef.name}'`);
+        }
+        return this.extractValue(manifest, inputDef.sourcePath);
 
       case 'previousTask': {
         // sourcePath format: "taskType.fieldName"
-        const [taskType, field] = inputDef.sourcePath!.split('.');
+        if (!inputDef.sourcePath) {
+          throw new Error(`Missing sourcePath for previousTask input '${inputDef.name}'`);
+        }
+        const [taskType, field] = inputDef.sourcePath.split('.');
+        if (!taskType || !field) {
+          throw new Error(`Invalid sourcePath '${inputDef.sourcePath}' for ${inputDef.name}`);
+        }
         const task = completedTasks.get(taskType);
         if (!task) {
           throw new Error(`Dependency '${taskType}' not completed for ${inputDef.name}`);
@@ -202,7 +212,7 @@ export class TaskExecutor {
       fs.mkdirSync(dir, { recursive: true });
     }
 
-    // @ts-ignore - Node streams compatibility
+    // @ts-expect-error - Node streams compatibility
     await pipeline(response.body, createWriteStream(dest));
   }
 }

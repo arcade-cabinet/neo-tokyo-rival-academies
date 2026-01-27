@@ -10,9 +10,9 @@ const TARGET_DIR = path.resolve(__dirname, '../../../../game/src/content/data');
 
 export async function migrateContent() {
   console.log('Migrating Monolithic JSON to Granular Files...');
-  
+
   const sourcePath = path.resolve(__dirname, '../../../../game/src/data/generated_jrpg.json');
-  
+
   if (!fs.existsSync(sourcePath)) {
     console.error(`Source file not found: ${sourcePath}`);
     return;

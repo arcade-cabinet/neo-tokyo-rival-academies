@@ -1,8 +1,8 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, type OnDestroy, type OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { InputStateService } from '../state/input-state.service';
-import { PlayerStoreService } from '../state/player-store.service';
-import { DialogueService } from '../state/dialogue.service';
+import type { DialogueService } from '../state/dialogue.service';
+import type { InputStateService } from '../state/input-state.service';
+import type { PlayerStoreService } from '../state/player-store.service';
 
 @Component({
   selector: 'app-jrpg-hud',
@@ -25,7 +25,7 @@ export class JrpgHudComponent implements OnInit, OnDestroy {
   constructor(
     private readonly inputState: InputStateService,
     private readonly playerStore: PlayerStoreService,
-    private readonly dialogueService: DialogueService,
+    private readonly dialogueService: DialogueService
   ) {}
 
   ngOnInit(): void {
@@ -36,13 +36,13 @@ export class JrpgHudComponent implements OnInit, OnDestroy {
         this.nextXp = player.xpToNextLevel;
         this.maxHp = player.stats.structure;
         this.hp = player.stats.structure;
-      }),
+      })
     );
 
     this.sub.add(
       this.dialogueService.watchCurrentNode().subscribe((node) => {
         this.dialogueNode = node ? { speaker: node.speaker, text: node.text } : null;
-      }),
+      })
     );
   }
 

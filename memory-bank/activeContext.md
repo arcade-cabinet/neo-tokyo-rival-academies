@@ -38,6 +38,11 @@
    - Added procedural rooftop scene builder and combat arena UI in Angular runtime
 10. **Dependency Fix**
    - Switched root Biome dependency to @biomejs/biome to restore installs
+11. **Test/Build Stabilization**
+    - Added zone.js for Angular tests and updated test harness
+    - Added seed phrase utilities to app and removed diorama dependency
+    - Added GameModule and fixed test wiring
+    - Updated core quest rewards, district themes, and removed TODOs
 
 ## Known Constraints
 

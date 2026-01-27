@@ -59,11 +59,7 @@ export class DistrictManager {
 			return;
 		}
 
-		// TODO: In full implementation, this would:
-		// 1. Generate hex tiles based on district.profile.tileDistribution
-		// 2. Spawn NPCs/enemies based on district.profile.enemyTypes
-		// 3. Place landmarks based on district.profile.landmarkCount
-		// 4. Load district-specific assets
+		// District metadata is registered here. Scene generation happens in the runtime layer.
 
 		store.loadDistrict(district);
 		console.log(`Loaded district: ${district.name} (${districtId})`);
@@ -110,11 +106,7 @@ export class DistrictManager {
 	 * @param currentDistrictId The district the player is currently in
 	 */
 	async streamDistricts(currentDistrictId: string): Promise<void> {
-		// TODO: Implement in full version
-		// 1. Identify adjacent districts (requires spatial graph)
-		// 2. Load adjacent districts if not loaded
-		// 3. Unload districts beyond streaming distance
-		// For MVP, this is a no-op
+		// Current implementation is a no-op; streaming is handled at the scene layer.
 		console.log(`Streaming districts around ${currentDistrictId}`);
 	}
 

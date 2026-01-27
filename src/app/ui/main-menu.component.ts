@@ -1,11 +1,11 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, type OnInit, Output } from '@angular/core';
+import { SaveSystem } from '../systems/save-system';
 import {
   generateSeedPhrase,
   isValidSeedPhrase,
   type SeedPhrase,
   suggestCompletions,
-} from '@neo-tokyo/diorama';
-import { SaveSystem } from '../systems/save-system';
+} from '../utils/seed-phrase';
 
 interface SeedSuggestions {
   adjectives: string[];
@@ -58,6 +58,14 @@ export class MainMenuComponent implements OnInit {
 
   get location(): string {
     return this.seedInput.split('-')[2] ?? '';
+  }
+
+  get allSuggestions(): string[] {
+    return [
+      ...this.suggestions.adjectives,
+      ...this.suggestions.nouns,
+      ...this.suggestions.locations,
+    ];
   }
 
   onSeedInput(value: string): void {

@@ -6,11 +6,10 @@
  * but missing local files.
  */
 
-import fs from 'node:fs';
+import fs, { createWriteStream } from 'node:fs';
 import path from 'node:path';
-import { pipeline as streamPipeline } from 'node:stream/promises';
-import { createWriteStream } from 'node:fs';
 import { Readable } from 'node:stream';
+import { pipeline as streamPipeline } from 'node:stream/promises';
 
 const MESHY_API_KEY = process.env.MESHY_API_KEY;
 if (!MESHY_API_KEY) {
@@ -45,7 +44,7 @@ async function fetchTaskResult(taskId: string, endpoint: string): Promise<Record
   if (!response.ok) {
     throw new Error(`Failed to fetch task ${taskId}: ${response.statusText}`);
   }
-  const data = await response.json() as Record<string, unknown>;
+  const data = (await response.json()) as Record<string, unknown>;
   return data;
 }
 
@@ -93,7 +92,7 @@ async function processCharacter(charDir: string): Promise<void> {
       // v1/multi-image-to-3d or v1/image-to-3d
       const result = await fetchTaskResult(manifest.tasks.model.taskId, '/v1/image-to-3d');
       const urls = result.model_urls as Record<string, string> | undefined;
-      const modelUrl = urls?.glb || (result as Record<string, unknown>).model_url as string;
+      const modelUrl = urls?.glb || ((result as Record<string, unknown>).model_url as string);
       if (modelUrl) {
         await downloadFile(modelUrl, modelPath);
       }

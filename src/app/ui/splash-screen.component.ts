@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, type OnDestroy, type OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'app-splash-screen',

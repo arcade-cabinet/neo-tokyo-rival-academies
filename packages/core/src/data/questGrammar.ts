@@ -46,7 +46,7 @@ export const QUEST_VERBS: GrammarEntry[] = [
 ];
 
 // Adjectives: Quest flavor (themed by district type)
-export const QUEST_ADJECTIVES: Record<string, GrammarEntry[]> = {
+export const QUEST_ADJECTIVES = {
 	slums: [
 		{ value: "desperate", weight: 1.0 },
 		{ value: "dangerous", weight: 0.9 },
@@ -101,10 +101,12 @@ export const QUEST_ADJECTIVES: Record<string, GrammarEntry[]> = {
 		{ value: "blood-stained", weight: 0.7 },
 		{ value: "yakuza-protected", weight: 0.8 },
 	],
-};
+} satisfies Record<string, GrammarEntry[]>;
+
+export type DistrictTheme = keyof typeof QUEST_ADJECTIVES;
 
 // Landmarks: Quest locations
-export const QUEST_LANDMARKS: Record<string, GrammarEntry[]> = {
+export const QUEST_LANDMARKS = {
 	slums: [
 		{ value: "rusted warehouse", weight: 1.0 },
 		{ value: "underground market", weight: 0.9 },
@@ -150,7 +152,7 @@ export const QUEST_LANDMARKS: Record<string, GrammarEntry[]> = {
 		{ value: "smuggler hideout", weight: 1.0 },
 		{ value: "black market auction", weight: 0.8 },
 	],
-};
+} satisfies Record<string, GrammarEntry[]>;
 
 // Outcomes: Quest resolution flavor
 export const QUEST_OUTCOMES: GrammarEntry[] = [

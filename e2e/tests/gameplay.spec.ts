@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 
 test.describe('JRPG Gameplay Verification', () => {
   test('should verify full gameplay loop: Menu -> Dialogue -> HUD', async ({ page }) => {
@@ -36,28 +36,28 @@ test.describe('JRPG Gameplay Verification', () => {
     console.log('Advancing dialogue...');
     // We know there are 5 lines in INTRO_SCRIPT.
     const introLines = [
-        'Hey Vector!',
-        'Your noise pollution',
-        'optimal path',
-        'Calculated? Hah!',
-        'MIDNIGHT EXAM'
+      'Hey Vector!',
+      'Your noise pollution',
+      'optimal path',
+      'Calculated? Hah!',
+      'MIDNIGHT EXAM',
     ];
 
     const viewport = page.viewportSize();
-    if (!viewport) throw new Error("Viewport not available");
+    if (!viewport) throw new Error('Viewport not available');
 
     for (const lineFragment of introLines) {
-        // Verify current line is visible (except maybe the first one which we checked above, but harmless to recheck)
-        // Note: rapid clicks might skip if animation is slow, but we wait for text.
-        // Actually, "NarrativeOverlay" might just tap to advance.
-        // Wait for the specific text to be stable/visible
-        await expect(page.getByText(lineFragment)).toBeVisible();
+      // Verify current line is visible (except maybe the first one which we checked above, but harmless to recheck)
+      // Note: rapid clicks might skip if animation is slow, but we wait for text.
+      // Actually, "NarrativeOverlay" might just tap to advance.
+      // Wait for the specific text to be stable/visible
+      await expect(page.getByText(lineFragment)).toBeVisible();
 
-        // Click to advance
-        await page.mouse.click(viewport.width / 2, viewport.height / 2);
+      // Click to advance
+      await page.mouse.click(viewport.width / 2, viewport.height / 2);
 
-        // Wait for next text or completion
-        // Since we loop, the next expect() acts as the wait.
+      // Wait for next text or completion
+      // Since we loop, the next expect() acts as the wait.
     }
 
     // Final click to close overlay

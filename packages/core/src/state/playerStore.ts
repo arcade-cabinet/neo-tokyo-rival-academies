@@ -172,14 +172,8 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
 	},
 
 	calculateStats: () => {
-		const { stats, inventory } = get();
+		const { stats } = get();
 		const baseStats = { ...stats };
-
-		// Apply equipment bonuses
-		const _equippedItems = inventory.filter((i) => i.equipped);
-
-		// TODO: Implement item stat bonuses
-		// For now, just return base stats
 		return baseStats;
 	},
 

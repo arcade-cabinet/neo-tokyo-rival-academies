@@ -27,7 +27,7 @@ class TaskRegistry {
   load(): void {
     if (this.loaded) return;
 
-    const files = fs.readdirSync(DEFINITIONS_DIR).filter(f => f.endsWith('.json'));
+    const files = fs.readdirSync(DEFINITIONS_DIR).filter((f) => f.endsWith('.json'));
 
     for (const file of files) {
       const filePath = path.join(DEFINITIONS_DIR, file);
@@ -159,23 +159,26 @@ export function getAnimationIds(): Record<string, number> {
 }
 
 // For backwards compatibility - lazy proxy
-export const ANIMATION_IDS: Record<string, number> = new Proxy({}, {
-  get(_, prop: string) {
-    return getAnimationIds()[prop];
-  },
-  has(_, prop: string) {
-    return prop in getAnimationIds();
-  },
-  ownKeys() {
-    return Object.keys(getAnimationIds());
-  },
-  getOwnPropertyDescriptor(_, prop: string) {
-    const ids = getAnimationIds();
-    if (prop in ids) {
-      return { configurable: true, enumerable: true, value: ids[prop] };
-    }
-    return undefined;
-  },
-});
+export const ANIMATION_IDS: Record<string, number> = new Proxy(
+  {},
+  {
+    get(_, prop: string) {
+      return getAnimationIds()[prop];
+    },
+    has(_, prop: string) {
+      return prop in getAnimationIds();
+    },
+    ownKeys() {
+      return Object.keys(getAnimationIds());
+    },
+    getOwnPropertyDescriptor(_, prop: string) {
+      const ids = getAnimationIds();
+      if (prop in ids) {
+        return { configurable: true, enumerable: true, value: ids[prop] };
+      }
+      return undefined;
+    },
+  }
+);
 
 export type AnimationType = string;

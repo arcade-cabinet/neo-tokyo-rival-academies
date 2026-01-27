@@ -1,5 +1,18 @@
-import { Component, EventEmitter, HostListener, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
-import { getRecommendedAllocation, validateAllocation, type StatAllocation } from '../systems/stat-allocation';
+import {
+  Component,
+  EventEmitter,
+  HostListener,
+  Input,
+  type OnChanges,
+  Output,
+  type SimpleChange,
+  type SimpleChanges,
+} from '@angular/core';
+import {
+  getRecommendedAllocation,
+  type StatAllocation,
+  validateAllocation,
+} from '../systems/stat-allocation';
 
 @Component({
   selector: 'app-stat-allocation-modal',
@@ -17,7 +30,8 @@ export class StatAllocationModalComponent implements OnChanges {
   error: string | undefined;
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['isOpen'] && this.isOpen) {
+    const { isOpen } = changes as Record<string, SimpleChange>;
+    if (isOpen && this.isOpen) {
       this.allocation = { structure: 0, ignition: 0, logic: 0, flow: 0 };
       this.error = undefined;
     }

@@ -2,4 +2,4 @@
  * Diorama Camera Exports
  */
 
-export * from "./IsometricCamera";
+export * from './IsometricCamera';

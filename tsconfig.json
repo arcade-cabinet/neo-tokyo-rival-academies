@@ -16,12 +16,26 @@
     "experimentalDecorators": true,
     "moduleResolution": "node",
     "importHelpers": true,
+    "allowSyntheticDefaultImports": true,
     "target": "es2022",
     "module": "es2020",
-    "lib": [
-      "es2018",
-      "dom"
-    ],
+    "lib": ["es2018", "dom"],
+    "paths": {
+      "@neo-tokyo/config": ["packages/config/src/index.ts"],
+      "@neo-tokyo/config/*": ["packages/config/src/*"],
+      "@neo-tokyo/content-gen": ["packages/content-gen/src/index.ts"],
+      "@neo-tokyo/content-gen/*": ["packages/content-gen/src/*"],
+      "@neo-tokyo/core": ["packages/core/src/index.ts"],
+      "@neo-tokyo/core/*": ["packages/core/src/*"],
+      "@neo-tokyo/diorama": ["packages/diorama/src/index.ts"],
+      "@neo-tokyo/diorama/*": ["packages/diorama/src/*"],
+      "@neo-tokyo/shared-assets": ["packages/shared-assets/src/index.ts"],
+      "@neo-tokyo/shared-assets/*": ["packages/shared-assets/src/*"],
+      "@neo-tokyo/types": ["packages/types/src/index.ts"],
+      "@neo-tokyo/types/*": ["packages/types/src/*"],
+      "@neo-tokyo/world-gen": ["packages/world-gen/src/index.ts"],
+      "@neo-tokyo/world-gen/*": ["packages/world-gen/src/*"]
+    },
     "skipLibCheck": true,
     "useDefineForClassFields": false
   },

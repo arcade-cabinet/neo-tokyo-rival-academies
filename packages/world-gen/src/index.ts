@@ -8,10 +8,14 @@
  */
 
 // Block system
-export * from "./blocks/BlockSystem";
-
-// Catalog
-export { BlockCatalog } from "./catalog/BlockCatalog";
-
+export * from './blocks/BlockSystem';
 // RTB Blocks
-export { SHELTER_BLOCKS, SHELTER_TARP, SHELTER_TENT, SHELTER_CONTAINER, SHELTER_PLATFORM } from "./blocks/rtb/ShelterBlock";
+export {
+  SHELTER_BLOCKS,
+  SHELTER_CONTAINER,
+  SHELTER_PLATFORM,
+  SHELTER_TARP,
+  SHELTER_TENT,
+} from './blocks/rtb/ShelterBlock';
+// Catalog
+export { BlockCatalog } from './catalog/BlockCatalog';

@@ -39,7 +39,7 @@ export const HexGridSystem = {
 
   getEdgeTiles(
     tiles: HexTile[],
-    bounds: GridBounds,
+    bounds: GridBounds
   ): {
     leftEdge: HexTile[];
     rightEdge: HexTile[];

@@ -1,14 +1,22 @@
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import fs from 'fs-extra';
-import path from 'path';
-import { fileURLToPath } from 'url';
 import { ASSET_LIST, SVG_ICON_PROMPT } from '../prompts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const OUTPUT_DIR = path.resolve(__dirname, '../../../../../packages/game/src/components/react/generated');
+const OUTPUT_DIR = path.resolve(
+  __dirname,
+  '../../../../../packages/game/src/components/react/generated'
+);
 
-async function generateIcon(model: any, item: { name: string, type: string, filename: string }) {
+type AssetItem = { name: string; type: string; filename: string };
+type AssetModel = {
+  generateContent: (prompt: string) => Promise<{ response: { text: () => string } }>;
+};
+
+async function generateIcon(model: AssetModel, item: AssetItem) {
   console.log(`Generating Icon: ${item.name}...`);
   try {
     const result = await model.generateContent(SVG_ICON_PROMPT(item.name, item.type));
@@ -16,7 +24,11 @@ async function generateIcon(model: any, item: { name: string, type: string, file
     let svgCode = response.text();
 
     // Clean up markdown code blocks if present
-    svgCode = svgCode.replace(/```xml/g, '').replace(/```svg/g, '').replace(/```/g, '').trim();
+    svgCode = svgCode
+      .replace(/```xml/g, '')
+      .replace(/```svg/g, '')
+      .replace(/```/g, '')
+      .trim();
 
     // basic validation
     if (!svgCode.includes('<svg') || !svgCode.includes('</svg>')) {
@@ -58,7 +70,8 @@ export async function generateAssets() {
 
   let successCount = 0;
 
-  for (const item of ASSET_LIST) {
+  const assets = ASSET_LIST as AssetItem[];
+  for (const item of assets) {
     const svgContent = await generateIcon(model, item);
 
     if (svgContent) {
@@ -72,7 +85,7 @@ export async function generateAssets() {
 
   // Generate an index barrel file
   if (successCount > 0) {
-    const exportStatements = ASSET_LIST.map((item: any) => `export * from './${item.filename}';`).join('\n');
+    const exportStatements = assets.map((item) => `export * from './${item.filename}';`).join('\n');
     await fs.writeFile(path.join(OUTPUT_DIR, 'index.ts'), exportStatements);
     console.log(`Generated index.ts for ${successCount} assets.`);
   }

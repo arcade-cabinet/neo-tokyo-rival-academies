@@ -1,5 +1,59 @@
 import { create } from "zustand";
 import type { Quest, QuestCluster } from "../systems/QuestGenerator";
+import type { InventoryItem } from "../types/SaveData";
+import { useAlignmentStore } from "./alignmentStore";
+import { usePlayerStore } from "./playerStore";
+
+const ITEM_CATALOG: Record<string, Omit<InventoryItem, "quantity">> = {
+	"redline-piston": {
+		id: "redline-piston",
+		name: "Redline Piston",
+		type: "weapon",
+	},
+	"null-set": { id: "null-set", name: "Null Set", type: "weapon" },
+	"salvage-vest": {
+		id: "salvage-vest",
+		name: "Salvage-Plated Vest",
+		type: "accessory",
+	},
+	"water-filter-core": {
+		id: "water-filter-core",
+		name: "Water Filter Core",
+		type: "accessory",
+	},
+	"salvagers-rope": {
+		id: "salvagers-rope",
+		name: "Salvager's Rope Harness",
+		type: "accessory",
+	},
+	"storm-adrenaline": {
+		id: "storm-adrenaline",
+		name: "Storm Adrenaline Shot",
+		type: "consumable",
+	},
+	"floodgate-keycard": {
+		id: "floodgate-keycard",
+		name: "Floodgate Keycard",
+		type: "key_item",
+	},
+};
+
+function normalizeItemId(itemId: string): string {
+	return itemId.trim().toLowerCase().replace(/\s+/g, "-");
+}
+
+function buildRewardItem(itemId: string): InventoryItem {
+	const normalized = normalizeItemId(itemId);
+	const catalogItem = ITEM_CATALOG[normalized];
+	if (catalogItem) {
+		return { ...catalogItem, quantity: 1 };
+	}
+
+	const displayName = itemId
+		.replace(/[-_]+/g, " ")
+		.replace(/\b\w/g, (match) => match.toUpperCase());
+	return { id: normalized, name: displayName, type: "key_item", quantity: 1 };
+}
 
 export interface QuestRewards {
 	xp: number;
@@ -95,11 +149,6 @@ export const useQuestStore = create<QuestState>((set, get) => ({
 			return null;
 		}
 
-		// Import stores dynamically to avoid circular dependencies
-		// Note: In production, these should be passed as parameters or use context
-		const { usePlayerStore } = require("./playerStore");
-		const { useAlignmentStore } = require("./alignmentStore");
-
 		const playerStore = usePlayerStore.getState();
 		const alignmentStore = useAlignmentStore.getState();
 
@@ -137,12 +186,7 @@ export const useQuestStore = create<QuestState>((set, get) => ({
 		// Add items
 		if (items && items.length > 0) {
 			for (const itemId of items) {
-				// TODO: Proper item data lookup
-				playerStore.addItem({
-					id: itemId,
-					name: itemId,
-					type: "key_item",
-				});
+				playerStore.addItem(buildRewardItem(itemId));
 			}
 		}
 

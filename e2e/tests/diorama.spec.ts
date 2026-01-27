@@ -10,7 +10,7 @@
  * - Component alignment and spacing
  */
 
-import { test, expect, type Page, type ConsoleMessage } from '@playwright/test';
+import { type ConsoleMessage, expect, type Page, test } from '@playwright/test';
 
 // Component categories as defined in ComponentShowcaseTest
 const SHOWCASE_CATEGORIES = [
@@ -249,7 +249,7 @@ async function waitForShowcaseReady(page: Page): Promise<void> {
   await page.waitForLoadState('networkidle', { timeout: 30000 });
 }
 
-async function selectCategory(page: Page, index: number, name: string): Promise<void> {
+async function selectCategory(page: Page, _index: number, name: string): Promise<void> {
   // Find and click the category button
   const button = page.locator(`button:has-text("${name}")`);
   await button.click();
@@ -279,10 +279,7 @@ test.describe('Component Showcase', () => {
 
         // Check for errors
         const significantErrors = ctx.errors.filter(
-          (e) =>
-            !e.includes('[HMR]') &&
-            !e.includes('DevTools') &&
-            !e.includes('favicon')
+          (e) => !e.includes('[HMR]') && !e.includes('DevTools') && !e.includes('favicon')
         );
 
         // Log errors for debugging
@@ -335,7 +332,9 @@ test.describe('Component Showcase', () => {
 
         await selectCategory(page, category.index, category.name);
 
-        expect(ctx.materialErrors, `${category.name} should have no material errors`).toHaveLength(0);
+        expect(ctx.materialErrors, `${category.name} should have no material errors`).toHaveLength(
+          0
+        );
       });
 
       test('visual regression', async ({ page }) => {
@@ -344,11 +343,14 @@ test.describe('Component Showcase', () => {
         // Additional wait for visual stability
         await page.waitForTimeout(500);
 
-        await expect(page).toHaveScreenshot(`showcase-${category.index}-${category.name.toLowerCase().replace(/\s+/g, '-')}.png`, {
-          maxDiffPixels: 300,
-          threshold: 0.15,
-          animations: 'disabled',
-        });
+        await expect(page).toHaveScreenshot(
+          `showcase-${category.index}-${category.name.toLowerCase().replace(/\s+/g, '-')}.png`,
+          {
+            maxDiffPixels: 300,
+            threshold: 0.15,
+            animations: 'disabled',
+          }
+        );
       });
     });
   }
@@ -420,11 +422,7 @@ test.describe('Showcase Integration', () => {
       await selectCategory(page, category.index, category.name);
 
       for (const error of ctx.errors) {
-        if (
-          !error.includes('[HMR]') &&
-          !error.includes('DevTools') &&
-          !error.includes('favicon')
-        ) {
+        if (!error.includes('[HMR]') && !error.includes('DevTools') && !error.includes('favicon')) {
           allErrors.push({ category: category.name, error });
         }
       }

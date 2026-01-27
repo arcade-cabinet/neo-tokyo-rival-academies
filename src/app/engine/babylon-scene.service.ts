@@ -1,31 +1,45 @@
-import { Injectable, NgZone } from '@angular/core';
-import { ArcRotateCamera, Color4, Engine, PointerEventTypes, Scene, Vector3 } from '@babylonjs/core';
+import { Injectable, type NgZone } from '@angular/core';
+import {
+  ArcRotateCamera,
+  Color4,
+  Engine,
+  PointerEventTypes,
+  Scene,
+  Vector3,
+} from '@babylonjs/core';
 import { ScreenOrientation } from '@capacitor/screen-orientation';
 import { CAMERA, PHYSICS } from '@neo-tokyo/config';
+import type { InputState } from '../types/game';
 import { BackgroundPanels } from './background-panels';
 import { CharacterAnimationController, CharacterLoader } from './character';
+import { FloodedWorldBuilder, type FloodedWorldBuildResult } from './flooded-world';
 import { HexTileFloor } from './hex-tile-floor';
 import { AmbientLighting, DirectionalLightWithShadows } from './lighting';
-import { QuestMarkerManager, DataShardManager, type QuestMarker, type DataShard } from './quest-markers';
 import { PlayerController } from './player-controller';
-import type { InputState } from '../types/game';
+import {
+  type DataShard,
+  DataShardManager,
+  type QuestMarker,
+  QuestMarkerManager,
+} from './quest-markers';
 
 @Injectable({ providedIn: 'root' })
 export class BabylonSceneService {
   private engine: Engine | null = null;
   private scene: Scene | null = null;
   private canvas: HTMLCanvasElement | null = null;
+  private arcCamera: ArcRotateCamera | null = null;
 
   private ambientLighting: AmbientLighting | null = null;
   private directionalLight: DirectionalLightWithShadows | null = null;
   private hexFloor: HexTileFloor | null = null;
   private backgroundPanels: BackgroundPanels | null = null;
+  private floodedWorldBuilder: FloodedWorldBuilder | null = null;
   private characterLoader: CharacterLoader | null = null;
   private animationController: CharacterAnimationController | null = null;
   private playerController: PlayerController | null = null;
   private questMarkerManager: QuestMarkerManager | null = null;
   private dataShardManager: DataShardManager | null = null;
-
 
   constructor(private readonly zone: NgZone) {}
 
@@ -108,6 +122,26 @@ export class BabylonSceneService {
     this.playerController?.setInputState(state);
   }
 
+  loadFloodedWorld(seed: string) {
+    if (!this.scene) return;
+
+    this.hexFloor?.dispose();
+    this.hexFloor = null;
+
+    this.floodedWorldBuilder?.dispose();
+    this.floodedWorldBuilder = new FloodedWorldBuilder(this.scene);
+
+    const buildResult: FloodedWorldBuildResult = this.floodedWorldBuilder.build(seed);
+
+    this.playerController?.setBounds(buildResult.bounds);
+    this.playerController?.setGroundMeshes(buildResult.groundMeshes, 0.2);
+    this.playerController?.setPosition(buildResult.spawnPoint);
+
+    if (this.arcCamera) {
+      this.arcCamera.setTarget(buildResult.spawnPoint);
+    }
+  }
+
   async lockOrientationLandscape() {
     try {
       await ScreenOrientation.lock({ orientation: 'landscape' });
@@ -125,6 +159,7 @@ export class BabylonSceneService {
     this.characterLoader?.dispose();
     this.backgroundPanels?.dispose();
     this.hexFloor?.dispose();
+    this.floodedWorldBuilder?.dispose();
     this.directionalLight?.dispose();
     this.ambientLighting?.dispose();
     this.scene?.dispose();
@@ -146,11 +181,12 @@ export class BabylonSceneService {
       Math.PI / 3,
       CAMERA.defaultRadius,
       new Vector3(0, 0, 0),
-      this.scene,
+      this.scene
     );
     arcCamera.mode = ArcRotateCamera.ORTHOGRAPHIC_CAMERA;
 
-    const aspectRatio = this.scene.getEngine().getRenderWidth() / this.scene.getEngine().getRenderHeight();
+    const aspectRatio =
+      this.scene.getEngine().getRenderWidth() / this.scene.getEngine().getRenderHeight();
     arcCamera.orthoLeft = -CAMERA.orthoSize * aspectRatio;
     arcCamera.orthoRight = CAMERA.orthoSize * aspectRatio;
     arcCamera.orthoTop = CAMERA.orthoSize;
@@ -161,9 +197,13 @@ export class BabylonSceneService {
     arcCamera.attachControl(this.canvas, true);
 
     this.scene.activeCamera = arcCamera;
+    this.arcCamera = arcCamera;
 
     this.scene.getEngine().onResizeObservable.add(() => {
-      const newAspect = this.scene!.getEngine().getRenderWidth() / this.scene!.getEngine().getRenderHeight();
+      const currentScene = this.scene;
+      if (!currentScene) return;
+      const newAspect =
+        currentScene.getEngine().getRenderWidth() / currentScene.getEngine().getRenderHeight();
       arcCamera.orthoLeft = -CAMERA.orthoSize * newAspect;
       arcCamera.orthoRight = CAMERA.orthoSize * newAspect;
     });
@@ -176,7 +216,14 @@ export class BabylonSceneService {
       const pick = pointerInfo.pickInfo;
       if (!pick?.hit || !pick.pickedMesh) return;
 
-      const metadata = pick.pickedMesh.metadata as { questMarkerId?: string; onInteract?: (id: string) => void; shardId?: string; onCollect?: (id: string) => void } | undefined;
+      const metadata = pick.pickedMesh.metadata as
+        | {
+            questMarkerId?: string;
+            onInteract?: (id: string) => void;
+            shardId?: string;
+            onCollect?: (id: string) => void;
+          }
+        | undefined;
       if (!metadata) return;
 
       if (metadata.questMarkerId && metadata.onInteract) {

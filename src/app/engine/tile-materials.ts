@@ -1,6 +1,6 @@
 import { Color3, type Scene } from '@babylonjs/core';
 import { TileType } from './tiles';
-import { createToonMaterial, createEnvironmentMaterial } from './toon-material';
+import { type createEnvironmentMaterial, createToonMaterial } from './toon-material';
 
 const TILE_COLORS: Record<TileType, Color3> = {
   [TileType.BASE]: new Color3(0.16, 0.18, 0.2),

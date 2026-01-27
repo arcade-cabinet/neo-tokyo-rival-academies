@@ -9,10 +9,10 @@
 
   <div class="inventory__filters">
     <button
-      *ngFor="let f of ['all','weapon','accessory','consumable','key_item']"
+      *ngFor="let f of filters"
       type="button"
       [class.active]="filter === f"
-      (click)="setFilter(f as any)"
+      (click)="setFilter(f)"
     >
       {{ f.replace('_', ' ') }}
     </button>

@@ -1,0 +1,105 @@
+<div class="combat-arena" *ngIf="inCombat && player">
+  <div class="combat-overlay" *ngIf="showVictory">
+    <div class="combat-modal success">
+      <div class="combat-icon">🏆</div>
+      <h2>Victory</h2>
+      <p>Rewards are being tallied.</p>
+      <button type="button" (click)="handleVictoryContinue()">Continue</button>
+    </div>
+  </div>
+
+  <div class="combat-overlay" *ngIf="showDefeat">
+    <div class="combat-modal danger">
+      <div class="combat-icon">💀</div>
+      <h2>Defeated</h2>
+      <p>Return to the last autosave.</p>
+      <button type="button" (click)="handleDefeatReload()">Reload Save</button>
+    </div>
+  </div>
+
+  <header class="combat-header">
+    <div class="turn-label">Turn {{ turn }}</div>
+    <div class="phase-label">
+      {{ phase === 'player_turn' ? 'Your Turn' : phase === 'enemy_turn' ? 'Enemy Turn' : 'Combat' }}
+    </div>
+  </header>
+
+  <section class="combat-body">
+    <div class="combat-panel">
+      <div class="panel-title">Player</div>
+      <div class="combat-card player">
+        <div class="card-row">
+          <span class="card-name">{{ player?.name }}</span>
+          <span class="card-hp">{{ player?.currentHP }} / {{ player?.maxHP }} HP</span>
+        </div>
+        <div class="hp-bar">
+          <div
+            class="hp-fill"
+            [style.width.%]="player ? (player.currentHP / player.maxHP) * 100 : 0"
+          ></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="combat-panel">
+      <div class="panel-title">Enemies</div>
+      <div class="enemy-list">
+        <button
+          type="button"
+          class="combat-card enemy"
+          *ngFor="let enemy of enemies"
+          [class.selected]="enemy.id === selectedTargetId"
+          (click)="selectTarget(enemy.id)"
+        >
+          <div class="card-row">
+            <span class="card-name">{{ enemy.name }}</span>
+            <span class="card-hp">{{ enemy.currentHP }} / {{ enemy.maxHP }} HP</span>
+          </div>
+          <div class="hp-bar">
+            <div
+              class="hp-fill enemy"
+              [style.width.%]="(enemy.currentHP / enemy.maxHP) * 100"
+            ></div>
+          </div>
+        </button>
+      </div>
+    </div>
+
+    <div class="combat-panel" *ngIf="latestLog">
+      <div class="panel-title">Combat Log</div>
+      <div class="combat-log">
+        <ng-container *ngIf="latestLog?.hit; else missTemplate">
+          <span class="log-attacker">{{ latestLog?.attackerName }}</span>
+          attacks
+          <span class="log-defender">{{ latestLog?.defenderName }}</span>
+          for
+          <span class="log-damage" [class.critical]="latestLog?.critical">{{ latestLog?.damage }}</span>
+          damage{{ latestLog?.critical ? ' (CRITICAL)' : '' }}
+        </ng-container>
+        <ng-template #missTemplate>
+          <span class="log-attacker">{{ latestLog?.attackerName }}</span>
+          's attack missed.
+        </ng-template>
+      </div>
+    </div>
+  </section>
+
+  <footer class="combat-actions">
+    <button
+      type="button"
+      class="action-btn attack"
+      [disabled]="phase !== 'player_turn'"
+      (click)="handleAction('attack')"
+    >
+      Attack
+    </button>
+    <button
+      type="button"
+      class="action-btn defend"
+      [disabled]="phase !== 'player_turn'"
+      (click)="handleAction('defend')"
+    >
+      Defend
+    </button>
+  </footer>
+</div>

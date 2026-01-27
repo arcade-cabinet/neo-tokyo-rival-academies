@@ -21,6 +21,7 @@
     <app-quest-log [isOpen]="questLogOpen" (close)="closeQuestLog()"></app-quest-log>
 
     <app-combat-text *ngIf="combatText" [message]="combatText.message" [color]="combatText.color"></app-combat-text>
+    <app-combat-arena></app-combat-arena>
 
     <button type="button" class="quest-log-btn" (click)="toggleQuestLog()">📋 Quests</button>
   </ng-container>

@@ -71,7 +71,7 @@ export function getHexesInBounds(
   maxX: number,
   minZ: number,
   maxZ: number,
-  size = HEX_SIZE,
+  size = HEX_SIZE
 ): AxialCoord[] {
   const hexes: AxialCoord[] = [];
 

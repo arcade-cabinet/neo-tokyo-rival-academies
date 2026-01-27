@@ -1,13 +1,17 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { useQuestStore } from '@neo-tokyo/core';
 import type { Quest, QuestCluster } from '@neo-tokyo/core';
+import { useQuestStore } from '@neo-tokyo/core';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class QuestStoreService {
   private readonly store = useQuestStore;
-  private readonly activeQuests$ = new BehaviorSubject<Quest[]>(this.store.getState().getActiveQuests());
-  private readonly completedQuests$ = new BehaviorSubject<string[]>(this.store.getState().getCompletedQuests());
+  private readonly activeQuests$ = new BehaviorSubject<Quest[]>(
+    this.store.getState().getActiveQuests()
+  );
+  private readonly completedQuests$ = new BehaviorSubject<string[]>(
+    this.store.getState().getCompletedQuests()
+  );
 
   constructor() {
     this.store.subscribe(() => {

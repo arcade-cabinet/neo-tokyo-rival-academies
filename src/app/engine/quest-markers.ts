@@ -2,11 +2,11 @@ import {
   Animation,
   Color3,
   GlowLayer,
+  type Mesh,
   MeshBuilder,
+  type Scene,
   StandardMaterial,
   Vector3,
-  type AbstractMesh,
-  type Scene,
 } from '@babylonjs/core';
 
 export interface QuestMarker {
@@ -31,7 +31,7 @@ const MARKER_COLORS: Record<QuestMarker['type'], Color3> = {
 };
 
 export class QuestMarkerManager {
-  private meshes = new Map<string, AbstractMesh>();
+  private meshes = new Map<string, Mesh>();
   private glowLayer: GlowLayer | null = null;
 
   constructor(private readonly scene: Scene) {
@@ -74,7 +74,7 @@ export class QuestMarkerManager {
 }
 
 export class DataShardManager {
-  private meshes = new Map<string, AbstractMesh>();
+  private meshes = new Map<string, Mesh>();
   private shards = new Map<string, DataShard>();
 
   constructor(private readonly scene: Scene) {}
@@ -121,10 +121,10 @@ function createMarkerMesh(
   scene: Scene,
   marker: QuestMarker,
   floatHeight: number,
-  glowLayer: GlowLayer | null,
-): AbstractMesh {
+  glowLayer: GlowLayer | null
+): Mesh {
   const color = MARKER_COLORS[marker.type];
-  let mesh: AbstractMesh;
+  let mesh: Mesh;
 
   switch (marker.type) {
     case 'objective':
@@ -139,12 +139,12 @@ function createMarkerMesh(
       const cylinder = MeshBuilder.CreateCylinder(
         `marker_${marker.id}_cyl`,
         { height: 0.6, diameter: 0.2, tessellation: 8 },
-        scene,
+        scene
       );
       const dot = MeshBuilder.CreateSphere(
         `marker_${marker.id}_dot`,
         { diameter: 0.2, segments: 8 },
-        scene,
+        scene
       );
       dot.position.y = -0.5;
       dot.parent = cylinder;
@@ -155,7 +155,7 @@ function createMarkerMesh(
       mesh = MeshBuilder.CreateCylinder(
         `marker_${marker.id}`,
         { height: 0.8, diameterTop: 0, diameterBottom: 0.5, tessellation: 4 },
-        scene,
+        scene
       );
       mesh.rotation.z = Math.PI;
       break;
@@ -181,7 +181,7 @@ function createMarkerMesh(
     'position.y',
     30,
     Animation.ANIMATIONTYPE_FLOAT,
-    Animation.ANIMATIONLOOPMODE_CYCLE,
+    Animation.ANIMATIONLOOPMODE_CYCLE
   );
   floatAnim.setKeys([
     { frame: 0, value: floatHeight },
@@ -196,7 +196,7 @@ function createMarkerMesh(
     'rotation.y',
     30,
     Animation.ANIMATIONTYPE_FLOAT,
-    Animation.ANIMATIONLOOPMODE_CYCLE,
+    Animation.ANIMATIONLOOPMODE_CYCLE
   );
   rotateAnim.setKeys([
     { frame: 0, value: 0 },
@@ -210,7 +210,7 @@ function createMarkerMesh(
     'material.emissiveColor',
     30,
     Animation.ANIMATIONTYPE_COLOR3,
-    Animation.ANIMATIONLOOPMODE_CYCLE,
+    Animation.ANIMATIONLOOPMODE_CYCLE
   );
   pulseAnim.setKeys([
     { frame: 0, value: color },
@@ -223,7 +223,7 @@ function createMarkerMesh(
   return mesh;
 }
 
-function createDataShardMesh(scene: Scene, shard: DataShard): AbstractMesh {
+function createDataShardMesh(scene: Scene, shard: DataShard): Mesh {
   const mesh = MeshBuilder.CreatePolyhedron(`shard_${shard.id}`, { type: 2, size: 0.2 }, scene);
   mesh.position = new Vector3(shard.position.x, 0.8, shard.position.z);
 
@@ -238,7 +238,7 @@ function createDataShardMesh(scene: Scene, shard: DataShard): AbstractMesh {
     'rotation.y',
     30,
     Animation.ANIMATIONTYPE_FLOAT,
-    Animation.ANIMATIONLOOPMODE_CYCLE,
+    Animation.ANIMATIONLOOPMODE_CYCLE
   );
   spinAnim.setKeys([
     { frame: 0, value: 0 },
