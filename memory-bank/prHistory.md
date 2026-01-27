@@ -24,8 +24,8 @@ Comprehensive architectural transformation from 3D platformer to Action JRPG.
 #### Files Changed
 - `AGENTS.md` - Rewritten for JRPG context
 - `README.md` - Updated project description
-- `docs/JRPG_TRANSFORMATION.md` - New stats/combat design
-- `docs/TESTING_STRATEGY.md` - New testing approach
+- `docs/legacy/story/JRPG_TRANSFORMATION.md` - New stats/combat design (legacy reference)
+- `docs/testing/TESTING_STRATEGY.md` - New testing approach
 - `packages/content-gen/` - GenAI pipeline implementation
 - `packages/game/src/utils/hex-grid.ts` - Hex utilities
 - `packages/game/src/components/react/scenes/IsometricScene.tsx` - Main scene

@@ -23,6 +23,10 @@
 4. **Governance**
    - Issue created: #68 (stack pivot + unified app)
    - Issue created: #69 (root port + parity + e2e)
+5. **Documentation Cleanup**
+   - Rewrote core design/gameplay/world docs to align with flooded-world scope
+   - Moved obsolete process/story handoffs into `/docs/legacy/process` and `/docs/legacy/story`
+   - Replaced multi-city geography with single-city rooftop district scope
 
 ## Known Constraints
 
@@ -35,7 +39,7 @@
 - Wire dialogue system and ECS data sources to Angular services
 - Move legacy apps into `_legacy/` and validate build
 - Add Electron target via Capacitor community plugin
-- Finish doc reorg: update links, deprecations, and legacy references
+- Validate legacy references and update any remaining stale links
 
 ---
 

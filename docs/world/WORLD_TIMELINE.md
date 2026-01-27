@@ -210,23 +210,19 @@ This is **Year 0** of the new calendar.
 
 ---
 
-## Relationship to Old Narrative Docs
+## Relationship to Story Docs
 
-**NARRATIVE_DESIGN.md** and **STORY_ARCS.md** contain the OLD cyberpunk setting (Midnight Exam, neon streets, etc.) and should be considered **DEPRECATED**.
+The old cyberpunk narrative documents are deprecated. The canonical narrative is now defined in:
 
-The core character dynamics (Kai vs Vera, Academy rivalry) can be adapted:
-- "Midnight Exam" race → Territory/salvage competition
-- Neon streets → Rooftop bridges
-- Cyberpunk chrome → Salvage tech
-- Corporate conspiracy → Academy secrets
+- `/docs/story/STORY_FLOODED.md`
 
-A new narrative document should be created that adapts these story beats to the Flooded World setting.
+Core dynamics remain (Kai vs Vera, Academy rivalry), but the setting is fully adapted to the Flooded World.
 
 ---
 
 *"Forty years ago, the city drowned. The waters rose and never fell. But we learned to swim. We learned to build. We learned that home isn't a place - it's the people you survive with."*
 
-— Elder Yuki, Kurenai Academy, Year 38
+- Elder Yuki, Kurenai Academy, Year 38
 
 ---
 

@@ -727,7 +727,7 @@ All documentation is production-ready and comprehensive:
 **Core Design**:
 - [`docs/NARRATIVE_DESIGN.md`](docs/NARRATIVE_DESIGN.md) - **⭐ READ THIS FIRST** - Complete A/B/C story with 9 storyboards
 - [`docs/UI_DESIGN_SYSTEM.md`](docs/UI_DESIGN_SYSTEM.md) - Faction-themed UI design system
-- [`docs/JRPG_TRANSFORMATION.md`](docs/JRPG_TRANSFORMATION.md) - Stats, combat, progression
+- [`docs/legacy/story/JRPG_TRANSFORMATION.md`](docs/legacy/story/JRPG_TRANSFORMATION.md) - Stats, combat, progression
 - [`docs/legacy/react/BABYLON_MIGRATION_PLAN.md`](docs/legacy/react/BABYLON_MIGRATION_PLAN.md) - **⭐ YOUR ROADMAP** - This handoff expands on this
 
 **Architecture**:

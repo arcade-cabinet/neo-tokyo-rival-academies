@@ -26,6 +26,9 @@
 - [x] Reorganized docs into domain subdirectories
 - [x] Updated Golden Record and Deprecations to current stack
 - [x] Added `/docs/README.md` index
+- [x] Rewrote design/gameplay/world docs to flooded-world scope
+- [x] Moved obsolete handoffs and process docs into `/docs/legacy/process`
+- [x] Moved legacy story transformation doc into `/docs/legacy/story`
 
 **Babylon Scene Port**
 - [x] Imperative Babylon scene service (camera, lighting, grid, background)

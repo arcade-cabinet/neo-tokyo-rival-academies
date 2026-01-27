@@ -6010,7 +6010,7 @@ docs/
 ├── POLISH_RULES.md                     # Sound/UI, haptics, particles
 ├── PHYSICAL_TESTING_CHECKLIST.md       # Device gates (Pixel 8a + OnePlus Open)
 ├── PHASE_ROADMAP.md                    # Dated milestones (this file)
-├── COMMUNITY_EXPANSION.md              # Seed sharing, user manifests
+├── docs/legacy/process/COMMUNITY_EXPANSION.md  # Seed sharing, user manifests
 └── GOLDEN_RECORD_MASTER.md             # This compilation (meta-overview + links)
 ```
 

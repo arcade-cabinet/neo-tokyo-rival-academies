@@ -24,7 +24,7 @@ Unity 6 documentation is preserved only for historical/reference purposes in `/d
 ### Code + Content
 
 - `_reference/typescript-runtime/`: historical snapshot only.
-- Any docs claiming “Unity migration complete” or “Unity is current.”
+- Any docs claiming "Unity migration complete" or "Unity is current."
 
 ### Aesthetic/Story
 
@@ -40,7 +40,7 @@ Unity 6 documentation is preserved only for historical/reference purposes in `/d
 - Kai vs Vera rivalry
 - Kurenai vs Azure academies
 - Four stats: Structure, Ignition, Logic, Flow
-- Alignment axis: Kurenai ← 0 → Azure
+- Alignment axis: Kurenai <- 0 -> Azure
 - 3-hour authored narrative arc
 - Procedural **scene** generation (layouts, props, encounters)
 
@@ -66,10 +66,12 @@ Unity 6 documentation is preserved only for historical/reference purposes in `/d
 
 ## Legacy Reference (Do Not Implement)
 
-- `/docs/legacy/unity/` — Unity 6 DOTS implementation notes
-- `/docs/legacy/react/` — React/Reactylon migration notes
-- `/docs/legacy/mobile/` — deprecated mobile-native strategy
-- `/docs/legacy/procedural/` — superseded long-form procedural drafts
+- `/docs/legacy/unity/` - Unity 6 DOTS implementation notes
+- `/docs/legacy/react/` - React/Reactylon migration notes
+- `/docs/legacy/mobile/` - deprecated mobile-native strategy
+- `/docs/legacy/procedural/` - superseded long-form procedural drafts
+- `/docs/legacy/process/` - historical handoffs and audits
+- `/docs/legacy/story/` - deprecated narrative transformations
 
 ---
 

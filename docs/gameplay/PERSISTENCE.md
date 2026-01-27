@@ -19,7 +19,7 @@ See `packages/core/src/types/SaveData.ts` for the canonical schema.
   "azureRep": 41,
   "level": 9,
   "stats": { "structure": 20, "ignition": 22, "logic": 18, "flow": 21 },
-  "inventory": ["Encrypted Passcode", "Water Filter"],
+  "inventory": ["Floodgate Keycard", "Water Filter Core"],
   "completedQuests": ["act1-main"],
   "activeQuests": ["act2-main"],
   "unlocks": ["market-access"],
@@ -50,8 +50,7 @@ See `packages/core/src/types/SaveData.ts` for the canonical schema.
 
 ## New Game+ Hooks
 
-- **Trigger**: Ending credits → “Continue?” prompt.
-- **Carry-over**: alignment/reputation, 1–2 signature items, partial stats.
-- **Changes**: enemy scaling +20–30%, alternate dialogue.
+- **Trigger**: Ending credits -> "Continue?" prompt.
+- **Carry-over**: alignment/reputation, 1-2 signature items, partial stats.
+- **Changes**: enemy scaling +20-30%, alternate dialogue.
 - **Max cycles**: 3.
-

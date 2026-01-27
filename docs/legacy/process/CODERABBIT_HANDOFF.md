@@ -17,7 +17,7 @@ Please review the complete documentation suite for:
 - [`docs/NARRATIVE_DESIGN.md`](docs/NARRATIVE_DESIGN.md) - Complete A/B/C story architecture with 9 stage storyboards
 - [`docs/UI_DESIGN_SYSTEM.md`](docs/UI_DESIGN_SYSTEM.md) - Faction-themed UI design tokens and components
 - [`docs/legacy/react/BABYLON_MIGRATION_PLAN.md`](docs/legacy/react/BABYLON_MIGRATION_PLAN.md) - 6-phase migration strategy
-- [`docs/JRPG_TRANSFORMATION.md`](docs/JRPG_TRANSFORMATION.md) - Stats, combat, progression systems
+- [`docs/legacy/story/JRPG_TRANSFORMATION.md`](docs/legacy/story/JRPG_TRANSFORMATION.md) - Stats, combat, progression systems
 - [`CLAUDE.md`](CLAUDE.md) - AI agent guidelines (updated for Vite)
 
 ### 2. Code Architecture
@@ -165,7 +165,7 @@ Capacitor is initialized but needs verification:
 | System | Implementation | Documentation | Tests |
 |--------|---------------|---------------|-------|
 | **ECS** | `packages/game/src/state/ecs.ts` | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | `__tests__/ecs.test.ts` |
-| **Stats** | `packages/game/src/state/components.ts` | [`docs/JRPG_TRANSFORMATION.md`](docs/JRPG_TRANSFORMATION.md) | `__tests__/stats.test.ts` |
+| **Stats** | `packages/game/src/state/components.ts` | [`docs/legacy/story/JRPG_TRANSFORMATION.md`](docs/legacy/story/JRPG_TRANSFORMATION.md) | `__tests__/stats.test.ts` |
 | **Hex Grid** | `packages/game/src/utils/hex-grid.ts` | [`CLAUDE.md`](CLAUDE.md) | `__tests__/hex-grid.test.ts` |
 | **Dialogue** | `packages/game/src/state/DialogueSystem.ts` | [`docs/NARRATIVE_DESIGN.md`](docs/NARRATIVE_DESIGN.md) | `__tests__/dialogue.test.ts` |
 | **GenAI** | `packages/content-gen/src/agents/` | [`docs/GENAI_PIPELINE.md`](docs/GENAI_PIPELINE.md) | N/A (visual) |

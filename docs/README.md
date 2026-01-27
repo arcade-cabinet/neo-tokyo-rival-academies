@@ -10,7 +10,6 @@
 
 ## Story
 - `/docs/story/STORY_FLOODED.md`
-- `/docs/story/JRPG_TRANSFORMATION.md`
 
 ## World
 - `/docs/world/FLOODED_WORLD.md`
@@ -41,7 +40,6 @@
 
 ## Pipeline
 - `/docs/pipeline/GENAI_PIPELINE.md`
-- `/docs/pipeline/GRAPHITI_OLLAMA_SETUP.md`
 
 ## Testing
 - `/docs/testing/TESTING_STRATEGY.md`
@@ -49,13 +47,12 @@
 
 ## Process
 - `/docs/process/AGENT_GOVERNANCE.md`
-- `/docs/process/PROJECT_EVOLUTION.md`
 - `/docs/process/CHANGELOG.md`
-- `/docs/process/AUDIT_REPORT.md`
-- `/docs/process/COMMUNITY_EXPANSION.md`
 
 ## Legacy (Reference Only)
 - `/docs/legacy/unity/`
 - `/docs/legacy/react/`
 - `/docs/legacy/mobile/`
 - `/docs/legacy/procedural/`
+- `/docs/legacy/process/`
+- `/docs/legacy/story/`
