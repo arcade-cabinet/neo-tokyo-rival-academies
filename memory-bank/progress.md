@@ -42,6 +42,7 @@
 - [x] Main menu, narrative overlay, splash screen
 - [x] JRPG HUD, alignment bar, quest log, quest objective
 - [x] Inventory screen, quest dialogs, save slot select, stat allocation modal
+- [x] Seed phrase menu and Continue flow integrated into main menu
 
 ---
 

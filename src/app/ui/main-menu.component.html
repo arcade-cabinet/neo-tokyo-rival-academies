@@ -1,21 +1,87 @@
 <div class="main-menu">
-  <div class="main-menu__content">
-    <h1 class="title">
-      NEO-TOKYO
-      <span>RIVAL ACADEMIES</span>
-    </h1>
+  <div class="main-menu__panel">
+    <div class="menu-header">
+      <div class="menu-badge">Flooded World</div>
+      <h1 class="menu-title">Neo-Tokyo</h1>
+      <p class="menu-subtitle">Rival Academies</p>
+    </div>
 
     <div class="story-text">
       <p>
-        &gt; DATE: 2126.01.27<br />
+        &gt; YEAR: 40 AFTER THE FLOOD<br />
         &gt; LOCATION: ROOFTOP TERRITORIES<br />
-        &gt; MISSION: THE DESCENT<br /><br />
-        The rivalry between Kurenai Academy and Azure Academy erupts across flooded districts.
-        Reach the Council summit before the tides erase the bridges.
+        &gt; MISSION: THE DESCENT
+      </p>
+      <p>
+        The rival academies face a deep-zone trial. Choose a seed and enter the rooftops
+        where bridges, storms, and secrets shape the fight for survival.
       </p>
     </div>
 
-    <button type="button" class="menu-btn" (click)="start.emit()">INITIATE STORY MODE</button>
-    <button type="button" class="menu-btn" disabled aria-disabled="true">ARCHIVES [LOCKED]</button>
+    <div class="seed-panel">
+      <div class="seed-preview">
+        <div class="seed-card">
+          <div class="seed-label">Adjective</div>
+          <div class="seed-value" [class.is-empty]="!adjective">{{ adjective || '---' }}</div>
+        </div>
+        <div class="seed-card">
+          <div class="seed-label">Noun</div>
+          <div class="seed-value" [class.is-empty]="!noun">{{ noun || '---' }}</div>
+        </div>
+        <div class="seed-card">
+          <div class="seed-label">Location</div>
+          <div class="seed-value" [class.is-empty]="!location">{{ location || '---' }}</div>
+        </div>
+      </div>
+
+      <label class="seed-input-label" for="seedInput">Seed Phrase</label>
+      <input
+        #seedInputRef
+        id="seedInput"
+        class="seed-input"
+        type="text"
+        [value]="seedInput"
+        (input)="onSeedInput(seedInputRef.value)"
+        placeholder="crimson-phoenix-academy"
+        spellcheck="false"
+        autocomplete="off"
+      />
+      <div class="seed-hint" [class.is-valid]="isValid">
+        {{ isValid ? 'Seed is valid.' : 'Enter three words separated by hyphens.' }}
+      </div>
+
+      <div
+        class="suggestions"
+        *ngIf="suggestions.adjectives.length || suggestions.nouns.length || suggestions.locations.length"
+      >
+        <button
+          class="suggestion"
+          type="button"
+          *ngFor="let word of [...suggestions.adjectives, ...suggestions.nouns, ...suggestions.locations]"
+          (click)="handleSuggestionClick(word)"
+        >
+          {{ word }}
+        </button>
+      </div>
+    </div>
+
+    <div class="menu-actions">
+      <button type="button" class="menu-btn secondary" (click)="handleGenerateNew()">
+        Generate New
+      </button>
+      <button type="button" class="menu-btn primary" [disabled]="!isValid" (click)="handleStartNew()">
+        Enter World
+      </button>
+      <button
+        *ngIf="hasSave"
+        type="button"
+        class="menu-btn ghost"
+        (click)="handleContinue()"
+      >
+        Continue ({{ lastSavedLabel }})
+      </button>
+    </div>
   </div>
+
+  <div class="waterline"></div>
 </div>

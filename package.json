@@ -44,6 +44,7 @@
     "@neo-tokyo/config": "workspace:*",
     "@neo-tokyo/content-gen": "workspace:*",
     "@neo-tokyo/core": "workspace:*",
+    "@neo-tokyo/diorama": "workspace:*",
     "animejs": "^3.2.1",
     "ionicons": "^7.0.0",
     "miniplex": "^2.0.0",

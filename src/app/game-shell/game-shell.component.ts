@@ -6,6 +6,7 @@ import { INTRO_SCRIPT } from '../content/intro-script';
 import { SaveSystem } from '../systems/save-system';
 import { BabylonSceneService } from '../engine/babylon-scene.service';
 import type { InputState } from '../types/game';
+import type { MenuStartPayload } from '../ui/main-menu.component';
 
 type ViewState = 'splash' | 'menu' | 'intro' | 'game' | 'gameover';
 
@@ -23,6 +24,7 @@ export class GameShellComponent implements OnInit, OnDestroy {
   private readonly music = new MusicSynth();
   private worldInitialized = false;
   private districtManager: DistrictManager | null = null;
+  private pendingSeed: string | null = null;
 
   constructor(
     private readonly inputState: InputStateService,
@@ -37,11 +39,12 @@ export class GameShellComponent implements OnInit, OnDestroy {
     this.music.stop();
   }
 
-  async handleStartStory(): Promise<void> {
-    const save = SaveSystem.load(0);
-    if (save) {
-      console.log('Save loaded');
+  async handleStartStory(payload: MenuStartPayload): Promise<void> {
+    if (payload.loadSave) {
+      SaveSystem.load(0);
     }
+
+    this.pendingSeed = payload.seed;
 
     this.viewState = 'intro';
     await this.sceneService.lockOrientationLandscape();
@@ -52,7 +55,7 @@ export class GameShellComponent implements OnInit, OnDestroy {
     this.music.start();
 
     if (!this.worldInitialized) {
-      const masterSeed = `neotokyo-${Date.now()}`;
+      const masterSeed = this.pendingSeed ?? `neotokyo-${Date.now()}`;
       const districtManager = new DistrictManager(masterSeed);
       await districtManager.initialize(true);
 
@@ -71,6 +74,7 @@ export class GameShellComponent implements OnInit, OnDestroy {
 
       this.districtManager = districtManager;
       this.worldInitialized = true;
+      this.pendingSeed = null;
     }
   }
 

@@ -95,6 +95,9 @@ importers:
       '@neo-tokyo/core':
         specifier: workspace:*
         version: link:../packages/core
+      '@neo-tokyo/diorama':
+        specifier: workspace:*
+        version: link:../packages/diorama
       animejs:
         specifier: ^3.2.1
         version: 3.2.2

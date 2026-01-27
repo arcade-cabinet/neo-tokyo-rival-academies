@@ -3,7 +3,10 @@
 
   <app-splash-screen *ngIf="viewState === 'splash'" (complete)="viewState = 'menu'"></app-splash-screen>
 
-  <app-main-menu *ngIf="viewState === 'menu' || viewState === 'gameover'" (start)="handleStartStory()"></app-main-menu>
+  <app-main-menu
+    *ngIf="viewState === 'menu' || viewState === 'gameover'"
+    (start)="handleStartStory($event)"
+  ></app-main-menu>
 
   <app-narrative-overlay *ngIf="viewState === 'intro'" [script]="introScript" (complete)="handleIntroComplete()"></app-narrative-overlay>
 

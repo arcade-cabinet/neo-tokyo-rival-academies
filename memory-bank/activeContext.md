@@ -31,6 +31,8 @@
    - Moved deprecated multi-app shells from `apps/` into `_legacy/apps/`
 7. **Electron Cleanup**
    - Removed legacy Electron Capacitor scripts; desktop target will be reintroduced explicitly later
+8. **Menu Seed Port**
+   - Ported Flooded World seed menu into Angular main menu with diorama seed generation
 
 ## Known Constraints
 
