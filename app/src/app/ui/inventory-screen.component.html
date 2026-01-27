@@ -1,0 +1,51 @@
+<div class="inventory" *ngIf="isOpen">
+  <div class="inventory__header">
+    <div>
+      <h2>Inventory</h2>
+      <div class="credits">💰 {{ credits | number }}</div>
+    </div>
+    <button type="button" (click)="close.emit()">×</button>
+  </div>
+
+  <div class="inventory__filters">
+    <button
+      *ngFor="let f of ['all','weapon','accessory','consumable','key_item']"
+      type="button"
+      [class.active]="filter === f"
+      (click)="setFilter(f as any)"
+    >
+      {{ f.replace('_', ' ') }}
+    </button>
+  </div>
+
+  <div class="inventory__content">
+    <div class="inventory__grid">
+      <div class="empty" *ngIf="filteredInventory().length === 0">No items in this category yet.</div>
+
+      <button
+        type="button"
+        class="item"
+        *ngFor="let item of filteredInventory()"
+        (click)="selectedItem = item"
+        [class.selected]="selectedItem?.id === item.id"
+        [class.equipped]="item.equipped"
+      >
+        <div class="icon">{{ getItemTypeIcon(item.type) }}</div>
+        <div class="name">{{ item.name }}</div>
+        <div class="qty">x{{ item.quantity }}</div>
+      </button>
+    </div>
+
+    <div class="inventory__details" *ngIf="selectedItem">
+      <h3>{{ selectedItem.name }}</h3>
+      <p class="type" [style.color]="getItemTypeColor(selectedItem.type)">
+        {{ selectedItem.type.replace('_',' ') }}
+      </p>
+      <p class="desc">{{ selectedItem.description || 'A well-crafted item.' }}</p>
+
+      <button type="button" class="use-btn" (click)="handleUseItem()" *ngIf="selectedItem.type === 'consumable'">
+        Use Item
+      </button>
+    </div>
+  </div>
+</div>

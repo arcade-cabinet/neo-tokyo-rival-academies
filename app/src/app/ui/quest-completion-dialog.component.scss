@@ -1,0 +1,47 @@
+.quest-completion {
+  position: fixed;
+  inset: 0;
+  background: rgba(2, 6, 23, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  font-family: var(--font-body);
+}
+
+.quest-completion__card {
+  background: rgba(8, 14, 20, 0.95);
+  border: 2px solid rgba(56, 189, 248, 0.6);
+  border-radius: 12px;
+  padding: 24px;
+  width: min(420px, 90%);
+  text-align: center;
+  color: #e2e8f0;
+}
+
+h2 {
+  margin: 0 0 12px 0;
+  color: #38bdf8;
+}
+
+.rewards {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 14px;
+}
+
+.level-up {
+  margin-top: 10px;
+  color: #fbbf24;
+}
+
+button {
+  margin-top: 16px;
+  background: #0ea5e9;
+  border: none;
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 999px;
+  cursor: pointer;
+}

@@ -1,0 +1,26 @@
+<div class="game-shell">
+  <app-babylon-canvas></app-babylon-canvas>
+
+  <app-splash-screen *ngIf="viewState === 'splash'" (complete)="viewState = 'menu'"></app-splash-screen>
+
+  <app-main-menu *ngIf="viewState === 'menu' || viewState === 'gameover'" (start)="handleStartStory()"></app-main-menu>
+
+  <app-narrative-overlay *ngIf="viewState === 'intro'" [script]="introScript" (complete)="handleIntroComplete()"></app-narrative-overlay>
+
+  <ng-container *ngIf="viewState === 'game'">
+    <app-jrpg-hud></app-jrpg-hud>
+    <app-quest-objective></app-quest-objective>
+
+    <div class="alignment-wrap">
+      <app-alignment-bar></app-alignment-bar>
+    </div>
+
+    <app-quest-log [isOpen]="questLogOpen" (close)="closeQuestLog()"></app-quest-log>
+
+    <app-combat-text *ngIf="combatText" [message]="combatText.message" [color]="combatText.color"></app-combat-text>
+
+    <button type="button" class="quest-log-btn" (click)="toggleQuestLog()">📋 Quests</button>
+  </ng-container>
+
+  <div class="scanlines"></div>
+</div>

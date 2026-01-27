@@ -9,6 +9,8 @@
 ### Technical Deprecations
 - **Pure Babylon.js (imperative)**: Early discussions on vanilla Babylon setup, ArcRotateCamera without JSX, manual dispose/parenting, YukaJS navigation (replaced by Navigation V2), or Three.js primitives. These were exploratory—**discard entirely**.
 - **Non-Reactylon declarative attempts**: Any react-babylonjs mentions or generic JSX without Reactylon specifics.
+- **React/Reactylon/Expo stack**: React + Reactylon + Expo mobile app is **deprecated**. The Golden Record is now Ionic Angular + Babylon.js + Capacitor.
+- **Multi-app shells**: Any split app structure (apps/web + apps/mobile + apps/desktop) is superseded by a single unified app in `app/`.
 - **Heavy runtime GenAI**: Ideas relying on live Meshy API calls during play—**ignore**; we settled on build-time manifest pipeline only.
 - **Open-world infinity / MMO / gacha**: Explicitly excluded per pillars.
 - **Early combat jank obscuring**: DBZ explosions hiding limbs—superseded by stats-driven, visible-preview system.
@@ -36,7 +38,7 @@ The "pre-flood" world is anchored to **2020s-2030s** (our current era), NOT retr
 **Current Truth as of January 19, 2026**:
 
 ### Technical
-- Reactylon + Babylon.js declarative composition
+- Ionic Angular + Babylon.js (imperative) + Capacitor
 - Seeded procedural generation (master/sub-seeds for world/quests/territories)
 - Meshy build-time pipeline (manifest.json + CLI generate)
 - Daggerfall-style block architecture (modular, snap points, rules-based content)

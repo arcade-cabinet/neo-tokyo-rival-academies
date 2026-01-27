@@ -1,0 +1,16 @@
+<div class="quest-objective" *ngIf="currentQuest">
+  <div class="quest-type" [ngClass]="currentQuest.type">
+    <span *ngIf="currentQuest.type === 'main'">⭐ Main Quest</span>
+    <span *ngIf="currentQuest.type === 'secret'">✨ Secret</span>
+    <span *ngIf="currentQuest.type === 'side'">📋 Side Quest</span>
+  </div>
+
+  <h3>{{ currentQuest.title }}</h3>
+
+  <div class="objective-box">
+    <div class="objective-label">Objective</div>
+    <div class="objective-text">{{ currentQuest.objective }}</div>
+  </div>
+
+  <div class="location">📍 {{ currentQuest.location }}</div>
+</div>

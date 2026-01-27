@@ -1,48 +1,44 @@
-# Architecture Pivot: Native Monorepo
+# Architecture Pivot: Unified Ionic Angular App
 
-**Date**: January 16, 2026
-**Status**: Pivot from Capacitor to Babylon Native (React Native).
+**Date**: January 27, 2026
+**Status**: Pivot to a single Ionic Angular + Babylon.js app wrapped by Capacitor.
 
-## 1. The Problem with Capacitor
-Capacitor wraps a WebGL canvas in a WebView.
-- **Performance**: WebGL in WebView < Native Metal/Vulkan.
-- **Flexibility**: Mobile gestures/layouts are limited by browser events.
-- **Future**: High-fidelity JRPG visuals (cel-shading, particles) need native power.
+## 1. The Problem with Multi-App Splits
+Multiple app shells (web, Expo/RN, desktop) increase maintenance cost and break feature parity.
 
-## 2. The Solution: Babylon Native (React Native)
-We adopt a true **Native** approach using ` @babylonjs/react-native`.
-- **Engine**: Babylon Native (C++ engine binding).
-- **UI**: React Native (Native components, no HTML overlay).
-- **Logic**: Shared TypeScript/ECS.
+## 2. The Solution: One Web App + Capacitor
+We adopt a **single** Ionic Angular app and wrap it with Capacitor for Android/iOS, with optional Electron for desktop.
 
-## 3. New Monorepo Structure (Reference: `wheres-ball-though`)
-We separate concerns into `apps` (platforms) and `packages` (logic).
+- **UI**: Ionic + Angular
+- **3D**: Babylon.js (WebGL)
+- **Logic**: Shared ECS packages
+
+## 3. Current Repo Layout
 
 ```
 root/
-├── apps/
-│   ├── mobile/         # React Native (iOS/Android) - The "Real" Game
-│   └── web/            # Vite + Babylon Web - For rapid dev tools & web access
-├── packages/
-│   ├── core/           # Shared Game Logic (ECS, Systems, State)
-│   ├── config/         # Centralized Configs (Biome, TS, Constants)
-│   ├── types/          # Shared Types (Schemas, Contracts)
-│   ├── ui/             # Shared UI Components (if compatible) or Design Tokens
-│   └── content-gen/    # GenAI Pipeline (Build-time)
+├── app/              # Ionic Angular unified app
+├── packages/         # Shared game logic/data
+└── docs/             # Golden Record
 ```
 
 ## 4. Migration Steps
-1.  **Scaffold**: Create `packages/config` and `packages/types`.
-2.  **Extract**: Move `src/systems`, `src/state`, `src/data` from `game` to `packages/core`.
-3.  **Setup Mobile**: Initialize Expo/RN project in `apps/mobile`.
-4.  **Setup Web**: Move remaining `game` view layer to `apps/web`.
-5.  **Wire Up**: dependencies via `pnpm workspace`.
+1. **Scaffold** Ionic Angular app in `app/`.
+2. **Port** React/Reactylon UI and Babylon scene to Angular + Babylon imperative.
+3. **Wire** ECS packages into the app.
+4. **Remove/Archive** legacy React/Expo apps.
+5. **Add** optional Electron target using same web bundle.
 
 ## 5. Compatibility Analysis
-| Feature | Web (Vite) | Native (RN) | Solution |
-|---------|------------|-------------|----------|
-| **Rendering** | Canvas + WebGL | BabylonNativeView | Abstract `GameView` component. |
-| **Input** | Mouse/Touch events | PanResponder / Gestures | Abstract `InputSystem` in Core. |
-| **UI** | HTML/CSS | RN View/Text | Separate UI implementations or React Native Web? (Likely separate for best feel). |
-| **ECS** | Miniplex (JS) | Miniplex (JS) | Shared in `packages/core`. |
-| **Assets** | URL fetch | Bundled/FS | `AssetManager` abstraction (URL vs require/fs). |
+
+| Feature | Unified App (Ionic + Babylon) | Notes |
+|---------|-------------------------------|-------|
+| Rendering | Babylon.js WebGL | Single pipeline |
+| Input | Ionic + Capacitor | Native-friendly touch |
+| UI | Ionic components | Accessible and mobile-ready |
+| ECS | Miniplex | Shared in packages |
+| Assets | Web bundle | Serves from `/assets` |
+
+---
+
+*This doc supersedes the previous React Native/Babylon Native pivot.*

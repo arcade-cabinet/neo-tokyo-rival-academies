@@ -1,63 +1,57 @@
 # Neo-Tokyo: Rival Academies - Project Brief
 
-Neo-Tokyo: Rival Academies is a **~3 hour Action JRPG** built with modern web technologies. Set in a neon-lit cyberpunk metropolis, players navigate the rivalry between two elite academies competing for supremacy through "The Midnight Exam" - an illegal underground race through Neo-Tokyo's rooftops.
+Neo-Tokyo: Rival Academies is a **3-hour Action JRPG** set in a **flooded, post-disaster Neo-Tokyo** where life has moved to rooftops. The game centers on rival academies (Kurenai vs Azure) and a territory-based salvage economy.
 
 ## Target Scope
 
-**Playtime**: ~3 hours if playing through ALL required and optional storyline content
-**Structure**: A/B/C Story Architecture (Japanese JRPG anime style)
+**Playtime**: ~3 hours for a full playthrough
+**Structure**: Action JRPG with narrative beats + procedural quests
 
 ## Core Requirements
 
 - **3D Isometric Diorama View** with hex-tile grid system
 - **JRPG Combat System** with stats-driven damage calculations
-- **A/B/C Story Architecture**: Main rivalry (A), parallel development (B), disruptor team-ups (C)
+- **Narrative Overlay** (visual novel style)
 - **GenAI Asset Pipeline** using Meshy AI for production-quality characters
-- **Visual Novel Dialogue** for narrative progression
-- **Mobile-Ready** via Capacitor for native deployment
+- **Mobile-First Delivery** via Capacitor (Android/iOS)
 
-## Tech Stack
+## Tech Stack (Current)
 
-- **Frontend**: React 19, Three.js 0.182, React Three Fiber 9.x
-- **3D Framework**: Isometric camera, hex grid utilities
-- **State**: Miniplex (ECS) + Zustand
-- **Physics**: Rapier (via @react-three/rapier)
-- **GenAI**: Meshy AI (text-to-image, image-to-3D, rigging, animations)
-- **Build**: Vite 6.x, PNPM 10
-- **Quality**: Biome (lint/format), Vitest (unit), Playwright (E2E)
+- **Frontend**: Ionic + Angular (zoneless)
+- **3D Engine**: Babylon.js
+- **State/Logic**: Miniplex (ECS) + Zustand stores (framework-agnostic usage)
+- **Physics**: Rapier
+- **Animation**: Anime.js (UI)
+- **Build**: Angular tooling + Vite under the hood, PNPM 10
+- **Quality**: Biome 2.3, Vitest
+- **Native Wrapper**: Capacitor 8
 
 ## Key Goals
 
-1. **Production Quality**: No placeholders, high-fidelity GLB assets
-2. **Cel-Shaded Aesthetic**: meshToonMaterial for anime visual style
-3. **Deep Narrative**: LLM-driven dialogue with rival characters
-4. **Kinetic Combat**: Stats-based JRPG with real-time elements
+1. **Production Quality**: No placeholders in shipped builds
+2. **Cel-Shaded Aesthetic**: Babylon.js ToonMaterial/meshToonMaterial equivalents
+3. **Mobile Performance**: 60 FPS on Pixel 8a baseline
+4. **Narrative Depth**: Rivalry system with alignment-driven dialogue
 
 ## Characters (9 Generated)
 
-**A-Story Heroes** (Hero preset - 7 animations):
-- **Kai** - Kurenai Academy protagonist, "Ignition" philosophy
-- **Vera** - Azure Academy rival, "Calculation" philosophy
+**A-Story Heroes**:
+- **Kai** - Kurenai Academy protagonist
+- **Vera** - Azure Academy rival
 
-**B-Story Characters** (Enemy/Boss presets):
-- Yakuza Grunt, Yakuza Boss - Street-level encounters
-- Biker Grunt, Biker Boss - Highway territory conflicts
+**B-Story Characters**:
+- Yakuza Grunt, Yakuza Boss
+- Biker Grunt, Biker Boss
 
-**C-Story Disruptors** (Enemy preset + Prop):
-- Mall Security Guard - Mall Drop stage enemy
-- Alien Humanoid - Alien Ship stage enemy
-- Tentacle Single (prop) - Yuka-driven boss mechanics
-
-## Story Structure
-
-- **A Story**: Kai vs Vera rivalry through 8-10 major beats
-- **B Story**: Parallel character development, academy politics, lore
-- **C Story**: Disruptor events (alien abduction, mall drop) forcing team-ups
+**C-Story Disruptors**:
+- Mall Security Guard
+- Alien Humanoid
+- Tentacle Single (prop)
 
 ## Current Phase
 
-**MVP**: Isometric diorama prototype with hex grid, character loading, and basic combat framework.
+**Phase 1: Mobile MVP** - Unified Ionic Angular app with Babylon.js + Capacitor.
 
 ---
 
-Last Updated: 2026-01-16
+Last Updated: 2026-01-27

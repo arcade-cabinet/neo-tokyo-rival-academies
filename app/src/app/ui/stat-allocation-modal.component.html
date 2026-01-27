@@ -1,0 +1,33 @@
+<div class="stat-modal" *ngIf="isOpen">
+  <div class="stat-modal__card" role="dialog" aria-modal="true">
+    <h2>LEVEL UP!</h2>
+
+    <div class="points">Available Points: <span>{{ remainingPoints }}</span></div>
+
+    <div class="error" *ngIf="error">{{ error }}</div>
+
+    <div class="stat-row" *ngFor="let stat of ['structure','ignition','logic','flow']">
+      <div class="stat-info">
+        <div class="name">{{ stat }}</div>
+        <div class="desc">Current: {{ currentStats[stat] }} → New: {{ currentStats[stat] + allocation[stat] }}</div>
+      </div>
+      <div class="controls">
+        <button type="button" (click)="decrement(stat)">-</button>
+        <span>{{ allocation[stat] }}</span>
+        <button type="button" (click)="increment(stat)">+</button>
+      </div>
+    </div>
+
+    <div class="recommendations">
+      <button type="button" (click)="applyRecommended('tank')">Tank</button>
+      <button type="button" (click)="applyRecommended('melee_dps')">Melee</button>
+      <button type="button" (click)="applyRecommended('ranged_dps')">Ranged</button>
+      <button type="button" (click)="applyRecommended('balanced')">Balanced</button>
+    </div>
+
+    <div class="actions">
+      <button type="button" class="confirm" (click)="handleConfirm()">Confirm</button>
+      <button type="button" class="cancel" (click)="cancel.emit()">Cancel</button>
+    </div>
+  </div>
+</div>

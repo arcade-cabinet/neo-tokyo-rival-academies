@@ -1,0 +1,112 @@
+.game-hud {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  font-family: var(--font-body);
+}
+
+.top-bar {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  right: 12px;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  pointer-events: auto;
+}
+
+.hud-box {
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  border-radius: 8px;
+  padding: 10px 14px;
+  color: #e2e8f0;
+}
+
+.hud-box.right {
+  text-align: right;
+}
+
+.label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #94a3b8;
+}
+
+.value {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.value.accent {
+  color: #38bdf8;
+}
+
+.dialogue {
+  position: absolute;
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(7, 10, 14, 0.9);
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  border-radius: 10px;
+  padding: 12px 16px;
+  pointer-events: auto;
+  min-width: 320px;
+}
+
+.speaker {
+  font-size: 12px;
+  text-transform: uppercase;
+  color: #38bdf8;
+  margin-bottom: 6px;
+}
+
+.speaker.rival {
+  color: #f97316;
+}
+
+.text {
+  font-size: 13px;
+  color: #e2e8f0;
+}
+
+.combat-text {
+  position: absolute;
+  top: 30%;
+  width: 100%;
+  text-align: center;
+  font-size: 3rem;
+  font-weight: 900;
+  color: #f97316;
+  opacity: 0;
+}
+
+.touch-controls {
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 16px;
+  pointer-events: auto;
+}
+
+.control-zone {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.control-zone button {
+  width: 64px;
+  height: 64px;
+  border-radius: 14px;
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  background: rgba(15, 23, 42, 0.85);
+  color: #f8fafc;
+  font-weight: 700;
+}

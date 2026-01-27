@@ -1,0 +1,64 @@
+<div class="save-select" *ngIf="isOpen">
+  <div class="save-select__header">
+    <h2>{{ mode === 'save' ? 'Save Game' : 'Load Game' }}</h2>
+    <button type="button" (click)="close.emit()">×</button>
+  </div>
+
+  <div class="save-select__list">
+    <button
+      type="button"
+      class="slot auto"
+      *ngIf="mode === 'load' && slots[0]"
+      [disabled]="!slots[0].data"
+      (click)="selectSlot.emit(0)"
+    >
+      <div class="slot__meta">
+        <div class="label">💾 Auto-Save</div>
+        <div *ngIf="slots[0].data" class="details">
+          Level {{ slots[0].data.level }} • Act {{ slots[0].data.act }}
+        </div>
+        <div *ngIf="slots[0].data" class="sub">
+          {{ slots[0].data.currentDistrictId.replace('district_', 'District ') }} •
+          {{ formatPlaytime(slots[0].data.playtimeMinutes) }}
+        </div>
+        <div *ngIf="!slots[0].data" class="empty">Empty</div>
+      </div>
+      <div class="timestamp" *ngIf="slots[0].lastSaved">
+        {{ formatTimestamp(slots[0].lastSaved!) }}
+      </div>
+    </button>
+
+    <button
+      type="button"
+      class="slot"
+      *ngFor="let slot of slots.slice(1, 4)"
+      (click)="selectSlot.emit(slot.slotNumber)"
+    >
+      <div class="slot__meta">
+        <div class="label">Slot {{ slot.slotNumber }}</div>
+        <div *ngIf="slot.data" class="details">
+          Level {{ slot.data.level }} • Act {{ slot.data.act }}
+        </div>
+        <div *ngIf="slot.data" class="sub">
+          {{ slot.data.currentDistrictId.replace('district_', 'District ') }}
+        </div>
+        <div *ngIf="slot.data" class="sub">
+          ⏱️ {{ formatPlaytime(slot.data.playtimeMinutes) }}
+          <span class="alignment" [class.azure]="slot.data.alignment > 0.2" [class.kurenai]="slot.data.alignment < -0.2">
+            {{ slot.data.alignment > 0.2 ? '⚡ Azure' : slot.data.alignment < -0.2 ? '🔥 Kurenai' : '⚖️ Neutral' }}
+          </span>
+        </div>
+        <div *ngIf="!slot.data" class="empty">
+          {{ mode === 'save' ? 'Empty Slot - Click to Save' : 'Empty Slot' }}
+        </div>
+      </div>
+      <div class="timestamp" *ngIf="slot.lastSaved">
+        {{ formatTimestamp(slot.lastSaved!) }}
+      </div>
+    </button>
+  </div>
+
+  <div class="warning" *ngIf="mode === 'save'">
+    ⚠️ Saving to an existing slot will overwrite previous data.
+  </div>
+</div>

@@ -1,0 +1,21 @@
+<div class="quest-dialog" *ngIf="isOpen && quest">
+  <div class="quest-dialog__content">
+    <h2>{{ quest.title }}</h2>
+    <p class="description">{{ quest.description }}</p>
+    <div class="objective">
+      <span>Objective:</span>
+      <strong>{{ quest.objective }}</strong>
+    </div>
+    <div class="rewards">
+      <span>💰 {{ quest.rewards.credits }} credits</span>
+      <span>⭐ {{ quest.rewards.xp }} XP</span>
+      <span *ngIf="quest.rewards.alignmentShift">
+        {{ quest.rewards.alignmentShift.kurenai ? '🔥' : '⚡' }} Reputation
+      </span>
+    </div>
+    <div class="actions">
+      <button type="button" class="accept" (click)="accept.emit()">Accept</button>
+      <button type="button" class="decline" (click)="decline.emit()">Decline</button>
+    </div>
+  </div>
+</div>

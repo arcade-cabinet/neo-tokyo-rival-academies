@@ -7,7 +7,7 @@ graph TD
     User[User / Player] -->|Input| InputSystem
     InputSystem -->|Update State| ECS[ECS World (Miniplex)]
 
-    subgraph "Game Loop (GameWorld.tsx)"
+    subgraph "Game Loop"
         PhysicsSystem -->|Read/Write| ECS
         AISystem -->|Read/Write| ECS
         CombatSystem -->|Read/Write| ECS
@@ -15,8 +15,8 @@ graph TD
         StageSystem -->|Manage| ECS
     end
 
-    ECS -->|Render| ReactThreeFiber[R3F Components]
-    ReactThreeFiber -->|Draw| Canvas
+    ECS -->|Render| Babylon[Babylon.js Scene]
+    Babylon -->|Draw| Canvas
 
     subgraph "Content Generation (Offline)"
         GenAI[Google Gemini] -->|Prompt| ContentCLI[content-gen CLI]
@@ -36,23 +36,17 @@ The game uses **Miniplex**. Entities are plain JS objects with optional componen
 
 ### Core Systems
 
-1.  **PhysicsSystem**: Updates `position` based on `velocity` and `platformData`. Handles collisions.
-2.  **CombatSystem**: Handles interactions between `isPlayer`, `isEnemy`, and `isProjectile`. Calculates damage using `CombatLogic`.
-3.  **AISystem**: Uses **Yuka** FSM to drive enemy behavior (Chase, Attack, Flee).
-4.  **DialogueSystem**: Manages narrative state overlays.
-
-## GenAI Pipeline
-
-Located in `packages/content-gen`.
-
-1.  **Prompts**: `src/game/prompts/index.ts` defines schemas.
-2.  **Generation**: `src/cli.ts` invokes Gemini API.
-3.  **Output**:
-    -   Narrative -> `packages/game/src/data/story_gen.json`
-    -   Icons -> `packages/game/src/components/react/generated/*.tsx`
+1. **PhysicsSystem**: Updates `position` based on `velocity` and `platformData`. Handles collisions.
+2. **CombatSystem**: Handles interactions between `isPlayer`, `isEnemy`, and `isProjectile`. Calculates damage using `CombatLogic`.
+3. **AISystem**: Navigation + behavior.
+4. **DialogueSystem**: Manages narrative state overlays.
 
 ## Mobile Architecture (Capacitor)
 
--   **Web App**: Built via Vite to `packages/game/dist`.
--   **Native Wrapper**: Capacitor serves `dist` in a WebView.
--   **Plugins**: Haptics, Motion, ScreenOrientation.
+- **Web App**: Built via Ionic Angular to `app/www`.
+- **Native Wrapper**: Capacitor serves `www` in a WebView.
+- **Plugins**: Haptics, Motion, ScreenOrientation.
+
+---
+
+*This architecture uses a single unified Ionic Angular app (no multi-app shells).*

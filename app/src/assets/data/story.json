@@ -1,0 +1,63 @@
+{
+  "dialogues": {
+    "intro": [
+      {
+        "id": "intro_1",
+        "speaker": "Kai",
+        "text": "Engine's hot. Let's melt some asphalt.",
+        "next": "intro_2"
+      },
+      {
+        "id": "intro_2",
+        "speaker": "Vera",
+        "text": "Your engine is inefficient, Takeda. I've already calculated the optimal path.",
+        "next": "intro_3"
+      },
+      { "id": "intro_3", "speaker": "Kai", "text": "Math this!", "next": null }
+    ],
+    "rival_encounter_1": [
+      {
+        "id": "re1_1",
+        "speaker": "Vera",
+        "text": "You're lagging. Expected.",
+        "next": "re1_2"
+      },
+      {
+        "id": "re1_2",
+        "speaker": "Kai",
+        "text": "I'm just warming up!",
+        "next": null
+      }
+    ],
+    "victory": [
+      {
+        "id": "vic_1",
+        "speaker": "Kai",
+        "text": "Looks like your math was off, Vector!",
+        "next": "vic_2"
+      },
+      {
+        "id": "vic_2",
+        "speaker": "Vera",
+        "text": "Recalculating... next year, Takeda.",
+        "next": null
+      }
+    ]
+  },
+  "items": {
+    "potion_s": {
+      "name": "Coolant S",
+      "description": "Restores 50 Structure."
+    },
+    "weapon_1": {
+      "name": "Redline Piston",
+      "description": "Kai's signature weapon. Smokes constantly."
+    }
+  },
+  "lore": {
+    "shard_1": {
+      "title": "The First Race",
+      "content": "Legend says the first Midnight Exam wasn't a race, but a riot."
+    }
+  }
+}

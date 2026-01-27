@@ -2,91 +2,39 @@
 
 ## Current Focus
 
-**Phase**: MVP Prototype - Isometric Diorama with GenAI Assets
-**Target**: ~3 Hour JRPG with A/B/C Story Architecture
+**Phase**: Mobile MVP (single unified Ionic Angular app)
+**Target**: Babylon.js + Capacitor delivery for web, Android, iOS; optional Electron desktop.
 
-### Game Scope
+## Active Work
 
-The game is a **3-hour Action JRPG** if playing through ALL required and optional storyline content with:
-- **A Story**: Main Kai vs Vera rivalry arc (8-10 major beats)
-- **B Story**: Parallel character development, academy politics
-- **C Story**: Disruptor events forcing team-ups (alien abduction, mall drop)
+1. **Stack Pivot**
+   - Unified Ionic Angular app scaffolded in `app/`
+   - Capacitor integration enabled (Capacitor 8)
+   - Zoneless Angular bootstrap enabled
 
-### Active Work
+2. **Babylon Scene Port**
+   - Imperative Babylon scene service built
+   - Hex grid, background panels, lighting, character loading, markers, and data shards ported
 
-1. **Hex Grid System** - Implemented, working
-   - `src/utils/hex-grid.ts` - Coordinate utilities
-   - `src/utils/hex-normalizer.ts` - GLTF normalization
-   - `IsometricScene.tsx` - Main scene with instanced tiles
+3. **UI/HUD Port**
+   - Main menu, narrative overlay, JRPG HUD, alignment bar, quest UI, splash screen ported
+   - Additional UI components ported: inventory, quest dialogs, save slots, stat allocation
 
-2. **GenAI Pipeline** - 9/9 characters complete
-   - All character manifests defined
-   - Meshy AI integration working
-   - Animation presets (hero/enemy/boss/prop) functioning
+4. **Governance**
+   - Issue created: #68 (stack pivot + unified app)
 
-3. **Stage System** - Skeleton implemented
-   - 9 stages defined in `content/stages.ts`
-   - C-Story disruptors (alien_ship, mall_drop) triggered by position
-   - Stage-to-stage connectors needed
+## Known Constraints
 
-4. **Documentation Overhaul** - Complete
-   - PROJECT_EVOLUTION.md - Jules session history
-   - NARRATIVE_DESIGN.md - A/B/C story architecture
-   - ARCHITECTURE.md, DESIGN_PHILOSOPHY.md created
-
-### Blocked Items
-
-- **Navigation Mesh**: YukaJS is unmaintained
-  - Mitigation: Babylon.js/Reactylon evaluation planned
-  - See: docs/REACTYLON_MIGRATION.md
-
-### Recent Decisions
-
-| Decision | Rationale | Date |
-|----------|-----------|------|
-| Isometric over Side-Scroll | Better tactical combat feel, "toy box" appeal | Jan 14 |
-| Miniplex ECS | Cleaner render/logic separation than hooks | Jan 14 |
-| Meshy AI over alternatives | Best quality/cost for anime-style 3D | Jan 13 |
-| Animation presets | Reduces manifest complexity | Jan 15 |
-| Prop pipeline | Non-humanoids can't be rigged | Jan 15 |
+- Must preserve all existing gameplay systems and assets.
+- No PRs; work directly on `main` per owner request.
 
 ## Next Steps
 
-### Immediate (This Session)
-- [x] Complete memory-bank documentation
-- [x] Create ARCHITECTURE.md
-- [x] Create DESIGN_PHILOSOPHY.md
-- [x] Create NARRATIVE_DESIGN.md (A/B/C stories)
-- [ ] Review CodeRabbit feedback
-
-### Short-Term (This Week)
-- [ ] Combat system prototype
-- [ ] Dialogue system integration
-- [ ] JRPG HUD improvements (quest log, minimap)
-- [ ] C-Story disruptor stage polish
-
-### Medium-Term (This Month)
-- [ ] Babylon.js migration evaluation
-- [ ] Full B-Story content implementation
-- [ ] GenAI parallax backgrounds
-- [ ] Save/load system
-
-## Open Questions
-
-1. **Camera System**: Fixed isometric or player-controllable rotation?
-2. **Combat Flow**: Real-time with Yuka AI for tentacles/rivals
-3. **B-Story Content**: Agent-generated alongside A-Story?
-
-## Context for AI Agents
-
-When working on this codebase:
-
-1. **Check manifest.json** before modifying character assets
-2. **Use ECS patterns** for game logic, not React state
-3. **Follow Biome** - run `pnpm check` before committing
-4. **Test with Vitest** - systems should have unit tests
-5. **Document changes** - update relevant docs
+- Integrate remaining legacy UI (combat arena, flooded world menu, game HUD) into Angular
+- Wire dialogue system and ECS data sources to Angular services
+- Move legacy apps into `_legacy/` and validate build
+- Add Electron target via Capacitor community plugin
 
 ---
 
-Last Updated: 2026-01-16
+Last Updated: 2026-01-27

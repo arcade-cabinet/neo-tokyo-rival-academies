@@ -1,0 +1,30 @@
+<div class="game-hud">
+  <div class="top-bar">
+    <div class="hud-box">
+      <div class="label">NEO-TOKYO</div>
+      <div class="value">{{ biomeNames[biome] || 'SECTOR 0' }}</div>
+    </div>
+    <div class="hud-box right">
+      <div class="label">REP</div>
+      <div class="value accent">{{ score }}</div>
+    </div>
+  </div>
+
+  <div class="dialogue" *ngIf="dialogue">
+    <div class="speaker" [class.rival]="dialogue.speaker === 'Rival'">{{ dialogue.speaker }}</div>
+    <div class="text">{{ dialogue.text }}</div>
+  </div>
+
+  <div class="combat-text">KNOCKOUT!</div>
+
+  <div class="touch-controls">
+    <div class="control-zone left">
+      <button type="button" (touchstart)="handleTouchStart('slide')" (touchend)="handleTouchEnd('slide')">SLIDE</button>
+      <button type="button" (touchstart)="handleTouchStart('run')" (touchend)="handleTouchEnd('run')">DASH</button>
+    </div>
+    <div class="control-zone right">
+      <button type="button" (touchstart)="handleTouchStart('attack')" (touchend)="handleTouchEnd('attack')">ATK</button>
+      <button type="button" (touchstart)="handleTouchStart('jump')" (touchend)="handleTouchEnd('jump')">JUMP</button>
+    </div>
+  </div>
+</div>

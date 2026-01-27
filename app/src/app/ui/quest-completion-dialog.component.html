@@ -1,0 +1,16 @@
+<div class="quest-completion" *ngIf="isOpen && rewards">
+  <div class="quest-completion__card">
+    <h2>Quest Complete</h2>
+    <div class="rewards">
+      <span>💰 {{ rewards.credits }} credits</span>
+      <span>⭐ {{ rewards.xp }} XP</span>
+      <span *ngIf="rewards.alignmentShift">
+        {{ rewards.alignmentShift.faction === 'kurenai' ? '🔥' : '⚡' }} Reputation +{{ rewards.alignmentShift.amount }}
+      </span>
+    </div>
+    <div class="level-up" *ngIf="rewards.leveledUp">
+      Level Up! New level: {{ rewards.newLevel }}
+    </div>
+    <button type="button" (click)="close.emit()">Continue</button>
+  </div>
+</div>

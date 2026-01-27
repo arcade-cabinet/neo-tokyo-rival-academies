@@ -1,0 +1,55 @@
+<div class="quest-log" *ngIf="isOpen">
+  <div class="quest-log__header">
+    <h2>Quest Log</h2>
+    <button type="button" (click)="close.emit()">×</button>
+  </div>
+
+  <div class="quest-log__tabs">
+    <button type="button" [class.active]="tab === 'active'" (click)="setTab('active')">
+      Active ({{ activeQuests.length }})
+    </button>
+    <button type="button" [class.active]="tab === 'completed'" (click)="setTab('completed')">
+      Completed ({{ completedQuests.length }})
+    </button>
+  </div>
+
+  <div class="quest-log__list">
+    <div class="quest-empty" *ngIf="tab === 'active' && activeQuests.length === 0">
+      No active quests. Explore the district to find new opportunities!
+    </div>
+
+    <div class="quest-card" *ngFor="let quest of activeQuests" [hidden]="tab !== 'active'">
+      <div class="quest-card__header">
+        <h3>{{ quest.title }}</h3>
+        <span class="quest-type" [class.main]="quest.type === 'main'" [class.secret]="quest.type === 'secret'">
+          {{ quest.type }}
+        </span>
+      </div>
+      <p>{{ quest.description }}</p>
+
+      <div class="quest-objective">
+        <div class="label">Objective</div>
+        <div class="text">{{ quest.objective }}</div>
+      </div>
+
+      <div class="quest-location">📍 {{ quest.location }}</div>
+
+      <div class="quest-rewards" *ngIf="quest.rewards">
+        <span>💰 {{ quest.rewards.credits }} credits</span>
+        <span>⭐ {{ quest.rewards.xp }} XP</span>
+        <span *ngIf="quest.rewards.alignmentShift">
+          {{ quest.rewards.alignmentShift.kurenai ? '🔥' : '⚡' }} Reputation
+        </span>
+      </div>
+    </div>
+
+    <div class="quest-empty" *ngIf="tab === 'completed' && completedQuests.length === 0">
+      No completed quests yet. Complete your first quest to start your legend!
+    </div>
+
+    <div class="quest-complete" *ngFor="let questId of completedQuests" [hidden]="tab !== 'completed'">
+      <span>✓</span>
+      <span>{{ questId }}</span>
+    </div>
+  </div>
+</div>

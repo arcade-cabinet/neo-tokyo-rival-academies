@@ -1,0 +1,42 @@
+/* Core Ionic CSS */
+@import "@ionic/angular/css/core.css";
+@import "@ionic/angular/css/normalize.css";
+@import "@ionic/angular/css/structure.css";
+@import "@ionic/angular/css/typography.css";
+@import "@ionic/angular/css/display.css";
+@import "@ionic/angular/css/padding.css";
+@import "@ionic/angular/css/float-elements.css";
+@import "@ionic/angular/css/text-alignment.css";
+@import "@ionic/angular/css/text-transformation.css";
+@import "@ionic/angular/css/flex-utils.css";
+
+:root {
+  --font-display: 'Rajdhani', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  --color-ink: #0b0f13;
+  --color-slate: #0f172a;
+  --color-ocean: #0ea5e9;
+  --color-amber: #f97316;
+  --color-rust: #b45309;
+  --color-mist: #94a3b8;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  font-family: var(--font-body);
+  background: #000;
+  color: #f8fafc;
+}
+
+body {
+  overflow: hidden;
+}
+
+ion-app,
+app-root {
+  height: 100%;
+}

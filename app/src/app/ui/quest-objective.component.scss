@@ -1,0 +1,63 @@
+.quest-objective {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: rgba(12, 20, 26, 0.95);
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  border-radius: 10px;
+  padding: 12px 16px;
+  max-width: 320px;
+  font-family: var(--font-body);
+  z-index: 100;
+  color: #e2e8f0;
+}
+
+.quest-type {
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: #94a3b8;
+
+  &.main {
+    color: #f59e0b;
+  }
+
+  &.secret {
+    color: #a855f7;
+  }
+}
+
+h3 {
+  margin: 0 0 8px 0;
+  font-size: 14px;
+  color: #38bdf8;
+}
+
+.objective-box {
+  padding: 8px;
+  background: rgba(6, 78, 59, 0.3);
+  border-left: 3px solid #10b981;
+  border-radius: 6px;
+}
+
+.objective-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #94a3b8;
+  margin-bottom: 4px;
+}
+
+.objective-text {
+  font-size: 12px;
+  color: #e2e8f0;
+  line-height: 1.4;
+}
+
+.location {
+  margin-top: 8px;
+  font-size: 11px;
+  color: #64748b;
+}

@@ -1,0 +1,30 @@
+<div class="alignment-bar">
+  <div class="alignment-header">
+    <span class="label">Alignment</span>
+    <span class="value" [style.color]="getColor()">{{ alignmentLabel }}</span>
+  </div>
+
+  <div class="alignment-track">
+    <div class="alignment-gradient"></div>
+    <div class="alignment-center"></div>
+    <div class="alignment-indicator" [style.left.%]="barPosition" [style.background]="getColor()"></div>
+  </div>
+
+  <div class="rep-meters">
+    <div class="rep">
+      <span class="icon">🔥</span>
+      <span class="name">Kurenai:</span>
+      <span class="value kurenai">{{ kurenaiRep }}</span>
+    </div>
+    <div class="rep">
+      <span class="icon">⚡</span>
+      <span class="name">Azure:</span>
+      <span class="value azure">{{ azureRep }}</span>
+    </div>
+  </div>
+
+  <div class="alignment-bonus" *ngIf="alignment > 0.6 || alignment < -0.6">
+    <span *ngIf="alignment > 0.6">⚡ Azure Focus: +10% Structure & Logic</span>
+    <span *ngIf="alignment < -0.6">🔥 Kurenai Focus: +10% Ignition & Flow</span>
+  </div>
+</div>

@@ -1,0 +1,46 @@
+<div class="hud">
+  <div class="status-frame">
+    <div class="portrait">
+      <div class="portrait-inner">K</div>
+    </div>
+    <div class="stats">
+      <div class="title">LVL {{ level }} KAI</div>
+      <div class="bar-container">
+        <div class="hp-bar" [style.width.%]="hpPercent"></div>
+        <span class="hp-text">{{ hp | number:'1.0-0' }}/{{ maxHp }}</span>
+      </div>
+      <div class="bar-container xp">
+        <div class="xp-bar" [style.width.%]="xpPercent"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="minimap">
+    <div class="grid"></div>
+    <div class="player-dot"></div>
+    <div class="coords" *ngIf="playerPos">
+      {{ playerPos.x | number:'1.0-0' }}, {{ playerPos.y | number:'1.0-0' }}
+    </div>
+  </div>
+
+  <button type="button" class="dialogue-box" *ngIf="dialogueNode" (click)="advanceDialogue()">
+    <div class="speaker">{{ dialogueNode.speaker }}</div>
+    <div class="text">{{ dialogueNode.text }}</div>
+    <div class="prompt">TAP TO CONTINUE</div>
+  </button>
+
+  <div class="controls">
+    <div class="dpad">
+      <button type="button" class="dpad-btn left" (touchstart)="handlePress('left', true)" (touchend)="handlePress('left', false)">←</button>
+      <button type="button" class="dpad-btn right" (touchstart)="handlePress('right', true)" (touchend)="handlePress('right', false)">→</button>
+      <button type="button" class="dpad-btn down" (touchstart)="handlePress('slide', true)" (touchend)="handlePress('slide', false)">↓</button>
+      <button type="button" class="dpad-btn up" (touchstart)="handlePress('jump', true)" (touchend)="handlePress('jump', false)">↑</button>
+    </div>
+
+    <div class="actions">
+      <button type="button" class="action-btn attack" (touchstart)="handlePress('attack', true)" (touchend)="handlePress('attack', false)">ATK</button>
+      <button type="button" class="action-btn jump" (touchstart)="handlePress('jump', true)" (touchend)="handlePress('jump', false)">JUMP</button>
+      <button type="button" class="action-btn run" (touchstart)="handlePress('run', true)" (touchend)="handlePress('run', false)">RUN</button>
+    </div>
+  </div>
+</div>

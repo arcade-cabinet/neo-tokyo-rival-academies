@@ -2,6 +2,7 @@
   "name": "neo-tokyo-rival-academies-root",
   "private": true,
   "scripts": {
+    "dev": "pnpm -C app start",
     "build": "pnpm -r build",
     "test": "pnpm -r test",
     "test:e2e": "pnpm --filter @neo-tokyo/e2e test",

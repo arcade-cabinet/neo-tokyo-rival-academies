@@ -1,0 +1,43 @@
+.splash {
+  position: absolute;
+  inset: 0;
+  background: #000;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  font-family: var(--font-mono);
+  color: #38bdf8;
+}
+
+pre {
+  white-space: pre-wrap;
+  text-align: left;
+  text-shadow: 0 0 8px rgba(56, 189, 248, 0.6);
+}
+
+.logo h1 {
+  margin: 0;
+  font-size: 3.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  font-family: var(--font-display);
+  animation: glitch 0.4s infinite;
+}
+
+.logo span {
+  display: block;
+  color: #f97316;
+  text-align: center;
+  margin-top: 8px;
+  letter-spacing: 0.2em;
+}
+
+@keyframes glitch {
+  0% { transform: skewX(-8deg) translate(0); }
+  25% { transform: skewX(-8deg) translate(-2px, 2px); }
+  50% { transform: skewX(-8deg) translate(2px, -2px); }
+  75% { transform: skewX(-8deg) translate(-2px, -2px); }
+  100% { transform: skewX(-8deg) translate(0); }
+}

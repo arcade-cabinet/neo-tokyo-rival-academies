@@ -2,72 +2,69 @@
 
 ## Why This Project Exists
 
-Neo-Tokyo: Rival Academies proves that **browser-based JRPGs** can achieve AAA-quality visuals through AI-generated assets. The game combines:
+Neo-Tokyo: Rival Academies proves that **mobile-first web JRPGs** can deliver high-fidelity 3D gameplay with a single unified codebase. The game combines:
 
-- Classic JRPG mechanics (stats, combat, progression)
-- Modern web technologies (React, Three.js, ECS)
-- GenAI-powered content creation (Meshy AI pipeline)
+- Action JRPG mechanics (stats, combat, progression)
+- Modern web tech (Ionic Angular, Babylon.js, ECS)
+- GenAI-powered asset pipeline (Meshy)
 
 ## Target Audience
 
 ### Primary: JRPG Enthusiasts (25-40)
 - Grew up with Final Fantasy, Persona, Dragon Quest
-- Appreciate deep narratives and character progression
-- Want JRPG experiences without console/PC commitment
+- Appreciate narrative depth and character progression
+- Want high-quality mobile experiences without pay-to-win
 
-### Secondary: Web Tech Innovators
-- Developers interested in browser-based 3D games
+### Secondary: Web + 3D Tech Builders
+- Developers interested in Babylon.js and Capacitor
 - AI/ML practitioners exploring GenAI for game assets
-- Three.js/R3F community members
 
 ## User Experience Goals
 
 ### 1. Instant Playability
-- No downloads, no installs
-- Works in any modern browser
-- Mobile-ready via Capacitor
+- Single web app, wrapped by Capacitor for native installs
+- Fast boot and stable 60 FPS on mobile
 
 ### 2. Visual Fidelity
-- Cel-shaded anime aesthetic (meshToonMaterial)
-- GenAI characters with 7-animation combat sets
-- Isometric diorama "toy box" appeal
+- Cel-shaded anime aesthetic
+- Isometric diorama with layered scenery
 
 ### 3. Deep Engagement
 - Stats-driven combat (Structure, Ignition, Logic, Flow)
-- Rival academy narrative with branching dialogue
-- Progression systems (XP, levels, skills)
+- Rival academy alignment system
+- Visual novel style narrative overlay
 
 ## Problems We Solve
 
 | Problem | Solution |
 |---------|----------|
-| JRPG asset creation is expensive | GenAI pipeline generates production-ready characters |
-| Browser games look cheap | Three.js + cel-shading achieves console quality |
-| Mobile JRPGs are pay-to-win | No monetization, pure gameplay |
-| Web 3D is complex to develop | ECS architecture separates rendering from logic |
+| Multi-app maintenance | One unified Ionic Angular app | 
+| Web 3D complexity | Babylon.js with ECS logic separation |
+| Mobile 3D performance | Capacitor + careful asset and scene optimization |
+| Asset cost | GenAI pipeline for rapid character creation |
 
 ## How It Should Work
 
 ### Player Flow
-1. **Start**: Land on Neo-Tokyo rooftop diorama
-2. **Explore**: WASD/click navigation on hex grid
-3. **Combat**: Real-time JRPG battles with stats
-4. **Story**: Visual novel dialogue with rivals
-5. **Progress**: Level up, unlock skills, advance story
+1. **Start**: Rooftop diorama in flooded Neo-Tokyo
+2. **Explore**: Touch controls + isometric camera
+3. **Combat**: Real-time JRPG encounters
+4. **Story**: Visual novel dialogue overlay
+5. **Progress**: Quest chains + alignment-driven choices
 
 ### Developer Flow
-1. **Define**: Create manifest.json for new character
-2. **Generate**: Run `pnpm generate` to create assets
-3. **Integrate**: Load GLB in scene component
-4. **Test**: Verify with Vitest/Playwright
+1. **Define**: Update manifest.json for new assets
+2. **Generate**: Run `pnpm generate` pipeline
+3. **Integrate**: Load GLB into Babylon scene
+4. **Test**: Vitest + device checks via Capacitor
 
 ## Success Metrics
 
-- **Performance**: Consistent 60 FPS on mid-tier devices
-- **Load Time**: < 3s first meaningful paint
-- **Asset Quality**: No visible AI deformities (hands, faces)
-- **Test Coverage**: > 70% for core systems
+- **Performance**: Sustained 60 FPS on Pixel 8a
+- **Boot Time**: <3.5s to interactive
+- **Asset Quality**: No visible deformities in hero models
+- **Test Coverage**: >70% for core systems
 
 ---
 
-Last Updated: 2026-01-16
+Last Updated: 2026-01-27
