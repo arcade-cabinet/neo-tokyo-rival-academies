@@ -8,7 +8,7 @@
 ## Active Work
 
 1. **Stack Pivot**
-   - Unified Ionic Angular app scaffolded in `app/`
+   - Unified Ionic Angular app scaffolded at repo root
    - Capacitor integration enabled (Capacitor 8)
    - Zoneless Angular bootstrap enabled
 
@@ -22,6 +22,7 @@
 
 4. **Governance**
    - Issue created: #68 (stack pivot + unified app)
+   - Issue created: #69 (root port + parity + e2e)
 
 ## Known Constraints
 
@@ -34,6 +35,7 @@
 - Wire dialogue system and ECS data sources to Angular services
 - Move legacy apps into `_legacy/` and validate build
 - Add Electron target via Capacitor community plugin
+- Finish doc reorg: update links, deprecations, and legacy references
 
 ---
 

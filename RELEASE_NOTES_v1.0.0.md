@@ -306,9 +306,9 @@ All documentation is complete and up-to-date:
 - ✅ [CHANGELOG.md](./CHANGELOG.md) - Version history (v1.0.0)
 - ✅ [TEST_PLAN.md](./TEST_PLAN.md) - Comprehensive test cases (33)
 - ✅ [CLAUDE.md](./CLAUDE.md) - AI assistant context
-- ✅ [docs/ROADMAP_1.0.md](./docs/ROADMAP_1.0.md) - 10-week sprint plan
-- ✅ [docs/GOLDEN_RECORD_MASTER.md](./docs/GOLDEN_RECORD_MASTER.md) - Master design
-- ✅ [docs/MOBILE_WEB_GUIDE.md](./docs/MOBILE_WEB_GUIDE.md) - Mobile constraints
+- ✅ [docs/ROADMAP_1.0.md](./docs/legacy/unity/ROADMAP_1.0.md) - 10-week sprint plan
+- ✅ [docs/00-golden/GOLDEN_RECORD_MASTER.md](./docs/00-golden/GOLDEN_RECORD_MASTER.md) - Master design
+- ✅ [docs/00-golden/MOBILE_WEB_GUIDE.md](./docs/00-golden/MOBILE_WEB_GUIDE.md) - Mobile constraints
 
 ---
 
@@ -344,6 +344,6 @@ MIT License - See [LICENSE](./LICENSE) for details.
 
 Built with ❤️ by the Arcade Cabinet team
 
-[Play Now](https://neo-tokyo.vercel.app) • [Documentation](./README.md) • [Roadmap](./docs/ROADMAP_1.0.md)
+[Play Now](https://neo-tokyo.vercel.app) • [Documentation](./README.md) • [Roadmap](./docs/legacy/unity/ROADMAP_1.0.md)
 
 </div>

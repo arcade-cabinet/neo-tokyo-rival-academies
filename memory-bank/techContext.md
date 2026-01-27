@@ -23,9 +23,9 @@
 - **Commands**:
   ```bash
   pnpm install
-  pnpm -C app start
-  pnpm -C app build
-  pnpm -C app test
+  pnpm start
+  pnpm build
+  pnpm test
   pnpm check
   ```
 

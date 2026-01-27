@@ -150,7 +150,7 @@ export const ENCOUNTER_TEMPLATES: Record<string, EncounterTemplate> = {
 
 /**
  * CombatSystem
- * Implements real-time combat formulas from ROADMAP_1.0.md
+ * Implements combat formulas from /docs/gameplay/COMBAT_PROGRESSION.md
  */
 export class CombatSystem {
 	private rng: seedrandom.PRNG;

@@ -331,7 +331,7 @@ export class WorldGrid {
 	}
 }
 
-// District IDs matching WORLD_GENERATION.md
+// District IDs matching /docs/legacy/procedural/WORLD_GENERATION.md
 export const DISTRICT_IDS = [
 	"academy_gate_slums",
 	"neon_spire_entertainment",

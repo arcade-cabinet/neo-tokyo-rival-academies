@@ -7,10 +7,10 @@ You MUST follow the documentation hierarchy below. Previous instructions (pure B
 
 ## 📚 Documentation Hierarchy (Golden Record)
 
-1.  **START HERE**: [`docs/MOBILE_WEB_GUIDE.md`](docs/MOBILE_WEB_GUIDE.md) - Mobile-first constraints & Capacitor integration.
-2.  **EXECUTION PLAN**: [`docs/PHASE_ROADMAP.md`](docs/PHASE_ROADMAP.md) - Chronological milestones.
-3.  **DEPRECATIONS**: [`docs/DEPRECATIONS.md`](docs/DEPRECATIONS.md) - What to IGNORE.
-4.  **MASTER INDEX**: [`docs/GOLDEN_RECORD_MASTER.md`](docs/GOLDEN_RECORD_MASTER.md) - Full system links.
+1.  **START HERE**: [`docs/00-golden/MOBILE_WEB_GUIDE.md`](docs/00-golden/MOBILE_WEB_GUIDE.md) - Mobile-first constraints & Capacitor integration.
+2.  **EXECUTION PLAN**: [`docs/00-golden/PHASE_ROADMAP.md`](docs/00-golden/PHASE_ROADMAP.md) - Chronological milestones.
+3.  **DEPRECATIONS**: [`docs/00-golden/DEPRECATIONS.md`](docs/00-golden/DEPRECATIONS.md) - What to IGNORE.
+4.  **MASTER INDEX**: [`docs/00-golden/GOLDEN_RECORD_MASTER.md`](docs/00-golden/GOLDEN_RECORD_MASTER.md) - Full system links.
 
 ## 🎯 Project Context
 
@@ -44,4 +44,4 @@ You are working on a **3D Action JRPG** built as a **Monorepo**.
 ## 📚 Reference
 
 - `AGENTS.md` for broader agent rules.
-- `docs/GOLDEN_RECORD_MASTER.md` for full design and architecture.
+- `docs/00-golden/GOLDEN_RECORD_MASTER.md` for full design and architecture.

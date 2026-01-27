@@ -7,7 +7,7 @@
  * - Havok physics integration (coming)
  * - Auto-disposal of resources
  *
- * @see docs/BABYLON_MIGRATION_PLAN.md for migration guide
+ * @see docs/legacy/react/BABYLON_MIGRATION_PLAN.md for migration guide
  * @see https://reactylon.com/docs for API reference
  */
 

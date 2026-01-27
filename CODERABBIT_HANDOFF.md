@@ -16,7 +16,7 @@ Please review the complete documentation suite for:
 **Key Documents**:
 - [`docs/NARRATIVE_DESIGN.md`](docs/NARRATIVE_DESIGN.md) - Complete A/B/C story architecture with 9 stage storyboards
 - [`docs/UI_DESIGN_SYSTEM.md`](docs/UI_DESIGN_SYSTEM.md) - Faction-themed UI design tokens and components
-- [`docs/BABYLON_MIGRATION_PLAN.md`](docs/BABYLON_MIGRATION_PLAN.md) - 6-phase migration strategy
+- [`docs/legacy/react/BABYLON_MIGRATION_PLAN.md`](docs/legacy/react/BABYLON_MIGRATION_PLAN.md) - 6-phase migration strategy
 - [`docs/JRPG_TRANSFORMATION.md`](docs/JRPG_TRANSFORMATION.md) - Stats, combat, progression systems
 - [`CLAUDE.md`](CLAUDE.md) - AI agent guidelines (updated for Vite)
 
@@ -133,7 +133,7 @@ The 3-hour JRPG design uses a unique A/B/C story tier system:
 
 ### 3. Babylon.js Migration Feasibility
 
-The [`docs/BABYLON_MIGRATION_PLAN.md`](docs/BABYLON_MIGRATION_PLAN.md) proposes a 6-week migration from Three.js to Babylon.js.
+The [`docs/legacy/react/BABYLON_MIGRATION_PLAN.md`](docs/legacy/react/BABYLON_MIGRATION_PLAN.md) proposes a 6-week migration from Three.js to Babylon.js.
 
 **Review Needed**:
 1. Are the code migration examples accurate?

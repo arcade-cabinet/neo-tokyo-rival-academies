@@ -5,10 +5,10 @@ All agents MUST follow the documentation hierarchy below. The project is migrati
 
 ## 📚 Documentation Hierarchy (Golden Record)
 
-1.  **START HERE**: [`docs/MOBILE_WEB_GUIDE.md`](docs/MOBILE_WEB_GUIDE.md) - Mobile-first constraints & Capacitor integration.
-2.  **EXECUTION PLAN**: [`docs/PHASE_ROADMAP.md`](docs/PHASE_ROADMAP.md) - Chronological milestones.
-3.  **DEPRECATIONS**: [`docs/DEPRECATIONS.md`](docs/DEPRECATIONS.md) - What to IGNORE.
-4.  **MASTER INDEX**: [`docs/GOLDEN_RECORD_MASTER.md`](docs/GOLDEN_RECORD_MASTER.md) - Full system links.
+1.  **START HERE**: [`docs/00-golden/MOBILE_WEB_GUIDE.md`](docs/00-golden/MOBILE_WEB_GUIDE.md) - Mobile-first constraints & Capacitor integration.
+2.  **EXECUTION PLAN**: [`docs/00-golden/PHASE_ROADMAP.md`](docs/00-golden/PHASE_ROADMAP.md) - Chronological milestones.
+3.  **DEPRECATIONS**: [`docs/00-golden/DEPRECATIONS.md`](docs/00-golden/DEPRECATIONS.md) - What to IGNORE.
+4.  **MASTER INDEX**: [`docs/00-golden/GOLDEN_RECORD_MASTER.md`](docs/00-golden/GOLDEN_RECORD_MASTER.md) - Full system links.
 
 ## 🚨 Governance & Workflow
 
@@ -40,7 +40,7 @@ All agents MUST follow the documentation hierarchy below. The project is migrati
 3.  **VERIFY EVERYTHING**: After every file change, read the file back to ensure correctness. After every feature, run tests.
 4.  **TEST DRIVEN**: Write tests for logic systems *before* or *during* implementation.
 5.  **VISUAL STYLE**: Use `meshToonMaterial` (or Babylon equivalent) for characters and assets to maintain the cel-shaded anime aesthetic.
-6.  **MOBILE FIRST**: All features must run at 60 FPS on Pixel 8a baseline. See `docs/MOBILE_WEB_GUIDE.md`.
+6.  **MOBILE FIRST**: All features must run at 60 FPS on Pixel 8a baseline. See `docs/00-golden/MOBILE_WEB_GUIDE.md`.
 
 ## 🏗️ Architecture Principles
 
@@ -76,4 +76,4 @@ The game is a high-speed Action JRPG.
 - **Story**: Data-driven Visual Novel style dialogue overlay (`src/data/story.json`).
 - **Visuals**: Cel-shaded characters with animated physics.
 
-Always refer to `docs/GOLDEN_RECORD_MASTER.md` for design details.
+Always refer to `docs/00-golden/GOLDEN_RECORD_MASTER.md` for design details.

@@ -2,7 +2,7 @@
  * Shelter Block - Production RTB block for survival shelters
  *
  * PROMOTED FROM: playground/src/components/Tarp.tsx, TentStructure.tsx
- * VALIDATION: See docs/COMPONENT_PROMOTION.md
+ * VALIDATION: See /docs/legacy/react/COMPONENT_PROMOTION.md
  *
  * Shelter blocks represent makeshift living spaces on rooftops.
  * They snap to floor edges and can connect to equipment blocks.

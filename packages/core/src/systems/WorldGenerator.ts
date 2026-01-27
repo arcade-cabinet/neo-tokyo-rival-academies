@@ -1,7 +1,7 @@
 import seedrandom from "seedrandom";
 import type { District, DistrictProfile } from "../state/worldStore";
 
-// Canonical district profiles (10 total as per docs/WORLD_GENERATION.md)
+// Canonical district profiles (legacy reference: /docs/legacy/procedural/WORLD_GENERATION.md)
 const DISTRICT_PROFILES: DistrictProfile[] = [
 	{
 		name: "Academy Gate Slums",

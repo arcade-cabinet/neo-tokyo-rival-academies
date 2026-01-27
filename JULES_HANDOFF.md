@@ -30,7 +30,7 @@ The current Three.js + YukaJS stack has a **critical limitation**: YukaJS is **u
 
 ### Migration Plan Overview
 
-📖 **Full Plan**: [`docs/BABYLON_MIGRATION_PLAN.md`](docs/BABYLON_MIGRATION_PLAN.md)
+📖 **Full Plan**: [`docs/legacy/react/BABYLON_MIGRATION_PLAN.md`](docs/legacy/react/BABYLON_MIGRATION_PLAN.md)
 
 **6 Phases (6 weeks)**:
 1. **Week 1**: Babylon.js Foundation - Basic scene rendering
@@ -728,7 +728,7 @@ All documentation is production-ready and comprehensive:
 - [`docs/NARRATIVE_DESIGN.md`](docs/NARRATIVE_DESIGN.md) - **⭐ READ THIS FIRST** - Complete A/B/C story with 9 storyboards
 - [`docs/UI_DESIGN_SYSTEM.md`](docs/UI_DESIGN_SYSTEM.md) - Faction-themed UI design system
 - [`docs/JRPG_TRANSFORMATION.md`](docs/JRPG_TRANSFORMATION.md) - Stats, combat, progression
-- [`docs/BABYLON_MIGRATION_PLAN.md`](docs/BABYLON_MIGRATION_PLAN.md) - **⭐ YOUR ROADMAP** - This handoff expands on this
+- [`docs/legacy/react/BABYLON_MIGRATION_PLAN.md`](docs/legacy/react/BABYLON_MIGRATION_PLAN.md) - **⭐ YOUR ROADMAP** - This handoff expands on this
 
 **Architecture**:
 - [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) - Technical architecture
@@ -894,7 +894,7 @@ All GLB assets must be:
 
 Before starting Babylon.js migration:
 - [ ] Read [`docs/NARRATIVE_DESIGN.md`](docs/NARRATIVE_DESIGN.md) - Understand full story
-- [ ] Read [`docs/BABYLON_MIGRATION_PLAN.md`](docs/BABYLON_MIGRATION_PLAN.md) - Full migration plan
+- [ ] Read [`docs/legacy/react/BABYLON_MIGRATION_PLAN.md`](docs/legacy/react/BABYLON_MIGRATION_PLAN.md) - Full migration plan
 - [ ] Read current `IsometricScene.tsx` - Understand what to port
 - [ ] Check asset status - Verify all GLBs exist
 - [ ] Review [`docs/UI_DESIGN_SYSTEM.md`](docs/UI_DESIGN_SYSTEM.md) - Understand UI goals

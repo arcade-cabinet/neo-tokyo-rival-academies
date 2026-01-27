@@ -10,7 +10,7 @@
 [![Babylon.js](https://img.shields.io/badge/Babylon.js-8.46-E0684B)](https://www.babylonjs.com/)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-[Play Demo](https://neo-tokyo.vercel.app) • [Documentation](./docs/) • [Roadmap](./docs/ROADMAP_1.0.md) • [Changelog](./CHANGELOG.md)
+[Play Demo](https://neo-tokyo.vercel.app) • [Documentation](./docs/) • [Roadmap](./docs/00-golden/PHASE_ROADMAP.md) • [Changelog](./CHANGELOG.md)
 
 </div>
 
@@ -38,11 +38,12 @@
 - **3D Engine**: [Babylon.js](https://www.babylonjs.com/) 8.46.2 + [Reactylon](https://github.com/brianzinn/react-babylonjs) 3.5.2
 - **State Management**: [Zustand](https://github.com/pmndrs/zustand) 5.0
 - **Language**: [TypeScript](https://www.typescriptlang.org/) 5.9 (strict mode)
-- **Build Tool**: [Vite](https://vitejs.dev/) 7.3
+- **Build Tool**: Angular CLI (Vite-based)
 - **Package Manager**: [PNPM](https://pnpm.io/) 10.28
 
 ### Architecture
 - **Monorepo**: PNPM Workspaces
+- **UI**: Ionic + Angular (zoneless)
 - **Game Logic**: Platform-agnostic `@neo-tokyo/core` package
 - **Rendering**: Babylon.js with imperative setup
 - **State**: Multiple Zustand stores (world, quest, alignment, player, combat)
@@ -59,6 +60,10 @@
 
 ```
 neo-tokyo-rival-academies/
+├── src/                    # Ionic Angular app (UI + Babylon)
+│   ├── app/                # Components, services, engine
+│   ├── assets/             # Runtime assets + story JSON
+│   └── ...
 ├── packages/
 │   ├── core/                # @neo-tokyo/core - Platform-agnostic game logic
 │   │   ├── src/
@@ -68,30 +73,23 @@ neo-tokyo-rival-academies/
 │   │   │   └── data/        # Quest grammar, district profiles
 │   │   └── package.json
 │   │
-│   ├── game/                # Main web application
-│   │   ├── src/
-│   │   │   ├── components/
-│   │   │   │   ├── react/
-│   │   │   │   │   ├── babylon/     # Babylon.js scene components
-│   │   │   │   │   ├── ui/          # React UI components
-│   │   │   │   │   └── scenes/      # Game views (Menu, Intro, Game)
-│   │   │   ├── systems/     # SaveSystem
-│   │   │   ├── types/       # Game-specific types
-│   │   │   ├── utils/       # Utilities
-│   │   │   └── content/     # Story scripts, manifests
-│   │   ├── public/          # Static assets
-│   │   ├── dist/            # Build output
-│   │   ├── package.json
-│   │   └── vercel.json      # Deployment config
-│   │
-│   ├── content-gen/         # Procedural content generation CLI (future)
-│   └── e2e/                 # End-to-end tests (future)
+│   ├── content-gen/         # Procedural content generation CLI
+│   ├── shared-assets/       # Shared asset helpers/manifests
+│   └── world-gen/           # World helpers (if used)
 │
+├── e2e/                     # Playwright tests
 ├── docs/                    # Documentation
-│   ├── GOLDEN_RECORD_MASTER.md
-│   ├── ROADMAP_1.0.md
-│   ├── MOBILE_WEB_GUIDE.md
-│   └── ...
+│   ├── 00-golden/
+│   ├── story/
+│   ├── world/
+│   ├── gameplay/
+│   ├── design/
+│   ├── tech/
+│   ├── procedural/
+│   ├── pipeline/
+│   ├── testing/
+│   ├── process/
+│   └── legacy/
 │
 ├── .github/                 # GitHub configuration
 ├── TEST_PLAN.md             # Comprehensive test plan
@@ -350,11 +348,11 @@ pnpm --filter @neo-tokyo/e2e test
 
 ## 📚 Documentation
 
-- **[GOLDEN_RECORD_MASTER.md](./docs/GOLDEN_RECORD_MASTER.md)** - Master design document
-- **[ROADMAP_1.0.md](./docs/ROADMAP_1.0.md)** - 10-week development sprint
-- **[MOBILE_WEB_GUIDE.md](./docs/MOBILE_WEB_GUIDE.md)** - Mobile-first constraints
+- **[GOLDEN_RECORD_MASTER.md](./docs/00-golden/GOLDEN_RECORD_MASTER.md)** - Master design document
+- **[PHASE_ROADMAP.md](./docs/00-golden/PHASE_ROADMAP.md)** - Delivery milestones
+- **[MOBILE_WEB_GUIDE.md](./docs/00-golden/MOBILE_WEB_GUIDE.md)** - Mobile-first constraints
+- **[DOCS INDEX](./docs/README.md)** - Organized doc map
 - **[CLAUDE.md](./CLAUDE.md)** - AI assistant context and guidelines
-- **[CHANGELOG.md](./CHANGELOG.md)** - Version history
 - **[TEST_PLAN.md](./TEST_PLAN.md)** - Comprehensive testing strategy
 
 ---

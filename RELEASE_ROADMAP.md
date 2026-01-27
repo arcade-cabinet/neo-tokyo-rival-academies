@@ -135,7 +135,7 @@ All issues roll up to the master Epic:
 
 ## References
 
-- [Golden Record Master](docs/GOLDEN_RECORD_MASTER.md)
+- [Golden Record Master](docs/00-golden/GOLDEN_RECORD_MASTER.md)
 - [Architecture Pivot](docs/ARCHITECTURE_PIVOT_NATIVE.md)
-- [Mobile Native Guide](docs/MOBILE_NATIVE_GUIDE.md)
+- [Mobile Native Guide](docs/legacy/mobile/MOBILE_NATIVE_GUIDE.md)
 - [Combat Design Gap Analysis](docs/COMBAT_DESIGN_GAP_ANALYSIS.md)

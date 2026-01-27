@@ -18,9 +18,14 @@
 
 **Governance + Scaffold**
 - [x] Created Issue #68 for Ionic Angular + Capacitor pivot
-- [x] Created `docs/MOBILE_WEB_GUIDE.md`
-- [x] Scaffolded Ionic Angular app in `app/` with Capacitor integration
+- [x] Created `docs/00-golden/MOBILE_WEB_GUIDE.md`
+- [x] Scaffolded Ionic Angular app at repo root with Capacitor integration
 - [x] Enabled zoneless Angular bootstrap
+
+**Documentation Reorg**
+- [x] Reorganized docs into domain subdirectories
+- [x] Updated Golden Record and Deprecations to current stack
+- [x] Added `/docs/README.md` index
 
 **Babylon Scene Port**
 - [x] Imperative Babylon scene service (camera, lighting, grid, background)

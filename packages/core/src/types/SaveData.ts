@@ -1,6 +1,6 @@
 /**
  * Save data schema for Neo-Tokyo: Rival Academies
- * As per docs/PERSISTENCE.md and ROADMAP_1.0.md
+ * As per /docs/gameplay/PERSISTENCE.md
  */
 
 import type { RPGStats } from "./entity";
