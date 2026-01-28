@@ -86,6 +86,10 @@
 - [x] Added `memory-bank/branch-parity-assessment.md` combining legacy TSX/TS and Unity C# targets
 - [x] Identified high-value 1.0 branches and Unity systems for parity extraction
 
+**Parity Matrix**
+- [x] Added `memory-bank/parity-matrix.md` with full legacy TSX/TS + Unity C# inventory
+- [x] Added heuristic Unity → TS mapping to guide port priorities
+
 ---
 
 ## In Progress

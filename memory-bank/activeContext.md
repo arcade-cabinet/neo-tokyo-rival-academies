@@ -67,6 +67,9 @@
 17. **Branch + Unity Audit**
     - Added `memory-bank/branch-parity-assessment.md` combining legacy + branch + Unity port targets
     - Identified high-value branches and Unity C# systems for parity extraction
+18. **Parity Matrix**
+    - Added `memory-bank/parity-matrix.md` with full legacy TSX/TS + Unity C# inventory
+    - Added heuristic mapping of Unity systems to current TS modules
 
 ## Known Constraints
 
