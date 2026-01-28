@@ -10,6 +10,9 @@
   <div class="objective-box">
     <div class="objective-label">Objective</div>
     <div class="objective-text">{{ currentQuest.objective }}</div>
+    <div class="objective-progress" *ngIf="objective">
+      {{ objective.progressText }}
+    </div>
   </div>
 
   <div class="location">📍 {{ currentQuest.location }}</div>

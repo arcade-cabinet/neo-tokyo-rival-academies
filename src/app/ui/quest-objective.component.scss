@@ -56,6 +56,14 @@ h3 {
   line-height: 1.4;
 }
 
+.objective-progress {
+  margin-top: 6px;
+  font-size: calc(10px * var(--hud-scale));
+  color: #a5b4fc;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 .location {
   margin-top: 8px;
   font-size: calc(11px * var(--hud-scale));

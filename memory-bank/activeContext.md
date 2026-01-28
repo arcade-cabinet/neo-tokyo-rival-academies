@@ -128,6 +128,9 @@
     - Added SettingsService + HapticsService wrapper
     - Added settings overlay and HUD settings button
     - Wired gyro/music toggles and HUD scale multiplier
+38. **Objective Tracking**
+    - Added ObjectiveTrackerService for quest progress
+    - Wired quest accept/complete to objective progress UI
 
 ## Known Constraints
 

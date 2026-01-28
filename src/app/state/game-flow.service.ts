@@ -5,6 +5,7 @@ import { BehaviorSubject } from 'rxjs';
 import { SaveSystem } from '../systems/save-system';
 import { DialogueService } from './dialogue.service';
 import { NotificationService } from './notification.service';
+import { ObjectiveTrackerService } from './objective-tracker.service';
 import { QuestStoreService } from './quest-store.service';
 
 @Injectable({ providedIn: 'root' })
@@ -20,6 +21,7 @@ export class GameFlowService {
   private readonly questStore = inject(QuestStoreService);
   private readonly dialogueService = inject(DialogueService);
   private readonly notifications = inject(NotificationService);
+  private readonly objectives = inject(ObjectiveTrackerService);
 
   watchPendingQuest() {
     return this.pendingQuest$.asObservable();
@@ -66,6 +68,12 @@ export class GameFlowService {
       title: 'Quest Accepted',
       message: quest.title,
     });
+    this.objectives.setObjective({
+      id: quest.id,
+      title: quest.title,
+      progressText: 'Objective: 0 / 1',
+      completed: false,
+    });
   }
 
   completeActiveQuest(): void {
@@ -80,12 +88,19 @@ export class GameFlowService {
         title: 'Quest Complete',
         message: quest?.title ?? 'Quest Completed',
       });
+      this.objectives.setObjective({
+        id: quest?.id ?? 'quest_complete',
+        title: quest?.title ?? 'Quest Complete',
+        progressText: 'Objective: 1 / 1',
+        completed: true,
+      });
     }
   }
 
   clearQuestRewards(): void {
     this.questRewards$.next(null);
     this.questCompletionTitle$.next('');
+    this.objectives.clear();
   }
 
   async handleMarker(markerId: string): Promise<void> {

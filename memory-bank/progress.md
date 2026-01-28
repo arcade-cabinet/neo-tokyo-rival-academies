@@ -188,6 +188,10 @@
 - [x] Added settings overlay UI and HUD settings button
 - [x] Wired gyro/music toggles into game shell + viewport scale into ViewportService
 
+**Objective Tracking**
+- [x] Added ObjectiveTrackerService for quest progress UI
+- [x] Wired quest accept/complete to objective progress display
+
 ---
 
 ## In Progress
