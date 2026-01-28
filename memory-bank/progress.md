@@ -90,6 +90,13 @@
 - [x] Added `memory-bank/parity-matrix.md` with full legacy TSX/TS + Unity C# inventory
 - [x] Added heuristic Unity → TS mapping to guide port priorities
 
+**Infrastructure + Structural Ports**
+- [x] Added InfrastructureKit and StructuralKit ports
+- [x] Wired infrastructure props into FloodedWorldBuilder and added bridge railings
+- [x] Updated parity docs to reflect new ports
+- [x] `pnpm check`
+- [x] `pnpm test --watch=false --browsers=ChromeHeadless`
+
 ---
 
 ## In Progress

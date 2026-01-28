@@ -70,6 +70,9 @@
 18. **Parity Matrix**
     - Added `memory-bank/parity-matrix.md` with full legacy TSX/TS + Unity C# inventory
     - Added heuristic mapping of Unity systems to current TS modules
+19. **Infrastructure + Structural Ports**
+    - Added InfrastructureKit and StructuralKit ports and wired infrastructure into FloodedWorldBuilder
+    - Added bridge railings via StructuralKit
 
 ## Known Constraints
 
