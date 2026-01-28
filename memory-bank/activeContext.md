@@ -52,6 +52,11 @@
     - Implemented gyro tilt support with optional camera sway
     - Added haptics feedback on touch controls
     - Updated HUD, quest UI, and shell layout for responsive portrait/landscape + foldable transitions
+14. **Mobile Playability Overhaul**
+    - Added virtual d-pad gesture input for smoother touch control
+    - Added HUD density breakpoints for compact vs roomy layouts
+    - Added HUD debug overlay for device QA (safe-area + scaling)
+    - Expanded haptics to quest flow and dialogue
 
 ## Known Constraints
 

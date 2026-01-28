@@ -63,6 +63,10 @@
 - [x] Added DeviceMotionService and gyro-driven camera sway
 - [x] Enabled haptic feedback on touch controls
 - [x] Responsive HUD and quest UI updates for portrait/landscape and foldable transitions
+- [x] Added virtual d-pad gesture input and compact HUD density breakpoints
+- [x] Added HUD debug overlay for device QA
+- [x] `pnpm check`
+- [x] `pnpm test --watch=false --browsers=ChromeHeadless`
 
 ---
 
