@@ -164,6 +164,11 @@
 - [x] Restored AmbientCG + floor textures from `_legacy` to match engine material paths
 - [x] Hardened Playwright e2e flow to skip intro and validate HUD
 - [x] `pnpm test:e2e`
+- [x] `pnpm check`
+- [x] `pnpm test --watch=false --browsers=ChromeHeadless`
+
+**Dev Env Propagation**
+- [x] Copied `.env` to all sibling arcade-cabinet repos and ensured `.env` is gitignored
 
 ---
 

@@ -28,9 +28,7 @@ test.describe('JRPG Gameplay Verification', () => {
     // "Hey Vector! Try not to overheat..."
     const dialogueBox = page.locator('.dialogue-box');
     await expect(dialogueBox).toBeVisible({ timeout: 15000 });
-    await expect(dialogueBox).toContainText(
-      /Council|Shortcuts|waterline|Kurenai|DESCENT/
-    );
+    await expect(dialogueBox).toContainText(/Council|Shortcuts|waterline|Kurenai|DESCENT/);
 
     await page.screenshot({ path: 'verification/2_dialogue_intro.png' });
 

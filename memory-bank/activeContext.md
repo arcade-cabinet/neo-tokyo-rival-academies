@@ -114,6 +114,9 @@
     - Added particle sprite and restored AmbientCG/floor textures from `_legacy`
     - Fixed tile GLB paths to match asset layout
     - Hardened Playwright flow (skip intro, validate HUD); `pnpm test:e2e` passes
+    - `pnpm check` + `pnpm test --watch=false --browsers=ChromeHeadless` passes
+34. **Dev Env Propagation**
+    - Copied `.env` to sibling arcade-cabinet repos and ensured `.env` is in `.gitignore`
 
 ## Known Constraints
 
