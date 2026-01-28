@@ -14,9 +14,12 @@ import type { InputState } from '../types/game';
 import { BackgroundPanels } from './background-panels';
 import { CharacterAnimationController, CharacterLoader } from './character';
 import { FloodedWorldBuilder, type FloodedWorldBuildResult } from './flooded-world';
+import { ForegroundProps } from './foreground-props';
 import { HexTileFloor } from './hex-tile-floor';
 import { AmbientLighting, DirectionalLightWithShadows } from './lighting';
+import { MidgroundFacades } from './midground-facades';
 import { PlayerController } from './player-controller';
+import { ProceduralBackground } from './procedural-background';
 import {
   type DataShard,
   DataShardManager,
@@ -35,6 +38,9 @@ export class BabylonSceneService {
   private directionalLight: DirectionalLightWithShadows | null = null;
   private hexFloor: HexTileFloor | null = null;
   private backgroundPanels: BackgroundPanels | null = null;
+  private midgroundFacades: MidgroundFacades | null = null;
+  private foregroundProps: ForegroundProps | null = null;
+  private proceduralBackground: ProceduralBackground | null = null;
   private floodedWorldBuilder: FloodedWorldBuilder | null = null;
   private characterLoader: CharacterLoader | null = null;
   private animationController: CharacterAnimationController | null = null;
@@ -150,6 +156,32 @@ export class BabylonSceneService {
 
     const buildResult: FloodedWorldBuildResult = this.floodedWorldBuilder.build(seed);
 
+    this.midgroundFacades?.dispose();
+    this.midgroundFacades = new MidgroundFacades(this.scene);
+    this.midgroundFacades.build({
+      minX: buildResult.bounds.minX,
+      maxX: buildResult.bounds.maxX,
+      height: 26,
+      depth: -10,
+    });
+
+    this.foregroundProps?.dispose();
+    this.foregroundProps = new ForegroundProps(this.scene);
+    this.foregroundProps.build({
+      seed: `${seed}:foreground`,
+      bounds: buildResult.bounds,
+      enableParticles: true,
+    });
+
+    this.proceduralBackground?.dispose();
+    this.proceduralBackground = new ProceduralBackground(this.scene);
+    this.proceduralBackground.build({
+      seed: `${seed}:background`,
+      theme: 'neon',
+      bounds: buildResult.bounds,
+      density: 0.65,
+    });
+
     this.playerController?.setBounds(buildResult.bounds);
     this.playerController?.setGroundMeshes(buildResult.groundMeshes, 0.2);
     this.playerController?.setPosition(buildResult.spawnPoint);
@@ -181,6 +213,9 @@ export class BabylonSceneService {
 
   dispose() {
     window.removeEventListener('resize', this.handleResize);
+    this.proceduralBackground?.dispose();
+    this.foregroundProps?.dispose();
+    this.midgroundFacades?.dispose();
     this.dataShardManager?.dispose();
     this.questMarkerManager?.dispose();
     this.playerController?.dispose();
