@@ -43,9 +43,10 @@
 
 ┌────────────────────────────────────────────────────────────────────────────┐
 │                          Content (Build-Time)                               │
-│  ┌──────────────────┐     ┌──────────────────┐     ┌──────────────────┐    │
-│  │  content-gen     │ ──→ │ JSON + manifests │ ──→ │ /src/assets/*     │    │
-│  └──────────────────┘     └──────────────────┘     └──────────────────┘    │
+│  ┌─────────────────────────────┐  ┌──────────────────┐  ┌─────────────────┐ │
+│  │  @agentic-dev-library/      │→ │ JSON + manifests │→ │ /src/assets/*   │ │
+│  │  meshy-content-generator    │  │                 │  │                │ │
+│  └─────────────────────────────┘  └──────────────────┘  └─────────────────┘ │
 └────────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -63,13 +64,12 @@
 - `src/app/state/`: Angular services wrapping core Zustand stores.
 - `src/app/ui/`: Angular UI/HUD components.
 - `packages/core/`: Platform-agnostic systems and stores.
-- `packages/content-gen/`: Build-time content pipeline (manifests, audio, story).
+- `packages/shared-assets/`: Shared manifest helpers and asset loaders.
 - `src/assets/`: Runtime assets and story JSON.
 
 ## Package Map
 
 - `packages/core`: ECS systems, stores, types.
-- `packages/content-gen`: Build-time generators (music, story, manifests).
 - `packages/shared-assets`: Shared asset manifests and helpers.
 - `e2e/`: Playwright test suite.
 
