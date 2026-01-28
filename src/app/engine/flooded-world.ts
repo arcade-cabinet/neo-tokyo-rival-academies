@@ -7,6 +7,8 @@ import {
   Vector3,
 } from '@babylonjs/core';
 import seedrandom from 'seedrandom';
+import { InfrastructureKit } from './infrastructure/infrastructure-kit';
+import { StructuralKit } from './structural/structural-kit';
 import { createEffectMaterial, createEnvironmentMaterial } from './toon-material';
 
 interface Bounds {
@@ -237,10 +239,16 @@ function generateRooftopLayout(
 export class FloodedWorldBuilder {
   private readonly meshes: AbstractMesh[] = [];
   private readonly lights: PointLight[] = [];
+  private infrastructureKit: InfrastructureKit | null = null;
+  private structuralKit: StructuralKit | null = null;
 
   constructor(private readonly scene: Scene) {}
 
   build(seed: string): FloodedWorldBuildResult {
+    this.infrastructureKit?.dispose();
+    this.infrastructureKit = new InfrastructureKit(this.scene);
+    this.structuralKit?.dispose();
+    this.structuralKit = new StructuralKit(this.scene);
     const { rooftops, bridges } = generateRooftopLayout(createSubRng(seed, 'layout'), 8);
 
     const groundMeshes: AbstractMesh[] = [];
@@ -371,6 +379,37 @@ export class FloodedWorldBuilder {
       bridgeMesh.receiveShadows = true;
       this.meshes.push(bridgeMesh);
       groundMeshes.push(bridgeMesh);
+
+      if (this.structuralKit) {
+        const offset = bridge.width / 2 + 0.2;
+        const sideOffsetX = Math.cos(angle + Math.PI / 2) * offset;
+        const sideOffsetZ = Math.sin(angle + Math.PI / 2) * offset;
+        const railingPosLeft = new Vector3(
+          midpoint.x + sideOffsetX,
+          midpoint.y + 0.1,
+          midpoint.z + sideOffsetZ
+        );
+        const railingPosRight = new Vector3(
+          midpoint.x - sideOffsetX,
+          midpoint.y + 0.1,
+          midpoint.z - sideOffsetZ
+        );
+        const leftRail = this.structuralKit.createRailing(
+          `${bridge.id}_rail_l`,
+          railingPosLeft,
+          length,
+          0.8,
+          angle
+        );
+        const rightRail = this.structuralKit.createRailing(
+          `${bridge.id}_rail_r`,
+          railingPosRight,
+          length,
+          0.8,
+          angle
+        );
+        this.meshes.push(...leftRail, ...rightRail);
+      }
     });
 
     const bounds = this.calculateBounds(rooftops, 6);
@@ -385,6 +424,10 @@ export class FloodedWorldBuilder {
   }
 
   dispose() {
+    this.infrastructureKit?.dispose();
+    this.infrastructureKit = null;
+    this.structuralKit?.dispose();
+    this.structuralKit = null;
     this.lights.forEach((light) => {
       light.dispose();
     });
@@ -400,10 +443,39 @@ export class FloodedWorldBuilder {
     const area = rooftop.width * rooftop.depth;
     const propCount = Math.floor(area / 15) + propRng.int(2, 5);
     const propTypes: Record<RooftopBlock['type'], string[]> = {
-      academy: ['bench', 'planter', 'lantern', 'antenna', 'vent', 'solar_panel'],
-      residential: ['ac_unit', 'water_tank', 'antenna', 'vent', 'crate', 'tarp', 'planter'],
-      commercial: ['ac_unit', 'satellite_dish', 'vent', 'solar_panel', 'barrel', 'bench'],
-      industrial: ['water_tank', 'vent', 'crate', 'barrel', 'debris', 'tarp', 'antenna'],
+      academy: ['bench', 'planter', 'lantern', 'antenna', 'vent', 'solar_panel', 'heli_pad'],
+      residential: [
+        'ac_unit',
+        'water_tank',
+        'antenna',
+        'vent',
+        'crate',
+        'tarp',
+        'planter',
+        'dumpster',
+      ],
+      commercial: [
+        'ac_unit',
+        'satellite_dish',
+        'vent',
+        'solar_panel',
+        'barrel',
+        'bench',
+        'generator',
+      ],
+      industrial: [
+        'water_tank',
+        'vent',
+        'crate',
+        'barrel',
+        'debris',
+        'tarp',
+        'antenna',
+        'storage_tank',
+        'cooling_tower',
+        'pipe',
+        'power_line',
+      ],
     };
 
     for (let i = 0; i < propCount; i++) {
@@ -415,61 +487,83 @@ export class FloodedWorldBuilder {
 
       switch (propType) {
         case 'ac_unit':
-          this.addBoxProp(
-            `${rooftop.id}_ac_${i}`,
-            new Vector3(x, y + 0.4, z),
-            new Color3(0.35, 0.38, 0.42),
-            1.2,
-            0.8,
-            1.2
-          );
+          this.addInfrastructureProp('ac_unit', `${rooftop.id}_ac_${i}`, new Vector3(x, y, z));
           break;
         case 'water_tank':
-          this.addCylinderProp(
-            `${rooftop.id}_tank_${i}`,
-            new Vector3(x, y + 0.8, z),
-            palette.metal,
-            0.8,
-            1.6
-          );
+          this.addInfrastructureProp('water_tank', `${rooftop.id}_tank_${i}`, new Vector3(x, y, z));
           break;
         case 'antenna':
-          this.addCylinderProp(
-            `${rooftop.id}_antenna_${i}`,
-            new Vector3(x, y + 1.4, z),
-            palette.metal,
-            0.15,
-            2.6
-          );
+          this.addInfrastructureProp('antenna', `${rooftop.id}_antenna_${i}`, new Vector3(x, y, z));
           break;
         case 'satellite_dish':
-          this.addCylinderProp(
+          this.addInfrastructureProp(
+            'satellite_dish',
             `${rooftop.id}_dish_${i}`,
-            new Vector3(x, y + 0.6, z),
-            palette.metal,
-            0.6,
-            0.2
+            new Vector3(x, y, z)
           );
           break;
         case 'solar_panel':
-          this.addBoxProp(
+          this.addInfrastructureProp(
+            'solar_panel',
             `${rooftop.id}_solar_${i}`,
-            new Vector3(x, y + 0.2, z),
-            new Color3(0.1, 0.12, 0.2),
-            1.4,
-            0.2,
-            1.0,
+            new Vector3(x, y, z),
             Math.PI / 8
           );
           break;
         case 'vent':
-          this.addBoxProp(
-            `${rooftop.id}_vent_${i}`,
-            new Vector3(x, y + 0.5, z),
-            palette.metal,
-            0.8,
-            0.8,
-            0.8
+          this.addInfrastructureProp('vent', `${rooftop.id}_vent_${i}`, new Vector3(x, y, z));
+          break;
+        case 'generator':
+          this.addInfrastructureProp(
+            'generator',
+            `${rooftop.id}_generator_${i}`,
+            new Vector3(x, y, z)
+          );
+          break;
+        case 'dumpster':
+          this.addInfrastructureProp(
+            'dumpster',
+            `${rooftop.id}_dumpster_${i}`,
+            new Vector3(x, y, z),
+            propRng.next() * Math.PI * 2
+          );
+          break;
+        case 'storage_tank':
+          this.addInfrastructureProp(
+            'storage_tank',
+            `${rooftop.id}_storage_${i}`,
+            new Vector3(x, y, z),
+            propRng.next() * Math.PI * 2
+          );
+          break;
+        case 'cooling_tower':
+          this.addInfrastructureProp(
+            'cooling_tower',
+            `${rooftop.id}_cooling_${i}`,
+            new Vector3(x, y, z)
+          );
+          break;
+        case 'pipe':
+          this.addInfrastructureProp(
+            'pipe',
+            `${rooftop.id}_pipe_${i}`,
+            new Vector3(x, y, z),
+            propRng.next() * Math.PI * 2
+          );
+          break;
+        case 'power_line':
+          this.addInfrastructureProp(
+            'power_line',
+            `${rooftop.id}_power_${i}`,
+            new Vector3(x, y, z),
+            propRng.next() * Math.PI * 2
+          );
+          break;
+        case 'heli_pad':
+          this.addInfrastructureProp(
+            'heli_pad',
+            `${rooftop.id}_helipad_${i}`,
+            new Vector3(x, y, z)
           );
           break;
         case 'crate':
@@ -608,6 +702,17 @@ export class FloodedWorldBuilder {
       return new Vector3(academy.position.x, academy.height + 1, academy.position.z);
     }
     return new Vector3((bounds.minX + bounds.maxX) / 2, 8, (bounds.minZ + bounds.maxZ) / 2);
+  }
+
+  private addInfrastructureProp(
+    kind: Parameters<InfrastructureKit['create']>[0],
+    id: string,
+    position: Vector3,
+    rotation = 0
+  ) {
+    if (!this.infrastructureKit) return;
+    const meshes = this.infrastructureKit.create(kind, id, position, rotation);
+    this.meshes.push(...meshes);
   }
 }
 

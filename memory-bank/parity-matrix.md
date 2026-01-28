@@ -190,6 +190,12 @@ Single source mapping for port targets: legacy TSX/TS + Unity C# + current TS/Ba
 - src/app/systems: 2
 - src/app/state: 8
 
+## Current Engine Ports (Babylon)
+- Diorama layers: ProceduralBackground, MidgroundFacades, ForegroundProps
+- Materials: AmbientCG PBR loader, DecalSystem, HDRI environment
+- Structural: TexturedWall, Floor, Roof, StructuralKit (stairs/railing/fence/ladder/door/window)
+- Infrastructure: InfrastructureKit (AC unit, antenna, dumpster, generator, heli pad, pipe, power line, satellite dish, solar panel, storage tank, vent, water tank)
+
 ### Unity System → TS Candidate Matches
 This is a heuristic name match to prioritize manual mapping.
 - AIStateMachineSystem: (no match)
