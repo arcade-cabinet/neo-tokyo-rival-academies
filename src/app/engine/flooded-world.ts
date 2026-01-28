@@ -396,6 +396,7 @@ export class FloodedWorldBuilder {
     });
 
     const bounds = this.calculateBounds(rooftops, 6);
+    this.placeStreet(bounds, seed);
     const spawnPoint = this.resolveSpawnPoint(rooftops, bounds);
 
     return {
@@ -828,6 +829,38 @@ export class FloodedWorldBuilder {
     light.diffuse = new Color3(1.0, 0.55, 0.25);
     light.intensity = 0.4;
     this.lights.push(light);
+  }
+
+  private placeStreet(bounds: Bounds, seed: string) {
+    if (!this.streetCompound) {
+      return;
+    }
+
+    const streetRng = createSubRng(seed, 'street');
+    const length = streetRng.int(32, 48);
+    const canalWidth = streetRng.int(6, 10);
+    const walkwayWidth = streetRng.int(3, 5);
+    const maxStartZ = 50 - length;
+    const minStartZ = -50;
+    const desiredStartZ = bounds.minZ - length * 0.6;
+    const startZ = Math.min(maxStartZ, Math.max(minStartZ, desiredStartZ));
+    const centerX = (bounds.minX + bounds.maxX) / 2;
+    const style = streetRng.pick(['residential', 'market', 'commercial', 'industrial'] as const);
+
+    const streetMeshes = this.streetCompound.build({
+      id: 'main_canal',
+      position: new Vector3(centerX, 0, startZ),
+      dimensions: { length, canalWidth, walkwayWidth },
+      style,
+      seed: streetRng.int(1, 10000),
+      leftWalkway: true,
+      rightWalkway: true,
+      waterLevel: -0.6,
+      canalDepth: 3.2,
+      ferryStops: streetRng.int(1, 3),
+    });
+
+    this.meshes.push(...streetMeshes);
   }
 
   private calculateBounds(rooftops: RooftopBlock[], padding: number): Bounds {

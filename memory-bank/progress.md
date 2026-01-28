@@ -114,7 +114,7 @@
 
 **Compound Assemblies (Ported)**
 - [x] Ported playground compounds into `src/app/engine/compounds` (Building, Bridge, Alley, Room, Street)
-- [x] Integrated BridgeCompound and rooftop compound placement into FloodedWorldBuilder
+- [x] Integrated BridgeCompound, StreetCompound, and rooftop compound placement into FloodedWorldBuilder
 - [x] `pnpm check`
 - [x] `pnpm test --watch=false --browsers=ChromeHeadless`
 

@@ -18,7 +18,7 @@
 - **Infrastructure/structural**: infrastructure kit + expanded structural kit ports added; remaining per-component parity still needed.
 
 ### Procedural/World Systems
-- **Playground compound logic**: `Building`, `Bridge`, `Street`, `Room`, `Alley` ported to `src/app/engine/compounds`; Bridge integrated into FloodedWorldBuilder. Street integration pending.
+- **Playground compound logic**: `Building`, `Bridge`, `Street`, `Room`, `Alley` ported to `src/app/engine/compounds`; Bridge + Street integrated into FloodedWorldBuilder.
 - **Procedural background and facades**: ported into Babylon runtime; compound logic integration is underway.
 
 ### UI/UX Parity

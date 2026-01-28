@@ -78,6 +78,7 @@
     - Wired new structural props into FloodedWorldBuilder
 21. **Compound Port (In Progress)**
     - Porting playground compounds (Building/Bridge/Street/Alley/Room) into Babylon engine
+    - Street compound integrated into FloodedWorldBuilder canal scene
 
 ## Known Constraints
 
@@ -91,7 +92,6 @@
 - Move legacy apps into `_legacy/` and validate build
 - Add Electron target via Capacitor community plugin
 - Validate legacy references and update any remaining stale links
-- Integrate StreetCompound into a visible scene pass and validate compound placement parity
 
 ---
 

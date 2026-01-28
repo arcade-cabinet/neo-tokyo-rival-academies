@@ -74,7 +74,7 @@ Single source mapping for port targets: legacy TSX/TS + Unity C# + current TS/Ba
 - _legacy/apps/playground/src/compounds/Bridge.tsx → `src/app/engine/compounds/bridge-compound.ts`
 - _legacy/apps/playground/src/compounds/Building.tsx → `src/app/engine/compounds/building-compound.ts`
 - _legacy/apps/playground/src/compounds/Room.tsx → `src/app/engine/compounds/room-compound.ts`
-- _legacy/apps/playground/src/compounds/Street.tsx → `src/app/engine/compounds/street-compound.ts` (integration pending)
+- _legacy/apps/playground/src/compounds/Street.tsx → `src/app/engine/compounds/street-compound.ts` (integrated)
 
 ### Playground Tests (reference scenes)
 - Total: 27
