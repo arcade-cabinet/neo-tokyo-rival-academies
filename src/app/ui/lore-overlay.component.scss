@@ -1,0 +1,65 @@
+.lore-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 18px;
+  background: rgba(2, 6, 12, 0.78);
+  z-index: 140;
+}
+
+.lore-overlay__card {
+  width: min(680px, 92vw);
+  background: rgba(9, 14, 22, 0.96);
+  border-radius: 18px;
+  border: 1px solid rgba(14, 165, 233, 0.5);
+  padding: 20px 22px 18px;
+  color: #e2e8f0;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+  font-family: var(--font-body);
+}
+
+.lore-overlay__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.lore-overlay__tag {
+  font-size: 0.7rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #38bdf8;
+}
+
+.lore-overlay__close {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-size: 1.4rem;
+  cursor: pointer;
+}
+
+.lore-overlay__title {
+  margin: 0 0 8px;
+  font-size: 1.4rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #f8fafc;
+}
+
+.lore-overlay__content {
+  margin: 0 0 16px;
+  font-size: 1.02rem;
+  line-height: 1.6;
+  color: #cbd5f5;
+}
+
+.lore-overlay__prompt {
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(148, 163, 184, 0.8);
+}

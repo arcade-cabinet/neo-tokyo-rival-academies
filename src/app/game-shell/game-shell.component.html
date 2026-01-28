@@ -14,6 +14,8 @@
     (complete)="handleIntroComplete()"
   ></app-narrative-overlay>
   <app-dialogue-overlay *ngIf="viewState === 'game'"></app-dialogue-overlay>
+  <app-lore-overlay *ngIf="viewState === 'game'"></app-lore-overlay>
+  <app-quest-toast *ngIf="viewState === 'game'"></app-quest-toast>
 
   <ng-container *ngIf="viewState === 'game'">
     <app-jrpg-hud></app-jrpg-hud>

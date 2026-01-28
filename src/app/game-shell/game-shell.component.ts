@@ -70,8 +70,9 @@ export class GameShellComponent implements OnInit, OnDestroy {
       })
     );
     this.subs.add(
-      this.sceneService.watchShardCollects().subscribe(() => {
+      this.sceneService.watchShardCollects().subscribe((shard) => {
         this.gameFlow.handleShard();
+        void this.gameFlow.handleShardLore(shard.id);
       })
     );
     this.subs.add(

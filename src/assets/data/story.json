@@ -58,6 +58,18 @@
     "shard_1": {
       "title": "The First Race",
       "content": "Legend says the first Midnight Exam wasn't a race, but a riot."
+    },
+    "shard_2": {
+      "title": "Rooftop Accord",
+      "content": "Kurenai and Azure once shared a rooftop pact: defend the floodline together, or fall alone."
+    },
+    "shard_3": {
+      "title": "Neon Sirens",
+      "content": "The sirens only sing when the towers lean. If you hear them, the water has already won."
+    },
+    "shard_4": {
+      "title": "Bridge of Ghosts",
+      "content": "No one crosses the east span after dusk. The bridge remembers every runner it took."
     }
   }
 }

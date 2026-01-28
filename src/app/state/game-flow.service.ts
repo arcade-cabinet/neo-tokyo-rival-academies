@@ -4,6 +4,7 @@ import { DistrictManager, QuestGenerator } from '@neo-tokyo/core';
 import { BehaviorSubject } from 'rxjs';
 import { SaveSystem } from '../systems/save-system';
 import { DialogueService } from './dialogue.service';
+import { NotificationService } from './notification.service';
 import { QuestStoreService } from './quest-store.service';
 
 @Injectable({ providedIn: 'root' })
@@ -18,6 +19,7 @@ export class GameFlowService {
 
   private readonly questStore = inject(QuestStoreService);
   private readonly dialogueService = inject(DialogueService);
+  private readonly notifications = inject(NotificationService);
 
   watchPendingQuest() {
     return this.pendingQuest$.asObservable();
@@ -59,6 +61,11 @@ export class GameFlowService {
 
     this.questStore.activateQuest(this.activeQuestId);
     this.pendingQuest$.next(null);
+    this.notifications.push({
+      tone: 'quest',
+      title: 'Quest Accepted',
+      message: quest.title,
+    });
   }
 
   completeActiveQuest(): void {
@@ -68,6 +75,11 @@ export class GameFlowService {
     if (rewards) {
       this.questCompletionTitle$.next(quest?.title ?? '');
       this.questRewards$.next(rewards);
+      this.notifications.push({
+        tone: 'reward',
+        title: 'Quest Complete',
+        message: quest?.title ?? 'Quest Completed',
+      });
     }
   }
 
@@ -90,5 +102,14 @@ export class GameFlowService {
 
   handleShard(): void {
     SaveSystem.autoSave();
+    this.notifications.push({
+      tone: 'shard',
+      title: 'Data Shard Acquired',
+      message: 'Lore fragment added to archive.',
+    });
+  }
+
+  async handleShardLore(shardId: string): Promise<void> {
+    await this.dialogueService.showLore(shardId);
   }
 }

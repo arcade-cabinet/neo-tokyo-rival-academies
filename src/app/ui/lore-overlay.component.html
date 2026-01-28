@@ -1,0 +1,11 @@
+<div class="lore-overlay" *ngIf="entry" (click)="close()">
+  <div class="lore-overlay__card" role="dialog" aria-live="polite">
+    <div class="lore-overlay__header">
+      <span class="lore-overlay__tag">Data Shard</span>
+      <button type="button" class="lore-overlay__close" (click)="close(); $event.stopPropagation()">×</button>
+    </div>
+    <h2 class="lore-overlay__title">{{ entry.title }}</h2>
+    <p class="lore-overlay__content">{{ entry.content }}</p>
+    <div class="lore-overlay__prompt">Tap anywhere to close</div>
+  </div>
+</div>

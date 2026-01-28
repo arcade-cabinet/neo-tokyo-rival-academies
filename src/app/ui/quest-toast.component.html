@@ -1,0 +1,15 @@
+<div class="quest-toast" *ngIf="notifications.length">
+  <div
+    class="quest-toast__item"
+    *ngFor="let notice of notifications"
+    [class.quest-toast__item--quest]="notice.tone === 'quest'"
+    [class.quest-toast__item--reward]="notice.tone === 'reward'"
+    [class.quest-toast__item--shard]="notice.tone === 'shard'"
+  >
+    <div class="quest-toast__header">
+      <span class="quest-toast__title">{{ notice.title }}</span>
+      <button type="button" class="quest-toast__close" (click)="dismiss(notice.id)">×</button>
+    </div>
+    <p class="quest-toast__message">{{ notice.message }}</p>
+  </div>
+</div>

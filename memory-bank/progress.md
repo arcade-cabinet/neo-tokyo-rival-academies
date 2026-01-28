@@ -175,6 +175,13 @@
 - [x] Restored HUD-only layout without narrative overlay class collisions
 - [x] `pnpm test:e2e`
 
+**Narrative + Notification Flow**
+- [x] Added quest toast notification system for quest/shard events
+- [x] Added lore overlay tied to data shard collection
+- [x] Extended dialogue service to expose lore entries
+- [x] Wired shard collection to lore + notifications
+- [x] Added additional shard lore entries to story data
+
 ---
 
 ## In Progress

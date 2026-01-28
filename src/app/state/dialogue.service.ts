@@ -8,6 +8,12 @@ interface DialogueNode {
   next: string | null;
 }
 
+export interface LoreEntry {
+  id: string;
+  title: string;
+  content: string;
+}
+
 interface StoryData {
   dialogues: Record<string, DialogueNode[]>;
   items: Record<string, { name: string; description: string }>;
@@ -18,6 +24,7 @@ interface StoryData {
 export class DialogueService {
   private storyData: StoryData | null = null;
   private readonly currentNode$ = new BehaviorSubject<DialogueNode | null>(null);
+  private readonly currentLore$ = new BehaviorSubject<LoreEntry | null>(null);
   private activeDialogueId: string | null = null;
 
   async load(): Promise<void> {
@@ -33,6 +40,10 @@ export class DialogueService {
     return this.currentNode$.asObservable();
   }
 
+  watchLore() {
+    return this.currentLore$.asObservable();
+  }
+
   async startDialogue(dialogueId: string): Promise<void> {
     await this.load();
     if (!this.storyData) return;
@@ -45,6 +56,18 @@ export class DialogueService {
 
     this.activeDialogueId = dialogueId;
     this.currentNode$.next(sequence[0]);
+  }
+
+  async showLore(loreId: string): Promise<void> {
+    await this.load();
+    if (!this.storyData) return;
+    const entry = this.storyData.lore[loreId];
+    if (!entry) return;
+    this.currentLore$.next({ id: loreId, title: entry.title, content: entry.content });
+  }
+
+  clearLore(): void {
+    this.currentLore$.next(null);
   }
 
   advanceDialogue(): void {

@@ -120,6 +120,10 @@
 35. **Dialogue Overlay Parity**
     - Added `DialogueOverlayComponent` for story dialogue during gameplay
     - Removed HUD dialogue button and renamed narrative overlay selectors to avoid collisions
+36. **Narrative + Notifications**
+    - Added quest toast system for quest/shard feedback
+    - Added lore overlay for data shard lore pickups
+    - Wired shard collection into lore/notification flow
 
 ## Known Constraints
 

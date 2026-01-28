@@ -11,12 +11,14 @@ import { GameHudComponent } from './ui/game-hud.component';
 import { HudDebugOverlayComponent } from './ui/hud-debug-overlay.component';
 import { InventoryScreenComponent } from './ui/inventory-screen.component';
 import { JrpgHudComponent } from './ui/jrpg-hud.component';
+import { LoreOverlayComponent } from './ui/lore-overlay.component';
 import { MainMenuComponent } from './ui/main-menu.component';
 import { NarrativeOverlayComponent } from './ui/narrative-overlay.component';
 import { QuestAcceptDialogComponent } from './ui/quest-accept-dialog.component';
 import { QuestCompletionDialogComponent } from './ui/quest-completion-dialog.component';
 import { QuestLogComponent } from './ui/quest-log.component';
 import { QuestObjectiveComponent } from './ui/quest-objective.component';
+import { QuestToastComponent } from './ui/quest-toast.component';
 import { SaveSlotSelectComponent } from './ui/save-slot-select.component';
 import { SplashScreenComponent } from './ui/splash-screen.component';
 import { StatAllocationModalComponent } from './ui/stat-allocation-modal.component';
@@ -32,12 +34,14 @@ const GAME_DECLARATIONS = [
   HudDebugOverlayComponent,
   InventoryScreenComponent,
   JrpgHudComponent,
+  LoreOverlayComponent,
   MainMenuComponent,
   NarrativeOverlayComponent,
   QuestAcceptDialogComponent,
   QuestCompletionDialogComponent,
   QuestLogComponent,
   QuestObjectiveComponent,
+  QuestToastComponent,
   SaveSlotSelectComponent,
   SplashScreenComponent,
   StatAllocationModalComponent,
