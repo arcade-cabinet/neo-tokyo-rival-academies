@@ -182,6 +182,12 @@
 - [x] Wired shard collection to lore + notifications
 - [x] Added additional shard lore entries to story data
 
+**Settings + Haptics Control**
+- [x] Added SettingsService (haptics/gyro/music/sfx/hud scale)
+- [x] Added HapticsService wrapper and routed haptic calls through settings
+- [x] Added settings overlay UI and HUD settings button
+- [x] Wired gyro/music toggles into game shell + viewport scale into ViewportService
+
 ---
 
 ## In Progress

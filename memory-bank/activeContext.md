@@ -124,6 +124,10 @@
     - Added quest toast system for quest/shard feedback
     - Added lore overlay for data shard lore pickups
     - Wired shard collection into lore/notification flow
+37. **Settings + Haptics Control**
+    - Added SettingsService + HapticsService wrapper
+    - Added settings overlay and HUD settings button
+    - Wired gyro/music toggles and HUD scale multiplier
 
 ## Known Constraints
 

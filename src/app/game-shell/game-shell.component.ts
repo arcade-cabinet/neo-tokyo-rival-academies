@@ -1,5 +1,5 @@
 import { Component, inject, NgZone, type OnDestroy, type OnInit } from '@angular/core';
-import { Haptics, ImpactStyle } from '@capacitor/haptics';
+import { ImpactStyle } from '@capacitor/haptics';
 import type { CombatDamageEvent, InventoryItem, Quest, QuestRewards } from '@neo-tokyo/core';
 import { useCombatStore } from '@neo-tokyo/core';
 import { Subscription } from 'rxjs';
@@ -8,8 +8,10 @@ import { INTRO_SCRIPT } from '../content/intro-script';
 import { BabylonSceneService } from '../engine/babylon-scene.service';
 import { DeviceMotionService, type GyroTilt } from '../state/device-motion.service';
 import { GameFlowService } from '../state/game-flow.service';
+import { HapticsService } from '../state/haptics.service';
 import { InputStateService } from '../state/input-state.service';
 import { PlayerStoreService } from '../state/player-store.service';
+import { SettingsService } from '../state/settings.service';
 import { SaveSystem } from '../systems/save-system';
 import type { InputState } from '../types/game';
 import type { MenuStartPayload } from '../ui/main-menu.component';
@@ -44,6 +46,7 @@ export class GameShellComponent implements OnInit, OnDestroy {
   showHudDebug = false;
   inventory: InventoryItem[] = [];
   credits = 0;
+  settingsOpen = false;
 
   private readonly music = new MusicSynth();
   private worldInitialized = false;
@@ -59,6 +62,8 @@ export class GameShellComponent implements OnInit, OnDestroy {
   private readonly gameFlow = inject(GameFlowService);
   private readonly deviceMotion = inject(DeviceMotionService);
   private readonly playerStore = inject(PlayerStoreService);
+  private readonly haptics = inject(HapticsService);
+  private readonly settings = inject(SettingsService);
   private readonly zone = inject(NgZone);
 
   ngOnInit(): void {
@@ -105,6 +110,21 @@ export class GameShellComponent implements OnInit, OnDestroy {
         this.credits = player.credits;
       })
     );
+    this.subs.add(
+      this.settings.watch().subscribe((settings) => {
+        if (this.viewState !== 'game') return;
+        if (settings.musicEnabled) {
+          this.music.start();
+        } else {
+          this.music.stop();
+        }
+        if (settings.gyroEnabled) {
+          void this.deviceMotion.enable();
+        } else {
+          this.deviceMotion.disable();
+        }
+      })
+    );
 
     this.combatUnsub = useCombatStore.subscribe(() => {
       const events = useCombatStore.getState().popDamageEvents();
@@ -138,8 +158,13 @@ export class GameShellComponent implements OnInit, OnDestroy {
 
   async handleIntroComplete(): Promise<void> {
     this.viewState = 'game';
-    this.music.start();
-    void this.deviceMotion.enable();
+    const { musicEnabled, gyroEnabled } = this.settings.getSnapshot();
+    if (musicEnabled) {
+      this.music.start();
+    }
+    if (gyroEnabled) {
+      void this.deviceMotion.enable();
+    }
 
     if (!this.worldInitialized) {
       const masterSeed = this.pendingSeed ?? `neotokyo-${Date.now()}`;
@@ -167,6 +192,19 @@ export class GameShellComponent implements OnInit, OnDestroy {
   toggleInventory(): void {
     this.inventoryOpen = !this.inventoryOpen;
     void this.pulseHaptic(ImpactStyle.Light);
+  }
+
+  openSettings(): void {
+    this.settingsOpen = true;
+    this.questLogOpen = false;
+    this.inventoryOpen = false;
+    this.inputState.reset();
+    void this.pulseHaptic(ImpactStyle.Light);
+  }
+
+  closeSettings(): void {
+    this.settingsOpen = false;
+    this.inputState.reset();
   }
 
   closeInventory(): void {
@@ -259,10 +297,6 @@ export class GameShellComponent implements OnInit, OnDestroy {
   }
 
   private async pulseHaptic(style: ImpactStyle): Promise<void> {
-    try {
-      await Haptics.impact({ style });
-    } catch {
-      // ignore
-    }
+    await this.haptics.impact(style);
   }
 }

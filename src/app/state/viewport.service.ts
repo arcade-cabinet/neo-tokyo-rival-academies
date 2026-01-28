@@ -1,5 +1,6 @@
-import { Injectable, type OnDestroy } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { Injectable, inject, type OnDestroy } from '@angular/core';
+import { BehaviorSubject, Subscription } from 'rxjs';
+import { SettingsService } from './settings.service';
 
 export interface ViewportState {
   width: number;
@@ -12,6 +13,8 @@ export interface ViewportState {
 @Injectable({ providedIn: 'root' })
 export class ViewportService implements OnDestroy {
   private enabled = false;
+  private readonly settings = inject(SettingsService);
+  private readonly subs = new Subscription();
   private readonly state$ = new BehaviorSubject<ViewportState>({
     width: 0,
     height: 0,
@@ -32,6 +35,12 @@ export class ViewportService implements OnDestroy {
     window.visualViewport?.addEventListener('resize', this.handleResize, { passive: true });
     window.visualViewport?.addEventListener('scroll', this.handleResize, { passive: true });
     window.screen?.orientation?.addEventListener('change', this.handleResize);
+
+    this.subs.add(
+      this.settings.watch().subscribe(() => {
+        this.updateViewportVars();
+      })
+    );
   }
 
   watch() {
@@ -45,6 +54,7 @@ export class ViewportService implements OnDestroy {
     window.visualViewport?.removeEventListener('resize', this.handleResize);
     window.visualViewport?.removeEventListener('scroll', this.handleResize);
     window.screen?.orientation?.removeEventListener('change', this.handleResize);
+    this.subs.unsubscribe();
   }
 
   private updateViewportVars(): void {
@@ -54,7 +64,8 @@ export class ViewportService implements OnDestroy {
     const ratio = width / Math.max(1, height);
     const shortSide = Math.min(width, height);
     const orientation: ViewportState['orientation'] = width >= height ? 'landscape' : 'portrait';
-    const hudScale = this.computeHudScale(width, height);
+    const baseHudScale = this.computeHudScale(width, height);
+    const hudScale = baseHudScale * this.settings.getSnapshot().hudScale;
 
     this.state$.next({ width, height, orientation, ratio, hudScale });
 

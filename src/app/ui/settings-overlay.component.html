@@ -1,0 +1,59 @@
+<div class="settings-overlay" *ngIf="isOpen">
+  <div class="settings-overlay__card">
+    <div class="settings-overlay__header">
+      <h2>System Settings</h2>
+      <button type="button" class="settings-overlay__close" (click)="handleClose()">×</button>
+    </div>
+
+    <div class="settings-overlay__section">
+      <h3>Controls</h3>
+      <label class="settings-toggle">
+        <span>Haptics</span>
+        <button type="button" (click)="toggle('hapticsEnabled')">
+          {{ settings.hapticsEnabled ? 'On' : 'Off' }}
+        </button>
+      </label>
+      <label class="settings-toggle">
+        <span>Gyro Aim</span>
+        <button type="button" (click)="toggle('gyroEnabled')">
+          {{ settings.gyroEnabled ? 'On' : 'Off' }}
+        </button>
+      </label>
+    </div>
+
+    <div class="settings-overlay__section">
+      <h3>Audio</h3>
+      <label class="settings-toggle">
+        <span>Music</span>
+        <button type="button" (click)="toggle('musicEnabled')">
+          {{ settings.musicEnabled ? 'On' : 'Off' }}
+        </button>
+      </label>
+      <label class="settings-toggle">
+        <span>SFX</span>
+        <button type="button" (click)="toggle('sfxEnabled')">
+          {{ settings.sfxEnabled ? 'On' : 'Off' }}
+        </button>
+      </label>
+    </div>
+
+    <div class="settings-overlay__section">
+      <h3>HUD Scale</h3>
+      <input
+        #hudScale
+        type="range"
+        min="0.8"
+        max="1.25"
+        step="0.05"
+        [value]="settings.hudScale"
+        (input)="updateHudScale(hudScale.value)"
+      />
+      <div class="settings-overlay__hint">{{ settings.hudScale | number:'1.2-2' }}x</div>
+    </div>
+
+    <div class="settings-overlay__actions">
+      <button type="button" (click)="reset()">Reset Defaults</button>
+      <button type="button" class="primary" (click)="handleClose()">Resume</button>
+    </div>
+  </div>
+</div>

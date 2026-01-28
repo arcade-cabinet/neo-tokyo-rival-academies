@@ -1,6 +1,7 @@
 import { Component, Input, inject, type OnDestroy, type OnInit } from '@angular/core';
-import { Haptics, ImpactStyle } from '@capacitor/haptics';
+import { ImpactStyle } from '@capacitor/haptics';
 import { Subscription } from 'rxjs';
+import { HapticsService } from '../state/haptics.service';
 import { InputStateService } from '../state/input-state.service';
 import { PlayerStoreService } from '../state/player-store.service';
 
@@ -28,6 +29,7 @@ export class JrpgHudComponent implements OnInit, OnDestroy {
 
   private readonly inputState = inject(InputStateService);
   private readonly playerStore = inject(PlayerStoreService);
+  private readonly haptics = inject(HapticsService);
 
   ngOnInit(): void {
     this.sub.add(
@@ -58,11 +60,7 @@ export class JrpgHudComponent implements OnInit, OnDestroy {
   async handlePress(key: 'left' | 'right' | 'jump' | 'slide' | 'attack' | 'run', pressed: boolean) {
     this.inputState.setKey(key, pressed);
     if (pressed) {
-      try {
-        await Haptics.impact({ style: ImpactStyle.Light });
-      } catch {
-        // ignore
-      }
+      await this.haptics.impact(ImpactStyle.Light);
     }
   }
 
@@ -170,10 +168,6 @@ export class JrpgHudComponent implements OnInit, OnDestroy {
   }
 
   private async hapticPulse(style: ImpactStyle): Promise<void> {
-    try {
-      await Haptics.impact({ style });
-    } catch {
-      // ignore
-    }
+    await this.haptics.impact(style);
   }
 }

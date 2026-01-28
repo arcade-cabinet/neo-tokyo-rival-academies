@@ -20,6 +20,7 @@ import { QuestLogComponent } from './ui/quest-log.component';
 import { QuestObjectiveComponent } from './ui/quest-objective.component';
 import { QuestToastComponent } from './ui/quest-toast.component';
 import { SaveSlotSelectComponent } from './ui/save-slot-select.component';
+import { SettingsOverlayComponent } from './ui/settings-overlay.component';
 import { SplashScreenComponent } from './ui/splash-screen.component';
 import { StatAllocationModalComponent } from './ui/stat-allocation-modal.component';
 
@@ -43,6 +44,7 @@ const GAME_DECLARATIONS = [
   QuestObjectiveComponent,
   QuestToastComponent,
   SaveSlotSelectComponent,
+  SettingsOverlayComponent,
   SplashScreenComponent,
   StatAllocationModalComponent,
 ];

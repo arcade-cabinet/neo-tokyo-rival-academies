@@ -39,6 +39,11 @@ export class DeviceMotionService implements OnDestroy {
     this.startListening();
   }
 
+  disable(): void {
+    this.enabled = false;
+    this.stopListening();
+  }
+
   ngOnDestroy(): void {
     this.stopListening();
   }

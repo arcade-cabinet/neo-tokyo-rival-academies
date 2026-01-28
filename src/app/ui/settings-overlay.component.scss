@@ -1,0 +1,98 @@
+.settings-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+  background: rgba(3, 7, 18, 0.82);
+  z-index: 150;
+}
+
+.settings-overlay__card {
+  width: min(640px, 92vw);
+  background: rgba(10, 15, 24, 0.95);
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  border-radius: 18px;
+  padding: 20px 22px;
+  color: #e2e8f0;
+  font-family: var(--font-body);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+}
+
+.settings-overlay__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.settings-overlay__header h2 {
+  margin: 0;
+  font-size: 1.4rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.settings-overlay__close {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-size: 1.4rem;
+  cursor: pointer;
+}
+
+.settings-overlay__section {
+  margin-bottom: 16px;
+}
+
+.settings-overlay__section h3 {
+  margin: 0 0 10px;
+  font-size: 0.8rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #38bdf8;
+}
+
+.settings-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.settings-toggle button {
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  color: #e2e8f0;
+  border-radius: 999px;
+  padding: 6px 14px;
+  cursor: pointer;
+}
+
+.settings-overlay__hint {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  margin-top: 6px;
+}
+
+.settings-overlay__actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.settings-overlay__actions button {
+  flex: 1;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  background: transparent;
+  color: #e2e8f0;
+  cursor: pointer;
+}
+
+.settings-overlay__actions .primary {
+  background: rgba(56, 189, 248, 0.2);
+  border-color: rgba(56, 189, 248, 0.6);
+}

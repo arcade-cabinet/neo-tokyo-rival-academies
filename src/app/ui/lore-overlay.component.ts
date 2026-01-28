@@ -1,7 +1,8 @@
 import { Component, inject, type OnDestroy, type OnInit } from '@angular/core';
-import { Haptics, ImpactStyle } from '@capacitor/haptics';
+import { ImpactStyle } from '@capacitor/haptics';
 import { Subscription } from 'rxjs';
 import { DialogueService, type LoreEntry } from '../state/dialogue.service';
+import { HapticsService } from '../state/haptics.service';
 import { InputStateService } from '../state/input-state.service';
 
 @Component({
@@ -14,6 +15,7 @@ export class LoreOverlayComponent implements OnInit, OnDestroy {
   entry: LoreEntry | null = null;
 
   private readonly dialogue = inject(DialogueService);
+  private readonly haptics = inject(HapticsService);
   private readonly inputState = inject(InputStateService);
   private readonly subs = new Subscription();
 
@@ -34,10 +36,6 @@ export class LoreOverlayComponent implements OnInit, OnDestroy {
 
   async close(): Promise<void> {
     this.dialogue.clearLore();
-    try {
-      await Haptics.impact({ style: ImpactStyle.Light });
-    } catch {
-      // ignore
-    }
+    await this.haptics.impact(ImpactStyle.Light);
   }
 }

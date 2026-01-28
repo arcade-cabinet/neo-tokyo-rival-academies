@@ -14,7 +14,8 @@
 }
 
 .quest-log-btn,
-.inventory-btn {
+.inventory-btn,
+.settings-btn {
   position: fixed;
   background: rgba(2, 132, 199, 0.9);
   border: 2px solid rgba(14, 116, 144, 0.9);
@@ -40,6 +41,13 @@
   border-color: rgba(14, 116, 144, 0.9);
 }
 
+.settings-btn {
+  bottom: calc(var(--safe-bottom) + var(--hud-control) + 18px);
+  right: calc(var(--safe-right) + var(--hud-edge) + 300px);
+  background: rgba(99, 102, 241, 0.9);
+  border-color: rgba(99, 102, 241, 0.9);
+}
+
 @media (orientation: portrait) {
   .quest-log-btn {
     bottom: calc(var(--safe-bottom) + var(--hud-control) + 6px);
@@ -48,6 +56,11 @@
 
   .inventory-btn {
     bottom: calc(var(--safe-bottom) + var(--hud-control) + 56px);
+    right: calc(var(--safe-right) + 10px);
+  }
+
+  .settings-btn {
+    bottom: calc(var(--safe-bottom) + var(--hud-control) + 106px);
     right: calc(var(--safe-right) + 10px);
   }
 }

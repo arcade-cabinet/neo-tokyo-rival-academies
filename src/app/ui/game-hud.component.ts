@@ -1,6 +1,7 @@
 import { Component, Input, inject, type OnDestroy, type OnInit } from '@angular/core';
-import { Haptics, ImpactStyle } from '@capacitor/haptics';
+import { ImpactStyle } from '@capacitor/haptics';
 import { Subscription } from 'rxjs';
+import { HapticsService } from '../state/haptics.service';
 import { InputStateService } from '../state/input-state.service';
 import type { InputState } from '../types/game';
 import { initialInputState } from '../utils/game-config';
@@ -21,6 +22,7 @@ export class GameHudComponent implements OnInit, OnDestroy {
   private sub = new Subscription();
 
   private readonly inputState = inject(InputStateService);
+  private readonly haptics = inject(HapticsService);
 
   ngOnInit(): void {
     this.sub.add(
@@ -36,11 +38,7 @@ export class GameHudComponent implements OnInit, OnDestroy {
 
   async handleTouchStart(key: keyof InputState): Promise<void> {
     this.inputState.setKey(key, true);
-    try {
-      await Haptics.impact({ style: ImpactStyle.Light });
-    } catch {
-      // ignore
-    }
+    await this.haptics.impact(ImpactStyle.Light);
   }
 
   handleTouchEnd(key: keyof InputState): void {

@@ -1,7 +1,8 @@
 import { Component, inject, type OnDestroy, type OnInit } from '@angular/core';
-import { Haptics, ImpactStyle } from '@capacitor/haptics';
+import { ImpactStyle } from '@capacitor/haptics';
 import { Subscription } from 'rxjs';
 import { DialogueService } from '../state/dialogue.service';
+import { HapticsService } from '../state/haptics.service';
 import { InputStateService } from '../state/input-state.service';
 
 interface DialogueNode {
@@ -21,6 +22,7 @@ export class DialogueOverlayComponent implements OnInit, OnDestroy {
   node: DialogueNode | null = null;
 
   private readonly dialogue = inject(DialogueService);
+  private readonly haptics = inject(HapticsService);
   private readonly inputState = inject(InputStateService);
   private readonly subs = new Subscription();
 
@@ -42,10 +44,6 @@ export class DialogueOverlayComponent implements OnInit, OnDestroy {
   async handleAdvance(): Promise<void> {
     if (!this.node) return;
     this.dialogue.advanceDialogue();
-    try {
-      await Haptics.impact({ style: ImpactStyle.Light });
-    } catch {
-      // ignore
-    }
+    await this.haptics.impact(ImpactStyle.Light);
   }
 }

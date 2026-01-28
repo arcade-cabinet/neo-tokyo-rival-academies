@@ -16,6 +16,11 @@
   <app-dialogue-overlay *ngIf="viewState === 'game'"></app-dialogue-overlay>
   <app-lore-overlay *ngIf="viewState === 'game'"></app-lore-overlay>
   <app-quest-toast *ngIf="viewState === 'game'"></app-quest-toast>
+  <app-settings-overlay
+    *ngIf="viewState === 'game'"
+    [isOpen]="settingsOpen"
+    (close)="closeSettings()"
+  ></app-settings-overlay>
 
   <ng-container *ngIf="viewState === 'game'">
     <app-jrpg-hud></app-jrpg-hud>
@@ -58,6 +63,7 @@
 
     <button type="button" class="quest-log-btn" (click)="toggleQuestLog()">📋 Quests</button>
     <button type="button" class="inventory-btn" (click)="toggleInventory()">🎒 Inventory</button>
+    <button type="button" class="settings-btn" (click)="openSettings()">⚙️ Settings</button>
   </ng-container>
 
   <div class="scanlines"></div>
