@@ -73,6 +73,9 @@
 19. **Infrastructure + Structural Ports**
     - Added InfrastructureKit and StructuralKit ports and wired infrastructure into FloodedWorldBuilder
     - Added bridge railings via StructuralKit
+20. **Structural Expansion**
+    - Expanded StructuralKit with pillars, ramps, balconies, catwalks, awnings, scaffolding
+    - Wired new structural props into FloodedWorldBuilder
 
 ## Known Constraints
 

@@ -97,6 +97,13 @@
 - [x] `pnpm check`
 - [x] `pnpm test --watch=false --browsers=ChromeHeadless`
 
+**Structural Expansion**
+- [x] Expanded StructuralKit with balconies, catwalks, ramps, awnings, scaffolding, pillars
+- [x] Wired new structural props into FloodedWorldBuilder
+- [x] Updated parity docs
+- [x] `pnpm check`
+- [x] `pnpm test --watch=false --browsers=ChromeHeadless`
+
 ---
 
 ## In Progress
