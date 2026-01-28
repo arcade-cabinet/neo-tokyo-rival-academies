@@ -21,6 +21,7 @@ Unity 6 documentation is preserved only for historical/reference purposes in `/d
 - **Expo / React Native app shells**: deprecated; single web bundle only.
 - **Multi-app packages** in `_legacy/apps/`: deprecated; we ship one unified app.
 - **Tech stack split docs**: `TECH_ARCHITECTURE.md` and `ARCHITECTURE_PIVOT_NATIVE.md` were merged into `/docs/tech/ARCHITECTURE.md`.
+- **Root legacy markdown**: historical `CHANGELOG.md`, `TEST_PLAN.md`, `RELEASE_ROADMAP.md`, `RELEASE_NOTES_v1.0.0.md`, `ASSET_STATUS_REPORT.md`, and `Grok-BabylonJS_Isometric_Diorama_Creation.md` moved under `/docs/legacy/`.
 
 ### Code + Content
 

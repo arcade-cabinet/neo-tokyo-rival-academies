@@ -10,6 +10,9 @@
 - `procedural/`: Earlier procedural drafts superseded by current scene pipeline.
 - `process/`: Historical handoffs, audits, and changelogs.
 - `story/`: Deprecated narrative transformations.
+- `testing/`: Legacy test plans and checklists.
+- `assets/`: Historical asset status snapshots.
+- `tech/`: Technical explorations and experiments.
 
 ## Usage Rules
 

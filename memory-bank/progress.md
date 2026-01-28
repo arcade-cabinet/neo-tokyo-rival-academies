@@ -104,6 +104,14 @@
 - [x] `pnpm check`
 - [x] `pnpm test --watch=false --browsers=ChromeHeadless`
 
+**Documentation Consolidation**
+- [x] Moved legacy root markdown into `/docs/legacy/` (changelog, test plan, release roadmap, release notes, asset status, grok doc)
+- [x] Added new legacy domains: testing, assets, tech
+- [x] Updated `/docs/README.md` and `/docs/00-golden/DEPRECATIONS.md`
+
+**Governance Override**
+- [x] Updated `/docs/process/AGENT_GOVERNANCE.md` to track work in memory-bank per owner directive
+
 ---
 
 ## In Progress

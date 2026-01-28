@@ -54,3 +54,6 @@
 - `/docs/legacy/procedural/`
 - `/docs/legacy/process/`
 - `/docs/legacy/story/`
+- `/docs/legacy/testing/`
+- `/docs/legacy/assets/`
+- `/docs/legacy/tech/`

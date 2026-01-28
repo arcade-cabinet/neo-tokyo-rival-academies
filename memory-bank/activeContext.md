@@ -4,6 +4,7 @@
 
 **Phase**: Mobile MVP (single unified Ionic Angular app)
 **Target**: Babylon.js + Capacitor delivery for web, Android, iOS; optional Electron desktop.
+**Governance Override**: Owner explicitly authorized work without Issues/Project tracking for this session (recorded per AGENT_GOVERNANCE.md).
 
 ## Active Work
 

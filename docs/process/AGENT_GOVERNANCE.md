@@ -4,20 +4,17 @@
 
 **Purpose**: Define how AI agents and human developers coordinate using GitHub to ensure the "Golden Record" is executed accurately.
 
-## 1. The GitHub Project Board
+## 1. Work Tracking
 
-All work MUST be tracked on the **Neo-Tokyo: Rival Academies** GitHub Project board.
-
-- **Columns**:
-  - `Backlog`: New ideas/issues not yet scheduled.
-  - `Ready`: Issues fully defined (spec + acceptance criteria) and prioritized.
-  - `In Progress`: Actively being worked on by an agent/dev.
-  - `Review`: PR submitted, awaiting CI/Review.
-  - `Done`: Merged and verified on `main`.
+Primary tracking for this repository is maintained in the **memory-bank** directory. GitHub Projects are optional and may be skipped at the owner's discretion.
 
 ## 2. Issue Lifecycle
 
 **Rule**: No code changes without an associated Issue.
+
+**Owner Override**: The repository owner may explicitly authorize work to proceed without issues or project tracking for a given scope or session. This override must be recorded in documentation (memory-bank) and referenced in the commit notes for any work done under the exception.
+
+**Current Directive**: Use memory-bank tracking in place of GitHub Issues/Projects until the owner re-enables them.
 
 1.  **Creation**:
     - Title: Clear and action-oriented (e.g., "Implement Quest Generator v1").
