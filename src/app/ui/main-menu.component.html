@@ -5,70 +5,63 @@
   <p class="menu-subtitle">Neo-Tokyo Rival Academies</p>
 
   <div class="seed-panel">
-      <div class="seed-preview">
-        <div class="seed-card">
-          <div class="seed-label">Adjective</div>
-          <div class="seed-value" [class.is-empty]="!adjective">{{ adjective || '---' }}</div>
-        </div>
-        <div class="seed-card">
-          <div class="seed-label">Noun</div>
-          <div class="seed-value" [class.is-empty]="!noun">{{ noun || '---' }}</div>
-        </div>
-        <div class="seed-card">
-          <div class="seed-label">Location</div>
-          <div class="seed-value" [class.is-empty]="!location">{{ location || '---' }}</div>
-        </div>
+    <div class="seed-preview">
+      <div class="seed-card">
+        <div class="seed-label">Adjective</div>
+        <div class="seed-value" [class.is-empty]="!adjective">{{ adjective || '---' }}</div>
       </div>
-
-      <label class="seed-input-label" for="seedInput">Seed Phrase</label>
-      <input
-        #seedInputRef
-        id="seedInput"
-        class="seed-input"
-        [class.is-valid]="isValid"
-        type="text"
-        [value]="seedInput"
-        (input)="onSeedInput(seedInputRef.value)"
-        placeholder="crimson-phoenix-academy"
-        spellcheck="false"
-        autocomplete="off"
-      />
-      <div class="seed-hint" [class.is-valid]="isValid">
-        {{ isValid ? 'Seed is valid.' : 'Enter three words separated by hyphens.' }}
+      <div class="seed-card">
+        <div class="seed-label">Noun</div>
+        <div class="seed-value" [class.is-empty]="!noun">{{ noun || '---' }}</div>
       </div>
-
-      <div
-        class="suggestions"
-        *ngIf="suggestions.adjectives.length || suggestions.nouns.length || suggestions.locations.length"
-      >
-        <button
-          class="suggestion"
-          type="button"
-          *ngFor="let word of allSuggestions"
-          (click)="handleSuggestionClick(word)"
-        >
-          {{ word }}
-        </button>
+      <div class="seed-card">
+        <div class="seed-label">Location</div>
+        <div class="seed-value" [class.is-empty]="!location">{{ location || '---' }}</div>
       </div>
     </div>
 
-    <div class="menu-actions">
-      <button type="button" class="menu-btn secondary" (click)="handleGenerateNew()">
-        Generate New
-      </button>
-      <button type="button" class="menu-btn primary" [disabled]="!isValid" (click)="handleStartNew()">
-        Enter World
-      </button>
+    <label class="seed-input-label" for="seedInput">Seed Phrase</label>
+    <input
+      #seedInputRef
+      id="seedInput"
+      class="seed-input"
+      [class.is-valid]="isValid"
+      type="text"
+      [value]="seedInput"
+      (input)="onSeedInput(seedInputRef.value)"
+      placeholder="crimson-phoenix-academy"
+      spellcheck="false"
+      autocomplete="off"
+    />
+    <div class="seed-hint" [class.is-valid]="isValid">
+      {{ isValid ? 'Seed is valid.' : 'Enter three words separated by hyphens.' }}
+    </div>
+
+    <div
+      class="suggestions"
+      *ngIf="suggestions.adjectives.length || suggestions.nouns.length || suggestions.locations.length"
+    >
       <button
-        *ngIf="hasSave"
+        class="suggestion"
         type="button"
-        class="menu-btn ghost"
-        (click)="handleContinue()"
+        *ngFor="let word of allSuggestions"
+        (click)="handleSuggestionClick(word)"
       >
-        Continue ({{ lastSavedLabel }})
+        {{ word }}
       </button>
     </div>
   </div>
 
+  <div class="menu-actions">
+    <button type="button" class="menu-btn secondary" (click)="handleGenerateNew()">
+      Generate New
+    </button>
+    <button type="button" class="menu-btn primary" [disabled]="!isValid" (click)="handleStartNew()">
+      INITIATE STORY MODE
+    </button>
+    <button *ngIf="hasSave" type="button" class="menu-btn ghost" (click)="handleContinue()">
+      Continue ({{ lastSavedLabel }})
+    </button>
+  </div>
   <div class="water-effect"></div>
 </div>

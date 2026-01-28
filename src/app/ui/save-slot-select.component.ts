@@ -3,6 +3,7 @@ import type { SaveSlot } from '@neo-tokyo/core';
 
 @Component({
   selector: 'app-save-slot-select',
+  standalone: false,
   templateUrl: './save-slot-select.component.html',
   styleUrls: ['./save-slot-select.component.scss'],
 })

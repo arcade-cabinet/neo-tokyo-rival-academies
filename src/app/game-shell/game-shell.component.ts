@@ -1,15 +1,15 @@
-import { Component, type NgZone, type OnDestroy, type OnInit } from '@angular/core';
+import { Component, inject, NgZone, type OnDestroy, type OnInit } from '@angular/core';
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
 import type { CombatDamageEvent, InventoryItem, Quest, QuestRewards } from '@neo-tokyo/core';
 import { useCombatStore } from '@neo-tokyo/core';
 import { Subscription } from 'rxjs';
 import { MusicSynth } from '../audio/music-synth';
 import { INTRO_SCRIPT } from '../content/intro-script';
-import type { BabylonSceneService } from '../engine/babylon-scene.service';
-import type { DeviceMotionService, GyroTilt } from '../state/device-motion.service';
-import type { GameFlowService } from '../state/game-flow.service';
-import type { InputStateService } from '../state/input-state.service';
-import type { PlayerStoreService } from '../state/player-store.service';
+import { BabylonSceneService } from '../engine/babylon-scene.service';
+import { DeviceMotionService, type GyroTilt } from '../state/device-motion.service';
+import { GameFlowService } from '../state/game-flow.service';
+import { InputStateService } from '../state/input-state.service';
+import { PlayerStoreService } from '../state/player-store.service';
 import { SaveSystem } from '../systems/save-system';
 import type { InputState } from '../types/game';
 import type { MenuStartPayload } from '../ui/main-menu.component';
@@ -18,6 +18,7 @@ type ViewState = 'splash' | 'menu' | 'intro' | 'game' | 'gameover';
 
 @Component({
   selector: 'app-game-shell',
+  standalone: false,
   templateUrl: './game-shell.component.html',
   styleUrls: ['./game-shell.component.scss'],
 })
@@ -53,14 +54,12 @@ export class GameShellComponent implements OnInit, OnDestroy {
   private floatingTimeouts = new Map<string, number>();
   private combatTextTimeout: number | null = null;
 
-  constructor(
-    private readonly inputState: InputStateService,
-    private readonly sceneService: BabylonSceneService,
-    private readonly gameFlow: GameFlowService,
-    private readonly deviceMotion: DeviceMotionService,
-    private readonly playerStore: PlayerStoreService,
-    private readonly zone: NgZone
-  ) {}
+  private readonly inputState = inject(InputStateService);
+  private readonly sceneService = inject(BabylonSceneService);
+  private readonly gameFlow = inject(GameFlowService);
+  private readonly deviceMotion = inject(DeviceMotionService);
+  private readonly playerStore = inject(PlayerStoreService);
+  private readonly zone = inject(NgZone);
 
   ngOnInit(): void {
     if (this.viewState === 'splash') return;

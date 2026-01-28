@@ -17,6 +17,7 @@ export interface Quest {
   description: string;
   objective: string;
   location: string;
+  alignmentBias?: 'kurenai' | 'azure' | 'neutral';
   rewards: {
     xp: number;
     credits: number;
@@ -115,6 +116,7 @@ export class QuestGenerator {
 
     // Determine rewards based on quest type
     const rewards = this.generateRewards(type, verb, outcome, questRng);
+    const alignmentBias = verb.alignmentBias ?? noun.alignmentBias ?? 'neutral';
 
     // Set requirements (main quests have lower requirements)
     const requirements =
@@ -131,6 +133,7 @@ export class QuestGenerator {
       description,
       objective,
       location: landmark.value,
+      alignmentBias,
       rewards,
       requirements,
       completed: false,

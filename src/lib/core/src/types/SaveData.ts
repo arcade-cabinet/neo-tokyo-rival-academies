@@ -11,6 +11,7 @@ export interface InventoryItem {
   type: 'weapon' | 'accessory' | 'consumable' | 'key_item';
   quantity: number;
   equipped?: boolean;
+  description?: string;
 }
 
 export interface ActiveQuest {

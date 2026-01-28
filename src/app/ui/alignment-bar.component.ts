@@ -1,9 +1,10 @@
-import { Component, type OnDestroy, type OnInit } from '@angular/core';
+import { Component, inject, type OnDestroy, type OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import type { AlignmentStoreService } from '../state/alignment-store.service';
+import { AlignmentStoreService } from '../state/alignment-store.service';
 
 @Component({
   selector: 'app-alignment-bar',
+  standalone: false,
   templateUrl: './alignment-bar.component.html',
   styleUrls: ['./alignment-bar.component.scss'],
 })
@@ -15,7 +16,7 @@ export class AlignmentBarComponent implements OnInit, OnDestroy {
 
   private sub = new Subscription();
 
-  constructor(private readonly alignmentStore: AlignmentStoreService) {}
+  private readonly alignmentStore = inject(AlignmentStoreService);
 
   ngOnInit(): void {
     this.sub.add(

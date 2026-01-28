@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-combat-text',
+  standalone: false,
   templateUrl: './combat-text.component.html',
   styleUrls: ['./combat-text.component.scss'],
 })

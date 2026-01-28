@@ -3,6 +3,7 @@ import type { QuestRewards } from '@neo-tokyo/core';
 
 @Component({
   selector: 'app-quest-completion-dialog',
+  standalone: false,
   templateUrl: './quest-completion-dialog.component.html',
   styleUrls: ['./quest-completion-dialog.component.scss'],
 })
@@ -14,5 +15,11 @@ export class QuestCompletionDialogComponent {
 
   getAlignmentColor(faction: 'kurenai' | 'azure'): string {
     return faction === 'kurenai' ? '#ef4444' : '#3b82f6';
+  }
+
+  getAlignmentShift(
+    rewards: QuestRewards
+  ): { faction: 'kurenai' | 'azure'; amount: number } | null {
+    return rewards.alignmentShift ?? null;
   }
 }

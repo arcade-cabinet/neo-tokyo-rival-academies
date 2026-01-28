@@ -6,7 +6,7 @@
 
     <div class="error" *ngIf="error">{{ error }}</div>
 
-    <div class="stat-row" *ngFor="let stat of ['structure','ignition','logic','flow']">
+    <div class="stat-row" *ngFor="let stat of stats">
       <div class="stat-info">
         <div class="name">{{ stat }}</div>
         <div class="desc">Current: {{ currentStats[stat] }} → New: {{ currentStats[stat] + allocation[stat] }}</div>

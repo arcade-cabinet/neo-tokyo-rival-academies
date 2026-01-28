@@ -45,8 +45,8 @@
           {{ quest.rewards.alignmentShift.kurenai ? '🔥' : '⚡' }}
           {{ quest.rewards.alignmentShift.kurenai ? 'Kurenai' : 'Azure' }}
         </span>
-        <span *ngIf="quest.rewards.items?.length">
-          🎁 {{ quest.rewards.items.length }} item{{ quest.rewards.items.length > 1 ? 's' : '' }}
+        <span *ngIf="quest.rewards.items?.length as itemCount">
+          🎁 {{ itemCount }} item{{ itemCount > 1 ? 's' : '' }}
         </span>
       </div>
     </div>

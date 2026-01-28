@@ -11,6 +11,7 @@ import type { NarrativeLine } from '../content/intro-script';
 
 @Component({
   selector: 'app-narrative-overlay',
+  standalone: false,
   templateUrl: './narrative-overlay.component.html',
   styleUrls: ['./narrative-overlay.component.scss'],
 })

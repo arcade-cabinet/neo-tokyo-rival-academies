@@ -43,6 +43,7 @@
     - Added seed phrase utilities to app and removed diorama dependency
     - Added GameModule and fixed test wiring
     - Updated core quest rewards, district themes, and removed TODOs
+    - Restored Zone.js polyfill for runtime boot stability
 12. **Quest Flow Wiring**
     - Added GameFlowService to initialize districts, generate quest clusters, and orchestrate quest rewards
     - Wired Babylon marker/shard events into Angular flow (dialogue triggers + autosave)
@@ -109,6 +110,10 @@
     - Added vitest coverage for player/combat store behaviors
 32. **Main Menu Parity**
     - Updated Angular main menu styling to mirror FloodedWorldMenu layout and motion
+33. **E2E + Asset Restoration**
+    - Added particle sprite and restored AmbientCG/floor textures from `_legacy`
+    - Fixed tile GLB paths to match asset layout
+    - Hardened Playwright flow (skip intro, validate HUD); `pnpm test:e2e` passes
 
 ## Known Constraints
 

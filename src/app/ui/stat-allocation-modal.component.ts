@@ -16,6 +16,7 @@ import {
 
 @Component({
   selector: 'app-stat-allocation-modal',
+  standalone: false,
   templateUrl: './stat-allocation-modal.component.html',
   styleUrls: ['./stat-allocation-modal.component.scss'],
 })
@@ -28,6 +29,7 @@ export class StatAllocationModalComponent implements OnChanges {
 
   allocation: StatAllocation = { structure: 0, ignition: 0, logic: 0, flow: 0 };
   error: string | undefined;
+  readonly stats: Array<keyof StatAllocation> = ['structure', 'ignition', 'logic', 'flow'];
 
   ngOnChanges(changes: SimpleChanges): void {
     const { isOpen } = changes as Record<string, SimpleChange>;

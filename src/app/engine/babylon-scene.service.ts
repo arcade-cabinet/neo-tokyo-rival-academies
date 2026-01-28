@@ -1,4 +1,4 @@
-import { Injectable, type NgZone } from '@angular/core';
+import { Injectable, inject, NgZone } from '@angular/core';
 import {
   ArcRotateCamera,
   Color4,
@@ -55,7 +55,7 @@ export class BabylonSceneService {
   private baseCameraAlpha = 0;
   private baseCameraBeta = 0;
 
-  constructor(private readonly zone: NgZone) {}
+  private readonly zone = inject(NgZone);
 
   async init(canvas: HTMLCanvasElement) {
     this.canvas = canvas;

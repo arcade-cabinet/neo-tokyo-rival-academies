@@ -22,15 +22,15 @@
         <span>💰</span>
         <span>+{{ rewards.credits }} Credits</span>
       </div>
-      <div class="reward-row align" *ngIf="rewards.alignmentShift">
-        <span>{{ rewards.alignmentShift.faction === 'kurenai' ? '🔥' : '⚡' }}</span>
-        <span [style.color]="getAlignmentColor(rewards.alignmentShift.faction)">
-          {{ rewards.alignmentShift.faction === 'kurenai' ? 'Kurenai' : 'Azure' }} +{{ rewards.alignmentShift.amount }}
+      <div class="reward-row align" *ngIf="getAlignmentShift(rewards) as alignmentShift">
+        <span>{{ alignmentShift.faction === 'kurenai' ? '🔥' : '⚡' }}</span>
+        <span [style.color]="getAlignmentColor(alignmentShift.faction)">
+          {{ alignmentShift.faction === 'kurenai' ? 'Kurenai' : 'Azure' }} +{{ alignmentShift.amount }}
         </span>
       </div>
-      <div class="reward-row items" *ngIf="rewards.items?.length">
+      <div class="reward-row items" *ngIf="rewards.items?.length as itemCount">
         <span>🎁</span>
-        <span>{{ rewards.items.length }} Item{{ rewards.items.length > 1 ? 's' : '' }}</span>
+        <span>{{ itemCount }} Item{{ itemCount > 1 ? 's' : '' }}</span>
       </div>
     </div>
 

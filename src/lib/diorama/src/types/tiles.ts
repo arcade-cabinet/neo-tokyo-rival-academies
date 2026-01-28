@@ -28,22 +28,22 @@ export const TILE_DEFINITIONS: Record<TileType, TileDefinition> = {
   [TileType.AIRVENT]: {
     type: TileType.AIRVENT,
     materialName: 'airvent_tile',
-    modelPath: '/assets/tiles/rooftop/airvent.glb',
+    modelPath: '/assets/tiles/rooftop/airvent/model.glb',
   },
   [TileType.PIPES]: {
     type: TileType.PIPES,
     materialName: 'pipes_tile',
-    modelPath: '/assets/tiles/rooftop/pipes.glb',
+    modelPath: '/assets/tiles/rooftop/pipes/model.glb',
   },
   [TileType.GENERATOR]: {
     type: TileType.GENERATOR,
     materialName: 'generator_tile',
-    modelPath: '/assets/tiles/rooftop/generator.glb',
+    modelPath: '/assets/tiles/rooftop/glass/model.glb',
   },
   [TileType.ANTENNA]: {
     type: TileType.ANTENNA,
     materialName: 'antenna_tile',
-    modelPath: '/assets/tiles/rooftop/antenna.glb',
+    modelPath: '/assets/tiles/rooftop/tarpaper/model.glb',
   },
   [TileType.EDGE]: {
     type: TileType.EDGE,

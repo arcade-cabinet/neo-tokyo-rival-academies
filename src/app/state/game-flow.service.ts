@@ -1,10 +1,10 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import type { Quest, QuestRewards } from '@neo-tokyo/core';
 import { DistrictManager, QuestGenerator } from '@neo-tokyo/core';
 import { BehaviorSubject } from 'rxjs';
 import { SaveSystem } from '../systems/save-system';
-import type { DialogueService } from './dialogue.service';
-import type { QuestStoreService } from './quest-store.service';
+import { DialogueService } from './dialogue.service';
+import { QuestStoreService } from './quest-store.service';
 
 @Injectable({ providedIn: 'root' })
 export class GameFlowService {
@@ -16,10 +16,8 @@ export class GameFlowService {
   private readonly questRewards$ = new BehaviorSubject<QuestRewards | null>(null);
   private readonly questCompletionTitle$ = new BehaviorSubject<string>('');
 
-  constructor(
-    private readonly questStore: QuestStoreService,
-    private readonly dialogueService: DialogueService
-  ) {}
+  private readonly questStore = inject(QuestStoreService);
+  private readonly dialogueService = inject(DialogueService);
 
   watchPendingQuest() {
     return this.pendingQuest$.asObservable();

@@ -2,6 +2,7 @@ import { Component, EventEmitter, type OnDestroy, type OnInit, Output } from '@a
 
 @Component({
   selector: 'app-splash-screen',
+  standalone: false,
   templateUrl: './splash-screen.component.html',
   styleUrls: ['./splash-screen.component.scss'],
 })

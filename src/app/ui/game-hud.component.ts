@@ -1,12 +1,13 @@
-import { Component, Input, type OnDestroy, type OnInit } from '@angular/core';
+import { Component, Input, inject, type OnDestroy, type OnInit } from '@angular/core';
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
 import { Subscription } from 'rxjs';
-import type { InputStateService } from '../state/input-state.service';
+import { InputStateService } from '../state/input-state.service';
 import type { InputState } from '../types/game';
 import { initialInputState } from '../utils/game-config';
 
 @Component({
   selector: 'app-game-hud',
+  standalone: false,
   templateUrl: './game-hud.component.html',
   styleUrls: ['./game-hud.component.scss'],
 })
@@ -19,7 +20,7 @@ export class GameHudComponent implements OnInit, OnDestroy {
   inputSnapshot: InputState = { ...initialInputState };
   private sub = new Subscription();
 
-  constructor(private readonly inputState: InputStateService) {}
+  private readonly inputState = inject(InputStateService);
 
   ngOnInit(): void {
     this.sub.add(

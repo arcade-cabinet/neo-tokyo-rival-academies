@@ -243,7 +243,11 @@ export class PropKit {
     );
     meshes.push(base);
 
-    const cover = MeshBuilder.CreateCone(`${id}_cover`, { diameter: 2.2, height: 1.0 }, this.scene);
+    const cover = MeshBuilder.CreateCylinder(
+      `${id}_cover`,
+      { diameterTop: 0, diameterBottom: 2.2, height: 1.0, tessellation: 24 },
+      this.scene
+    );
     cover.position = position.clone();
     cover.position.y += 0.8;
     cover.rotation.y = rotation;

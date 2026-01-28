@@ -438,9 +438,9 @@ export class FurnitureKit {
     );
     meshes.push(pole);
 
-    const canopy = MeshBuilder.CreateCone(
+    const canopy = MeshBuilder.CreateCylinder(
       `${id}_canopy`,
-      { diameter: 1.2, height: 0.4 },
+      { diameterTop: 0, diameterBottom: 1.2, height: 0.4, tessellation: 24 },
       this.scene
     );
     canopy.position = position.clone();

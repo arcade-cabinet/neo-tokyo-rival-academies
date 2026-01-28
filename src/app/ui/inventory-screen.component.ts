@@ -5,6 +5,7 @@ type FilterType = 'all' | 'weapon' | 'accessory' | 'consumable' | 'key_item';
 
 @Component({
   selector: 'app-inventory-screen',
+  standalone: false,
   templateUrl: './inventory-screen.component.html',
   styleUrls: ['./inventory-screen.component.scss'],
 })

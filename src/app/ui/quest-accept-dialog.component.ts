@@ -3,6 +3,7 @@ import type { Quest } from '@neo-tokyo/core';
 
 @Component({
   selector: 'app-quest-accept-dialog',
+  standalone: false,
   templateUrl: './quest-accept-dialog.component.html',
   styleUrls: ['./quest-accept-dialog.component.scss'],
 })
@@ -34,5 +35,13 @@ export class QuestAcceptDialogComponent {
     if (bias === 'kurenai') return '🔥 Kurenai Path';
     if (bias === 'azure') return '⚡ Azure Path';
     return '⚖️ Neutral';
+  }
+
+  getAlignmentShift(quest: Quest): { faction: 'kurenai' | 'azure'; amount: number } | null {
+    const shift = quest.rewards.alignmentShift;
+    if (!shift) return null;
+    if (shift.kurenai) return { faction: 'kurenai', amount: shift.kurenai };
+    if (shift.azure) return { faction: 'azure', amount: shift.azure };
+    return null;
   }
 }

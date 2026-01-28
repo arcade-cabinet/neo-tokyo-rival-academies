@@ -42,7 +42,8 @@ const GAME_DECLARATIONS = [
 ];
 
 @NgModule({
-  imports: [CommonModule, IonicModule, ...GAME_DECLARATIONS],
+  declarations: [...GAME_DECLARATIONS],
+  imports: [CommonModule, IonicModule],
   exports: [...GAME_DECLARATIONS],
 })
 export class GameModule {}

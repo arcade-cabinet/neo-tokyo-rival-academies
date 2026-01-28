@@ -158,6 +158,13 @@
 - [x] Implemented consumable effects + equipment stat bonuses in core player store; added core tests
 - [x] Updated main menu styling/layout to match FloodedWorldMenu parity
 
+**E2E + Runtime Stabilization**
+- [x] Restored Zone.js polyfill to resolve Angular runtime boot failure
+- [x] Fixed tile GLB paths and added particle sprite for ForegroundProps
+- [x] Restored AmbientCG + floor textures from `_legacy` to match engine material paths
+- [x] Hardened Playwright e2e flow to skip intro and validate HUD
+- [x] `pnpm test:e2e`
+
 ---
 
 ## In Progress

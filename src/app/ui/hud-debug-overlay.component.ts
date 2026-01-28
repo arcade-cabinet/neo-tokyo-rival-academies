@@ -1,6 +1,6 @@
-import { Component, type OnDestroy, type OnInit } from '@angular/core';
+import { Component, inject, type OnDestroy, type OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import type { ViewportService, ViewportState } from '../state/viewport.service';
+import { ViewportService, type ViewportState } from '../state/viewport.service';
 
 interface SafeAreaState {
   top: string;
@@ -11,6 +11,7 @@ interface SafeAreaState {
 
 @Component({
   selector: 'app-hud-debug-overlay',
+  standalone: false,
   templateUrl: './hud-debug-overlay.component.html',
   styleUrls: ['./hud-debug-overlay.component.scss'],
 })
@@ -20,7 +21,7 @@ export class HudDebugOverlayComponent implements OnInit, OnDestroy {
 
   private readonly sub = new Subscription();
 
-  constructor(private readonly viewportService: ViewportService) {}
+  private readonly viewportService = inject(ViewportService);
 
   ngOnInit(): void {
     this.sub.add(

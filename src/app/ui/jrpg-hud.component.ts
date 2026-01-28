@@ -1,14 +1,15 @@
-import { Component, Input, type OnDestroy, type OnInit } from '@angular/core';
+import { Component, Input, inject, type OnDestroy, type OnInit } from '@angular/core';
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
 import { Subscription } from 'rxjs';
-import type { DialogueService } from '../state/dialogue.service';
-import type { InputStateService } from '../state/input-state.service';
-import type { PlayerStoreService } from '../state/player-store.service';
+import { DialogueService } from '../state/dialogue.service';
+import { InputStateService } from '../state/input-state.service';
+import { PlayerStoreService } from '../state/player-store.service';
 
 type DpadState = { left: boolean; right: boolean; up: boolean; down: boolean };
 
 @Component({
   selector: 'app-jrpg-hud',
+  standalone: false,
   templateUrl: './jrpg-hud.component.html',
   styleUrls: ['./jrpg-hud.component.scss'],
 })
@@ -28,11 +29,9 @@ export class JrpgHudComponent implements OnInit, OnDestroy {
   private dpadRect: DOMRect | null = null;
   private dpadState: DpadState = { left: false, right: false, up: false, down: false };
 
-  constructor(
-    private readonly inputState: InputStateService,
-    private readonly playerStore: PlayerStoreService,
-    private readonly dialogueService: DialogueService
-  ) {}
+  private readonly inputState = inject(InputStateService);
+  private readonly playerStore = inject(PlayerStoreService);
+  private readonly dialogueService = inject(DialogueService);
 
   ngOnInit(): void {
     this.sub.add(
@@ -168,7 +167,15 @@ export class JrpgHudComponent implements OnInit, OnDestroy {
   }
 
   private setKeyIfChanged(key: 'left' | 'right' | 'jump' | 'slide', pressed: boolean): void {
-    if (this.dpadState[key] === pressed) return;
+    const current =
+      key === 'left'
+        ? this.dpadState.left
+        : key === 'right'
+          ? this.dpadState.right
+          : key === 'jump'
+            ? this.dpadState.up
+            : this.dpadState.down;
+    if (current === pressed) return;
     this.inputState.setKey(key, pressed);
   }
 

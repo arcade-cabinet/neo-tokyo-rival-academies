@@ -1,4 +1,4 @@
-import { Component, type NgZone, type OnDestroy, type OnInit } from '@angular/core';
+import { Component, inject, NgZone, type OnDestroy, type OnInit } from '@angular/core';
 import type { CombatAction } from '@neo-tokyo/core';
 import { useCombatStore } from '@neo-tokyo/core';
 import { SaveSystem } from '../systems/save-system';
@@ -15,6 +15,7 @@ type EnemyCombatant = CombatStoreState['enemies'][number];
 
 @Component({
   selector: 'app-combat-arena',
+  standalone: false,
   templateUrl: './combat-arena.component.html',
   styleUrls: ['./combat-arena.component.scss'],
 })
@@ -33,7 +34,7 @@ export class CombatArenaComponent implements OnInit, OnDestroy {
   private unsubscribe: (() => void) | null = null;
   private enemyTurnTimeout: number | null = null;
 
-  constructor(private readonly zone: NgZone) {}
+  private readonly zone = inject(NgZone);
 
   ngOnInit(): void {
     this.syncState(useCombatStore.getState());

@@ -1,10 +1,11 @@
-import { Component, type OnDestroy, type OnInit } from '@angular/core';
+import { Component, inject, type OnDestroy, type OnInit } from '@angular/core';
 import type { Quest } from '@neo-tokyo/core';
 import { Subscription } from 'rxjs';
-import type { QuestStoreService } from '../state/quest-store.service';
+import { QuestStoreService } from '../state/quest-store.service';
 
 @Component({
   selector: 'app-quest-objective',
+  standalone: false,
   templateUrl: './quest-objective.component.html',
   styleUrls: ['./quest-objective.component.scss'],
 })
@@ -12,7 +13,7 @@ export class QuestObjectiveComponent implements OnInit, OnDestroy {
   currentQuest: Quest | null = null;
   private sub = new Subscription();
 
-  constructor(private readonly questStore: QuestStoreService) {}
+  private readonly questStore = inject(QuestStoreService);
 
   ngOnInit(): void {
     this.sub.add(

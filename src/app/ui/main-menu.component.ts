@@ -20,6 +20,7 @@ export interface MenuStartPayload {
 
 @Component({
   selector: 'app-main-menu',
+  standalone: false,
   templateUrl: './main-menu.component.html',
   styleUrls: ['./main-menu.component.scss'],
 })

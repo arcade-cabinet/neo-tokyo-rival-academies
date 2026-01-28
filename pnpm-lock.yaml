@@ -35,6 +35,9 @@ importers:
       '@angular/router':
         specifier: ^20.0.0
         version: 20.3.16(@angular/common@20.3.16(@angular/core@20.3.16(@angular/compiler@20.3.16)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/core@20.3.16(@angular/compiler@20.3.16)(rxjs@7.8.2)(zone.js@0.15.1))(@angular/platform-browser@20.3.16(@angular/animations@20.3.16(@angular/core@20.3.16(@angular/compiler@20.3.16)(rxjs@7.8.2)(zone.js@0.15.1)))(@angular/common@20.3.16(@angular/core@20.3.16(@angular/compiler@20.3.16)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/core@20.3.16(@angular/compiler@20.3.16)(rxjs@7.8.2)(zone.js@0.15.1)))(rxjs@7.8.2)
+      '@babel/runtime':
+        specifier: ^7.28.3
+        version: 7.28.3
       '@babylonjs/addons':
         specifier: ^8.46.2
         version: 8.46.2(@babylonjs/core@8.46.2)
@@ -74,12 +77,6 @@ importers:
       '@ionic/angular':
         specifier: ^8.0.0
         version: 8.7.17(779e92b12364ecfade5acc83c4c09d29)
-      '@neo-tokyo/config':
-        specifier: workspace:*
-        version: link:packages/config
-      '@neo-tokyo/core':
-        specifier: workspace:*
-        version: link:packages/core
       animejs:
         specifier: ^3.2.1
         version: 3.2.2
