@@ -8,6 +8,7 @@
 - Legacy diorama components: 110 TSX components (environment, furniture, infrastructure, maritime, props, signage, structural, vegetation).
 - Current Babylon engine equivalents: partial (background panels, lighting, character, hex tiles, quest markers, player controller).
 - Current UI/HUD: Angular ports exist, but parity with legacy component library is incomplete.
+ - Content-gen pipeline: legacy game/playground expects @neo-tokyo/content-gen and @neo-tokyo/shared-assets runtime exports; full pipeline outputs (heroes/props/assets) still need audit and validation.
 
 ## Major Gaps (Must Port for 1:1 Parity)
 

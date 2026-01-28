@@ -12,10 +12,8 @@ All agents MUST follow the documentation hierarchy below. The project is migrati
 
 ## 🚨 Governance & Workflow
 
-1.  **GitHub Projects**: All tasks MUST be tracked on the GitHub Project board.
-2.  **Issues First**: No code changes without an associated Issue.
-    - Create an Issue if one doesn't exist.
-    - Link PRs to Issues.
+1.  **Memory Bank Tracking**: All tasks MUST be tracked in the `memory-bank` directory.
+2.  **Issues/Projects**: Optional and only used if the owner explicitly requests them.
 3.  **Governance Doc**: See [`docs/AGENT_GOVERNANCE.md`](docs/AGENT_GOVERNANCE.md) for detailed workflow.
 
 ## 🎯 Project Overview

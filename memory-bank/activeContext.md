@@ -84,11 +84,18 @@
     - MaritimeKit, VegetationKit, EnvironmentKit added and integrated into FloodedWorldBuilder
 23. **Furniture/Props Kits**
     - FurnitureKit and PropKit added and integrated into FloodedWorldBuilder placement
+24. **Signage Kit + E2E**
+    - SignageKit added and integrated into rooftop placement
+    - Playwright canal scene verification added
+25. **Content-Gen Audit (New)**
+    - Investigate missing content-gen pipeline outputs and asset manifests (heroes/props/assets)
+    - Fix package exports so legacy game/playground can resolve @neo-tokyo/content-gen and @neo-tokyo/shared-assets
 
 ## Known Constraints
 
 - Must preserve all existing gameplay systems and assets.
 - No PRs; work directly on `main` per owner request.
+- Legacy game E2E currently logs known errors (missing combat_stance.glb, button nesting hydration warning); canal test filters those for now.
 
 ## Next Steps
 

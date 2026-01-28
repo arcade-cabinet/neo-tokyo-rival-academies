@@ -1,4 +1,44 @@
+import { existsSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { defineConfig, devices } from '@playwright/test';
+
+const workspaceRoot = resolve(__dirname, '..');
+const hasPlayground = existsSync(resolve(workspaceRoot, 'packages', 'playground'));
+
+const projects = [
+  // Game tests (existing)
+  {
+    name: 'game-chromium',
+    testMatch: /(gameplay|canal)\.spec\.ts/,
+    use: {
+      ...devices['Desktop Chrome'],
+      baseURL: 'http://localhost:4321',
+    },
+  },
+];
+
+if (hasPlayground) {
+  projects.push(
+    {
+      name: 'playground-chromium',
+      testMatch: /playground\.spec\.ts/,
+      use: {
+        ...devices['Desktop Chrome'],
+        baseURL: 'http://localhost:3001',
+        viewport: { width: 1280, height: 720 },
+      },
+    },
+    {
+      name: 'diorama-chromium',
+      testMatch: /diorama\.spec\.ts/,
+      use: {
+        ...devices['Desktop Chrome'],
+        baseURL: 'http://localhost:3001',
+        viewport: { width: 1280, height: 720 },
+      },
+    }
+  );
+}
 
 export default defineConfig({
   testDir: './tests',
@@ -25,53 +65,24 @@ export default defineConfig({
     video: 'retain-on-failure',
   },
 
-  projects: [
-    // Game tests (existing)
-    {
-      name: 'game-chromium',
-      testMatch: /gameplay\.spec\.ts/,
-      use: {
-        ...devices['Desktop Chrome'],
-        baseURL: 'http://localhost:4321',
-      },
-    },
-    // Playground component tests
-    {
-      name: 'playground-chromium',
-      testMatch: /playground\.spec\.ts/,
-      use: {
-        ...devices['Desktop Chrome'],
-        baseURL: 'http://localhost:3001',
-        // Consistent viewport for visual regression
-        viewport: { width: 1280, height: 720 },
-      },
-    },
-    // Diorama package visual regression
-    {
-      name: 'diorama-chromium',
-      testMatch: /diorama\.spec\.ts/,
-      use: {
-        ...devices['Desktop Chrome'],
-        baseURL: 'http://localhost:3001',
-        viewport: { width: 1280, height: 720 },
-      },
-    },
-  ],
+  projects,
 
   webServer: [
-    // Game server for gameplay tests
     {
       command: 'pnpm --filter @neo-tokyo/game dev',
       url: 'http://localhost:4321',
       reuseExistingServer: !process.env.CI,
       timeout: 120000,
     },
-    // Playground server for component tests
-    {
-      command: 'pnpm --filter @neo-tokyo/playground dev',
-      url: 'http://localhost:3001',
-      reuseExistingServer: !process.env.CI,
-      timeout: 120000,
-    },
+    ...(hasPlayground
+      ? [
+          {
+            command: 'pnpm --filter @neo-tokyo/playground dev',
+            url: 'http://localhost:3001',
+            reuseExistingServer: !process.env.CI,
+            timeout: 120000,
+          },
+        ]
+      : []),
   ],
 });

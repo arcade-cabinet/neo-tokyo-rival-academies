@@ -203,6 +203,7 @@ Single source mapping for port targets: legacy TSX/TS + Unity C# + current TS/Ba
 - Environment: EnvironmentKit (steam vent, fog panel)
 - Furniture: FurnitureKit (bench, trash can, vending machine, mailbox, planter, phone booth, hydrant, parking meter, bollard, manhole, drain grate, shopping cart, umbrella, newspaper)
 - Props: PropKit (crate, barrel, debris, pallet stack, tarp, tarpaulin, clothesline, tent, bicycle, bicycle rack, carcass)
+- Signage: SignageKit (street light, lamppost, billboard, poster, traffic sign, signpost, lantern, graffiti, flagpole)
 
 ### Unity System → TS Candidate Matches
 This is a heuristic name match to prioritize manual mapping.

@@ -112,6 +112,7 @@
 **Governance Override**
 - [x] Updated `/docs/process/AGENT_GOVERNANCE.md` to track work in memory-bank per owner directive
 - [x] Opened Issue #71 for maritime + vegetation + environment port scope
+- [x] Updated `AGENTS.md` to require memory-bank tracking instead of GitHub Projects
 
 **Compound Assemblies (Ported)**
 - [x] Ported playground compounds into `src/app/engine/compounds` (Building, Bridge, Alley, Room, Street)
@@ -133,6 +134,17 @@
 - [x] Integrated furniture + prop kits into rooftop placement rules
 - [x] `pnpm check`
 - [x] `pnpm test --watch=false --browsers=ChromeHeadless`
+
+**Signage Ports + E2E**
+- [x] Added SignageKit (street light, lamppost, billboard, poster, traffic sign, signpost, lantern, graffiti, flagpole)
+- [x] Integrated signage into rooftop placement rules
+- [x] Added Playwright canal scene verification
+- [x] `pnpm -C e2e test -- --project=game-chromium canal.spec.ts` (passes with known legacy error filtering)
+
+**Content-Gen + Shared Assets Exports**
+- [x] Updated `@neo-tokyo/content-gen` and `@neo-tokyo/shared-assets` exports to point at `src` for dev/runtime resolution
+- [x] Adjusted Playwright config to skip playground server when missing
+- [x] Installed Playwright browsers for local runs
 
 ---
 

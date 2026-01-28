@@ -2,7 +2,7 @@ import {
   type AbstractMesh,
   Color3,
   MeshBuilder,
-  PointLight,
+  type PointLight,
   type Scene,
   Vector3,
 } from '@babylonjs/core';
@@ -17,8 +17,9 @@ import { FurnitureKit } from './furniture/furniture-kit';
 import { InfrastructureKit } from './infrastructure/infrastructure-kit';
 import { MaritimeKit } from './maritime/maritime-kit';
 import { PropKit } from './props/prop-kit';
+import { SignageKit } from './signage/signage-kit';
 import { StructuralKit } from './structural/structural-kit';
-import { createEffectMaterial, createEnvironmentMaterial } from './toon-material';
+import { createEnvironmentMaterial } from './toon-material';
 import { VegetationKit } from './vegetation/vegetation-kit';
 
 interface Bounds {
@@ -261,6 +262,7 @@ export class FloodedWorldBuilder {
   private environmentKit: EnvironmentKit | null = null;
   private furnitureKit: FurnitureKit | null = null;
   private propKit: PropKit | null = null;
+  private signageKit: SignageKit | null = null;
 
   constructor(private readonly scene: Scene) {}
 
@@ -279,6 +281,8 @@ export class FloodedWorldBuilder {
     this.furnitureKit = new FurnitureKit(this.scene);
     this.propKit?.dispose();
     this.propKit = new PropKit(this.scene);
+    this.signageKit?.dispose();
+    this.signageKit = new SignageKit(this.scene);
     this.buildingCompound?.dispose();
     this.buildingCompound = new BuildingCompound(this.scene);
     this.bridgeCompound?.dispose();
@@ -313,9 +317,9 @@ export class FloodedWorldBuilder {
       { width: 120, height: 120 },
       this.scene
     );
-    waterPlane.position.y = 0;
+    waterPlane.position.y = -2;
     const waterMat = createEnvironmentMaterial('water_material', this.scene, palette.water);
-    waterMat.alpha = 0.8;
+    waterMat.alpha = 0.6;
     waterPlane.material = waterMat;
     this.meshes.push(waterPlane);
 
@@ -442,6 +446,8 @@ export class FloodedWorldBuilder {
     this.furnitureKit = null;
     this.propKit?.dispose();
     this.propKit = null;
+    this.signageKit?.dispose();
+    this.signageKit = null;
     this.buildingCompound?.dispose();
     this.buildingCompound = null;
     this.bridgeCompound?.dispose();
@@ -477,6 +483,9 @@ export class FloodedWorldBuilder {
         'heli_pad',
         'railing',
         'stairs',
+        'flagpole',
+        'signpost',
+        'poster',
       ],
       residential: [
         'ac_unit',
@@ -498,6 +507,9 @@ export class FloodedWorldBuilder {
         'trash_can',
         'mailbox',
         'newspaper',
+        'lamppost',
+        'poster',
+        'signpost',
       ],
       commercial: [
         'ac_unit',
@@ -518,6 +530,10 @@ export class FloodedWorldBuilder {
         'bollard',
         'shopping_cart',
         'bicycle',
+        'street_light',
+        'billboard',
+        'traffic_sign',
+        'graffiti',
       ],
       industrial: [
         'water_tank',
@@ -542,6 +558,8 @@ export class FloodedWorldBuilder {
         'clothesline',
         'tent',
         'carcass',
+        'street_light',
+        'graffiti',
       ],
     };
 
@@ -713,9 +731,6 @@ export class FloodedWorldBuilder {
         case 'bench':
           this.addFurnitureProp('bench', `${rooftop.id}_bench_${i}`, new Vector3(x, y, z));
           break;
-        case 'lantern':
-          this.addLantern(`${rooftop.id}_lantern_${i}`, new Vector3(x, y + 0.4, z));
-          break;
         case 'trash_can':
           this.addFurnitureProp('trash_can', `${rooftop.id}_trash_${i}`, new Vector3(x, y, z));
           break;
@@ -761,6 +776,41 @@ export class FloodedWorldBuilder {
           break;
         case 'carcass':
           this.addProp('carcass', `${rooftop.id}_carcass_${i}`, new Vector3(x, y, z));
+          break;
+        case 'street_light':
+          this.addSignageProp(
+            'street_light',
+            `${rooftop.id}_streetlight_${i}`,
+            new Vector3(x, y, z)
+          );
+          break;
+        case 'lamppost':
+          this.addSignageProp('lamppost', `${rooftop.id}_lamppost_${i}`, new Vector3(x, y, z));
+          break;
+        case 'billboard':
+          this.addSignageProp('billboard', `${rooftop.id}_billboard_${i}`, new Vector3(x, y, z));
+          break;
+        case 'poster':
+          this.addSignageProp('poster', `${rooftop.id}_poster_${i}`, new Vector3(x, y, z));
+          break;
+        case 'traffic_sign':
+          this.addSignageProp('traffic_sign', `${rooftop.id}_traffic_${i}`, new Vector3(x, y, z));
+          break;
+        case 'signpost':
+          this.addSignageProp('signpost', `${rooftop.id}_signpost_${i}`, new Vector3(x, y, z));
+          break;
+        case 'lantern':
+          this.addSignageProp(
+            'lantern',
+            `${rooftop.id}_lantern_prop_${i}`,
+            new Vector3(x, y + 0.2, z)
+          );
+          break;
+        case 'graffiti':
+          this.addSignageProp('graffiti', `${rooftop.id}_graffiti_${i}`, new Vector3(x, y, z));
+          break;
+        case 'flagpole':
+          this.addSignageProp('flagpole', `${rooftop.id}_flag_${i}`, new Vector3(x, y, z));
           break;
         case 'tree':
           this.addVegetationProp('tree', `${rooftop.id}_tree_${i}`, new Vector3(x, y, z), 1.0);
@@ -867,31 +917,6 @@ export class FloodedWorldBuilder {
       });
       this.meshes.push(...alleyMeshes);
     }
-  }
-
-  private addLantern(id: string, position: Vector3) {
-    const base = MeshBuilder.CreateCylinder(
-      `${id}_base`,
-      { diameter: 0.3, height: 0.4 },
-      this.scene
-    );
-    base.position.set(position.x, position.y, position.z);
-    base.material = createEnvironmentMaterial(
-      `${id}_base_mat`,
-      this.scene,
-      new Color3(0.2, 0.2, 0.22)
-    );
-    this.meshes.push(base);
-
-    const glow = MeshBuilder.CreateSphere(`${id}_glow`, { diameter: 0.35 }, this.scene);
-    glow.position.set(position.x, position.y + 0.35, position.z);
-    glow.material = createEffectMaterial(`${id}_glow_mat`, this.scene, new Color3(1.0, 0.6, 0.2));
-    this.meshes.push(glow);
-
-    const light = new PointLight(`${id}_light`, glow.position, this.scene);
-    light.diffuse = new Color3(1.0, 0.55, 0.25);
-    light.intensity = 0.4;
-    this.lights.push(light);
   }
 
   private placeStreet(bounds: Bounds, seed: string) {
@@ -1099,6 +1124,17 @@ export class FloodedWorldBuilder {
   ) {
     if (!this.propKit) return;
     const meshes = this.propKit.create(kind, id, position, rotation);
+    this.meshes.push(...meshes);
+  }
+
+  private addSignageProp(
+    kind: Parameters<SignageKit['create']>[0],
+    id: string,
+    position: Vector3,
+    rotation = 0
+  ) {
+    if (!this.signageKit) return;
+    const meshes = this.signageKit.create(kind, id, position, rotation);
     this.meshes.push(...meshes);
   }
 }
