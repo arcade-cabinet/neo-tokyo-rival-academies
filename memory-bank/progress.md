@@ -112,6 +112,12 @@
 **Governance Override**
 - [x] Updated `/docs/process/AGENT_GOVERNANCE.md` to track work in memory-bank per owner directive
 
+**Compound Assemblies (Ported)**
+- [x] Ported playground compounds into `src/app/engine/compounds` (Building, Bridge, Alley, Room, Street)
+- [x] Integrated BridgeCompound and rooftop compound placement into FloodedWorldBuilder
+- [x] `pnpm check`
+- [x] `pnpm test --watch=false --browsers=ChromeHeadless`
+
 ---
 
 ## In Progress

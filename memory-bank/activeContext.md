@@ -22,8 +22,7 @@
    - Additional UI components ported: inventory, quest dialogs, save slots, stat allocation
 
 4. **Governance**
-   - Issue created: #68 (stack pivot + unified app)
-   - Issue created: #69 (root port + parity + e2e)
+   - Owner directive: track work in memory-bank; skip GitHub Issues/Projects until re-enabled
 5. **Documentation Cleanup**
    - Rewrote core design/gameplay/world docs to align with flooded-world scope
    - Moved obsolete process/story handoffs into `/docs/legacy/process` and `/docs/legacy/story`
@@ -77,6 +76,8 @@
 20. **Structural Expansion**
     - Expanded StructuralKit with pillars, ramps, balconies, catwalks, awnings, scaffolding
     - Wired new structural props into FloodedWorldBuilder
+21. **Compound Port (In Progress)**
+    - Porting playground compounds (Building/Bridge/Street/Alley/Room) into Babylon engine
 
 ## Known Constraints
 
@@ -90,6 +91,7 @@
 - Move legacy apps into `_legacy/` and validate build
 - Add Electron target via Capacitor community plugin
 - Validate legacy references and update any remaining stale links
+- Integrate StreetCompound into a visible scene pass and validate compound placement parity
 
 ---
 

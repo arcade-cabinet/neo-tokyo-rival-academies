@@ -13,13 +13,13 @@
 
 ### World/Visual Components (Diorama)
 - **Missing categories**: environment, furniture, infrastructure, maritime, props, vegetation (signage + structural partially ported).
-- **Missing compound assemblies**: rooftop/street/building systems present in playground compounds and tests.
+- **Compound assemblies**: playground compounds are now ported into the Babylon engine; Street integration is pending scene placement.
 - **Material systems**: now ported, still need integration into runtime visuals.
 - **Infrastructure/structural**: infrastructure kit + expanded structural kit ports added; remaining per-component parity still needed.
 
 ### Procedural/World Systems
-- **Playground compound logic**: `Building`, `Bridge`, `Street`, `Room`, `Alley` and related tests not ported.
-- **Procedural background and facades**: ported into Babylon runtime, pending integration of compound logic.
+- **Playground compound logic**: `Building`, `Bridge`, `Street`, `Room`, `Alley` ported to `src/app/engine/compounds`; Bridge integrated into FloodedWorldBuilder. Street integration pending.
+- **Procedural background and facades**: ported into Babylon runtime; compound logic integration is underway.
 
 ### UI/UX Parity
 - **Legacy game UI** is thin in `_legacy/apps/mobile` (webview wrapper only). 
@@ -30,6 +30,7 @@
 - **Diorama layers ported**: `ProceduralBackground`, `MidgroundFacades`, `ForegroundProps`.
 - **Material systems ported**: AmbientCG PBR loader, DecalSystem, HDRI environment setup.
 - **Structural/signage ports (initial)**: `TexturedWall`, `Floor`, `Roof`, `NeonSign`.
+- **Compound assemblies ported**: `BuildingCompound`, `BridgeCompound`, `AlleyCompound`, `RoomCompound`, `StreetCompound`.
 - **Infrastructure kit**: AC units, antennas, dumpsters, generators, heli pads, pipes, power lines, satellite dishes, solar panels, storage tanks, vents, water tanks.
 - **Structural kit**: stairs, railings, fences, ladders, doors, windows, pillars, ramps, balconies, catwalks, awnings, scaffolding.
 - Angular HUD/menus/dialogue/quests exist in `src/app/ui` but need parity verification against legacy web UI sources once located.

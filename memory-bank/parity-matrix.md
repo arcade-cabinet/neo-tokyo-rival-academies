@@ -70,11 +70,11 @@ Single source mapping for port targets: legacy TSX/TS + Unity C# + current TS/Ba
 
 ### Playground Compounds
 - Total: 5
-- _legacy/apps/playground/src/compounds/Alley.tsx
-- _legacy/apps/playground/src/compounds/Bridge.tsx
-- _legacy/apps/playground/src/compounds/Building.tsx
-- _legacy/apps/playground/src/compounds/Room.tsx
-- _legacy/apps/playground/src/compounds/Street.tsx
+- _legacy/apps/playground/src/compounds/Alley.tsx → `src/app/engine/compounds/alley-compound.ts`
+- _legacy/apps/playground/src/compounds/Bridge.tsx → `src/app/engine/compounds/bridge-compound.ts`
+- _legacy/apps/playground/src/compounds/Building.tsx → `src/app/engine/compounds/building-compound.ts`
+- _legacy/apps/playground/src/compounds/Room.tsx → `src/app/engine/compounds/room-compound.ts`
+- _legacy/apps/playground/src/compounds/Street.tsx → `src/app/engine/compounds/street-compound.ts` (integration pending)
 
 ### Playground Tests (reference scenes)
 - Total: 27
@@ -241,7 +241,7 @@ This is a heuristic name match to prioritize manual mapping.
 
 ## Required Parity Work (Prioritized)
 1. Complete port of remaining diorama categories (structural, props, signage, infrastructure, environment, vegetation, maritime).
-2. Port compound assemblies (Building, Street, Bridge, Alley, Room) from playground compounds and validate via legacy tests.
+2. Validate compound assemblies (Building, Street, Bridge, Alley, Room) via legacy test scenes; integrate StreetCompound into a visible scene.
 3. Port Unity gameplay systems (Combat, AI, Quest, Progression, Inventory) into TS equivalents aligned with Golden Record.
 4. Port Unity UI flows (HUD, QuestLog, Inventory, Dialogue, Save/Load) and align Angular UI 1:1 before enhancements.
 5. Integrate AmbientCG + Decal + HDRI systems into runtime rendering with asset paths validated.

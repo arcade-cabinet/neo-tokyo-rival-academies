@@ -7,6 +7,11 @@ import {
   Vector3,
 } from '@babylonjs/core';
 import seedrandom from 'seedrandom';
+import { AlleyCompound } from './compounds/alley-compound';
+import { BridgeCompound } from './compounds/bridge-compound';
+import { BuildingCompound } from './compounds/building-compound';
+import { RoomCompound } from './compounds/room-compound';
+import { StreetCompound } from './compounds/street-compound';
 import { InfrastructureKit } from './infrastructure/infrastructure-kit';
 import { StructuralKit } from './structural/structural-kit';
 import { createEffectMaterial, createEnvironmentMaterial } from './toon-material';
@@ -241,6 +246,11 @@ export class FloodedWorldBuilder {
   private readonly lights: PointLight[] = [];
   private infrastructureKit: InfrastructureKit | null = null;
   private structuralKit: StructuralKit | null = null;
+  private buildingCompound: BuildingCompound | null = null;
+  private bridgeCompound: BridgeCompound | null = null;
+  private alleyCompound: AlleyCompound | null = null;
+  private roomCompound: RoomCompound | null = null;
+  private streetCompound: StreetCompound | null = null;
 
   constructor(private readonly scene: Scene) {}
 
@@ -249,6 +259,16 @@ export class FloodedWorldBuilder {
     this.infrastructureKit = new InfrastructureKit(this.scene);
     this.structuralKit?.dispose();
     this.structuralKit = new StructuralKit(this.scene);
+    this.buildingCompound?.dispose();
+    this.buildingCompound = new BuildingCompound(this.scene);
+    this.bridgeCompound?.dispose();
+    this.bridgeCompound = new BridgeCompound(this.scene);
+    this.alleyCompound?.dispose();
+    this.alleyCompound = new AlleyCompound(this.scene);
+    this.roomCompound?.dispose();
+    this.roomCompound = new RoomCompound(this.scene);
+    this.streetCompound?.dispose();
+    this.streetCompound = new StreetCompound(this.scene);
     const { rooftops, bridges } = generateRooftopLayout(createSubRng(seed, 'layout'), 8);
 
     const groundMeshes: AbstractMesh[] = [];
@@ -351,64 +371,27 @@ export class FloodedWorldBuilder {
       });
 
       this.placeProps(rooftop, seed, palette);
+      this.placeCompounds(rooftop, seed);
     });
 
     bridges.forEach((bridge) => {
-      const length = Math.hypot(
-        bridge.endPos.x - bridge.startPos.x,
-        bridge.endPos.z - bridge.startPos.z
-      );
-      const midpoint = new Vector3(
-        (bridge.startPos.x + bridge.endPos.x) / 2,
-        (bridge.startPos.y + bridge.endPos.y) / 2,
-        (bridge.startPos.z + bridge.endPos.z) / 2
-      );
-      const angle = Math.atan2(
-        bridge.endPos.x - bridge.startPos.x,
-        bridge.endPos.z - bridge.startPos.z
-      );
-
-      const bridgeMesh = MeshBuilder.CreateBox(
-        bridge.id,
-        { width: bridge.width, height: 0.15, depth: length },
-        this.scene
-      );
-      bridgeMesh.position.set(midpoint.x, midpoint.y, midpoint.z);
-      bridgeMesh.rotation.y = angle;
-      bridgeMesh.material = createEnvironmentMaterial('bridge_metal', this.scene, palette.metal);
-      bridgeMesh.receiveShadows = true;
-      this.meshes.push(bridgeMesh);
-      groundMeshes.push(bridgeMesh);
-
-      if (this.structuralKit) {
-        const offset = bridge.width / 2 + 0.2;
-        const sideOffsetX = Math.cos(angle + Math.PI / 2) * offset;
-        const sideOffsetZ = Math.sin(angle + Math.PI / 2) * offset;
-        const railingPosLeft = new Vector3(
-          midpoint.x + sideOffsetX,
-          midpoint.y + 0.1,
-          midpoint.z + sideOffsetZ
-        );
-        const railingPosRight = new Vector3(
-          midpoint.x - sideOffsetX,
-          midpoint.y + 0.1,
-          midpoint.z - sideOffsetZ
-        );
-        const leftRail = this.structuralKit.createRailing(
-          `${bridge.id}_rail_l`,
-          railingPosLeft,
-          length,
-          0.8,
-          angle
-        );
-        const rightRail = this.structuralKit.createRailing(
-          `${bridge.id}_rail_r`,
-          railingPosRight,
-          length,
-          0.8,
-          angle
-        );
-        this.meshes.push(...leftRail, ...rightRail);
+      if (!this.bridgeCompound) {
+        return;
+      }
+      const bridgeMeshes = this.bridgeCompound.build({
+        id: bridge.id,
+        startPosition: bridge.startPos,
+        endPosition: bridge.endPos,
+        width: bridge.width,
+        style: 'industrial',
+        supportCount: 1,
+        edgeLighting: true,
+        accentColor: palette.glow,
+      });
+      this.meshes.push(...bridgeMeshes);
+      const deck = bridgeMeshes.find((mesh) => mesh.name === `floor_${bridge.id}_deck`);
+      if (deck) {
+        groundMeshes.push(deck);
       }
     });
 
@@ -428,6 +411,16 @@ export class FloodedWorldBuilder {
     this.infrastructureKit = null;
     this.structuralKit?.dispose();
     this.structuralKit = null;
+    this.buildingCompound?.dispose();
+    this.buildingCompound = null;
+    this.bridgeCompound?.dispose();
+    this.bridgeCompound = null;
+    this.alleyCompound?.dispose();
+    this.alleyCompound = null;
+    this.roomCompound?.dispose();
+    this.roomCompound = null;
+    this.streetCompound?.dispose();
+    this.streetCompound = null;
     this.lights.forEach((light) => {
       light.dispose();
     });
@@ -710,6 +703,76 @@ export class FloodedWorldBuilder {
         default:
           break;
       }
+    }
+  }
+
+  private placeCompounds(rooftop: RooftopBlock, seed: string) {
+    if (!this.buildingCompound || !this.alleyCompound || !this.roomCompound) {
+      return;
+    }
+
+    const compoundRng = createSubRng(seed, `compound_${rooftop.id}`);
+    const baseY = rooftop.height;
+    const basePosition = rooftop.position;
+
+    if (rooftop.type === 'academy') {
+      const roomWidth = Math.min(10, rooftop.width * 0.55);
+      const roomDepth = Math.min(8, rooftop.depth * 0.45);
+      const roomMeshes = this.roomCompound.build({
+        id: `${rooftop.id}_dojo`,
+        position: new Vector3(basePosition.x, baseY, basePosition.z + rooftop.depth * 0.1),
+        dimensions: { width: roomWidth, depth: roomDepth, height: 3.5 },
+        style: 'office',
+        walls: { north: false, south: true, east: true, west: true },
+        ambientLevel: 0.25,
+      });
+      this.meshes.push(...roomMeshes);
+      return;
+    }
+
+    const buildingStyle =
+      rooftop.type === 'residential'
+        ? 'residential'
+        : rooftop.type === 'commercial'
+          ? 'commercial'
+          : 'industrial';
+
+    const buildingFootprint = {
+      width: Math.max(4, Math.min(rooftop.width * 0.55, 10)),
+      depth: Math.max(4, Math.min(rooftop.depth * 0.45, 10)),
+    };
+
+    const buildingMeshes = this.buildingCompound.build({
+      id: `${rooftop.id}_building`,
+      position: new Vector3(
+        basePosition.x - rooftop.width * 0.15,
+        baseY,
+        basePosition.z - rooftop.depth * 0.1
+      ),
+      footprint: buildingFootprint,
+      floors: compoundRng.int(2, 4),
+      floorHeight: 2.8,
+      style: buildingStyle,
+      seed: compoundRng.int(1, 10000),
+      rooftopEquipment: true,
+    });
+    this.meshes.push(...buildingMeshes);
+
+    const alleyLength = Math.min(14, rooftop.depth * 0.6);
+    if (alleyLength > 6) {
+      const alleyMeshes = this.alleyCompound.build({
+        id: `${rooftop.id}_alley`,
+        position: new Vector3(
+          basePosition.x + rooftop.width * 0.2,
+          baseY,
+          basePosition.z - rooftop.depth / 2 + 1
+        ),
+        dimensions: { length: alleyLength, width: 3, wallHeight: 6 },
+        mood: rooftop.type === 'industrial' ? 'industrial' : 'neon',
+        seed: compoundRng.int(1, 10000),
+        deadEnd: compoundRng.next() > 0.5,
+      });
+      this.meshes.push(...alleyMeshes);
     }
   }
 
