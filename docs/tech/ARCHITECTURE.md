@@ -8,7 +8,7 @@
 |-------|------------|-------|
 | UI | **Ionic + Angular (zoneless)** | Mobile-first UI, routing, accessibility |
 | 3D | **Babylon.js** | WebGL scene, toon shading |
-| ECS/Logic | **Miniplex + Zustand** | Systems + state in `packages/core` |
+| ECS/Logic | **Miniplex + Zustand** | Systems + state in `src/lib/core` |
 | Physics | **Rapier** | Deterministic physics where needed |
 | Native | **Capacitor 8** | Android/iOS wrapper |
 | Build | **Angular CLI (Vite-based)** | Production and dev builds |
@@ -53,7 +53,7 @@
 ## Data Flow
 
 1. **Input** (touch/keyboard) updates `InputStateService`.
-2. **Systems** update stores (`@neo-tokyo/core`) and emit derived state.
+2. **Systems** update stores (`src/lib/core`) and emit derived state.
 3. **UI** subscribes to stores/services and renders HUD + overlays.
 4. **Scene** pulls the same state for character movement, markers, and FX.
 5. **SaveSystem** snapshots state to local storage and restores on boot.
@@ -63,14 +63,14 @@
 - `src/app/engine/`: Babylon scene setup, camera, lighting, markers, controllers.
 - `src/app/state/`: Angular services wrapping core Zustand stores.
 - `src/app/ui/`: Angular UI/HUD components.
-- `packages/core/`: Platform-agnostic systems and stores.
-- `packages/shared-assets/`: Shared manifest helpers and asset loaders.
+- `src/lib/core/`: Platform-agnostic systems and stores.
+- `src/lib/shared-assets/`: Shared manifest helpers and asset loaders.
 - `src/assets/`: Runtime assets and story JSON.
 
 ## Package Map
 
-- `packages/core`: ECS systems, stores, types.
-- `packages/shared-assets`: Shared asset manifests and helpers.
+- `src/lib/core`: ECS systems, stores, types.
+- `src/lib/shared-assets`: Shared asset manifests and helpers.
 - `e2e/`: Playwright test suite.
 
 ## Runtime Principles
@@ -104,7 +104,7 @@ We ship **one** Ionic Angular app and wrap it with Capacitor for Android/iOS. De
 
 ### Migration Steps (Current Scope)
 1. Port React/Reactylon UI and Babylon scene code to Angular + Babylon imperative.
-2. Wire ECS packages into the app.
+2. Wire ECS modules (`src/lib`) into the app.
 3. Archive legacy React/Expo apps and Unity runtime notes.
 4. Keep Electron optional and non-divergent.
 

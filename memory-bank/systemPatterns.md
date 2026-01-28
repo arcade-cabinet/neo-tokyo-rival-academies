@@ -44,7 +44,7 @@ interface Entity {
 ### System Organization
 
 ```text
-packages/core/src/systems/
+src/lib/core/src/systems/
 ├── PhysicsSystem.ts
 ├── CombatSystem.ts
 ├── InputSystem.ts

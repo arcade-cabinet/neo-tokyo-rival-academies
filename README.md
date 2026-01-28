@@ -6,8 +6,9 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue)](https://www.typescriptlang.org/)
-[![React](https://img.shields.io/badge/React-19.0-61DAFB)](https://react.dev/)
 [![Babylon.js](https://img.shields.io/badge/Babylon.js-8.46-E0684B)](https://www.babylonjs.com/)
+[![Angular](https://img.shields.io/badge/Angular-20.0-DD0031)](https://angular.dev/)
+[![Ionic](https://img.shields.io/badge/Ionic-8.0-3880FF)](https://ionicframework.com/)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
 [Play Demo](https://neo-tokyo.vercel.app) • [Documentation](./docs/) • [Roadmap](./docs/00-golden/PHASE_ROADMAP.md) • [Changelog](./CHANGELOG.md)
@@ -34,17 +35,17 @@
 ## 🚀 Tech Stack
 
 ### Core Technologies
-- **Frontend**: [Vite](https://vitejs.dev/) 7.3 + [React](https://react.dev/) 19.0
-- **3D Engine**: [Babylon.js](https://www.babylonjs.com/) 8.46.2 + [Reactylon](https://github.com/brianzinn/react-babylonjs) 3.5.2
+- **Frontend**: Angular 20 + Ionic 8 (zoneless)
+- **3D Engine**: [Babylon.js](https://www.babylonjs.com/) 8.46.2
 - **State Management**: [Zustand](https://github.com/pmndrs/zustand) 5.0
 - **Language**: [TypeScript](https://www.typescriptlang.org/) 5.9 (strict mode)
 - **Build Tool**: Angular CLI (Vite-based)
 - **Package Manager**: [PNPM](https://pnpm.io/) 10.28
 
 ### Architecture
-- **Monorepo**: PNPM Workspaces
+- **App**: Single Ionic + Angular app (no workspace)
 - **UI**: Ionic + Angular (zoneless)
-- **Game Logic**: Platform-agnostic `@neo-tokyo/core` package
+- **Game Logic**: Shared modules in `src/lib/` (ECS, systems, data)
 - **Rendering**: Babylon.js with imperative setup
 - **State**: Multiple Zustand stores (world, quest, alignment, player, combat)
 
@@ -62,21 +63,10 @@
 neo-tokyo-rival-academies/
 ├── src/                    # Ionic Angular app (UI + Babylon)
 │   ├── app/                # Components, services, engine
+│   ├── lib/                # Shared core logic (ECS, data, systems)
 │   ├── assets/             # Runtime assets + story JSON
 │   └── ...
-├── packages/
-│   ├── core/                # @neo-tokyo/core - Platform-agnostic game logic
-│   │   ├── src/
-│   │   │   ├── systems/     # WorldGenerator, QuestGenerator, CombatSystem
-│   │   │   ├── state/       # Zustand stores (world, quest, alignment, player, combat)
-│   │   │   ├── types/       # TypeScript interfaces
-│   │   │   └── data/        # Quest grammar, district profiles
-│   │   └── package.json
-│   │
-│   ├── content-gen/         # Procedural content generation CLI
-│   ├── shared-assets/       # Shared asset helpers/manifests
-│   └── world-gen/           # World helpers (if used)
-│
+├── _legacy/                # Archived packages and migration artifacts
 ├── e2e/                     # Playwright tests
 ├── docs/                    # Documentation
 │   ├── 00-golden/
@@ -95,8 +85,7 @@ neo-tokyo-rival-academies/
 ├── TEST_PLAN.md             # Comprehensive test plan
 ├── CHANGELOG.md             # Version history
 ├── CLAUDE.md                # AI assistant context
-├── package.json             # Root workspace config
-├── pnpm-workspace.yaml      # Workspace definition
+├── package.json             # Root app config
 └── README.md                # This file
 ```
 
@@ -130,16 +119,11 @@ pnpm dev
 
 ```bash
 # Development
-pnpm dev              # Start dev server (packages/game)
-pnpm build            # Build all packages
+pnpm dev              # Start dev server
+pnpm build            # Build app
 pnpm test             # Run unit tests
 pnpm check            # Lint and format check
 pnpm check:fix        # Auto-fix linting/formatting
-
-# Package-specific
-pnpm --filter @neo-tokyo/core build
-pnpm --filter @neo-tokyo/game dev
-pnpm --filter @neo-tokyo/content-gen build
 ```
 
 ---
@@ -244,13 +228,13 @@ pnpm --filter @neo-tokyo/content-gen build
 # Create feature branch
 git checkout -b feat/your-feature
 
-# Make changes in packages/core or packages/game
+# Make changes in src/lib or src/app
 # Follow TypeScript strict mode (no 'any')
 # Use Biome for formatting
 
 # Test your changes
-pnpm --filter @neo-tokyo/core test
-pnpm --filter @neo-tokyo/game build
+pnpm test
+pnpm build
 
 # Commit with conventional commits
 git commit -m "feat(core): add new combat ability system"
@@ -262,18 +246,14 @@ git commit -m "feat(core): add new combat ability system"
 pnpm check:fix
 
 # Type check
-pnpm --filter @neo-tokyo/core build
-pnpm --filter @neo-tokyo/game build
+pnpm build
 
 # Run tests
 pnpm test
 ```
 
 ### 3. Pull Request
-- Create PR to `release/1.0` or `main`
-- Fill out PR template
-- Wait for CI checks (if configured)
-- Request review
+- Merge to `main` when ready
 
 ---
 
@@ -285,8 +265,7 @@ pnpm test
 # Install Vercel CLI
 npm i -g vercel
 
-# Deploy from packages/game
-cd packages/game
+# Deploy from repo root
 vercel --prod
 
 # Or use Vercel GitHub integration
@@ -296,8 +275,8 @@ vercel --prod
 ### Netlify
 
 ```bash
-# Build command: pnpm --filter @neo-tokyo/game build
-# Publish directory: packages/game/dist
+# Build command: pnpm build
+# Publish directory: dist/neo-tokyo-rival-academies
 # Node version: 20
 
 # Deploy
@@ -310,7 +289,7 @@ npx netlify-cli deploy --prod
 # Build production bundle
 pnpm build
 
-# Serve packages/game/dist with any static host
+# Serve dist/neo-tokyo-rival-academies with any static host
 # Ensure fallback to index.html for SPA routing
 ```
 
@@ -324,7 +303,7 @@ pnpm build
 pnpm test
 
 # Watch mode
-pnpm --filter @neo-tokyo/core test:watch
+pnpm test --watch
 
 # Coverage
 pnpm test --coverage
@@ -333,10 +312,10 @@ pnpm test --coverage
 ### E2E Tests (Playwright - Future)
 ```bash
 # Install Playwright
-pnpm --filter @neo-tokyo/e2e playwright install
+pnpm -C e2e playwright install
 
 # Run E2E tests
-pnpm --filter @neo-tokyo/e2e test
+pnpm test:e2e
 ```
 
 ### Manual Testing
@@ -366,7 +345,7 @@ Contributions are welcome! Please read [CONTRIBUTING.md](./CONTRIBUTING.md) for 
 2. **Zero Stubs** - Fully implement logic, no placeholders
 3. **Strict Types** - No `any` types, comprehensive interfaces
 4. **Platform Agnostic** - Core logic has no rendering dependencies
-5. **Monorepo Awareness** - Use `pnpm --filter` for package-specific commands
+5. **Single App** - Keep shared logic in `src/lib/` for portability
 
 ---
 

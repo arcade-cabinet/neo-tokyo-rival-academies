@@ -4,7 +4,7 @@
 
 **Phase**: Mobile MVP (single unified Ionic Angular app)
 **Target**: Babylon.js + Capacitor delivery for web, Android, iOS; optional Electron desktop.
-**Governance Override**: Owner explicitly authorized work without Issues/Project tracking for this session (recorded per AGENT_GOVERNANCE.md).
+**Governance**: Owner directed memory-bank-only tracking; GitHub Issues/Projects are disabled until re-enabled.
 
 ## Active Work
 
@@ -22,8 +22,7 @@
    - Additional UI components ported: inventory, quest dialogs, save slots, stat allocation
 
 4. **Governance**
-   - Issue #71 created for maritime + vegetation + environment port scope
-   - Project board creation blocked: missing `project` scope for `gh` (needs owner auth refresh)
+   - Memory-bank is the sole work tracker; no Issues/Projects unless owner re-enables.
 5. **Documentation Cleanup**
    - Rewrote core design/gameplay/world docs to align with flooded-world scope
    - Moved obsolete process/story handoffs into `/docs/legacy/process` and `/docs/legacy/story`
@@ -88,8 +87,28 @@
     - SignageKit added and integrated into rooftop placement
     - Playwright canal scene verification added
 25. **Content-Gen Audit (New)**
-    - Investigate missing content-gen pipeline outputs and asset manifests (heroes/props/assets)
-    - Fix package exports so legacy game/playground can resolve @neo-tokyo/content-gen and @neo-tokyo/shared-assets
+    - Investigate missing content-gen pipeline outputs and full asset suite (heroes/props/declared assets)
+    - Ensure content-gen pipeline aligns with declared hero/prop/asset lists across docs
+26. **Content-Gen Pivot (New)**
+    - Standalone OSS content-gen package created at `/Users/jbogaty/src/agentic-dev-library/meshy-content-generator`
+    - New declarative pipeline engine + CLI/API with Meshy provider and JSON definitions
+27. **Governance Alignment**
+    - Updated agent governance to enforce memory-bank tracking and main-branch workflow (no PRs by default)
+28. **Docs Consolidation**
+    - Merged world geography/timeline into `docs/world/FLOODED_WORLD.md`
+    - Merged modular assembly into `docs/procedural/PROCEDURAL_ARCHITECTURE.md`
+    - Removed redundant design master plan and pruned legacy docs to Unity + `FEATURE_INVENTORY.md`
+29. **UI Parity Pass (Initial)**
+    - Upgraded quest accept/complete dialogs, inventory details, combat text floating damage support
+    - Added quest completion title propagation from GameFlowService to UI
+30. **UI Parity Pass (Wiring)**
+    - Wired combat damage events into floating UI text overlays
+    - Wired inventory screen into game shell with equip/use handlers
+31. **Inventory Effects + Tests**
+    - Added equipment bonuses and consumable effects to core player store
+    - Added vitest coverage for player/combat store behaviors
+32. **Main Menu Parity**
+    - Updated Angular main menu styling to mirror FloodedWorldMenu layout and motion
 
 ## Known Constraints
 

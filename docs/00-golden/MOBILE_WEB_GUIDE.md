@@ -17,7 +17,7 @@ We ship **one** Ionic Angular web app and wrap it with Capacitor for Android/iOS
 ```
 root/
 ├── src/                 # Ionic Angular application (single unified app)
-├── packages/            # Shared core logic (ECS, data, systems)
+├── src/lib/             # Shared core logic (ECS, data, systems)
 ├── e2e/                 # Playwright tests
 ├── docs/                 # Golden Record
 └── ...

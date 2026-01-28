@@ -20,7 +20,7 @@ Welcome! We love contributions. Please follow these guidelines to keep the codeb
 ## 🧩 Architecture
 
 -   **Game Logic**: ECS (Miniplex). Components in `src/state/ecs.ts`, Systems in `src/systems/`.
--   **Content**: GenAI scripts in `packages/content-gen`.
+-   **Content**: GenAI scripts in `-dev-library/meshy-content-generator`.
 -   **UI**: React components in `src/components/react/ui`.
 
 ## 🤖 AI Policy

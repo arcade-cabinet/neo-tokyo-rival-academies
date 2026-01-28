@@ -1,20 +1,54 @@
 <div class="quest-dialog" *ngIf="isOpen && quest">
-  <div class="quest-dialog__content">
-    <h2>{{ quest.title }}</h2>
-    <p class="description">{{ quest.description }}</p>
+  <div class="quest-dialog__content" [style.borderColor]="getQuestTypeColor(quest.type)">
+    <div class="header">
+      <div class="type-label" [style.color]="getQuestTypeColor(quest.type)">
+        {{ getQuestTypeLabel(quest.type) }}
+      </div>
+      <h2>{{ quest.title }}</h2>
+    </div>
+
+    <div class="description-card">
+      <div class="label">Quest Brief</div>
+      <p>{{ quest.description }}</p>
+    </div>
+
     <div class="objective">
-      <span>Objective:</span>
-      <strong>{{ quest.objective }}</strong>
+      <div class="label">Objective</div>
+      <div class="text">{{ quest.objective }}</div>
     </div>
+
+    <div class="meta">
+      <div class="location">📍 {{ quest.location }}</div>
+      <div class="alignment" [style.color]="getAlignmentColor(quest.alignmentBias)">
+        {{ getAlignmentLabel(quest.alignmentBias) }}
+      </div>
+    </div>
+
     <div class="rewards">
-      <span>💰 {{ quest.rewards.credits }} credits</span>
-      <span>⭐ {{ quest.rewards.xp }} XP</span>
-      <span *ngIf="quest.rewards.alignmentShift">
-        {{ quest.rewards.alignmentShift.kurenai ? '🔥' : '⚡' }} Reputation
-      </span>
+      <div class="label">Rewards</div>
+      <div class="reward-row">
+        <span>⭐</span>
+        <span>{{ quest.rewards.xp }} XP</span>
+      </div>
+      <div class="reward-row">
+        <span>💰</span>
+        <span>{{ quest.rewards.credits }} Credits</span>
+      </div>
+      <div class="reward-row" *ngIf="quest.rewards.alignmentShift">
+        <span>{{ quest.rewards.alignmentShift.faction === 'kurenai' ? '🔥' : '⚡' }}</span>
+        <span [style.color]="getAlignmentColor(quest.rewards.alignmentShift.faction)">
+          {{ quest.rewards.alignmentShift.faction === 'kurenai' ? 'Kurenai' : 'Azure' }}
+          +{{ quest.rewards.alignmentShift.amount }}
+        </span>
+      </div>
+      <div class="reward-row" *ngIf="quest.rewards.items?.length">
+        <span>🎁</span>
+        <span>{{ quest.rewards.items.length }} Item{{ quest.rewards.items.length > 1 ? 's' : '' }}</span>
+      </div>
     </div>
+
     <div class="actions">
-      <button type="button" class="accept" (click)="accept.emit()">Accept</button>
+      <button type="button" class="accept" (click)="accept.emit()">Accept Quest</button>
       <button type="button" class="decline" (click)="decline.emit()">Decline</button>
     </div>
   </div>

@@ -8,4 +8,12 @@ import { Component, Input } from '@angular/core';
 export class CombatTextComponent {
   @Input() message: string | null = null;
   @Input() color = '#ef4444';
+  @Input() floatingDamages: Array<{
+    id: string;
+    damage: number;
+    x: number;
+    y: number;
+    isCritical?: boolean;
+    color?: string;
+  }> = [];
 }

@@ -40,4 +40,8 @@ export class QuestStoreService {
   completeQuest(questId: string) {
     return this.store.getState().completeQuest(questId);
   }
+
+  getQuest(questId: string) {
+    return this.store.getState().getQuest(questId);
+  }
 }

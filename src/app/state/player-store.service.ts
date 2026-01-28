@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import type { RPGStats } from '@neo-tokyo/core';
+import type { InventoryItem, RPGStats } from '@neo-tokyo/core';
 import { usePlayerStore } from '@neo-tokyo/core';
 import { BehaviorSubject } from 'rxjs';
 
@@ -9,6 +9,7 @@ interface PlayerSnapshot {
   xpToNextLevel: number;
   stats: RPGStats;
   credits: number;
+  inventory: InventoryItem[];
 }
 
 @Injectable({ providedIn: 'root' })
@@ -26,6 +27,18 @@ export class PlayerStoreService {
     return this.snapshot$.asObservable();
   }
 
+  equipItem(itemId: string) {
+    this.store.getState().equipItem(itemId);
+  }
+
+  useConsumable(itemId: string) {
+    return this.store.getState().useConsumable(itemId);
+  }
+
+  removeItem(itemId: string, quantity = 1) {
+    return this.store.getState().removeItem(itemId, quantity);
+  }
+
   private getSnapshot(): PlayerSnapshot {
     const state = this.store.getState();
     return {
@@ -34,6 +47,7 @@ export class PlayerStoreService {
       xpToNextLevel: state.xpToNextLevel,
       stats: state.stats,
       credits: state.credits,
+      inventory: state.inventory,
     };
   }
 }

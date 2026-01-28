@@ -1,24 +1,10 @@
 <div class="main-menu">
-  <div class="main-menu__panel">
-    <div class="menu-header">
-      <div class="menu-badge">Flooded World</div>
-      <h1 class="menu-title">Neo-Tokyo</h1>
-      <p class="menu-subtitle">Rival Academies</p>
-    </div>
+  <div class="alpha-badge">ALPHA</div>
 
-    <div class="story-text">
-      <p>
-        &gt; YEAR: 40 AFTER THE FLOOD<br />
-        &gt; LOCATION: ROOFTOP TERRITORIES<br />
-        &gt; MISSION: THE DESCENT
-      </p>
-      <p>
-        The rival academies face a deep-zone trial. Choose a seed and enter the rooftops
-        where bridges, storms, and secrets shape the fight for survival.
-      </p>
-    </div>
+  <h1 class="menu-title">Flooded World</h1>
+  <p class="menu-subtitle">Neo-Tokyo Rival Academies</p>
 
-    <div class="seed-panel">
+  <div class="seed-panel">
       <div class="seed-preview">
         <div class="seed-card">
           <div class="seed-label">Adjective</div>
@@ -39,6 +25,7 @@
         #seedInputRef
         id="seedInput"
         class="seed-input"
+        [class.is-valid]="isValid"
         type="text"
         [value]="seedInput"
         (input)="onSeedInput(seedInputRef.value)"
@@ -83,5 +70,5 @@
     </div>
   </div>
 
-  <div class="waterline"></div>
+  <div class="water-effect"></div>
 </div>

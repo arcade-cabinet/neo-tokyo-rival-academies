@@ -21,8 +21,12 @@
     <div class="quest-card" *ngFor="let quest of activeQuests" [hidden]="tab !== 'active'">
       <div class="quest-card__header">
         <h3>{{ quest.title }}</h3>
-        <span class="quest-type" [class.main]="quest.type === 'main'" [class.secret]="quest.type === 'secret'">
-          {{ quest.type }}
+        <span
+          class="quest-type"
+          [class.main]="quest.type === 'main'"
+          [class.secret]="quest.type === 'secret'"
+        >
+          {{ quest.type === 'main' ? '⭐ MAIN' : quest.type === 'secret' ? '✨ SECRET' : '📋 SIDE' }}
         </span>
       </div>
       <p>{{ quest.description }}</p>
@@ -38,7 +42,11 @@
         <span>💰 {{ quest.rewards.credits }} credits</span>
         <span>⭐ {{ quest.rewards.xp }} XP</span>
         <span *ngIf="quest.rewards.alignmentShift">
-          {{ quest.rewards.alignmentShift.kurenai ? '🔥' : '⚡' }} Reputation
+          {{ quest.rewards.alignmentShift.kurenai ? '🔥' : '⚡' }}
+          {{ quest.rewards.alignmentShift.kurenai ? 'Kurenai' : 'Azure' }}
+        </span>
+        <span *ngIf="quest.rewards.items?.length">
+          🎁 {{ quest.rewards.items.length }} item{{ quest.rewards.items.length > 1 ? 's' : '' }}
         </span>
       </div>
     </div>

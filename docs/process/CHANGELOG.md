@@ -1,6 +1,6 @@
 # Changelog
 
-**Note**: Current runtime is Ionic Angular + Babylon.js + Capacitor. Legacy historical changelogs are stored in `/docs/legacy/process/CHANGELOG_UNITY.md`.
+**Note**: Current runtime is Ionic Angular + Babylon.js + Capacitor. Legacy scope notes are summarized in `/docs/legacy/FEATURE_INVENTORY.md`.
 
 All notable changes to Neo-Tokyo: Rival Academies are documented here. Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
@@ -19,4 +19,3 @@ All notable changes to Neo-Tokyo: Rival Academies are documented here. Format fo
 
 ### Deprecated
 - React/Reactylon runtime and multi-app shell approach (see `/docs/00-golden/DEPRECATIONS.md`).
-

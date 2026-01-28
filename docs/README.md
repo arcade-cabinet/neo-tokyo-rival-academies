@@ -13,8 +13,6 @@
 
 ## World
 - `/docs/world/FLOODED_WORLD.md`
-- `/docs/world/WORLD_GEOGRAPHY.md`
-- `/docs/world/WORLD_TIMELINE.md`
 
 ## Gameplay Systems
 - `/docs/gameplay/ALIGNMENT_SYSTEM.md`
@@ -23,7 +21,6 @@
 - `/docs/gameplay/PERSISTENCE.md`
 
 ## Design
-- `/docs/design/DESIGN_MASTER_PLAN.md`
 - `/docs/design/DESIGN_PHILOSOPHY.md`
 - `/docs/design/UI_DESIGN_SYSTEM.md`
 - `/docs/design/POLISH_RULES.md`
@@ -33,7 +30,6 @@
 
 ## Procedural
 - `/docs/procedural/PROCEDURAL_ARCHITECTURE.md`
-- `/docs/procedural/MODULAR_ASSEMBLY_SYSTEM.md`
 
 ## Pipeline
 - `/docs/pipeline/GENAI_PIPELINE.md`
@@ -48,12 +44,5 @@
 
 ## Legacy (Reference Only)
 - `/docs/legacy/README.md`
+- `/docs/legacy/FEATURE_INVENTORY.md`
 - `/docs/legacy/unity/`
-- `/docs/legacy/react/`
-- `/docs/legacy/mobile/`
-- `/docs/legacy/procedural/`
-- `/docs/legacy/process/`
-- `/docs/legacy/story/`
-- `/docs/legacy/testing/`
-- `/docs/legacy/assets/`
-- `/docs/legacy/tech/`

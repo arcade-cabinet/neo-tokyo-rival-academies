@@ -60,9 +60,9 @@
 
 ## Implementation (TypeScript)
 
-- `packages/core/src/systems/QuestGenerator.ts`
-- `packages/core/src/state/questStore.ts`
-- `packages/core/src/state/playerStore.ts`
+- `src/lib/core/src/systems/QuestGenerator.ts`
+- `src/lib/core/src/state/questStore.ts`
+- `src/lib/core/src/state/playerStore.ts`
 
 The generator uses deterministic seeds per scene to create a **quest cluster**: 1 main, 2 side, 1 secret.
 

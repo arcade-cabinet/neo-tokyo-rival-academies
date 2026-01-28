@@ -1,3 +1,14 @@
 <div class="combat-text" *ngIf="message" [style.color]="color">
   {{ message }}
 </div>
+
+<div
+  class="floating-damage"
+  *ngFor="let dmg of floatingDamages"
+  [style.left.px]="dmg.x"
+  [style.top.px]="dmg.y"
+  [class.critical]="dmg.isCritical"
+  [style.color]="dmg.color || (dmg.isCritical ? '#FFD700' : '#FFFFFF')"
+>
+  {{ dmg.damage }}
+</div>

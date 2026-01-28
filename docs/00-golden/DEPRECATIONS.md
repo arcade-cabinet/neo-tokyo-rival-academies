@@ -21,13 +21,16 @@ Unity 6 documentation is preserved only for historical/reference purposes in `/d
 - **Expo / React Native app shells**: deprecated; single web bundle only.
 - **Multi-app packages** in `_legacy/apps/`: deprecated; we ship one unified app.
 - **Tech stack split docs**: `TECH_ARCHITECTURE.md` and `ARCHITECTURE_PIVOT_NATIVE.md` were merged into `/docs/tech/ARCHITECTURE.md`.
-- **Root legacy markdown**: historical `CHANGELOG.md`, `TEST_PLAN.md`, `RELEASE_ROADMAP.md`, `RELEASE_NOTES_v1.0.0.md`, `ASSET_STATUS_REPORT.md`, and `Grok-BabylonJS_Isometric_Diorama_Creation.md` moved under `/docs/legacy/`.
+- **Root legacy markdown**: historical handoffs, audits, release notes, and test plans were consolidated or removed; see `/docs/legacy/FEATURE_INVENTORY.md` for retained parity notes.
 
 ### Code + Content
 
 - `_reference/typescript-runtime/`: historical snapshot only.
 - Any docs claiming "Unity migration complete" or "Unity is current."
 - **Combat gap analysis**: `COMBAT_DESIGN_GAP_ANALYSIS.md` merged into `/docs/gameplay/COMBAT_PROGRESSION.md`.
+- **World geography/timeline**: consolidated into `/docs/world/FLOODED_WORLD.md`.
+- **Modular assembly doc**: merged into `/docs/procedural/PROCEDURAL_ARCHITECTURE.md`.
+- **Design master plan**: removed as redundant with Golden Record + Design Philosophy.
 
 ### Aesthetic/Story
 
@@ -70,11 +73,7 @@ Unity 6 documentation is preserved only for historical/reference purposes in `/d
 ## Legacy Reference (Do Not Implement)
 
 - `/docs/legacy/unity/` - Unity 6 DOTS implementation notes
-- `/docs/legacy/react/` - React/Reactylon migration notes
-- `/docs/legacy/mobile/` - deprecated mobile-native strategy
-- `/docs/legacy/procedural/` - superseded long-form procedural drafts
-- `/docs/legacy/process/` - historical handoffs and audits
-- `/docs/legacy/story/` - deprecated narrative transformations
+- `/docs/legacy/FEATURE_INVENTORY.md` - legacy feature/UI snapshot for parity
 
 ---
 

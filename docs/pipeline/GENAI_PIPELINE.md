@@ -46,7 +46,7 @@ Runtime loads assets by manifest and category.
 ## Tooling (TypeScript)
 
 - **External CLI/API**: `@agentic-dev-library/meshy-content-generator` (Meshy-focused OSS generator).
-- **Local Helpers**: manifest readers + asset loaders live in `packages/shared-assets/` and runtime code.
+- **Local Helpers**: manifest readers + asset loaders live in `src/lib/shared-assets/` and runtime code.
 
 ## Asset-Local Pipeline Definitions
 

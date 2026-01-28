@@ -11,7 +11,7 @@
 ## Test Types
 
 ### Unit Tests (Vitest)
-- Location: `packages/*/src/**/*.test.ts`
+- Location: `src/lib/**/*.test.ts`
 - Run: `pnpm test`
 
 ### E2E Tests (Playwright)
@@ -34,4 +34,3 @@
 - Combat spin-out transitions
 - Save/load integrity
 - Performance on Pixel 8a baseline
-

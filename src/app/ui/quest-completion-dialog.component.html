@@ -1,16 +1,39 @@
-<div class="quest-completion" *ngIf="isOpen && rewards">
-  <div class="quest-completion__card">
-    <h2>Quest Complete</h2>
-    <div class="rewards">
-      <span>💰 {{ rewards.credits }} credits</span>
-      <span>⭐ {{ rewards.xp }} XP</span>
-      <span *ngIf="rewards.alignmentShift">
-        {{ rewards.alignmentShift.faction === 'kurenai' ? '🔥' : '⚡' }} Reputation +{{ rewards.alignmentShift.amount }}
-      </span>
+<div class="quest-completion" *ngIf="isOpen && rewards" (click)="close.emit()">
+  <div class="quest-completion__card" (click)="$event.stopPropagation()" role="dialog" aria-modal="true">
+    <div class="icon">✓</div>
+    <div class="header">
+      <div class="label">QUEST COMPLETE</div>
+      <h2>{{ questTitle || 'Quest Complete' }}</h2>
     </div>
+
     <div class="level-up" *ngIf="rewards.leveledUp">
-      Level Up! New level: {{ rewards.newLevel }}
+      <div class="emoji">🎉</div>
+      <div class="title">LEVEL UP!</div>
+      <div class="detail">You reached Level {{ rewards.newLevel }}</div>
     </div>
-    <button type="button" (click)="close.emit()">Continue</button>
+
+    <div class="rewards">
+      <div class="section-label">Rewards Earned</div>
+      <div class="reward-row xp">
+        <span>⭐</span>
+        <span>+{{ rewards.xp }} XP</span>
+      </div>
+      <div class="reward-row credits">
+        <span>💰</span>
+        <span>+{{ rewards.credits }} Credits</span>
+      </div>
+      <div class="reward-row align" *ngIf="rewards.alignmentShift">
+        <span>{{ rewards.alignmentShift.faction === 'kurenai' ? '🔥' : '⚡' }}</span>
+        <span [style.color]="getAlignmentColor(rewards.alignmentShift.faction)">
+          {{ rewards.alignmentShift.faction === 'kurenai' ? 'Kurenai' : 'Azure' }} +{{ rewards.alignmentShift.amount }}
+        </span>
+      </div>
+      <div class="reward-row items" *ngIf="rewards.items?.length">
+        <span>🎁</span>
+        <span>{{ rewards.items.length }} Item{{ rewards.items.length > 1 ? 's' : '' }}</span>
+      </div>
+    </div>
+
+    <button type="button" class="continue" (click)="close.emit()">Continue</button>
   </div>
 </div>

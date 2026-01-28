@@ -40,7 +40,7 @@
 ```text
 root/
 ├── app/              # Ionic Angular unified app
-├── packages/         # Shared core (ECS, data, systems)
+├── src/lib/          # Shared core (ECS, data, systems)
 └── docs/             # Golden Record
 ```
 

@@ -231,6 +231,115 @@ Every academy student learns:
 
 ---
 
+## Geography & Districts
+
+### Scope (Current Game)
+The base game takes place **entirely within Neo-Tokyo's rooftop districts**. There is **no inter-city travel** in the 3-hour story. Other locations exist only as lore.
+
+### Rooftop District Map (Canonical)
+Each district is a **story anchor** with procedural scenes layered on top.
+
+| District | Role | Notes |
+|----------|------|-------|
+| **Kurenai Academy** | Protagonist home | Training platforms, red tarps, hospital rooftops |
+| **Azure Academy** | Rival home | University rooftops, blue canopies, workshops |
+| **Market Collective** | Neutral hub | Docks, stalls, barter economy |
+| **Shrine District** | Sacred neutral ground | Old temple rooftops, no-fighting rule |
+| **The Reach** | Contested edge | Lawless spans, pirate pressure |
+| **Salvage Yards** | Resource zone | Crane barges, scrap piles |
+| **Dockline** | Waterline transit | Skiffs, ferries, boat traffic |
+| **Overlook** | High ground | Antennas, wind exposure |
+| **Flooded Cut** | Story-critical descent | Entry into shallow/deep zones |
+
+### Travel & Connectivity
+- **Bridges**: Short hops between adjacent rooftops.
+- **Boat lanes**: Dockline ↔ Market ↔ Salvage Yards.
+- **Cable lines**: Fast traversal in storms or combat beats.
+
+**Typical Travel Times (In-Game)**
+- Rooftop-to-rooftop: **2-5 minutes**
+- District-to-district: **5-12 minutes**
+- Dockline boat hop: **3-8 minutes**
+
+### Communication (Local Scale)
+- **Runners**: Physical message delivery, most reliable.
+- **Radio**: Rare; Academy + Syndicate only.
+- **Signal lights**: Emergency-only, limited vocabulary.
+
+### Outside World (Lore-Only)
+Other cities (Neo-Yokohama, Neo-Kawasaki, Chiba Ruins, Mountain Refuge) are **rumors only** in the base game.
+
+### Future Expansion (Optional)
+If expansions are approved, these are the canonical candidates:
+- **Neo-Yokohama**: industrial shipyards
+- **Neo-Kawasaki**: contested transit corridor
+- **Chiba Ruins**: toxic salvage zone
+- **Mountain Refuge**: dry-land agriculture
+
+---
+
+## Timeline & Backstory
+
+### Design Anchor Principle
+Pre-flood culture anchors to the **2020s-2030s** (our current era). Artifacts should feel familiar and recent.
+
+- **Pre-flood tech**: modern phones, clean sans-serif signage, contemporary interfaces.
+- **Old-world UI**: technical precision, modern digital typography.
+- **Post-flood UI**: hand-painted signage inspired by what people remember.
+
+### The Old World (Before Year 0)
+- **2020s**: sea levels rise, typhoons intensify, drainage fails.
+- **2030-2035**: seawall breach, flood zones declared, rooftop migration begins.
+- **2035-2038**: mass retreat to rooftops, grid instability, solar becomes essential.
+- **Year 0 (2038)**: Typhoon Megumi triggers the permanent drowning; water stabilizes at the 4th floor.
+
+### Flood Years (Year 0-10)
+- **Year 0-1**: chaos, resource violence, first bridges.
+- **Year 2-5**: trade routes, water-as-currency economy.
+- **Year 6-7**: Kurenai and Azure Academies founded.
+- **Year 8-10**: first academy conflicts; markets and shrines declared neutral.
+
+### Middle Years (Year 10-30)
+- Stabilized population, rooftop farming, standardized filtration.
+- Rivalries become ritualized; oral histories formalize.
+- The Deep becomes forbidden, mythologized.
+
+### Present Day (Year 35-40)
+- Resources tighten, academy tension peaks.
+- Pirates organize; storms intensify again.
+- **Year 40**: game begins.
+
+### Generational Demographics
+| Generation | Birth Years | Age in Year 40 | Characteristics |
+|------------|-------------|----------------|-----------------|
+| **Elders** | Pre-flood | 55+ | Remember old world, dying out |
+| **Survivors** | Year -10 to 0 | 40-55 | Trauma, pragmatic |
+| **Waterline** | Year 0-15 | 25-40 | Born during chaos, tough |
+| **Flood-Born** | Year 15-30 | 10-25 | Old world is myth |
+| **Current Youth** | Year 30+ | Under 10 | Fourth generation |
+
+### Key Historical Events (Quest/Lore Anchors)
+| Event | Year | Significance |
+|------|------|--------------|
+| Typhoon Yuki Breach | -8 | First major warning |
+| Strategic Retreat | -2 | Official abandonment |
+| The Drowning | 0 | 72 hours that changed everything |
+| The Hungry Year | 1 | Darkest period, highest casualties |
+| First Bridge Built | 2 | Cooperation milestone |
+| Kurenai Academy Founded | 6 | Eastern hospital rooftops |
+| Azure Academy Founded | 7 | University rooftops |
+| Treaty of Neutral Waters | 10 | Markets + shrines neutral |
+| The Great Storm | 22 | Worst typhoon since Megumi |
+| Present Day | 40 | Game begins |
+
+### Open Questions (Hooks)
+- What happened to the government?
+- Who accelerated the flood (if anyone)?
+- Are survivors still below the waterline?
+- What is in the deepest ruins?
+
+---
+
 ## Procedural Scenes
 
 Scene layouts, props, and encounter composition are generated per story beat.

@@ -14,15 +14,16 @@ You MUST follow the documentation hierarchy below. Previous instructions (pure B
 
 ## 🎯 Project Context
 
-You are working on a **3D Action JRPG** built as a **Monorepo**.
-- **Core Package**: `packages/game` (Vite + React + Babylon/Reactylon)
-- **Content Package**: `packages/content-gen` (Node.js CLI + Meshy)
-- **Test Package**: `packages/e2e` (Playwright)
+You are working on a **3D Action JRPG** built as a **single Ionic Angular app**.
+- **Core App**: `src/` (Ionic + Angular + Babylon)
+- **Shared Logic**: `src/lib/` (core systems, types, assets)
+- **Content Generator**: `@agentic-dev-library/meshy-content-generator` (Meshy OSS generator)
+- **E2E**: `e2e/` (Playwright)
 
 ## 🔧 Technology Stack
 
-- **Framework**: Vite (SPA) + React 19
-- **3D**: Babylon.js + Reactylon (Replaces Three/R3F)
+- **Framework**: Ionic + Angular (zoneless)
+- **3D**: Babylon.js
 - **State/Logic**: Miniplex (ECS) + Zustand + Navigation V2 (Replaces Yuka)
 - **Mobile**: Capacitor (Mobile First)
 - **Tooling**: PNPM, Biome, Vitest, Playwright
@@ -30,14 +31,14 @@ You are working on a **3D Action JRPG** built as a **Monorepo**.
 ## 🧠 Your Role & Strengths
 
 - **ECS Architect**: Design systems in `src/systems/` that operate on `src/state/ecs.ts`.
-- **GenAI Integrator**: Use `packages/content-gen` to procedurally fill the game world via build-time manifests.
+- **GenAI Integrator**: Use `-dev-library/meshy-content-generator` to procedurally fill the game world via build-time manifests.
 - **Visual Stylist**: Maintain the Cel-Shaded/Cyberpunk aesthetic.
 
 ## 🚨 Critical Rules
 
-1. **Governance**: All changes must be tracked on GitHub Projects/Issues.
+1. **Governance**: All changes must be tracked in memory-bank (Issues optional per owner).
 2. **Mobile First**: All features must run at 60 FPS on Pixel 8a baseline.
-3. **Monorepo Awareness**: Run commands with `pnpm --filter <package>`.
+3. **Single App**: Work directly in the root app; no package filters.
 4. **Zero Stubs**: Fully implement logic.
 5. **Strict Types**: No `any`. Use interfaces exported from `src/state/ecs.ts`.
 

@@ -20,6 +20,14 @@
     </div>
 
     <app-quest-log [isOpen]="questLogOpen" (close)="closeQuestLog()"></app-quest-log>
+    <app-inventory-screen
+      [isOpen]="inventoryOpen"
+      [inventory]="inventory"
+      [credits]="credits"
+      (close)="closeInventory()"
+      (useItem)="handleUseItem($event)"
+      (equipItem)="handleEquipItem($event)"
+    ></app-inventory-screen>
     <app-quest-accept-dialog
       [isOpen]="showQuestAccept"
       [quest]="pendingQuest"
@@ -28,14 +36,21 @@
     ></app-quest-accept-dialog>
     <app-quest-completion-dialog
       [isOpen]="showQuestCompletion"
+      [questTitle]="questCompletionTitle"
       [rewards]="questRewards"
       (close)="handleQuestCompletionClose()"
     ></app-quest-completion-dialog>
 
-    <app-combat-text *ngIf="combatText" [message]="combatText.message" [color]="combatText.color"></app-combat-text>
+    <app-combat-text
+      *ngIf="combatText || floatingDamages.length"
+      [message]="combatText?.message || null"
+      [color]="combatText?.color || '#ef4444'"
+      [floatingDamages]="floatingDamages"
+    ></app-combat-text>
     <app-combat-arena></app-combat-arena>
 
     <button type="button" class="quest-log-btn" (click)="toggleQuestLog()">📋 Quests</button>
+    <button type="button" class="inventory-btn" (click)="toggleInventory()">🎒 Inventory</button>
   </ng-container>
 
   <div class="scanlines"></div>

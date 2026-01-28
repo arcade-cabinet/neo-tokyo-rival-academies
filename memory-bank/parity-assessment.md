@@ -1,14 +1,15 @@
 # Parity Assessment (Legacy TSX/TS)
 
 ## Scope
-- Legacy sources reviewed: `_legacy/apps/mobile`, `_legacy/apps/playground`, `packages/diorama`, `packages/core`, `packages/world-gen`, `packages/content-gen`.
+- Legacy sources reviewed: `_legacy/apps/mobile`, `_legacy/apps/playground`, `src/lib/diorama`, `src/lib/core`, `src/lib/world-gen`, `-dev-library/meshy-content-generator`.
 - Current target: Angular + Babylon runtime in `src/app`.
 
 ## Summary
 - Legacy diorama components: 110 TSX components (environment, furniture, infrastructure, maritime, props, signage, structural, vegetation).
 - Current Babylon engine equivalents: partial (background panels, lighting, character, hex tiles, quest markers, player controller).
 - Current UI/HUD: Angular ports exist, but parity with legacy component library is incomplete.
- - Content-gen pipeline: legacy game/playground expects @neo-tokyo/content-gen and @neo-tokyo/shared-assets runtime exports; full pipeline outputs (heroes/props/assets) still need audit and validation.
+- Content-gen pipeline: migrated to `@agentic-dev-library/meshy-content-generator`; legacy asset pipelines now live under `_legacy/` and need audit/validation for hero/prop output parity.
+ - Legacy UI/system snapshot consolidated in `/docs/legacy/FEATURE_INVENTORY.md` for parity checklisting.
 
 ## Major Gaps (Must Port for 1:1 Parity)
 
@@ -37,6 +38,7 @@
 - **Infrastructure kit**: AC units, antennas, dumpsters, generators, heli pads, pipes, power lines, satellite dishes, solar panels, storage tanks, vents, water tanks.
 - **Structural kit**: stairs, railings, fences, ladders, doors, windows, pillars, ramps, balconies, catwalks, awnings, scaffolding.
 - Angular HUD/menus/dialogue/quests exist in `src/app/ui` but need parity verification against legacy web UI sources once located.
+ - Quest dialogs, inventory details, and quest completion UI upgraded for closer 1:1 parity.
 
 ## Immediate Remediation Plan
 1. **Inventory remaining diorama components** and map to Babylon equivalents (component-by-component port list).

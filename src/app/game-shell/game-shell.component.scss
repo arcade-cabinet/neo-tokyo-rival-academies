@@ -13,10 +13,9 @@
   z-index: 100;
 }
 
-.quest-log-btn {
+.quest-log-btn,
+.inventory-btn {
   position: fixed;
-  bottom: calc(var(--safe-bottom) + var(--hud-control) + 18px);
-  right: calc(var(--safe-right) + var(--hud-edge));
   background: rgba(2, 132, 199, 0.9);
   border: 2px solid rgba(14, 116, 144, 0.9);
   border-radius: 10px;
@@ -29,9 +28,26 @@
   z-index: 100;
 }
 
+.quest-log-btn {
+  bottom: calc(var(--safe-bottom) + var(--hud-control) + 18px);
+  right: calc(var(--safe-right) + var(--hud-edge));
+}
+
+.inventory-btn {
+  bottom: calc(var(--safe-bottom) + var(--hud-control) + 18px);
+  right: calc(var(--safe-right) + var(--hud-edge) + 150px);
+  background: rgba(14, 116, 144, 0.9);
+  border-color: rgba(14, 116, 144, 0.9);
+}
+
 @media (orientation: portrait) {
   .quest-log-btn {
     bottom: calc(var(--safe-bottom) + var(--hud-control) + 6px);
+    right: calc(var(--safe-right) + 10px);
+  }
+
+  .inventory-btn {
+    bottom: calc(var(--safe-bottom) + var(--hud-control) + 56px);
     right: calc(var(--safe-right) + 10px);
   }
 }

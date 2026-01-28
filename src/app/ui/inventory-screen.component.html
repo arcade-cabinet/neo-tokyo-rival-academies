@@ -30,22 +30,40 @@
         [class.selected]="selectedItem?.id === item.id"
         [class.equipped]="item.equipped"
       >
+        <div class="equipped-badge" *ngIf="item.equipped">✓</div>
         <div class="icon">{{ getItemTypeIcon(item.type) }}</div>
         <div class="name">{{ item.name }}</div>
-        <div class="qty">x{{ item.quantity }}</div>
+        <div class="qty" *ngIf="item.quantity > 1">×{{ item.quantity }}</div>
       </button>
     </div>
 
     <div class="inventory__details" *ngIf="selectedItem">
+      <div class="detail-icon">{{ getItemTypeIcon(selectedItem.type) }}</div>
       <h3>{{ selectedItem.name }}</h3>
       <p class="type" [style.color]="getItemTypeColor(selectedItem.type)">
         {{ selectedItem.type.replace('_',' ') }}
       </p>
+
+      <div class="quantity" *ngIf="selectedItem.quantity > 1">
+        Quantity: {{ selectedItem.quantity }}
+      </div>
+
       <p class="desc">{{ selectedItem.description || 'A well-crafted item.' }}</p>
 
-      <button type="button" class="use-btn" (click)="handleUseItem()" *ngIf="selectedItem.type === 'consumable'">
-        Use Item
-      </button>
+      <div class="detail-actions">
+        <button type="button" class="use-btn" (click)="handleUseItem()" *ngIf="selectedItem.type === 'consumable'">
+          Use Item
+        </button>
+        <div class="equipped-pill" *ngIf="selectedItem.equipped">✓ Equipped</div>
+        <button
+          type="button"
+          class="equip-btn"
+          *ngIf="(selectedItem.type === 'weapon' || selectedItem.type === 'accessory') && !selectedItem.equipped"
+          (click)="handleEquipItem()"
+        >
+          Equip
+        </button>
+      </div>
     </div>
   </div>
 </div>

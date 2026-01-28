@@ -14,6 +14,7 @@ export class InventoryScreenComponent {
   @Input() credits = 0;
   @Output() close = new EventEmitter<void>();
   @Output() useItem = new EventEmitter<InventoryItem>();
+  @Output() equipItem = new EventEmitter<InventoryItem>();
 
   selectedItem: InventoryItem | null = null;
   filter: FilterType = 'all';
@@ -62,6 +63,12 @@ export class InventoryScreenComponent {
   handleUseItem(): void {
     if (this.selectedItem) {
       this.useItem.emit(this.selectedItem);
+    }
+  }
+
+  handleEquipItem(): void {
+    if (this.selectedItem) {
+      this.equipItem.emit(this.selectedItem);
     }
   }
 }

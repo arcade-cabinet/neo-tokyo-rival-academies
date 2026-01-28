@@ -11,4 +11,28 @@ export class QuestAcceptDialogComponent {
   @Input() isOpen = false;
   @Output() accept = new EventEmitter<void>();
   @Output() decline = new EventEmitter<void>();
+
+  getQuestTypeLabel(type: Quest['type']): string {
+    if (type === 'main') return '⭐ MAIN QUEST';
+    if (type === 'secret') return '✨ SECRET QUEST';
+    return '📋 SIDE QUEST';
+  }
+
+  getQuestTypeColor(type: Quest['type']): string {
+    if (type === 'main') return '#f59e0b';
+    if (type === 'secret') return '#8b5cf6';
+    return '#0ea5e9';
+  }
+
+  getAlignmentColor(bias: Quest['alignmentBias']): string {
+    if (bias === 'kurenai') return '#ef4444';
+    if (bias === 'azure') return '#3b82f6';
+    return '#94a3b8';
+  }
+
+  getAlignmentLabel(bias: Quest['alignmentBias']): string {
+    if (bias === 'kurenai') return '🔥 Kurenai Path';
+    if (bias === 'azure') return '⚡ Azure Path';
+    return '⚖️ Neutral';
+  }
 }

@@ -41,8 +41,6 @@
     "@capacitor/status-bar": "^8.0.0",
     "@dimforge/rapier3d-compat": "^0.19.3",
     "@ionic/angular": "^8.0.0",
-    "@neo-tokyo/config": "workspace:*",
-    "@neo-tokyo/core": "workspace:*",
     "animejs": "^3.2.1",
     "ionicons": "^7.0.0",
     "miniplex": "^2.0.0",

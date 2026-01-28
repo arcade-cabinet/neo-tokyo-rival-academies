@@ -1,21 +1,37 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, type OnDestroy, type OnInit } from '@angular/core';
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
+import { Subscription } from 'rxjs';
 import type { InputStateService } from '../state/input-state.service';
 import type { InputState } from '../types/game';
+import { initialInputState } from '../utils/game-config';
 
 @Component({
   selector: 'app-game-hud',
   templateUrl: './game-hud.component.html',
   styleUrls: ['./game-hud.component.scss'],
 })
-export class GameHudComponent {
+export class GameHudComponent implements OnInit, OnDestroy {
   @Input() score = 0;
   @Input() biome = 0;
   @Input() dialogue: { speaker: string; text: string } | null = null;
 
   readonly biomeNames = ['SHIBUYA', 'ROPPONGI', 'AKIHABARA', 'SHINJUKU'];
+  inputSnapshot: InputState = { ...initialInputState };
+  private sub = new Subscription();
 
   constructor(private readonly inputState: InputStateService) {}
+
+  ngOnInit(): void {
+    this.sub.add(
+      this.inputState.watch().subscribe((state) => {
+        this.inputSnapshot = state;
+      })
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.sub.unsubscribe();
+  }
 
   async handleTouchStart(key: keyof InputState): Promise<void> {
     this.inputState.setKey(key, true);

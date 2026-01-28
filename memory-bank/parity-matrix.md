@@ -6,66 +6,66 @@ Single source mapping for port targets: legacy TSX/TS + Unity C# + current TS/Ba
 ## Legacy TSX Inventory
 ### Diorama Components
 - Total: 110
-- packages/diorama/src/components/BackgroundPanels.tsx
-- packages/diorama/src/components/Character.tsx
-- packages/diorama/src/components/ForegroundProps.tsx
-- packages/diorama/src/components/HexTileFloor.tsx
-- packages/diorama/src/components/Lighting.tsx
-- packages/diorama/src/components/MidgroundFacades.tsx
-- packages/diorama/src/components/PlayerController.tsx
-- packages/diorama/src/components/ProceduralBackground.tsx
-- packages/diorama/src/components/QuestMarkers.tsx
-- packages/diorama/src/components/environment/Farground.tsx
-- packages/diorama/src/components/environment/Fog.tsx
-- packages/diorama/src/components/environment/Hero.tsx
-- packages/diorama/src/components/environment/NavMesh.tsx
-- packages/diorama/src/components/environment/Platform.tsx
-- packages/diorama/src/components/environment/RailPath.tsx
-- packages/diorama/src/components/environment/SteamVent.tsx
-- packages/diorama/src/components/furniture/Bench.tsx
-- packages/diorama/src/components/furniture/BollardPost.tsx
-- packages/diorama/src/components/furniture/DrainGrate.tsx
-- packages/diorama/src/components/furniture/FireHydrant.tsx
-- packages/diorama/src/components/furniture/Mailbox.tsx
-- packages/diorama/src/components/furniture/Manhole.tsx
-- packages/diorama/src/components/furniture/Newspaper.tsx
-- packages/diorama/src/components/furniture/ParkingMeter.tsx
-- packages/diorama/src/components/furniture/PhoneBooth.tsx
-- packages/diorama/src/components/furniture/Planter.tsx
-- packages/diorama/src/components/furniture/ShoppingCart.tsx
-- packages/diorama/src/components/furniture/TrashCan.tsx
-- packages/diorama/src/components/furniture/Umbrella.tsx
-- packages/diorama/src/components/furniture/VendingMachine.tsx
-- packages/diorama/src/components/infrastructure/ACUnit.tsx
-- packages/diorama/src/components/infrastructure/AirConditioner.tsx
-- packages/diorama/src/components/infrastructure/Antenna.tsx
-- packages/diorama/src/components/infrastructure/CoolingTower.tsx
-- packages/diorama/src/components/infrastructure/Dumpster.tsx
-- packages/diorama/src/components/infrastructure/Elevator.tsx
-- packages/diorama/src/components/infrastructure/Generator.tsx
-- packages/diorama/src/components/infrastructure/HeliPad.tsx
-- packages/diorama/src/components/infrastructure/Pipe.tsx
-- packages/diorama/src/components/infrastructure/PowerLine.tsx
-- packages/diorama/src/components/infrastructure/Rope.tsx
-- packages/diorama/src/components/infrastructure/SatelliteDish.tsx
-- packages/diorama/src/components/infrastructure/SolarPanel.tsx
-- packages/diorama/src/components/infrastructure/StorageTank.tsx
-- packages/diorama/src/components/infrastructure/Vent.tsx
-- packages/diorama/src/components/infrastructure/WaterTank.tsx
-- packages/diorama/src/components/maritime/Anchor.tsx
-- packages/diorama/src/components/maritime/Boat.tsx
-- packages/diorama/src/components/maritime/Bridge.tsx
-- packages/diorama/src/components/maritime/Buoy.tsx
-- packages/diorama/src/components/maritime/Canal.tsx
-- packages/diorama/src/components/maritime/DockingStation.tsx
-- packages/diorama/src/components/maritime/FishingNet.tsx
-- packages/diorama/src/components/maritime/FloatingPlatform.tsx
-- packages/diorama/src/components/maritime/Houseboat.tsx
-- packages/diorama/src/components/maritime/Pier.tsx
-- packages/diorama/src/components/maritime/Pontoon.tsx
-- packages/diorama/src/components/maritime/Puddle.tsx
-- packages/diorama/src/components/maritime/RainCollector.tsx
-- packages/diorama/src/components/maritime/Water.tsx
+- src/lib/diorama/src/components/BackgroundPanels.tsx
+- src/lib/diorama/src/components/Character.tsx
+- src/lib/diorama/src/components/ForegroundProps.tsx
+- src/lib/diorama/src/components/HexTileFloor.tsx
+- src/lib/diorama/src/components/Lighting.tsx
+- src/lib/diorama/src/components/MidgroundFacades.tsx
+- src/lib/diorama/src/components/PlayerController.tsx
+- src/lib/diorama/src/components/ProceduralBackground.tsx
+- src/lib/diorama/src/components/QuestMarkers.tsx
+- src/lib/diorama/src/components/environment/Farground.tsx
+- src/lib/diorama/src/components/environment/Fog.tsx
+- src/lib/diorama/src/components/environment/Hero.tsx
+- src/lib/diorama/src/components/environment/NavMesh.tsx
+- src/lib/diorama/src/components/environment/Platform.tsx
+- src/lib/diorama/src/components/environment/RailPath.tsx
+- src/lib/diorama/src/components/environment/SteamVent.tsx
+- src/lib/diorama/src/components/furniture/Bench.tsx
+- src/lib/diorama/src/components/furniture/BollardPost.tsx
+- src/lib/diorama/src/components/furniture/DrainGrate.tsx
+- src/lib/diorama/src/components/furniture/FireHydrant.tsx
+- src/lib/diorama/src/components/furniture/Mailbox.tsx
+- src/lib/diorama/src/components/furniture/Manhole.tsx
+- src/lib/diorama/src/components/furniture/Newspaper.tsx
+- src/lib/diorama/src/components/furniture/ParkingMeter.tsx
+- src/lib/diorama/src/components/furniture/PhoneBooth.tsx
+- src/lib/diorama/src/components/furniture/Planter.tsx
+- src/lib/diorama/src/components/furniture/ShoppingCart.tsx
+- src/lib/diorama/src/components/furniture/TrashCan.tsx
+- src/lib/diorama/src/components/furniture/Umbrella.tsx
+- src/lib/diorama/src/components/furniture/VendingMachine.tsx
+- src/lib/diorama/src/components/infrastructure/ACUnit.tsx
+- src/lib/diorama/src/components/infrastructure/AirConditioner.tsx
+- src/lib/diorama/src/components/infrastructure/Antenna.tsx
+- src/lib/diorama/src/components/infrastructure/CoolingTower.tsx
+- src/lib/diorama/src/components/infrastructure/Dumpster.tsx
+- src/lib/diorama/src/components/infrastructure/Elevator.tsx
+- src/lib/diorama/src/components/infrastructure/Generator.tsx
+- src/lib/diorama/src/components/infrastructure/HeliPad.tsx
+- src/lib/diorama/src/components/infrastructure/Pipe.tsx
+- src/lib/diorama/src/components/infrastructure/PowerLine.tsx
+- src/lib/diorama/src/components/infrastructure/Rope.tsx
+- src/lib/diorama/src/components/infrastructure/SatelliteDish.tsx
+- src/lib/diorama/src/components/infrastructure/SolarPanel.tsx
+- src/lib/diorama/src/components/infrastructure/StorageTank.tsx
+- src/lib/diorama/src/components/infrastructure/Vent.tsx
+- src/lib/diorama/src/components/infrastructure/WaterTank.tsx
+- src/lib/diorama/src/components/maritime/Anchor.tsx
+- src/lib/diorama/src/components/maritime/Boat.tsx
+- src/lib/diorama/src/components/maritime/Bridge.tsx
+- src/lib/diorama/src/components/maritime/Buoy.tsx
+- src/lib/diorama/src/components/maritime/Canal.tsx
+- src/lib/diorama/src/components/maritime/DockingStation.tsx
+- src/lib/diorama/src/components/maritime/FishingNet.tsx
+- src/lib/diorama/src/components/maritime/FloatingPlatform.tsx
+- src/lib/diorama/src/components/maritime/Houseboat.tsx
+- src/lib/diorama/src/components/maritime/Pier.tsx
+- src/lib/diorama/src/components/maritime/Pontoon.tsx
+- src/lib/diorama/src/components/maritime/Puddle.tsx
+- src/lib/diorama/src/components/maritime/RainCollector.tsx
+- src/lib/diorama/src/components/maritime/Water.tsx
 - Maritime port target: `src/app/engine/maritime/maritime-kit.ts`
 - Vegetation port target: `src/app/engine/vegetation/vegetation-kit.ts`
 - Environment port target: `src/app/engine/environment/environment-kit.ts`
@@ -189,7 +189,7 @@ Single source mapping for port targets: legacy TSX/TS + Unity C# + current TS/Ba
 - Assets/Scripts/MonoBehaviours/UI/UIScreen.cs
 
 ## Current TS Systems Inventory
-- packages/core/src/systems: 10
+- src/lib/core/src/systems: 10
 - src/app/systems: 2
 - src/app/state: 8
 
@@ -198,6 +198,38 @@ Single source mapping for port targets: legacy TSX/TS + Unity C# + current TS/Ba
 - Materials: AmbientCG PBR loader, DecalSystem, HDRI environment
 - Structural: TexturedWall, Floor, Roof, StructuralKit (stairs/railing/fence/ladder/door/window/pillar/ramp/balcony/catwalk/awning/scaffold)
 - Infrastructure: InfrastructureKit (AC unit, antenna, dumpster, generator, heli pad, pipe, power line, satellite dish, solar panel, storage tank, vent, water tank)
+
+## UI Parity Map (React → Angular)
+
+### Core HUD / Menu
+- `_legacy/packages/game/src/components/react/ui/MainMenu.tsx` → `src/app/ui/main-menu.component.*` (seed + start/continue)
+- `_legacy/packages/game/src/components/react/ui/FloodedWorldMenu.tsx` → `src/app/ui/main-menu.component.*` (seed preview + suggestions + enter world)
+- `_legacy/packages/game/src/components/react/ui/SplashScreen.tsx` → `src/app/ui/splash-screen.component.*`
+- `_legacy/packages/game/src/components/react/ui/NarrativeOverlay.tsx` → `src/app/ui/narrative-overlay.component.*`
+- `_legacy/packages/game/src/components/react/ui/GameHUD.tsx` → `src/app/ui/game-hud.component.*`
+- `_legacy/packages/game/src/components/react/ui/JRPGHUD.tsx` → `src/app/ui/jrpg-hud.component.*`
+
+### Quest + Alignment
+- `_legacy/packages/game/src/components/react/ui/QuestObjective.tsx` → `src/app/ui/quest-objective.component.*`
+- `_legacy/packages/game/src/components/react/ui/QuestLog.tsx` → `src/app/ui/quest-log.component.*`
+- `_legacy/packages/game/src/components/react/ui/QuestAcceptDialog.tsx` → `src/app/ui/quest-accept-dialog.component.*`
+- `_legacy/packages/game/src/components/react/ui/QuestCompletionDialog.tsx` → `src/app/ui/quest-completion-dialog.component.*`
+- `_legacy/packages/game/src/components/react/ui/AlignmentBar.tsx` → `src/app/ui/alignment-bar.component.*`
+
+### Combat + Inventory
+- `_legacy/packages/game/src/components/react/ui/CombatArena.tsx` → `src/app/ui/combat-arena.component.*`
+- `_legacy/packages/game/src/components/react/ui/CombatText.tsx` → `src/app/ui/combat-text.component.*`
+- `_legacy/packages/game/src/components/react/ui/InventoryScreen.tsx` → `src/app/ui/inventory-screen.component.*`
+- `_legacy/packages/game/src/components/react/ui/SaveSlotSelect.tsx` → `src/app/ui/save-slot-select.component.*`
+- `_legacy/packages/game/src/components/react/ui/StatAllocationModal.tsx` → `src/app/ui/stat-allocation-modal.component.*`
+
+### Known UI Gaps (to close for 1:1 parity)
+- Quest dialogs/log styling and reward detail parity (type badges, alignment labels, reward rows) — **partially closed**.
+- Quest completion card (level-up banner + animated styling) — **closed**.
+- Inventory detail panel parity (equipped state, item detail layout) — **closed** (equip emit added).
+- Combat text variants (floating damage numbers) — **wired to combat store events** (positions are UI-staged).
+- Main menu messaging still divergent in places (legacy cyberpunk vs flooded world) — need to preserve system behavior while aligning visuals.
+- FloodedWorldMenu layout parity — **closed** (Angular menu now matches structure and style).
 - Maritime: MaritimeKit (pier, dock, pontoon, boat, buoy, floating platform, houseboat, rain collector, fishing net, anchor)
 - Vegetation: VegetationKit (tree, palm, shrub, grass, vine, mushroom, flower bed)
 - Environment: EnvironmentKit (steam vent, fog panel)

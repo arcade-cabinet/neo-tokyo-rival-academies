@@ -2,46 +2,30 @@
 
 > **Updated**: January 27, 2026 | **Platform**: Ionic Angular + Babylon.js
 
-**Purpose**: Define how AI agents and human developers coordinate using GitHub to ensure the "Golden Record" is executed accurately.
+**Purpose**: Define how AI agents and human developers coordinate using the memory-bank to ensure the "Golden Record" is executed accurately.
 
 ## 1. Work Tracking
 
 Primary tracking for this repository is maintained in the **memory-bank** directory. GitHub Projects are optional and may be skipped at the owner's discretion.
 
-## 2. Issue Lifecycle
+## 2. Work Sessions (No Issues)
 
-**Rule**: No code changes without an associated Issue.
+**Rule**: Track all work in the memory-bank instead of GitHub Issues/Projects until the owner re-enables them.
 
-**Owner Override**: The repository owner may explicitly authorize work to proceed without issues or project tracking for a given scope or session. This override must be recorded in documentation (memory-bank) and referenced in the commit notes for any work done under the exception.
+**Session Logging**:
+1.  Record scope, goals, and decisions in `memory-bank/activeContext.md`.
+2.  Record progress updates in `memory-bank/progress.md`.
+3.  Record parity checks in `memory-bank/parity-assessment.md` and `memory-bank/parity-matrix.md` as needed.
+4.  Link commits to memory-bank entries in commit messages when relevant.
 
-**Current Directive**: Use memory-bank tracking in place of GitHub Issues/Projects until the owner re-enables them.
+## 3. Main-Branch Workflow
 
-1.  **Creation**:
-    - Title: Clear and action-oriented (e.g., "Implement Quest Generator v1").
-    - Body: Link to relevant Golden Record doc (e.g., `/docs/gameplay/QUEST_SYSTEM.md`).
-    - Labels: `feature`, `bug`, `refactor`, `documentation`.
-    - Milestone: Associate with the current Phase (e.g., `Phase 1: MVP`).
-
-2.  **Working**:
-    - Assign the issue to yourself (the agent).
-    - Move to `In Progress`.
-    - Create a branch: `feat/issue-number-short-description` (e.g., `feat/12-quest-generator`).
-    - **Exception**: For the current migration, work directly on `main` if explicitly requested.
-
-3.  **Closing**:
-    - Link PR to issue (e.g., "Closes #12").
-    - Move to `Done` upon merge.
-
-## 3. Pull Request (PR) Protocol
-
-- **Title**: Semantic Commit style (e.g., `feat(quest): implement grammar tables`).
-- **Description**:
-  - Summary of changes.
-  - Verification: How was this tested? (e.g., "Ran unit tests", "Manual playtest on Pixel 8a").
-  - Linked Issue.
-- **Checks**:
-  - CI must pass (`pnpm test`, `pnpm check`, `pnpm test:e2e` as applicable).
+- **Default**: Work directly on `main` unless the owner requests a PR.
+- **Commits**: Use Semantic Commit style (e.g., `feat(quest): implement grammar tables`).
+- **Verification**:
+  - CI-equivalent checks should pass locally (`pnpm test`, `pnpm check`, `pnpm test:e2e` as applicable).
   - No compile errors or warnings.
+  - Link commits to memory-bank entries when relevant.
 
 ## 4. Documentation First
 
@@ -51,7 +35,7 @@ Primary tracking for this repository is maintained in the **memory-bank** direct
 
 ## 5. Agent Handoff
 
-- When finishing a session, leave a comment on the Issue or PR with:
+- When finishing a session, update the memory-bank with:
   - Current state.
   - Next steps.
   - Any blockers.

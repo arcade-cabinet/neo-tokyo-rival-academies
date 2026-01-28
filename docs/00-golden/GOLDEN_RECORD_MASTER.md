@@ -17,7 +17,7 @@ A **3-hour, non-procedural JRPG** set in post-apocalyptic Neo-Tokyo rooftops.
 
 Forty years ago, Neo-Tokyo flooded. The waterline stabilized at the fourth story. Life happens on rooftops connected by bridges and boats.
 
-**World Bible**: `/docs/world/FLOODED_WORLD.md`
+**World Bible**: `/docs/world/FLOODED_WORLD.md` (includes geography + timeline)
 
 ---
 
@@ -130,6 +130,8 @@ Design references: `/docs/design/DESIGN_PHILOSOPHY.md`
 - `/docs/tech/ARCHITECTURE.md`
 - `/docs/story/STORY_FLOODED.md`
 - `/docs/world/FLOODED_WORLD.md`
+- `/docs/design/DESIGN_PHILOSOPHY.md`
+- `/docs/design/UI_DESIGN_SYSTEM.md`
 - `/docs/00-golden/DEPRECATIONS.md`
 
 ---

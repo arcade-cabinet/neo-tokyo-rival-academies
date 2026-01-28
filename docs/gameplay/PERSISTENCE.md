@@ -6,7 +6,7 @@
 
 ## Save Data Structure (JSON)
 
-See `packages/core/src/types/SaveData.ts` for the canonical schema.
+See `src/lib/core/src/types/SaveData.ts` for the canonical schema.
 
 ```json
 {

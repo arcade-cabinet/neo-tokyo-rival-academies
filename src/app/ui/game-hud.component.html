@@ -19,12 +19,40 @@
 
   <div class="touch-controls">
     <div class="control-zone left">
-      <button type="button" (touchstart)="handleTouchStart('slide')" (touchend)="handleTouchEnd('slide')">SLIDE</button>
-      <button type="button" (touchstart)="handleTouchStart('run')" (touchend)="handleTouchEnd('run')">DASH</button>
+      <button
+        type="button"
+        [class.pressed]="inputSnapshot.slide"
+        (touchstart)="handleTouchStart('slide')"
+        (touchend)="handleTouchEnd('slide')"
+      >
+        SLIDE
+      </button>
+      <button
+        type="button"
+        [class.pressed]="inputSnapshot.run"
+        (touchstart)="handleTouchStart('run')"
+        (touchend)="handleTouchEnd('run')"
+      >
+        DASH
+      </button>
     </div>
     <div class="control-zone right">
-      <button type="button" (touchstart)="handleTouchStart('attack')" (touchend)="handleTouchEnd('attack')">ATK</button>
-      <button type="button" (touchstart)="handleTouchStart('jump')" (touchend)="handleTouchEnd('jump')">JUMP</button>
+      <button
+        type="button"
+        [class.pressed]="inputSnapshot.attack"
+        (touchstart)="handleTouchStart('attack')"
+        (touchend)="handleTouchEnd('attack')"
+      >
+        ATK
+      </button>
+      <button
+        type="button"
+        [class.pressed]="inputSnapshot.jump"
+        (touchstart)="handleTouchStart('jump')"
+        (touchend)="handleTouchEnd('jump')"
+      >
+        JUMP
+      </button>
     </div>
   </div>
 </div>

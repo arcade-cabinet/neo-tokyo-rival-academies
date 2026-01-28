@@ -13,8 +13,8 @@ All agents MUST follow the documentation hierarchy below. The project is migrati
 ## 🚨 Governance & Workflow
 
 1.  **Memory Bank Tracking**: All tasks MUST be tracked in the `memory-bank` directory.
-2.  **Issues/Projects**: Optional and only used if the owner explicitly requests them.
-3.  **Governance Doc**: See [`docs/AGENT_GOVERNANCE.md`](docs/AGENT_GOVERNANCE.md) for detailed workflow.
+2.  **Issues/Projects**: Do not use GitHub Issues/Projects unless the owner explicitly re-enables them.
+3.  **Governance Doc**: See [`docs/process/AGENT_GOVERNANCE.md`](docs/process/AGENT_GOVERNANCE.md) for detailed workflow.
 
 ## 🎯 Project Overview
 

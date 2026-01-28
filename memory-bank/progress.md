@@ -4,7 +4,7 @@
 
 | Milestone | Status | Target | Notes |
 |-----------|--------|--------|-------|
-| Stack Pivot (Ionic Angular) | In Progress | Jan 27 | Issue #68 opened |
+| Stack Pivot (Ionic Angular) | In Progress | Jan 27 | Memory-bank tracked |
 | Unified App Scaffold | In Progress | Jan 27 | `app/` created with Capacitor |
 | Babylon Scene Port | In Progress | Jan 27 | Scene service + core components |
 | UI/HUD Port | In Progress | Jan 27 | Main menu + HUD + quest UI |
@@ -17,7 +17,6 @@
 ### January 27, 2026
 
 **Governance + Scaffold**
-- [x] Created Issue #68 for Ionic Angular + Capacitor pivot
 - [x] Created `docs/00-golden/MOBILE_WEB_GUIDE.md`
 - [x] Scaffolded Ionic Angular app at repo root with Capacitor integration
 - [x] Enabled zoneless Angular bootstrap
@@ -111,7 +110,6 @@
 
 **Governance Override**
 - [x] Updated `/docs/process/AGENT_GOVERNANCE.md` to track work in memory-bank per owner directive
-- [x] Opened Issue #71 for maritime + vegetation + environment port scope
 - [x] Updated `AGENTS.md` to require memory-bank tracking instead of GitHub Projects
 
 **Compound Assemblies (Ported)**
@@ -142,9 +140,23 @@
 - [x] `pnpm -C e2e test -- --project=game-chromium canal.spec.ts` (passes with known legacy error filtering)
 
 **Content-Gen + Shared Assets Exports**
-- [x] Updated `@neo-tokyo/content-gen` and `@neo-tokyo/shared-assets` exports to point at `src` for dev/runtime resolution
+- [x] Retired in-repo content-gen in favor of `@agentic-dev-library/meshy-content-generator`
+- [x] Archived shared-assets package under `_legacy/`
 - [x] Adjusted Playwright config to skip playground server when missing
 - [x] Installed Playwright browsers for local runs
+
+**Content-Gen OSS Pivot**
+- [x] Created standalone declarative content-gen package at `/Users/jbogaty/src/agentic-dev-library/meshy-content-generator`
+- [x] Implemented CLI (`content-gen`) + API with provider-agnostic pipelines and Meshy adapter
+- [x] Added JSON pipeline/task definitions and animation lookup tables
+- [x] Added Biome 2.3 + pnpm 10 config, tests, and build setup
+- [x] Updated agent governance to align with memory-bank tracking + main-branch workflow
+- [x] Consolidated docs (merged world/timeline, merged modular assembly into procedural, removed redundant design master plan)
+- [x] Pruned legacy docs to Unity + legacy feature inventory; removed obsolete handoffs/release/test docs
+- [x] Expanded Angular UI parity for quest dialogs, inventory details, quest completion title, and combat text floating damage support
+- [x] Wired combat damage events to floating UI text + added inventory screen wiring and equip handling
+- [x] Implemented consumable effects + equipment stat bonuses in core player store; added core tests
+- [x] Updated main menu styling/layout to match FloodedWorldMenu parity
 
 ---
 

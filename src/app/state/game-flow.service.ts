@@ -14,6 +14,7 @@ export class GameFlowService {
 
   private readonly pendingQuest$ = new BehaviorSubject<Quest | null>(null);
   private readonly questRewards$ = new BehaviorSubject<QuestRewards | null>(null);
+  private readonly questCompletionTitle$ = new BehaviorSubject<string>('');
 
   constructor(
     private readonly questStore: QuestStoreService,
@@ -26,6 +27,10 @@ export class GameFlowService {
 
   watchQuestRewards() {
     return this.questRewards$.asObservable();
+  }
+
+  watchQuestCompletionTitle() {
+    return this.questCompletionTitle$.asObservable();
   }
 
   async initialize(seed: string): Promise<void> {
@@ -60,14 +65,17 @@ export class GameFlowService {
 
   completeActiveQuest(): void {
     if (!this.activeQuestId) return;
+    const quest = this.questStore.getQuest(this.activeQuestId);
     const rewards = this.questStore.completeQuest(this.activeQuestId);
     if (rewards) {
+      this.questCompletionTitle$.next(quest?.title ?? '');
       this.questRewards$.next(rewards);
     }
   }
 
   clearQuestRewards(): void {
     this.questRewards$.next(null);
+    this.questCompletionTitle$.next('');
   }
 
   async handleMarker(markerId: string): Promise<void> {
