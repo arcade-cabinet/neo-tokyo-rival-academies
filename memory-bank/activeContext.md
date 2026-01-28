@@ -22,7 +22,8 @@
    - Additional UI components ported: inventory, quest dialogs, save slots, stat allocation
 
 4. **Governance**
-   - Owner directive: track work in memory-bank; skip GitHub Issues/Projects until re-enabled
+   - Issue #71 created for maritime + vegetation + environment port scope
+   - Project board creation blocked: missing `project` scope for `gh` (needs owner auth refresh)
 5. **Documentation Cleanup**
    - Rewrote core design/gameplay/world docs to align with flooded-world scope
    - Moved obsolete process/story handoffs into `/docs/legacy/process` and `/docs/legacy/story`
@@ -79,6 +80,8 @@
 21. **Compound Port (In Progress)**
     - Porting playground compounds (Building/Bridge/Street/Alley/Room) into Babylon engine
     - Street compound integrated into FloodedWorldBuilder canal scene
+22. **Maritime/Vegetation/Environment Kits**
+    - MaritimeKit, VegetationKit, EnvironmentKit added and integrated into FloodedWorldBuilder
 
 ## Known Constraints
 

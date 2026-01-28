@@ -12,7 +12,7 @@
 ## Major Gaps (Must Port for 1:1 Parity)
 
 ### World/Visual Components (Diorama)
-- **Missing categories**: environment, furniture, infrastructure, maritime, props, vegetation (signage + structural partially ported).
+- **Missing categories**: furniture and props (infrastructure, maritime, vegetation, environment now have initial kit ports).
 - **Compound assemblies**: playground compounds are now ported into the Babylon engine; Street integration is pending scene placement.
 - **Material systems**: now ported, still need integration into runtime visuals.
 - **Infrastructure/structural**: infrastructure kit + expanded structural kit ports added; remaining per-component parity still needed.
@@ -31,6 +31,7 @@
 - **Material systems ported**: AmbientCG PBR loader, DecalSystem, HDRI environment setup.
 - **Structural/signage ports (initial)**: `TexturedWall`, `Floor`, `Roof`, `NeonSign`.
 - **Compound assemblies ported**: `BuildingCompound`, `BridgeCompound`, `AlleyCompound`, `RoomCompound`, `StreetCompound`.
+- **Maritime/Vegetation/Environment kits**: `MaritimeKit`, `VegetationKit`, `EnvironmentKit` with seeded placement in FloodedWorldBuilder.
 - **Infrastructure kit**: AC units, antennas, dumpsters, generators, heli pads, pipes, power lines, satellite dishes, solar panels, storage tanks, vents, water tanks.
 - **Structural kit**: stairs, railings, fences, ladders, doors, windows, pillars, ramps, balconies, catwalks, awnings, scaffolding.
 - Angular HUD/menus/dialogue/quests exist in `src/app/ui` but need parity verification against legacy web UI sources once located.

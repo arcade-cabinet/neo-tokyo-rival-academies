@@ -66,6 +66,9 @@ Single source mapping for port targets: legacy TSX/TS + Unity C# + current TS/Ba
 - packages/diorama/src/components/maritime/Puddle.tsx
 - packages/diorama/src/components/maritime/RainCollector.tsx
 - packages/diorama/src/components/maritime/Water.tsx
+- Maritime port target: `src/app/engine/maritime/maritime-kit.ts`
+- Vegetation port target: `src/app/engine/vegetation/vegetation-kit.ts`
+- Environment port target: `src/app/engine/environment/environment-kit.ts`
 ...
 
 ### Playground Compounds

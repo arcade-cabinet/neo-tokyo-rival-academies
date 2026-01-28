@@ -111,10 +111,19 @@
 
 **Governance Override**
 - [x] Updated `/docs/process/AGENT_GOVERNANCE.md` to track work in memory-bank per owner directive
+- [x] Opened Issue #71 for maritime + vegetation + environment port scope
 
 **Compound Assemblies (Ported)**
 - [x] Ported playground compounds into `src/app/engine/compounds` (Building, Bridge, Alley, Room, Street)
 - [x] Integrated BridgeCompound, StreetCompound, and rooftop compound placement into FloodedWorldBuilder
+- [x] `pnpm check`
+- [x] `pnpm test --watch=false --browsers=ChromeHeadless`
+
+**Maritime + Vegetation + Environment Ports**
+- [x] Added MaritimeKit (pier, dock, pontoon, boat, buoy, floating platform, houseboat, rain collector, fishing net, anchor)
+- [x] Added VegetationKit (tree, palm, shrub, grass, vine, mushroom, flower bed)
+- [x] Added EnvironmentKit (steam vent, fog panel)
+- [x] Integrated maritime props + fog into canal scene; added vegetation + steam vents to rooftop prop placement
 - [x] `pnpm check`
 - [x] `pnpm test --watch=false --browsers=ChromeHeadless`
 

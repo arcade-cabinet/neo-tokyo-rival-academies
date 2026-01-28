@@ -12,9 +12,12 @@ import { BridgeCompound } from './compounds/bridge-compound';
 import { BuildingCompound } from './compounds/building-compound';
 import { RoomCompound } from './compounds/room-compound';
 import { StreetCompound } from './compounds/street-compound';
+import { EnvironmentKit } from './environment/environment-kit';
 import { InfrastructureKit } from './infrastructure/infrastructure-kit';
+import { MaritimeKit } from './maritime/maritime-kit';
 import { StructuralKit } from './structural/structural-kit';
 import { createEffectMaterial, createEnvironmentMaterial } from './toon-material';
+import { VegetationKit } from './vegetation/vegetation-kit';
 
 interface Bounds {
   minX: number;
@@ -251,6 +254,9 @@ export class FloodedWorldBuilder {
   private alleyCompound: AlleyCompound | null = null;
   private roomCompound: RoomCompound | null = null;
   private streetCompound: StreetCompound | null = null;
+  private maritimeKit: MaritimeKit | null = null;
+  private vegetationKit: VegetationKit | null = null;
+  private environmentKit: EnvironmentKit | null = null;
 
   constructor(private readonly scene: Scene) {}
 
@@ -259,6 +265,12 @@ export class FloodedWorldBuilder {
     this.infrastructureKit = new InfrastructureKit(this.scene);
     this.structuralKit?.dispose();
     this.structuralKit = new StructuralKit(this.scene);
+    this.maritimeKit?.dispose();
+    this.maritimeKit = new MaritimeKit(this.scene);
+    this.vegetationKit?.dispose();
+    this.vegetationKit = new VegetationKit(this.scene);
+    this.environmentKit?.dispose();
+    this.environmentKit = new EnvironmentKit(this.scene);
     this.buildingCompound?.dispose();
     this.buildingCompound = new BuildingCompound(this.scene);
     this.bridgeCompound?.dispose();
@@ -412,6 +424,12 @@ export class FloodedWorldBuilder {
     this.infrastructureKit = null;
     this.structuralKit?.dispose();
     this.structuralKit = null;
+    this.maritimeKit?.dispose();
+    this.maritimeKit = null;
+    this.vegetationKit?.dispose();
+    this.vegetationKit = null;
+    this.environmentKit?.dispose();
+    this.environmentKit = null;
     this.buildingCompound?.dispose();
     this.buildingCompound = null;
     this.bridgeCompound?.dispose();
@@ -459,6 +477,11 @@ export class FloodedWorldBuilder {
         'dumpster',
         'ladder',
         'awning',
+        'shrub',
+        'grass',
+        'flower_bed',
+        'mushroom',
+        'vine',
       ],
       commercial: [
         'ac_unit',
@@ -470,6 +493,9 @@ export class FloodedWorldBuilder {
         'generator',
         'balcony',
         'catwalk',
+        'tree',
+        'shrub',
+        'grass',
       ],
       industrial: [
         'water_tank',
@@ -486,6 +512,9 @@ export class FloodedWorldBuilder {
         'pillar',
         'ramp',
         'scaffold',
+        'grass',
+        'mushroom',
+        'steam_vent',
       ],
     };
 
@@ -701,6 +730,37 @@ export class FloodedWorldBuilder {
         case 'lantern':
           this.addLantern(`${rooftop.id}_lantern_${i}`, new Vector3(x, y + 0.4, z));
           break;
+        case 'tree':
+          this.addVegetationProp('tree', `${rooftop.id}_tree_${i}`, new Vector3(x, y, z), 1.0);
+          break;
+        case 'shrub':
+          this.addVegetationProp('shrub', `${rooftop.id}_shrub_${i}`, new Vector3(x, y, z), 0.8);
+          break;
+        case 'grass':
+          this.addVegetationProp('grass', `${rooftop.id}_grass_${i}`, new Vector3(x, y, z), 0.7);
+          break;
+        case 'flower_bed':
+          this.addVegetationProp(
+            'flower_bed',
+            `${rooftop.id}_flower_${i}`,
+            new Vector3(x, y, z),
+            0.9
+          );
+          break;
+        case 'mushroom':
+          this.addVegetationProp(
+            'mushroom',
+            `${rooftop.id}_mushroom_${i}`,
+            new Vector3(x, y, z),
+            0.6
+          );
+          break;
+        case 'vine':
+          this.addVegetationProp('vine', `${rooftop.id}_vine_${i}`, new Vector3(x, y, z), 1.0);
+          break;
+        case 'steam_vent':
+          this.addEnvironmentProp('steam_vent', `${rooftop.id}_steam_${i}`, new Vector3(x, y, z));
+          break;
         default:
           break;
       }
@@ -832,7 +892,7 @@ export class FloodedWorldBuilder {
   }
 
   private placeStreet(bounds: Bounds, seed: string) {
-    if (!this.streetCompound) {
+    if (!this.streetCompound || !this.maritimeKit) {
       return;
     }
 
@@ -861,6 +921,57 @@ export class FloodedWorldBuilder {
     });
 
     this.meshes.push(...streetMeshes);
+
+    const leftEdgeX = centerX - canalWidth / 2 - walkwayWidth * 0.5;
+    const rightEdgeX = centerX + canalWidth / 2 + walkwayWidth * 0.5;
+    const pierZ = startZ + length * 0.2;
+    const dockZ = startZ + length * 0.75;
+    const waterY = -0.6;
+
+    const pierMeshes = this.maritimeKit.create(
+      'pier',
+      'canal_pier',
+      new Vector3(leftEdgeX, waterY + 0.2, pierZ),
+      Math.PI / 2
+    );
+    const dockMeshes = this.maritimeKit.create(
+      'dock',
+      'canal_dock',
+      new Vector3(rightEdgeX, waterY + 0.2, dockZ),
+      -Math.PI / 2
+    );
+    this.meshes.push(...pierMeshes, ...dockMeshes);
+
+    const pontoonMeshes = this.maritimeKit.create(
+      'pontoon',
+      'canal_pontoon',
+      new Vector3(centerX - canalWidth * 0.15, waterY, startZ + length * 0.5),
+      Math.PI / 6,
+      'wood'
+    );
+    const boatMeshes = this.maritimeKit.create(
+      'boat',
+      'canal_boat',
+      new Vector3(centerX + canalWidth * 0.1, waterY, startZ + length * 0.35),
+      -Math.PI / 8,
+      streetRng.next() > 0.5 ? 'sampan' : 'rowboat'
+    );
+    const buoyMeshes = this.maritimeKit.create(
+      'buoy',
+      'canal_buoy',
+      new Vector3(centerX, waterY, startZ + length * 0.6)
+    );
+    this.meshes.push(...pontoonMeshes, ...boatMeshes, ...buoyMeshes);
+
+    if (this.environmentKit) {
+      const fogMeshes = this.environmentKit.create(
+        'fog_panel',
+        'canal_fog',
+        new Vector3(centerX, 0, startZ + length * 0.5),
+        0
+      );
+      this.meshes.push(...fogMeshes);
+    }
   }
 
   private calculateBounds(rooftops: RooftopBlock[], padding: number): Bounds {
@@ -941,6 +1052,28 @@ export class FloodedWorldBuilder {
         meshes = kit.createScaffold(id, position, 2.6, 2.4, 1.2);
         break;
     }
+    this.meshes.push(...meshes);
+  }
+
+  private addVegetationProp(
+    kind: Parameters<VegetationKit['create']>[0],
+    id: string,
+    position: Vector3,
+    scale = 1
+  ) {
+    if (!this.vegetationKit) return;
+    const meshes = this.vegetationKit.create(kind, id, position, 0, undefined, scale);
+    this.meshes.push(...meshes);
+  }
+
+  private addEnvironmentProp(
+    kind: Parameters<EnvironmentKit['create']>[0],
+    id: string,
+    position: Vector3,
+    rotation = 0
+  ) {
+    if (!this.environmentKit) return;
+    const meshes = this.environmentKit.create(kind, id, position, rotation);
     this.meshes.push(...meshes);
   }
 }
