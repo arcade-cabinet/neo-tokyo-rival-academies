@@ -57,6 +57,10 @@
     - Added HUD density breakpoints for compact vs roomy layouts
     - Added HUD debug overlay for device QA (safe-area + scaling)
     - Expanded haptics to quest flow and dialogue
+15. **Parity Audit + Diorama Porting**
+    - Added `memory-bank/parity-assessment.md` to document TSX/TS parity gaps
+    - Ported MidgroundFacades, ForegroundProps, ProceduralBackground into Babylon runtime
+    - Wired new diorama layers into Flooded World load flow
 
 ## Known Constraints
 

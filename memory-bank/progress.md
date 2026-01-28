@@ -68,6 +68,13 @@
 - [x] `pnpm check`
 - [x] `pnpm test --watch=false --browsers=ChromeHeadless`
 
+**Parity Audit + Diorama Porting**
+- [x] Added parity report at `memory-bank/parity-assessment.md`
+- [x] Ported MidgroundFacades, ForegroundProps, ProceduralBackground into Babylon runtime
+- [x] Wired diorama layers into Flooded World load flow
+- [x] `pnpm check`
+- [x] `pnpm test --watch=false --browsers=ChromeHeadless`
+
 ---
 
 ## In Progress
