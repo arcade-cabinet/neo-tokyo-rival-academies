@@ -75,6 +75,13 @@
 - [x] `pnpm check`
 - [x] `pnpm test --watch=false --browsers=ChromeHeadless`
 
+**Material + Structural Ports**
+- [x] Ported AmbientCG material loader, DecalSystem, and HDRI environment setup
+- [x] Ported TexturedWall, Floor, Roof, and NeonSign components into engine modules
+- [x] Updated parity assessment for new ports
+- [x] `pnpm check`
+- [x] `pnpm test --watch=false --browsers=ChromeHeadless`
+
 ---
 
 ## In Progress

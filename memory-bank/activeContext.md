@@ -61,6 +61,9 @@
     - Added `memory-bank/parity-assessment.md` to document TSX/TS parity gaps
     - Ported MidgroundFacades, ForegroundProps, ProceduralBackground into Babylon runtime
     - Wired new diorama layers into Flooded World load flow
+16. **Material + Structural Ports**
+    - Ported AmbientCG material loader, DecalSystem, HDRI environment setup
+    - Ported TexturedWall, Floor, Roof, and NeonSign components into engine modules
 
 ## Known Constraints
 
