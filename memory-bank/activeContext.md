@@ -47,6 +47,11 @@
     - Added GameFlowService to initialize districts, generate quest clusters, and orchestrate quest rewards
     - Wired Babylon marker/shard events into Angular flow (dialogue triggers + autosave)
     - Added quest accept/completion dialogs to the game shell
+13. **Mobile-First UX Pass**
+    - Added viewport service to drive safe-area and dynamic scaling variables
+    - Implemented gyro tilt support with optional camera sway
+    - Added haptics feedback on touch controls
+    - Updated HUD, quest UI, and shell layout for responsive portrait/landscape + foldable transitions
 
 ## Known Constraints
 

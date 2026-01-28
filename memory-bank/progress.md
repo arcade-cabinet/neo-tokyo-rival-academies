@@ -58,6 +58,12 @@
 - [x] `pnpm check`
 - [x] `pnpm test --watch=false --browsers=ChromeHeadless`
 
+**Mobile-First UX**
+- [x] Added ViewportService to manage safe-area sizing and HUD scale variables
+- [x] Added DeviceMotionService and gyro-driven camera sway
+- [x] Enabled haptic feedback on touch controls
+- [x] Responsive HUD and quest UI updates for portrait/landscape and foldable transitions
+
 ---
 
 ## In Progress
