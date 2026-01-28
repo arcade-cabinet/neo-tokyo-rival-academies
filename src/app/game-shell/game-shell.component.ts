@@ -1,4 +1,5 @@
 import { Component, type OnDestroy, type OnInit } from '@angular/core';
+import { Haptics, ImpactStyle } from '@capacitor/haptics';
 import type { Quest, QuestRewards } from '@neo-tokyo/core';
 import { Subscription } from 'rxjs';
 import { MusicSynth } from '../audio/music-synth';
@@ -27,6 +28,7 @@ export class GameShellComponent implements OnInit, OnDestroy {
   questRewards: QuestRewards | null = null;
   showQuestAccept = false;
   showQuestCompletion = false;
+  showHudDebug = false;
 
   private readonly music = new MusicSynth();
   private worldInitialized = false;
@@ -43,6 +45,7 @@ export class GameShellComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     if (this.viewState === 'splash') return;
+    this.showHudDebug = this.isHudDebugEnabled();
     this.subs.add(
       this.sceneService.watchMarkerInteractions().subscribe((marker) => {
         void this.gameFlow.handleMarker(marker.id);
@@ -110,6 +113,7 @@ export class GameShellComponent implements OnInit, OnDestroy {
 
   toggleQuestLog(): void {
     this.questLogOpen = !this.questLogOpen;
+    void this.pulseHaptic(ImpactStyle.Light);
   }
 
   closeQuestLog(): void {
@@ -122,13 +126,30 @@ export class GameShellComponent implements OnInit, OnDestroy {
 
   handleQuestAccept(): void {
     this.gameFlow.acceptPendingQuest();
+    void this.pulseHaptic(ImpactStyle.Medium);
   }
 
   handleQuestDecline(): void {
     this.showQuestAccept = false;
+    void this.pulseHaptic(ImpactStyle.Light);
   }
 
   handleQuestCompletionClose(): void {
     this.gameFlow.clearQuestRewards();
+    void this.pulseHaptic(ImpactStyle.Light);
+  }
+
+  private isHudDebugEnabled(): boolean {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('hudDebug') === '1') return true;
+    return window.localStorage.getItem('hudDebug') === '1';
+  }
+
+  private async pulseHaptic(style: ImpactStyle): Promise<void> {
+    try {
+      await Haptics.impact({ style });
+    } catch {
+      // ignore
+    }
   }
 }

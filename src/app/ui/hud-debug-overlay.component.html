@@ -1,0 +1,8 @@
+<div class="hud-debug" *ngIf="viewport">
+  <div class="hud-debug__row">Viewport: {{ viewport.width | number:'1.0-0' }} x {{ viewport.height | number:'1.0-0' }}</div>
+  <div class="hud-debug__row">Orientation: {{ viewport.orientation }}</div>
+  <div class="hud-debug__row">Ratio: {{ viewport.ratio | number:'1.2-2' }}</div>
+  <div class="hud-debug__row">HUD Scale: {{ viewport.hudScale | number:'1.2-2' }}</div>
+  <div class="hud-debug__row">Safe: T {{ safeArea.top }} / R {{ safeArea.right }}</div>
+  <div class="hud-debug__row">Safe: B {{ safeArea.bottom }} / L {{ safeArea.left }}</div>
+</div>

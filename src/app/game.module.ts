@@ -7,6 +7,7 @@ import { AlignmentBarComponent } from './ui/alignment-bar.component';
 import { CombatArenaComponent } from './ui/combat-arena.component';
 import { CombatTextComponent } from './ui/combat-text.component';
 import { GameHudComponent } from './ui/game-hud.component';
+import { HudDebugOverlayComponent } from './ui/hud-debug-overlay.component';
 import { InventoryScreenComponent } from './ui/inventory-screen.component';
 import { JrpgHudComponent } from './ui/jrpg-hud.component';
 import { MainMenuComponent } from './ui/main-menu.component';
@@ -26,6 +27,7 @@ const GAME_DECLARATIONS = [
   CombatArenaComponent,
   CombatTextComponent,
   GameHudComponent,
+  HudDebugOverlayComponent,
   InventoryScreenComponent,
   JrpgHudComponent,
   MainMenuComponent,

@@ -6,6 +6,7 @@ export interface ViewportState {
   height: number;
   orientation: 'portrait' | 'landscape';
   ratio: number;
+  hudScale: number;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -16,6 +17,7 @@ export class ViewportService implements OnDestroy {
     height: 0,
     orientation: 'landscape',
     ratio: 1,
+    hudScale: 1,
   });
   private readonly handleResize = () => this.updateViewportVars();
 
@@ -51,8 +53,9 @@ export class ViewportService implements OnDestroy {
     const height = viewport?.height ?? window.innerHeight;
     const ratio = width / Math.max(1, height);
     const orientation: ViewportState['orientation'] = width >= height ? 'landscape' : 'portrait';
+    const hudScale = this.computeHudScale(width, height);
 
-    this.state$.next({ width, height, orientation, ratio });
+    this.state$.next({ width, height, orientation, ratio, hudScale });
 
     const root = document.documentElement;
     root.style.setProperty('--vw', `${width / 100}px`);
@@ -61,15 +64,28 @@ export class ViewportService implements OnDestroy {
     root.style.setProperty('--viewport-height', `${height}px`);
     root.style.setProperty('--viewport-short', `${Math.min(width, height)}px`);
     root.style.setProperty('--viewport-long', `${Math.max(width, height)}px`);
-    root.style.setProperty('--hud-scale', `${this.computeHudScale(width, height).toFixed(3)}`);
+    root.style.setProperty('--hud-scale', `${hudScale.toFixed(3)}`);
     // biome-ignore lint/complexity/useLiteralKeys: DOMStringMap index signature requires bracket access.
     root.dataset['orientation'] = orientation;
   }
 
   private computeHudScale(width: number, height: number): number {
     const shortSide = Math.min(width, height);
-    const baseline = 360;
-    const scale = shortSide / baseline;
-    return Math.max(0.78, Math.min(1.2, scale));
+    const ratio = width / Math.max(1, height);
+    let baseline = 360;
+
+    if (shortSide >= 900) {
+      baseline = 420;
+    } else if (shortSide >= 600) {
+      baseline = 390;
+    }
+
+    let scale = shortSide / baseline;
+
+    if (ratio > 1.8) {
+      scale *= 0.95;
+    }
+
+    return Math.max(0.78, Math.min(1.25, scale));
   }
 }

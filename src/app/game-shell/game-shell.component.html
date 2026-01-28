@@ -13,6 +13,7 @@
   <ng-container *ngIf="viewState === 'game'">
     <app-jrpg-hud></app-jrpg-hud>
     <app-quest-objective></app-quest-objective>
+    <app-hud-debug-overlay *ngIf="showHudDebug"></app-hud-debug-overlay>
 
     <div class="alignment-wrap">
       <app-alignment-bar></app-alignment-bar>

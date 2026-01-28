@@ -72,7 +72,12 @@ export class JrpgHudComponent implements OnInit, OnDestroy {
     }
   }
 
-  advanceDialogue() {
+  async advanceDialogue() {
     this.dialogueService.advanceDialogue();
+    try {
+      await Haptics.impact({ style: ImpactStyle.Light });
+    } catch {
+      // ignore
+    }
   }
 }
