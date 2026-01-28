@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { MusicSynth } from '../audio/music-synth';
 import { INTRO_SCRIPT } from '../content/intro-script';
 import type { BabylonSceneService } from '../engine/babylon-scene.service';
+import type { DeviceMotionService, GyroTilt } from '../state/device-motion.service';
 import type { GameFlowService } from '../state/game-flow.service';
 import type { InputStateService } from '../state/input-state.service';
 import { SaveSystem } from '../systems/save-system';
@@ -31,11 +32,13 @@ export class GameShellComponent implements OnInit, OnDestroy {
   private worldInitialized = false;
   private pendingSeed: string | null = null;
   private readonly subs = new Subscription();
+  private lastGyro: GyroTilt | null = null;
 
   constructor(
     private readonly inputState: InputStateService,
     private readonly sceneService: BabylonSceneService,
-    private readonly gameFlow: GameFlowService
+    private readonly gameFlow: GameFlowService,
+    private readonly deviceMotion: DeviceMotionService
   ) {}
 
   ngOnInit(): void {
@@ -62,6 +65,13 @@ export class GameShellComponent implements OnInit, OnDestroy {
         this.showQuestCompletion = Boolean(rewards);
       })
     );
+    this.subs.add(
+      this.deviceMotion.watchTilt().subscribe((tilt) => {
+        if (this.lastGyro === tilt) return;
+        this.lastGyro = tilt;
+        this.sceneService.setGyroTilt(tilt);
+      })
+    );
   }
 
   ngOnDestroy(): void {
@@ -76,12 +86,13 @@ export class GameShellComponent implements OnInit, OnDestroy {
     this.pendingSeed = payload.seed;
 
     this.viewState = 'intro';
-    await this.sceneService.lockOrientationLandscape();
+    await this.sceneService.enableDynamicOrientation();
   }
 
   async handleIntroComplete(): Promise<void> {
     this.viewState = 'game';
     this.music.start();
+    void this.deviceMotion.enable();
 
     if (!this.worldInitialized) {
       const masterSeed = this.pendingSeed ?? `neotokyo-${Date.now()}`;

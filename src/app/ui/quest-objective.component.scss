@@ -1,12 +1,12 @@
 .quest-objective {
   position: fixed;
-  top: 20px;
-  right: 20px;
+  top: calc(var(--safe-top) + var(--hud-edge));
+  right: calc(var(--safe-right) + var(--hud-edge));
   background: rgba(12, 20, 26, 0.95);
   border: 1px solid rgba(148, 163, 184, 0.4);
-  border-radius: 10px;
-  padding: 12px 16px;
-  max-width: 320px;
+  border-radius: calc(10px * var(--hud-scale));
+  padding: calc(10px * var(--hud-scale)) calc(14px * var(--hud-scale));
+  max-width: min(320px, 80vw);
   font-family: var(--font-body);
   z-index: 100;
   color: #e2e8f0;
@@ -31,7 +31,7 @@
 
 h3 {
   margin: 0 0 8px 0;
-  font-size: 14px;
+  font-size: calc(13px * var(--hud-scale));
   color: #38bdf8;
 }
 
@@ -51,13 +51,20 @@ h3 {
 }
 
 .objective-text {
-  font-size: 12px;
+  font-size: calc(12px * var(--hud-scale));
   color: #e2e8f0;
   line-height: 1.4;
 }
 
 .location {
   margin-top: 8px;
-  font-size: 11px;
+  font-size: calc(11px * var(--hud-scale));
   color: #64748b;
+}
+
+@media (max-width: 540px) {
+  .quest-objective {
+    right: calc(var(--safe-right) + 10px);
+    top: calc(var(--safe-top) + 10px);
+  }
 }

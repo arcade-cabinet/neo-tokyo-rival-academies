@@ -45,6 +45,9 @@ export class BabylonSceneService {
   private readonly shardCollect$ = new Subject<DataShard>();
   private markerLookup = new Map<string, QuestMarker>();
   private shardLookup = new Map<string, DataShard>();
+  private gyroTilt: { beta: number; gamma: number } | null = null;
+  private baseCameraAlpha = 0;
+  private baseCameraBeta = 0;
 
   constructor(private readonly zone: NgZone) {}
 
@@ -116,6 +119,7 @@ export class BabylonSceneService {
 
     this.zone.runOutsideAngular(() => {
       this.engine?.runRenderLoop(() => {
+        this.applyGyroTilt();
         if (this.scene) this.scene.render();
       });
     });
@@ -155,9 +159,21 @@ export class BabylonSceneService {
     }
   }
 
+  setGyroTilt(tilt: { beta: number; gamma: number } | null): void {
+    this.gyroTilt = tilt;
+  }
+
   async lockOrientationLandscape() {
     try {
       await ScreenOrientation.lock({ orientation: 'landscape' });
+    } catch {
+      // Ignore if not supported
+    }
+  }
+
+  async enableDynamicOrientation() {
+    try {
+      await ScreenOrientation.unlock();
     } catch {
       // Ignore if not supported
     }
@@ -213,6 +229,8 @@ export class BabylonSceneService {
 
     this.scene.activeCamera = arcCamera;
     this.arcCamera = arcCamera;
+    this.baseCameraAlpha = arcCamera.alpha;
+    this.baseCameraBeta = arcCamera.beta;
 
     this.scene.getEngine().onResizeObservable.add(() => {
       const currentScene = this.scene;
@@ -222,6 +240,25 @@ export class BabylonSceneService {
       arcCamera.orthoLeft = -CAMERA.orthoSize * newAspect;
       arcCamera.orthoRight = CAMERA.orthoSize * newAspect;
     });
+  }
+
+  private applyGyroTilt() {
+    if (!this.arcCamera || !this.gyroTilt) return;
+    const tiltAlpha = (this.gyroTilt.gamma * Math.PI) / 180;
+    const tiltBeta = (this.gyroTilt.beta * Math.PI) / 180;
+    const targetAlpha = this.baseCameraAlpha + this.clamp(tiltAlpha * 0.12, -0.2, 0.2);
+    const targetBeta = this.baseCameraBeta + this.clamp(tiltBeta * 0.1, -0.2, 0.2);
+
+    this.arcCamera.alpha = this.lerp(this.arcCamera.alpha, targetAlpha, 0.08);
+    this.arcCamera.beta = this.lerp(this.arcCamera.beta, targetBeta, 0.08);
+  }
+
+  private lerp(current: number, target: number, rate: number): number {
+    return current + (target - current) * rate;
+  }
+
+  private clamp(value: number, min: number, max: number): number {
+    return Math.max(min, Math.min(max, value));
   }
 
   private setupPointerInteractions() {

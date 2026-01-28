@@ -1,4 +1,5 @@
 import { Component, Input, type OnDestroy, type OnInit } from '@angular/core';
+import { Haptics, ImpactStyle } from '@capacitor/haptics';
 import { Subscription } from 'rxjs';
 import type { DialogueService } from '../state/dialogue.service';
 import type { InputStateService } from '../state/input-state.service';
@@ -60,8 +61,15 @@ export class JrpgHudComponent implements OnInit, OnDestroy {
     return Math.min(100, (this.xp / this.nextXp) * 100);
   }
 
-  handlePress(key: 'left' | 'right' | 'jump' | 'slide' | 'attack' | 'run', pressed: boolean) {
+  async handlePress(key: 'left' | 'right' | 'jump' | 'slide' | 'attack' | 'run', pressed: boolean) {
     this.inputState.setKey(key, pressed);
+    if (pressed) {
+      try {
+        await Haptics.impact({ style: ImpactStyle.Light });
+      } catch {
+        // ignore
+      }
+    }
   }
 
   advanceDialogue() {

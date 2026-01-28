@@ -13,14 +13,15 @@
   background: rgba(10, 15, 20, 0.95);
   border: 2px solid rgba(56, 189, 248, 0.6);
   border-radius: 12px;
-  padding: 24px;
-  width: min(520px, 90%);
+  padding: clamp(18px, 3vw, 24px);
+  width: min(520px, 92vw);
   color: #e2e8f0;
 }
 
 h2 {
   margin: 0 0 12px 0;
   color: #38bdf8;
+  font-size: clamp(18px, 2.8vw, 22px);
 }
 
 .description {
@@ -44,7 +45,7 @@ h2 {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  font-size: 13px;
+  font-size: clamp(12px, 2vw, 13px);
 }
 
 .actions {

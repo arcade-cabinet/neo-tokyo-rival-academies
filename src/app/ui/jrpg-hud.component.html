@@ -31,16 +31,16 @@
 
   <div class="controls">
     <div class="dpad">
-      <button type="button" class="dpad-btn left" (touchstart)="handlePress('left', true)" (touchend)="handlePress('left', false)">←</button>
-      <button type="button" class="dpad-btn right" (touchstart)="handlePress('right', true)" (touchend)="handlePress('right', false)">→</button>
-      <button type="button" class="dpad-btn down" (touchstart)="handlePress('slide', true)" (touchend)="handlePress('slide', false)">↓</button>
-      <button type="button" class="dpad-btn up" (touchstart)="handlePress('jump', true)" (touchend)="handlePress('jump', false)">↑</button>
+      <button type="button" class="dpad-btn left" (pointerdown)="handlePress('left', true)" (pointerup)="handlePress('left', false)" (pointerleave)="handlePress('left', false)">←</button>
+      <button type="button" class="dpad-btn right" (pointerdown)="handlePress('right', true)" (pointerup)="handlePress('right', false)" (pointerleave)="handlePress('right', false)">→</button>
+      <button type="button" class="dpad-btn down" (pointerdown)="handlePress('slide', true)" (pointerup)="handlePress('slide', false)" (pointerleave)="handlePress('slide', false)">↓</button>
+      <button type="button" class="dpad-btn up" (pointerdown)="handlePress('jump', true)" (pointerup)="handlePress('jump', false)" (pointerleave)="handlePress('jump', false)">↑</button>
     </div>
 
     <div class="actions">
-      <button type="button" class="action-btn attack" (touchstart)="handlePress('attack', true)" (touchend)="handlePress('attack', false)">ATK</button>
-      <button type="button" class="action-btn jump" (touchstart)="handlePress('jump', true)" (touchend)="handlePress('jump', false)">JUMP</button>
-      <button type="button" class="action-btn run" (touchstart)="handlePress('run', true)" (touchend)="handlePress('run', false)">RUN</button>
+      <button type="button" class="action-btn attack" (pointerdown)="handlePress('attack', true)" (pointerup)="handlePress('attack', false)" (pointerleave)="handlePress('attack', false)">ATK</button>
+      <button type="button" class="action-btn jump" (pointerdown)="handlePress('jump', true)" (pointerup)="handlePress('jump', false)" (pointerleave)="handlePress('jump', false)">JUMP</button>
+      <button type="button" class="action-btn run" (pointerdown)="handlePress('run', true)" (pointerup)="handlePress('run', false)" (pointerleave)="handlePress('run', false)">RUN</button>
     </div>
   </div>
 </div>

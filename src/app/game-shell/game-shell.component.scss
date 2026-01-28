@@ -1,32 +1,39 @@
 .game-shell {
   position: relative;
   width: 100vw;
-  height: 100vh;
+  height: calc(var(--vh) * 100);
   background: #000;
   overflow: hidden;
 }
 
 .alignment-wrap {
   position: fixed;
-  top: 20px;
-  left: 20px;
+  top: calc(var(--safe-top) + var(--hud-edge));
+  left: calc(var(--safe-left) + var(--hud-edge));
   z-index: 100;
 }
 
 .quest-log-btn {
   position: fixed;
-  bottom: 80px;
-  left: 20px;
+  bottom: calc(var(--safe-bottom) + var(--hud-control) + 18px);
+  right: calc(var(--safe-right) + var(--hud-edge));
   background: rgba(2, 132, 199, 0.9);
   border: 2px solid rgba(14, 116, 144, 0.9);
   border-radius: 10px;
   color: #fff;
-  padding: 10px 18px;
+  padding: 10px 16px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: calc(13px * var(--hud-scale));
   font-weight: 700;
   font-family: var(--font-body);
   z-index: 100;
+}
+
+@media (orientation: portrait) {
+  .quest-log-btn {
+    bottom: calc(var(--safe-bottom) + var(--hud-control) + 6px);
+    right: calc(var(--safe-right) + 10px);
+  }
 }
 
 .scanlines {

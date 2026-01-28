@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject, type OnInit } from '@angular/core';
+import { ViewportService } from './state/viewport.service';
 
 @Component({
   selector: 'app-root',
@@ -6,4 +7,10 @@ import { Component } from '@angular/core';
   styleUrls: ['app.component.scss'],
   standalone: false,
 })
-export class AppComponent {}
+export class AppComponent implements OnInit {
+  private readonly viewport = inject(ViewportService);
+
+  ngOnInit(): void {
+    this.viewport.enable();
+  }
+}

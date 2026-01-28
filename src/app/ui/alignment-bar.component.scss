@@ -1,10 +1,10 @@
 .alignment-bar {
-  padding: 12px 16px;
+  padding: calc(10px * var(--hud-scale)) calc(14px * var(--hud-scale));
   background: rgba(10, 15, 18, 0.9);
   border: 1px solid rgba(148, 163, 184, 0.4);
-  border-radius: 10px;
+  border-radius: calc(10px * var(--hud-scale));
   font-family: var(--font-body);
-  min-width: 260px;
+  min-width: min(260px, 70vw);
   color: #e2e8f0;
 }
 
@@ -15,23 +15,23 @@
   margin-bottom: 8px;
 
   .label {
-    font-size: 12px;
+    font-size: calc(11px * var(--hud-scale));
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: #94a3b8;
   }
 
   .value {
-    font-size: 14px;
+    font-size: calc(13px * var(--hud-scale));
     font-weight: 700;
   }
 }
 
 .alignment-track {
   position: relative;
-  height: 22px;
+  height: calc(20px * var(--hud-scale));
   background: #0f172a;
-  border-radius: 6px;
+  border-radius: calc(6px * var(--hud-scale));
   border: 1px solid rgba(148, 163, 184, 0.3);
   overflow: hidden;
 }
@@ -57,8 +57,8 @@
   position: absolute;
   top: 50%;
   transform: translate(-50%, -50%);
-  width: 12px;
-  height: 12px;
+  width: calc(12px * var(--hud-scale));
+  height: calc(12px * var(--hud-scale));
   border-radius: 50%;
   border: 2px solid #f8fafc;
   box-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
@@ -69,7 +69,7 @@
   display: flex;
   justify-content: space-between;
   margin-top: 8px;
-  font-size: 11px;
+  font-size: calc(11px * var(--hud-scale));
 
   .rep {
     display: flex;
@@ -94,10 +94,10 @@
 
 .alignment-bonus {
   margin-top: 8px;
-  padding: 6px 8px;
+  padding: calc(6px * var(--hud-scale)) calc(8px * var(--hud-scale));
   background: rgba(20, 83, 45, 0.2);
   border-left: 2px solid #22c55e;
-  border-radius: 4px;
-  font-size: 11px;
+  border-radius: calc(4px * var(--hud-scale));
+  font-size: calc(11px * var(--hud-scale));
   color: #86efac;
 }

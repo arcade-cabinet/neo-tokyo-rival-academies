@@ -21,6 +21,33 @@
   --color-amber: #f97316;
   --color-rust: #b45309;
   --color-mist: #94a3b8;
+
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --vh: 1vh;
+  --vw: 1vw;
+  --viewport-width: 100vw;
+  --viewport-height: 100vh;
+  --viewport-short: 100vmin;
+  --viewport-long: 100vmax;
+  --hud-scale: 1;
+  --hud-edge: calc(12px * var(--hud-scale));
+  --hud-gap: calc(10px * var(--hud-scale));
+  --hud-control: calc(64px * var(--hud-scale));
+  --hud-dpad: calc(140px * var(--hud-scale));
+  --hud-font: calc(12px * var(--hud-scale));
+}
+
+:root[data-orientation='portrait'] {
+  --hud-control: calc(56px * var(--hud-scale));
+  --hud-dpad: calc(120px * var(--hud-scale));
+}
+
+:root[data-orientation='landscape'] {
+  --hud-control: calc(64px * var(--hud-scale));
+  --hud-dpad: calc(148px * var(--hud-scale));
 }
 
 html,
@@ -34,9 +61,12 @@ body {
 
 body {
   overflow: hidden;
+  height: calc(var(--vh) * 100);
+  touch-action: manipulation;
+  overscroll-behavior: none;
 }
 
 ion-app,
 app-root {
-  height: 100%;
+  height: calc(var(--vh) * 100);
 }
