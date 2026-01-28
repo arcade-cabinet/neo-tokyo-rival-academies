@@ -52,6 +52,7 @@ export class ViewportService implements OnDestroy {
     const width = viewport?.width ?? window.innerWidth;
     const height = viewport?.height ?? window.innerHeight;
     const ratio = width / Math.max(1, height);
+    const shortSide = Math.min(width, height);
     const orientation: ViewportState['orientation'] = width >= height ? 'landscape' : 'portrait';
     const hudScale = this.computeHudScale(width, height);
 
@@ -67,6 +68,8 @@ export class ViewportService implements OnDestroy {
     root.style.setProperty('--hud-scale', `${hudScale.toFixed(3)}`);
     // biome-ignore lint/complexity/useLiteralKeys: DOMStringMap index signature requires bracket access.
     root.dataset['orientation'] = orientation;
+    // biome-ignore lint/complexity/useLiteralKeys: DOMStringMap index signature requires bracket access.
+    root.dataset['hud'] = this.computeHudDensity(shortSide, ratio);
   }
 
   private computeHudScale(width: number, height: number): number {
@@ -87,5 +90,11 @@ export class ViewportService implements OnDestroy {
     }
 
     return Math.max(0.78, Math.min(1.25, scale));
+  }
+
+  private computeHudDensity(shortSide: number, ratio: number): 'compact' | 'roomy' {
+    if (shortSide < 420) return 'compact';
+    if (ratio > 1.9 && shortSide < 520) return 'compact';
+    return 'roomy';
   }
 }

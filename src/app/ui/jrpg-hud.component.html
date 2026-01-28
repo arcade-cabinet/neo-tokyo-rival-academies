@@ -30,11 +30,19 @@
   </button>
 
   <div class="controls">
-    <div class="dpad">
-      <button type="button" class="dpad-btn left" (pointerdown)="handlePress('left', true)" (pointerup)="handlePress('left', false)" (pointerleave)="handlePress('left', false)">←</button>
-      <button type="button" class="dpad-btn right" (pointerdown)="handlePress('right', true)" (pointerup)="handlePress('right', false)" (pointerleave)="handlePress('right', false)">→</button>
-      <button type="button" class="dpad-btn down" (pointerdown)="handlePress('slide', true)" (pointerup)="handlePress('slide', false)" (pointerleave)="handlePress('slide', false)">↓</button>
-      <button type="button" class="dpad-btn up" (pointerdown)="handlePress('jump', true)" (pointerup)="handlePress('jump', false)" (pointerleave)="handlePress('jump', false)">↑</button>
+    <div
+      class="dpad"
+      (pointerdown)="handleDpadPointerDown($event)"
+      (pointermove)="handleDpadPointerMove($event)"
+      (pointerup)="handleDpadPointerUp($event)"
+      (pointercancel)="handleDpadPointerUp($event)"
+      (pointerleave)="handleDpadPointerLeave($event)"
+    >
+      <div class="dpad-hit"></div>
+      <button type="button" class="dpad-btn left">←</button>
+      <button type="button" class="dpad-btn right">→</button>
+      <button type="button" class="dpad-btn down">↓</button>
+      <button type="button" class="dpad-btn up">↑</button>
     </div>
 
     <div class="actions">

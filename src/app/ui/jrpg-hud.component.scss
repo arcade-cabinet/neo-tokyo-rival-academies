@@ -162,12 +162,23 @@
   justify-content: space-between;
   padding: 0;
   pointer-events: auto;
+  touch-action: none;
 }
 
 .dpad {
   position: relative;
   width: var(--hud-dpad);
   height: var(--hud-dpad);
+  touch-action: none;
+  user-select: none;
+}
+
+.dpad-hit {
+  position: absolute;
+  inset: 0;
+  border-radius: 18px;
+  background: radial-gradient(circle, rgba(15, 23, 42, 0.6), rgba(5, 12, 18, 0.9));
+  border: 1px solid rgba(148, 163, 184, 0.25);
 }
 
 .dpad-btn {
@@ -179,6 +190,7 @@
   border: 1px solid rgba(148, 163, 184, 0.4);
   color: #f8fafc;
   font-size: calc(16px * var(--hud-scale));
+  pointer-events: none;
 }
 
 .dpad-btn.left {
@@ -205,6 +217,7 @@
   display: flex;
   align-items: flex-end;
   gap: calc(12px * var(--hud-scale));
+  touch-action: none;
 }
 
 .action-btn {
@@ -215,6 +228,7 @@
   background: rgba(15, 23, 42, 0.9);
   color: #f8fafc;
   font-weight: 700;
+  touch-action: none;
 }
 
 .action-btn.attack {
@@ -252,6 +266,11 @@
   }
 }
 
+:host-context(:root[data-orientation='portrait']) .actions {
+  flex-direction: column;
+  align-items: flex-end;
+}
+
 @media (max-width: 540px) {
   .minimap {
     display: none;
@@ -260,4 +279,20 @@
   .bar-container {
     width: calc(140px * var(--hud-scale));
   }
+}
+
+:host-context(:root[data-hud='compact']) .minimap {
+  display: none;
+}
+
+:host-context(:root[data-hud='compact']) .dialogue-box {
+  width: min(92%, 560px);
+}
+
+:host-context(:root[data-hud='compact']) .status-frame {
+  flex-direction: row;
+}
+
+:host-context(:root[data-hud='compact']) .bar-container {
+  width: calc(130px * var(--hud-scale));
 }
