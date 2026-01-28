@@ -8,7 +8,12 @@
     (start)="handleStartStory($event)"
   ></app-main-menu>
 
-  <app-narrative-overlay *ngIf="viewState === 'intro'" [script]="introScript" (complete)="handleIntroComplete()"></app-narrative-overlay>
+  <app-narrative-overlay
+    *ngIf="viewState === 'intro'"
+    [script]="introScript"
+    (complete)="handleIntroComplete()"
+  ></app-narrative-overlay>
+  <app-dialogue-overlay *ngIf="viewState === 'game'"></app-dialogue-overlay>
 
   <ng-container *ngIf="viewState === 'game'">
     <app-jrpg-hud></app-jrpg-hud>

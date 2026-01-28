@@ -117,6 +117,9 @@
     - `pnpm check` + `pnpm test --watch=false --browsers=ChromeHeadless` passes
 34. **Dev Env Propagation**
     - Copied `.env` to sibling arcade-cabinet repos and ensured `.env` is in `.gitignore`
+35. **Dialogue Overlay Parity**
+    - Added `DialogueOverlayComponent` for story dialogue during gameplay
+    - Removed HUD dialogue button and renamed narrative overlay selectors to avoid collisions
 
 ## Known Constraints
 

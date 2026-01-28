@@ -1,7 +1,6 @@
 import { Component, Input, inject, type OnDestroy, type OnInit } from '@angular/core';
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
 import { Subscription } from 'rxjs';
-import { DialogueService } from '../state/dialogue.service';
 import { InputStateService } from '../state/input-state.service';
 import { PlayerStoreService } from '../state/player-store.service';
 
@@ -22,8 +21,6 @@ export class JrpgHudComponent implements OnInit, OnDestroy {
   xp = 0;
   nextXp = 100;
 
-  dialogueNode: { speaker: string; text: string } | null = null;
-
   private sub = new Subscription();
   private dpadPointerId: number | null = null;
   private dpadRect: DOMRect | null = null;
@@ -31,7 +28,6 @@ export class JrpgHudComponent implements OnInit, OnDestroy {
 
   private readonly inputState = inject(InputStateService);
   private readonly playerStore = inject(PlayerStoreService);
-  private readonly dialogueService = inject(DialogueService);
 
   ngOnInit(): void {
     this.sub.add(
@@ -41,12 +37,6 @@ export class JrpgHudComponent implements OnInit, OnDestroy {
         this.nextXp = player.xpToNextLevel;
         this.maxHp = player.stats.structure;
         this.hp = player.stats.structure;
-      })
-    );
-
-    this.sub.add(
-      this.dialogueService.watchCurrentNode().subscribe((node) => {
-        this.dialogueNode = node ? { speaker: node.speaker, text: node.text } : null;
       })
     );
   }
@@ -73,15 +63,6 @@ export class JrpgHudComponent implements OnInit, OnDestroy {
       } catch {
         // ignore
       }
-    }
-  }
-
-  async advanceDialogue() {
-    this.dialogueService.advanceDialogue();
-    try {
-      await Haptics.impact({ style: ImpactStyle.Light });
-    } catch {
-      // ignore
     }
   }
 

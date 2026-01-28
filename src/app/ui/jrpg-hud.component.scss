@@ -119,7 +119,7 @@
   color: #94a3b8;
 }
 
-.dialogue-box {
+.hud-dialogue {
   position: absolute;
   bottom: calc(var(--safe-bottom) + var(--hud-dpad) + 32px);
   left: 50%;
@@ -256,7 +256,7 @@
     height: calc(96px * var(--hud-scale));
   }
 
-  .dialogue-box {
+  .hud-dialogue {
     width: min(92%, 640px);
     bottom: calc(var(--safe-bottom) + var(--hud-control) + 20px);
   }
@@ -285,7 +285,7 @@
   display: none;
 }
 
-:host-context(:root[data-hud='compact']) .dialogue-box {
+:host-context(:root[data-hud='compact']) .hud-dialogue {
   width: min(92%, 560px);
 }
 

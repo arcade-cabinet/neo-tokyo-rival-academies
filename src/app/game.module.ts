@@ -6,6 +6,7 @@ import { GameShellComponent } from './game-shell/game-shell.component';
 import { AlignmentBarComponent } from './ui/alignment-bar.component';
 import { CombatArenaComponent } from './ui/combat-arena.component';
 import { CombatTextComponent } from './ui/combat-text.component';
+import { DialogueOverlayComponent } from './ui/dialogue-overlay.component';
 import { GameHudComponent } from './ui/game-hud.component';
 import { HudDebugOverlayComponent } from './ui/hud-debug-overlay.component';
 import { InventoryScreenComponent } from './ui/inventory-screen.component';
@@ -26,6 +27,7 @@ const GAME_DECLARATIONS = [
   AlignmentBarComponent,
   CombatArenaComponent,
   CombatTextComponent,
+  DialogueOverlayComponent,
   GameHudComponent,
   HudDebugOverlayComponent,
   InventoryScreenComponent,

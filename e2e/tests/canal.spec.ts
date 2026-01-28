@@ -20,7 +20,7 @@ test.describe('Canal Scene Verification', () => {
     await expect(startBtn).toBeVisible({ timeout: 15000 });
     await startBtn.click();
 
-    await expect(page.locator('.dialogue-box')).toBeVisible({ timeout: 15000 });
+    await expect(page.locator('.narrative-dialogue-box')).toBeVisible({ timeout: 15000 });
     await page.getByRole('button', { name: 'SKIP INTRO >>' }).click();
 
     await expect(page.getByText('LVL 1 KAI')).toBeVisible({ timeout: 15000 });

@@ -26,7 +26,7 @@ test.describe('JRPG Gameplay Verification', () => {
     console.log('Waiting for Intro Dialogue...');
     // Look for unique dialogue text from INTRO_SCRIPT (NeoTokyoGame.tsx) or story.json
     // "Hey Vector! Try not to overheat..."
-    const dialogueBox = page.locator('.dialogue-box');
+    const dialogueBox = page.locator('.narrative-dialogue-box');
     await expect(dialogueBox).toBeVisible({ timeout: 15000 });
     await expect(dialogueBox).toContainText(/Council|Shortcuts|waterline|Kurenai|DESCENT/);
 

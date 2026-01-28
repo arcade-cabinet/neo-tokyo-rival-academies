@@ -52,7 +52,7 @@
   bottom: 0;
 }
 
-.dialogue-box {
+.narrative-dialogue-box {
   position: absolute;
   bottom: 10%;
   left: 50%;
@@ -71,22 +71,22 @@
   color: #f8fafc;
 }
 
-.dialogue-box h3 {
+.narrative-dialogue-box h3 {
   margin: 0;
   font-size: 1.4rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
 
-.dialogue-box h3.kurenai {
+.narrative-dialogue-box h3.kurenai {
   color: #f97316;
 }
 
-.dialogue-box h3.azure {
+.narrative-dialogue-box h3.azure {
   color: #38bdf8;
 }
 
-.dialogue-box p {
+.narrative-dialogue-box p {
   margin: 0;
   font-size: 1.1rem;
   line-height: 1.5;

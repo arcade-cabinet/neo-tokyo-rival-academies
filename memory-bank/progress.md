@@ -170,6 +170,11 @@
 **Dev Env Propagation**
 - [x] Copied `.env` to all sibling arcade-cabinet repos and ensured `.env` is gitignored
 
+**Dialogue Overlay (Parity)**
+- [x] Added dedicated story dialogue overlay for in-game dialogue system
+- [x] Restored HUD-only layout without narrative overlay class collisions
+- [x] `pnpm test:e2e`
+
 ---
 
 ## In Progress

@@ -1,0 +1,13 @@
+<div class="story-dialogue" *ngIf="node" (click)="handleAdvance()">
+  <div class="story-dialogue__box" role="dialog" aria-live="polite">
+    <h3
+      class="story-dialogue__speaker"
+      [class.kurenai]="node.speaker === 'Kai'"
+      [class.azure]="node.speaker === 'Vera'"
+    >
+      {{ node.speaker }}
+    </h3>
+    <p class="story-dialogue__text">{{ node.text }}</p>
+    <div class="story-dialogue__prompt">Tap to continue</div>
+  </div>
+</div>
