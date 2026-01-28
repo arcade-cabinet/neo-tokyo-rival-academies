@@ -43,6 +43,10 @@
     - Added seed phrase utilities to app and removed diorama dependency
     - Added GameModule and fixed test wiring
     - Updated core quest rewards, district themes, and removed TODOs
+12. **Quest Flow Wiring**
+    - Added GameFlowService to initialize districts, generate quest clusters, and orchestrate quest rewards
+    - Wired Babylon marker/shard events into Angular flow (dialogue triggers + autosave)
+    - Added quest accept/completion dialogs to the game shell
 
 ## Known Constraints
 
@@ -52,11 +56,11 @@
 ## Next Steps
 
 - Integrate remaining legacy UI (combat arena, flooded world menu, game HUD) into Angular
-- Wire dialogue system and ECS data sources to Angular services
+- Expand dialogue system coverage and ECS data sources to Angular services
 - Move legacy apps into `_legacy/` and validate build
 - Add Electron target via Capacitor community plugin
 - Validate legacy references and update any remaining stale links
 
 ---
 
-Last Updated: 2026-01-27
+Last Updated: 2026-01-28

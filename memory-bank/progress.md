@@ -49,6 +49,15 @@
 - [x] Combat arena UI ported to Angular
 - [x] Local seed phrase utilities added to drop diorama dependency
 
+### January 28, 2026
+
+**Quest Flow Wiring**
+- [x] Added GameFlowService for district initialization, quest cluster generation, and quest rewards
+- [x] Wired Babylon marker + shard interactions to trigger dialogue and autosave
+- [x] Added quest accept/completion dialogs to the game shell
+- [x] `pnpm check`
+- [x] `pnpm test --watch=false --browsers=ChromeHeadless`
+
 ---
 
 ## In Progress
@@ -62,4 +71,4 @@
 
 ---
 
-Last Updated: 2026-01-27
+Last Updated: 2026-01-28
