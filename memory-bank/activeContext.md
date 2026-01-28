@@ -64,6 +64,9 @@
 16. **Material + Structural Ports**
     - Ported AmbientCG material loader, DecalSystem, HDRI environment setup
     - Ported TexturedWall, Floor, Roof, and NeonSign components into engine modules
+17. **Branch + Unity Audit**
+    - Added `memory-bank/branch-parity-assessment.md` combining legacy + branch + Unity port targets
+    - Identified high-value branches and Unity C# systems for parity extraction
 
 ## Known Constraints
 

@@ -82,6 +82,10 @@
 - [x] `pnpm check`
 - [x] `pnpm test --watch=false --browsers=ChromeHeadless`
 
+**Branch + Unity Audit**
+- [x] Added `memory-bank/branch-parity-assessment.md` combining legacy TSX/TS and Unity C# targets
+- [x] Identified high-value 1.0 branches and Unity systems for parity extraction
+
 ---
 
 ## In Progress
