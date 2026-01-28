@@ -12,13 +12,13 @@
 ## Major Gaps (Must Port for 1:1 Parity)
 
 ### World/Visual Components (Diorama)
-- **Missing categories**: environment, furniture, infrastructure, maritime, props, signage, structural, vegetation.
+- **Missing categories**: environment, furniture, infrastructure, maritime, props, vegetation (signage + structural partially ported).
 - **Missing compound assemblies**: rooftop/street/building systems present in playground compounds and tests.
-- **Material systems**: AmbientCGMaterial, DecalSystem, HDRIEnvironment (playground materials) not yet ported.
+- **Material systems**: now ported, still need integration into runtime visuals.
 
 ### Procedural/World Systems
 - **Playground compound logic**: `Building`, `Bridge`, `Street`, `Room`, `Alley` and related tests not ported.
-- **Procedural background and facades**: `ProceduralBackground`, `MidgroundFacades`, `ForegroundProps` not ported.
+- **Procedural background and facades**: ported into Babylon runtime, pending integration of compound logic.
 
 ### UI/UX Parity
 - **Legacy game UI** is thin in `_legacy/apps/mobile` (webview wrapper only). 
@@ -26,13 +26,16 @@
 
 ## Current Parity Coverage (Partial)
 - Babylon scene service + lighting + hex grid + character + quest markers exist in `src/app/engine`.
+- **Diorama layers ported**: `ProceduralBackground`, `MidgroundFacades`, `ForegroundProps`.
+- **Material systems ported**: AmbientCG PBR loader, DecalSystem, HDRI environment setup.
+- **Structural/signage ports (initial)**: `TexturedWall`, `Floor`, `Roof`, `NeonSign`.
 - Angular HUD/menus/dialogue/quests exist in `src/app/ui` but need parity verification against legacy web UI sources once located.
 
 ## Immediate Remediation Plan
-1. **Inventory all diorama components** and map to Babylon equivalents (component-by-component port list).
-2. **Port missing diorama categories** in prioritized order: structural → props → signage → infrastructure → environment → vegetation → maritime.
+1. **Inventory remaining diorama components** and map to Babylon equivalents (component-by-component port list).
+2. **Port missing diorama categories** in prioritized order: props → signage → infrastructure → structural (remaining) → environment → vegetation → maritime.
 3. **Port compound assemblies** (Building/Street/Bridge/Alley) and align procedural rooftop generation with legacy test scenes.
-4. **Port material systems** (AmbientCGMaterial + DecalSystem + HDRIEnvironment) to preserve visual identity.
+4. **Integrate material systems** (AmbientCGMaterial + DecalSystem + HDRIEnvironment) into runtime visuals.
 5. **UI parity audit** against legacy React game UI (outside `_legacy` if applicable), then adjust Angular HUD layouts for 1:1 alignment.
 
 ## Notes
