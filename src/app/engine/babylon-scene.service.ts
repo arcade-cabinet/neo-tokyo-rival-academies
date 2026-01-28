@@ -9,6 +9,7 @@ import {
 } from '@babylonjs/core';
 import { ScreenOrientation } from '@capacitor/screen-orientation';
 import { CAMERA, PHYSICS } from '@neo-tokyo/config';
+import { Subject } from 'rxjs';
 import type { InputState } from '../types/game';
 import { BackgroundPanels } from './background-panels';
 import { CharacterAnimationController, CharacterLoader } from './character';
@@ -40,6 +41,10 @@ export class BabylonSceneService {
   private playerController: PlayerController | null = null;
   private questMarkerManager: QuestMarkerManager | null = null;
   private dataShardManager: DataShardManager | null = null;
+  private readonly markerInteract$ = new Subject<QuestMarker>();
+  private readonly shardCollect$ = new Subject<DataShard>();
+  private markerLookup = new Map<string, QuestMarker>();
+  private shardLookup = new Map<string, DataShard>();
 
   constructor(private readonly zone: NgZone) {}
 
@@ -122,6 +127,14 @@ export class BabylonSceneService {
     this.playerController?.setInputState(state);
   }
 
+  watchMarkerInteractions() {
+    return this.markerInteract$.asObservable();
+  }
+
+  watchShardCollects() {
+    return this.shardCollect$.asObservable();
+  }
+
   loadFloodedWorld(seed: string) {
     if (!this.scene) return;
 
@@ -167,6 +180,8 @@ export class BabylonSceneService {
     this.scene = null;
     this.engine = null;
     this.canvas = null;
+    this.markerLookup.clear();
+    this.shardLookup.clear();
   }
 
   private handleResize = () => {
@@ -257,7 +272,10 @@ export class BabylonSceneService {
     ];
 
     this.questMarkerManager.setMarkers(questMarkers, (markerId) => {
-      console.log('Quest marker interaction:', markerId);
+      const marker = this.markerLookup.get(markerId);
+      if (marker) {
+        this.markerInteract$.next(marker);
+      }
     });
 
     const dataShards: DataShard[] = [
@@ -268,8 +286,14 @@ export class BabylonSceneService {
     ];
 
     this.dataShardManager.setShards(dataShards, (shardId) => {
-      console.log('Collected shard:', shardId);
+      const shard = this.shardLookup.get(shardId);
+      if (shard) {
+        this.shardCollect$.next(shard);
+      }
       this.dataShardManager?.markCollected(shardId);
     });
+
+    this.markerLookup = new Map(questMarkers.map((marker) => [marker.id, marker]));
+    this.shardLookup = new Map(dataShards.map((shard) => [shard.id, shard]));
   }
 }

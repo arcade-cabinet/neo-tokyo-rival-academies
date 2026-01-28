@@ -19,6 +19,17 @@
     </div>
 
     <app-quest-log [isOpen]="questLogOpen" (close)="closeQuestLog()"></app-quest-log>
+    <app-quest-accept-dialog
+      [isOpen]="showQuestAccept"
+      [quest]="pendingQuest"
+      (accept)="handleQuestAccept()"
+      (decline)="handleQuestDecline()"
+    ></app-quest-accept-dialog>
+    <app-quest-completion-dialog
+      [isOpen]="showQuestCompletion"
+      [rewards]="questRewards"
+      (close)="handleQuestCompletionClose()"
+    ></app-quest-completion-dialog>
 
     <app-combat-text *ngIf="combatText" [message]="combatText.message" [color]="combatText.color"></app-combat-text>
     <app-combat-arena></app-combat-arena>

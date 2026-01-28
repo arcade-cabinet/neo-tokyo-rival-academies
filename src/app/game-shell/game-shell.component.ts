@@ -1,8 +1,10 @@
 import { Component, type OnDestroy, type OnInit } from '@angular/core';
-import { DistrictManager, QuestGenerator, useQuestStore } from '@neo-tokyo/core';
+import type { Quest, QuestRewards } from '@neo-tokyo/core';
+import { Subscription } from 'rxjs';
 import { MusicSynth } from '../audio/music-synth';
 import { INTRO_SCRIPT } from '../content/intro-script';
 import type { BabylonSceneService } from '../engine/babylon-scene.service';
+import type { GameFlowService } from '../state/game-flow.service';
 import type { InputStateService } from '../state/input-state.service';
 import { SaveSystem } from '../systems/save-system';
 import type { InputState } from '../types/game';
@@ -20,29 +22,57 @@ export class GameShellComponent implements OnInit, OnDestroy {
   introScript = INTRO_SCRIPT;
   questLogOpen = false;
   combatText: { message: string; color: string } | null = null;
+  pendingQuest: Quest | null = null;
+  questRewards: QuestRewards | null = null;
+  showQuestAccept = false;
+  showQuestCompletion = false;
 
   private readonly music = new MusicSynth();
   private worldInitialized = false;
   private pendingSeed: string | null = null;
+  private readonly subs = new Subscription();
 
   constructor(
     private readonly inputState: InputStateService,
-    private readonly sceneService: BabylonSceneService
+    private readonly sceneService: BabylonSceneService,
+    private readonly gameFlow: GameFlowService
   ) {}
 
   ngOnInit(): void {
     if (this.viewState === 'splash') return;
+    this.subs.add(
+      this.sceneService.watchMarkerInteractions().subscribe((marker) => {
+        void this.gameFlow.handleMarker(marker.id);
+      })
+    );
+    this.subs.add(
+      this.sceneService.watchShardCollects().subscribe(() => {
+        this.gameFlow.handleShard();
+      })
+    );
+    this.subs.add(
+      this.gameFlow.watchPendingQuest().subscribe((quest) => {
+        this.pendingQuest = quest;
+        this.showQuestAccept = Boolean(quest);
+      })
+    );
+    this.subs.add(
+      this.gameFlow.watchQuestRewards().subscribe((rewards) => {
+        this.questRewards = rewards;
+        this.showQuestCompletion = Boolean(rewards);
+      })
+    );
   }
 
   ngOnDestroy(): void {
     this.music.stop();
+    this.subs.unsubscribe();
   }
 
   async handleStartStory(payload: MenuStartPayload): Promise<void> {
     if (payload.loadSave) {
       SaveSystem.load(0);
     }
-
     this.pendingSeed = payload.seed;
 
     this.viewState = 'intro';
@@ -55,23 +85,8 @@ export class GameShellComponent implements OnInit, OnDestroy {
 
     if (!this.worldInitialized) {
       const masterSeed = this.pendingSeed ?? `neotokyo-${Date.now()}`;
-      const districtManager = new DistrictManager(masterSeed);
-      await districtManager.initialize(true);
-
+      await this.gameFlow.initialize(masterSeed);
       this.sceneService.loadFloodedWorld(masterSeed);
-
-      const currentDistrict = districtManager.getCurrentDistrict();
-      if (currentDistrict) {
-        const questGenerator = new QuestGenerator(currentDistrict.seed);
-        const cluster = questGenerator.generateCluster(
-          currentDistrict.profile,
-          currentDistrict.id,
-          currentDistrict.name
-        );
-
-        useQuestStore.getState().addCluster(cluster);
-        useQuestStore.getState().activateQuest(cluster.main.id);
-      }
 
       this.worldInitialized = true;
       this.pendingSeed = null;
@@ -92,5 +107,17 @@ export class GameShellComponent implements OnInit, OnDestroy {
 
   showCombatText(message: string, color: string): void {
     this.combatText = { message, color };
+  }
+
+  handleQuestAccept(): void {
+    this.gameFlow.acceptPendingQuest();
+  }
+
+  handleQuestDecline(): void {
+    this.showQuestAccept = false;
+  }
+
+  handleQuestCompletionClose(): void {
+    this.gameFlow.clearQuestRewards();
   }
 }
