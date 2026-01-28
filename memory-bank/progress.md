@@ -127,6 +127,13 @@
 - [x] `pnpm check`
 - [x] `pnpm test --watch=false --browsers=ChromeHeadless`
 
+**Furniture + Props Ports**
+- [x] Added FurnitureKit (bench, trash can, vending machine, mailbox, planter, phone booth, hydrant, parking meter, bollard, manhole, drain grate, shopping cart, umbrella, newspaper)
+- [x] Added PropKit (crate, barrel, debris, pallet stack, tarp, tarpaulin, clothesline, tent, bicycle, bicycle rack, carcass)
+- [x] Integrated furniture + prop kits into rooftop placement rules
+- [x] `pnpm check`
+- [x] `pnpm test --watch=false --browsers=ChromeHeadless`
+
 ---
 
 ## In Progress

@@ -13,8 +13,10 @@ import { BuildingCompound } from './compounds/building-compound';
 import { RoomCompound } from './compounds/room-compound';
 import { StreetCompound } from './compounds/street-compound';
 import { EnvironmentKit } from './environment/environment-kit';
+import { FurnitureKit } from './furniture/furniture-kit';
 import { InfrastructureKit } from './infrastructure/infrastructure-kit';
 import { MaritimeKit } from './maritime/maritime-kit';
+import { PropKit } from './props/prop-kit';
 import { StructuralKit } from './structural/structural-kit';
 import { createEffectMaterial, createEnvironmentMaterial } from './toon-material';
 import { VegetationKit } from './vegetation/vegetation-kit';
@@ -257,6 +259,8 @@ export class FloodedWorldBuilder {
   private maritimeKit: MaritimeKit | null = null;
   private vegetationKit: VegetationKit | null = null;
   private environmentKit: EnvironmentKit | null = null;
+  private furnitureKit: FurnitureKit | null = null;
+  private propKit: PropKit | null = null;
 
   constructor(private readonly scene: Scene) {}
 
@@ -271,6 +275,10 @@ export class FloodedWorldBuilder {
     this.vegetationKit = new VegetationKit(this.scene);
     this.environmentKit?.dispose();
     this.environmentKit = new EnvironmentKit(this.scene);
+    this.furnitureKit?.dispose();
+    this.furnitureKit = new FurnitureKit(this.scene);
+    this.propKit?.dispose();
+    this.propKit = new PropKit(this.scene);
     this.buildingCompound?.dispose();
     this.buildingCompound = new BuildingCompound(this.scene);
     this.bridgeCompound?.dispose();
@@ -382,7 +390,7 @@ export class FloodedWorldBuilder {
         }
       });
 
-      this.placeProps(rooftop, seed, palette);
+      this.placeProps(rooftop, seed);
       this.placeCompounds(rooftop, seed);
     });
 
@@ -430,6 +438,10 @@ export class FloodedWorldBuilder {
     this.vegetationKit = null;
     this.environmentKit?.dispose();
     this.environmentKit = null;
+    this.furnitureKit?.dispose();
+    this.furnitureKit = null;
+    this.propKit?.dispose();
+    this.propKit = null;
     this.buildingCompound?.dispose();
     this.buildingCompound = null;
     this.bridgeCompound?.dispose();
@@ -450,7 +462,7 @@ export class FloodedWorldBuilder {
     this.meshes.length = 0;
   }
 
-  private placeProps(rooftop: RooftopBlock, seed: string, palette: Palette) {
+  private placeProps(rooftop: RooftopBlock, seed: string) {
     const propRng = createSubRng(seed, `props_${rooftop.id}`);
     const area = rooftop.width * rooftop.depth;
     const propCount = Math.floor(area / 15) + propRng.int(2, 5);
@@ -482,6 +494,10 @@ export class FloodedWorldBuilder {
         'flower_bed',
         'mushroom',
         'vine',
+        'bench',
+        'trash_can',
+        'mailbox',
+        'newspaper',
       ],
       commercial: [
         'ac_unit',
@@ -496,6 +512,12 @@ export class FloodedWorldBuilder {
         'tree',
         'shrub',
         'grass',
+        'vending_machine',
+        'phone_booth',
+        'parking_meter',
+        'bollard',
+        'shopping_cart',
+        'bicycle',
       ],
       industrial: [
         'water_tank',
@@ -515,6 +537,11 @@ export class FloodedWorldBuilder {
         'grass',
         'mushroom',
         'steam_vent',
+        'pallet_stack',
+        'tarpaulin',
+        'clothesline',
+        'tent',
+        'carcass',
       ],
     };
 
@@ -669,66 +696,71 @@ export class FloodedWorldBuilder {
           this.addStructuralProp('scaffold', `${rooftop.id}_scaffold_${i}`, new Vector3(x, y, z));
           break;
         case 'crate':
-          this.addBoxProp(
-            `${rooftop.id}_crate_${i}`,
-            new Vector3(x, y + 0.3, z),
-            palette.wood,
-            0.8,
-            0.6,
-            0.8
-          );
+          this.addProp('crate', `${rooftop.id}_crate_${i}`, new Vector3(x, y, z));
           break;
         case 'barrel':
-          this.addCylinderProp(
-            `${rooftop.id}_barrel_${i}`,
-            new Vector3(x, y + 0.5, z),
-            new Color3(0.2, 0.3, 0.32),
-            0.4,
-            1.0
-          );
+          this.addProp('barrel', `${rooftop.id}_barrel_${i}`, new Vector3(x, y, z));
           break;
         case 'tarp':
-          this.addBoxProp(
-            `${rooftop.id}_tarp_${i}`,
-            new Vector3(x, y + 0.2, z),
-            palette.cloth,
-            1.6,
-            0.2,
-            1.6
-          );
+          this.addProp('tarp', `${rooftop.id}_tarp_${i}`, new Vector3(x, y, z));
           break;
         case 'debris':
-          this.addBoxProp(
-            `${rooftop.id}_debris_${i}`,
-            new Vector3(x, y + 0.1, z),
-            new Color3(0.18, 0.2, 0.22),
-            0.6,
-            0.2,
-            0.6
-          );
+          this.addProp('debris', `${rooftop.id}_debris_${i}`, new Vector3(x, y, z));
           break;
         case 'planter':
-          this.addBoxProp(
-            `${rooftop.id}_planter_${i}`,
-            new Vector3(x, y + 0.3, z),
-            new Color3(0.2, 0.25, 0.18),
-            0.8,
-            0.6,
-            0.8
-          );
+          this.addFurnitureProp('planter', `${rooftop.id}_planter_${i}`, new Vector3(x, y, z));
           break;
         case 'bench':
-          this.addBoxProp(
-            `${rooftop.id}_bench_${i}`,
-            new Vector3(x, y + 0.25, z),
-            palette.wood,
-            1.4,
-            0.3,
-            0.5
-          );
+          this.addFurnitureProp('bench', `${rooftop.id}_bench_${i}`, new Vector3(x, y, z));
           break;
         case 'lantern':
           this.addLantern(`${rooftop.id}_lantern_${i}`, new Vector3(x, y + 0.4, z));
+          break;
+        case 'trash_can':
+          this.addFurnitureProp('trash_can', `${rooftop.id}_trash_${i}`, new Vector3(x, y, z));
+          break;
+        case 'mailbox':
+          this.addFurnitureProp('mailbox', `${rooftop.id}_mail_${i}`, new Vector3(x, y, z));
+          break;
+        case 'newspaper':
+          this.addFurnitureProp('newspaper', `${rooftop.id}_paper_${i}`, new Vector3(x, y, z));
+          break;
+        case 'vending_machine':
+          this.addFurnitureProp(
+            'vending_machine',
+            `${rooftop.id}_vending_${i}`,
+            new Vector3(x, y, z)
+          );
+          break;
+        case 'phone_booth':
+          this.addFurnitureProp('phone_booth', `${rooftop.id}_phone_${i}`, new Vector3(x, y, z));
+          break;
+        case 'parking_meter':
+          this.addFurnitureProp('parking_meter', `${rooftop.id}_meter_${i}`, new Vector3(x, y, z));
+          break;
+        case 'bollard':
+          this.addFurnitureProp('bollard', `${rooftop.id}_bollard_${i}`, new Vector3(x, y, z));
+          break;
+        case 'shopping_cart':
+          this.addFurnitureProp('shopping_cart', `${rooftop.id}_cart_${i}`, new Vector3(x, y, z));
+          break;
+        case 'bicycle':
+          this.addProp('bicycle', `${rooftop.id}_bike_${i}`, new Vector3(x, y, z));
+          break;
+        case 'pallet_stack':
+          this.addProp('pallet_stack', `${rooftop.id}_pallet_${i}`, new Vector3(x, y, z));
+          break;
+        case 'tarpaulin':
+          this.addProp('tarpaulin', `${rooftop.id}_tarpaulin_${i}`, new Vector3(x, y, z));
+          break;
+        case 'clothesline':
+          this.addProp('clothesline', `${rooftop.id}_clothes_${i}`, new Vector3(x, y, z));
+          break;
+        case 'tent':
+          this.addProp('tent', `${rooftop.id}_tent_${i}`, new Vector3(x, y, z));
+          break;
+        case 'carcass':
+          this.addProp('carcass', `${rooftop.id}_carcass_${i}`, new Vector3(x, y, z));
           break;
         case 'tree':
           this.addVegetationProp('tree', `${rooftop.id}_tree_${i}`, new Vector3(x, y, z), 1.0);
@@ -835,35 +867,6 @@ export class FloodedWorldBuilder {
       });
       this.meshes.push(...alleyMeshes);
     }
-  }
-
-  private addBoxProp(
-    id: string,
-    position: Vector3,
-    color: Color3,
-    width: number,
-    height: number,
-    depth: number,
-    tilt = 0
-  ) {
-    const mesh = MeshBuilder.CreateBox(id, { width, height, depth }, this.scene);
-    mesh.position.set(position.x, position.y, position.z);
-    mesh.rotation.x = tilt;
-    mesh.material = createEnvironmentMaterial(`${id}_mat`, this.scene, color);
-    this.meshes.push(mesh);
-  }
-
-  private addCylinderProp(
-    id: string,
-    position: Vector3,
-    color: Color3,
-    diameter: number,
-    height: number
-  ) {
-    const mesh = MeshBuilder.CreateCylinder(id, { diameter, height }, this.scene);
-    mesh.position.set(position.x, position.y, position.z);
-    mesh.material = createEnvironmentMaterial(`${id}_mat`, this.scene, color);
-    this.meshes.push(mesh);
   }
 
   private addLantern(id: string, position: Vector3) {
@@ -1074,6 +1077,28 @@ export class FloodedWorldBuilder {
   ) {
     if (!this.environmentKit) return;
     const meshes = this.environmentKit.create(kind, id, position, rotation);
+    this.meshes.push(...meshes);
+  }
+
+  private addFurnitureProp(
+    kind: Parameters<FurnitureKit['create']>[0],
+    id: string,
+    position: Vector3,
+    rotation = 0
+  ) {
+    if (!this.furnitureKit) return;
+    const meshes = this.furnitureKit.create(kind, id, position, rotation);
+    this.meshes.push(...meshes);
+  }
+
+  private addProp(
+    kind: Parameters<PropKit['create']>[0],
+    id: string,
+    position: Vector3,
+    rotation = 0
+  ) {
+    if (!this.propKit) return;
+    const meshes = this.propKit.create(kind, id, position, rotation);
     this.meshes.push(...meshes);
   }
 }

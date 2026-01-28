@@ -82,6 +82,8 @@
     - Street compound integrated into FloodedWorldBuilder canal scene
 22. **Maritime/Vegetation/Environment Kits**
     - MaritimeKit, VegetationKit, EnvironmentKit added and integrated into FloodedWorldBuilder
+23. **Furniture/Props Kits**
+    - FurnitureKit and PropKit added and integrated into FloodedWorldBuilder placement
 
 ## Known Constraints
 

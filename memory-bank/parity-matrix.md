@@ -198,6 +198,11 @@ Single source mapping for port targets: legacy TSX/TS + Unity C# + current TS/Ba
 - Materials: AmbientCG PBR loader, DecalSystem, HDRI environment
 - Structural: TexturedWall, Floor, Roof, StructuralKit (stairs/railing/fence/ladder/door/window/pillar/ramp/balcony/catwalk/awning/scaffold)
 - Infrastructure: InfrastructureKit (AC unit, antenna, dumpster, generator, heli pad, pipe, power line, satellite dish, solar panel, storage tank, vent, water tank)
+- Maritime: MaritimeKit (pier, dock, pontoon, boat, buoy, floating platform, houseboat, rain collector, fishing net, anchor)
+- Vegetation: VegetationKit (tree, palm, shrub, grass, vine, mushroom, flower bed)
+- Environment: EnvironmentKit (steam vent, fog panel)
+- Furniture: FurnitureKit (bench, trash can, vending machine, mailbox, planter, phone booth, hydrant, parking meter, bollard, manhole, drain grate, shopping cart, umbrella, newspaper)
+- Props: PropKit (crate, barrel, debris, pallet stack, tarp, tarpaulin, clothesline, tent, bicycle, bicycle rack, carcass)
 
 ### Unity System → TS Candidate Matches
 This is a heuristic name match to prioritize manual mapping.
