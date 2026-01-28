@@ -443,7 +443,17 @@ export class FloodedWorldBuilder {
     const area = rooftop.width * rooftop.depth;
     const propCount = Math.floor(area / 15) + propRng.int(2, 5);
     const propTypes: Record<RooftopBlock['type'], string[]> = {
-      academy: ['bench', 'planter', 'lantern', 'antenna', 'vent', 'solar_panel', 'heli_pad'],
+      academy: [
+        'bench',
+        'planter',
+        'lantern',
+        'antenna',
+        'vent',
+        'solar_panel',
+        'heli_pad',
+        'railing',
+        'stairs',
+      ],
       residential: [
         'ac_unit',
         'water_tank',
@@ -453,6 +463,8 @@ export class FloodedWorldBuilder {
         'tarp',
         'planter',
         'dumpster',
+        'ladder',
+        'awning',
       ],
       commercial: [
         'ac_unit',
@@ -462,6 +474,8 @@ export class FloodedWorldBuilder {
         'barrel',
         'bench',
         'generator',
+        'balcony',
+        'catwalk',
       ],
       industrial: [
         'water_tank',
@@ -475,6 +489,9 @@ export class FloodedWorldBuilder {
         'cooling_tower',
         'pipe',
         'power_line',
+        'pillar',
+        'ramp',
+        'scaffold',
       ],
     };
 
@@ -565,6 +582,68 @@ export class FloodedWorldBuilder {
             `${rooftop.id}_helipad_${i}`,
             new Vector3(x, y, z)
           );
+          break;
+        case 'railing':
+          this.addStructuralProp(
+            'railing',
+            `${rooftop.id}_rail_${i}`,
+            new Vector3(x, y + 0.2, z),
+            propRng.next() * Math.PI * 2
+          );
+          break;
+        case 'stairs':
+          this.addStructuralProp(
+            'stairs',
+            `${rooftop.id}_stairs_${i}`,
+            new Vector3(x, y, z),
+            propRng.next() * Math.PI * 2
+          );
+          break;
+        case 'ladder':
+          this.addStructuralProp(
+            'ladder',
+            `${rooftop.id}_ladder_${i}`,
+            new Vector3(x, y, z),
+            propRng.next() * Math.PI * 2
+          );
+          break;
+        case 'awning':
+          this.addStructuralProp(
+            'awning',
+            `${rooftop.id}_awning_${i}`,
+            new Vector3(x, y + 1.2, z),
+            propRng.next() * Math.PI * 2
+          );
+          break;
+        case 'balcony':
+          this.addStructuralProp(
+            'balcony',
+            `${rooftop.id}_balcony_${i}`,
+            new Vector3(x, y + 1.6, z),
+            propRng.next() * Math.PI * 2
+          );
+          break;
+        case 'catwalk':
+          this.addStructuralProp(
+            'catwalk',
+            `${rooftop.id}_catwalk_${i}`,
+            new Vector3(x, y + 0.4, z),
+            propRng.next() * Math.PI * 2
+          );
+          break;
+        case 'pillar':
+          this.addStructuralProp('pillar', `${rooftop.id}_pillar_${i}`, new Vector3(x, y, z));
+          break;
+        case 'ramp':
+          this.addStructuralProp(
+            'ramp',
+            `${rooftop.id}_ramp_${i}`,
+            new Vector3(x, y, z),
+            propRng.next() * Math.PI * 2
+          );
+          break;
+        case 'scaffold':
+          this.addStructuralProp('scaffold', `${rooftop.id}_scaffold_${i}`, new Vector3(x, y, z));
           break;
         case 'crate':
           this.addBoxProp(
@@ -712,6 +791,60 @@ export class FloodedWorldBuilder {
   ) {
     if (!this.infrastructureKit) return;
     const meshes = this.infrastructureKit.create(kind, id, position, rotation);
+    this.meshes.push(...meshes);
+  }
+
+  private addStructuralProp(
+    kind:
+      | 'stairs'
+      | 'ladder'
+      | 'railing'
+      | 'fence'
+      | 'pillar'
+      | 'ramp'
+      | 'balcony'
+      | 'catwalk'
+      | 'awning'
+      | 'scaffold',
+    id: string,
+    position: Vector3,
+    rotation = 0
+  ) {
+    if (!this.structuralKit) return;
+    const kit = this.structuralKit;
+    let meshes: AbstractMesh[] = [];
+    switch (kind) {
+      case 'stairs':
+        meshes = kit.createStairs(id, position, 2.4, 1.6, 2.4);
+        break;
+      case 'ladder':
+        meshes = kit.createLadder(id, position, 2.4, rotation);
+        break;
+      case 'railing':
+        meshes = kit.createRailing(id, position, 3.2, 0.9, rotation);
+        break;
+      case 'fence':
+        meshes = kit.createFence(id, position, 3.2, 1.2, rotation);
+        break;
+      case 'pillar':
+        meshes = kit.createPillar(id, position, 3.2, 0.2);
+        break;
+      case 'ramp':
+        meshes = kit.createRamp(id, position, 2.4, 1.0, 3.0, rotation);
+        break;
+      case 'balcony':
+        meshes = kit.createBalcony(id, position, 3.0, 1.4, rotation);
+        break;
+      case 'catwalk':
+        meshes = kit.createCatwalk(id, position, 3.0, 1.2, rotation);
+        break;
+      case 'awning':
+        meshes = kit.createAwning(id, position, 2.4, 1.2, rotation);
+        break;
+      case 'scaffold':
+        meshes = kit.createScaffold(id, position, 2.6, 2.4, 1.2);
+        break;
+    }
     this.meshes.push(...meshes);
   }
 }

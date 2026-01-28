@@ -169,6 +169,104 @@ export class StructuralKit {
     return [mesh];
   }
 
+  createPillar(id: string, position: Vector3, height = 3, radius = 0.2): AbstractMesh[] {
+    const mat = this.getMaterials().concrete;
+    const pillar = MeshBuilder.CreateCylinder(
+      `pillar_${id}`,
+      { diameter: radius * 2, height },
+      this.scene
+    );
+    pillar.position = position.clone();
+    pillar.position.y += height / 2;
+    pillar.material = mat;
+    return [pillar];
+  }
+
+  createRamp(
+    id: string,
+    position: Vector3,
+    width: number,
+    height: number,
+    depth: number,
+    rotation = 0
+  ): AbstractMesh[] {
+    const mat = this.getMaterials().concrete;
+    const ramp = MeshBuilder.CreateBox(`ramp_${id}`, { width, height, depth }, this.scene);
+    ramp.position = position.clone();
+    ramp.position.y += height / 2;
+    ramp.rotation.y = rotation;
+    ramp.rotation.x = -Math.atan2(height, depth);
+    ramp.material = mat;
+    return [ramp];
+  }
+
+  createBalcony(
+    id: string,
+    position: Vector3,
+    width: number,
+    depth: number,
+    rotation = 0
+  ): AbstractMesh[] {
+    const mat = this.getMaterials().concrete;
+    const balcony = MeshBuilder.CreateBox(
+      `balcony_${id}`,
+      { width, height: 0.2, depth },
+      this.scene
+    );
+    balcony.position = position.clone();
+    balcony.position.y += 0.1;
+    balcony.rotation.y = rotation;
+    balcony.material = mat;
+    return [balcony];
+  }
+
+  createCatwalk(
+    id: string,
+    position: Vector3,
+    width: number,
+    depth: number,
+    rotation = 0
+  ): AbstractMesh[] {
+    const mat = this.getMaterials().metal;
+    const walk = MeshBuilder.CreateBox(`catwalk_${id}`, { width, height: 0.15, depth }, this.scene);
+    walk.position = position.clone();
+    walk.position.y += 0.075;
+    walk.rotation.y = rotation;
+    walk.material = mat;
+    return [walk];
+  }
+
+  createAwning(
+    id: string,
+    position: Vector3,
+    width: number,
+    depth: number,
+    rotation = 0
+  ): AbstractMesh[] {
+    const mat = this.getMaterials().glass;
+    const awning = MeshBuilder.CreateBox(`awning_${id}`, { width, height: 0.1, depth }, this.scene);
+    awning.position = position.clone();
+    awning.position.y += 0.05;
+    awning.rotation.y = rotation;
+    awning.material = mat;
+    return [awning];
+  }
+
+  createScaffold(
+    id: string,
+    position: Vector3,
+    width: number,
+    height: number,
+    depth: number
+  ): AbstractMesh[] {
+    const mat = this.getMaterials().metal;
+    const frame = MeshBuilder.CreateBox(`scaffold_${id}`, { width, height, depth }, this.scene);
+    frame.position = position.clone();
+    frame.position.y += height / 2;
+    frame.material = mat;
+    return [frame];
+  }
+
   dispose(): void {
     if (!this.materials) return;
     for (const mat of Object.values(this.materials)) {

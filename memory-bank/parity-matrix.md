@@ -193,7 +193,7 @@ Single source mapping for port targets: legacy TSX/TS + Unity C# + current TS/Ba
 ## Current Engine Ports (Babylon)
 - Diorama layers: ProceduralBackground, MidgroundFacades, ForegroundProps
 - Materials: AmbientCG PBR loader, DecalSystem, HDRI environment
-- Structural: TexturedWall, Floor, Roof, StructuralKit (stairs/railing/fence/ladder/door/window)
+- Structural: TexturedWall, Floor, Roof, StructuralKit (stairs/railing/fence/ladder/door/window/pillar/ramp/balcony/catwalk/awning/scaffold)
 - Infrastructure: InfrastructureKit (AC unit, antenna, dumpster, generator, heli pad, pipe, power line, satellite dish, solar panel, storage tank, vent, water tank)
 
 ### Unity System → TS Candidate Matches
