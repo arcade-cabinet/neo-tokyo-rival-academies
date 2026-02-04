@@ -1,5 +1,7 @@
 # Large Spec Task Organization
 
+> **Updated**: February 3, 2026 | **Platform**: Ionic Angular + Babylon.js
+
 ## When to Use Nested Tasks
 
 For specs with more than 50 tasks or 5+ major sections, split tasks into:
@@ -18,10 +20,8 @@ For specs with more than 50 tasks or 5+ major sections, split tasks into:
     ├── 02-systems.md
     ├── 03-components.md
     ├── 04-ui.md
-    ├── 05-assets.md
-    ├── 06-testing.md
-    ├── 07-integration.md
-    └── 08-polish.md
+    ├── 05-testing.md
+    └── 06-integration.md
 ```
 
 ## TOC Format (tasks.md)
@@ -36,8 +36,8 @@ For specs with more than 50 tasks or 5+ major sections, split tasks into:
 - Node.js: >=22.22.0
 - PNPM: >=10.0.0
 - TypeScript: 5.9+
-- React: 19
-- Three.js: 0.182
+- Angular: 19 (zoneless)
+- Babylon.js: 8.46+
 
 ## Task Sections
 
@@ -47,36 +47,20 @@ For specs with more than 50 tasks or 5+ major sections, split tasks into:
 | 2. Systems | [02-systems.md](tasks/02-systems.md) | 12 | Not Started |
 | 3. Components | [03-components.md](tasks/03-components.md) | 15 | Not Started |
 | 4. UI | [04-ui.md](tasks/04-ui.md) | 10 | Not Started |
-| 5. Assets | [05-assets.md](tasks/05-assets.md) | 8 | Not Started |
-| 6. Testing | [06-testing.md](tasks/06-testing.md) | 12 | Not Started |
-| 7. Integration | [07-integration.md](tasks/07-integration.md) | 6 | Not Started |
-| 8. Polish | [08-polish.md](tasks/08-polish.md) | 5 | Not Started |
+| 5. Testing | [05-testing.md](tasks/05-testing.md) | 12 | Not Started |
+| 6. Integration | [06-integration.md](tasks/06-integration.md) | 6 | Not Started |
 
-**Total Tasks:** 76
-
-## Dependency Graph
-
-```mermaid
-graph TD
-    A[1. Setup] --> B[2. Systems]
-    B --> C[3. Components]
-    C --> D[4. UI]
-    B --> E[5. Assets]
-    C --> E
-    D --> F[6. Testing]
-    E --> F
-    F --> G[7. Integration]
-    G --> H[8. Polish]
-```
+**Total Tasks:** 63
 
 ## Execution Notes
 
 - Execute sections sequentially (1 → 2 → 3 → ...)
 - Some tasks within sections can be parallelized
 - Commit after each task or logical group
-- Push after each section completes
+- Push to main after each section completes
 - Run `pnpm check` before committing
-- Run `pnpm test` after implementing features
+- Run `pnpm test --watch=false` after implementing features
+- Update memory-bank after each section
 ```
 
 ## Nested Task File Format
@@ -104,18 +88,11 @@ Each nested file follows this structure:
 
 - [ ] {N}.1.1. {Task description}
   - {Additional detail}
-  - {File to modify: `path/to/file.ts`}
+  - {File to modify: `src/app/systems/file.ts`}
   
 - [ ] {N}.1.2. {Task description}
   - {Additional detail}
-  - {Command to run: `pnpm test`}
-
-### {N}.2. {Subsection Title}
-
-**Validates:** Requirement X.Z
-
-- [ ] {N}.2.1. {Task description}
-- [ ] {N}.2.2. {Task description}
+  - {Command to run: `pnpm test --watch=false`}
 
 ## Verification
 
@@ -130,16 +107,19 @@ After completing this section:
 
 ```bash
 # Development
-pnpm --filter @neo-tokyo/game dev
+pnpm start
 
 # Build
-pnpm --filter @neo-tokyo/game build
+pnpm build
 
 # Test
-pnpm --filter @neo-tokyo/game test
+pnpm test --watch=false
+
+# E2E
+pnpm test:e2e
 
 # Lint
-pnpm --filter @neo-tokyo/game check
+pnpm check
 ```
 ```
 
@@ -149,12 +129,6 @@ pnpm --filter @neo-tokyo/game check
 - Section numbers match file prefix (01 = section 1)
 - Subsections are logical groupings within a section
 - Tasks are atomic, executable units
-
-Example:
-- `1.3.2` = Section 1, Subsection 3, Task 2
-- File: `tasks/01-setup.md`
-- Subsection: "1.3. Configure TypeScript"
-- Task: "1.3.2. Set up path aliases"
 
 ## Status Tracking
 
@@ -179,32 +153,20 @@ git commit -m "feat({spec}): complete section N"
 ### Typical Section Breakdown
 
 1. **Setup** - Environment, dependencies, configuration
-2. **Systems** - ECS systems (Physics, Combat, AI, etc.)
-3. **Components** - React 3D components (Character, Enemy, etc.)
-4. **UI** - HUD, menus, overlays
-5. **Assets** - 3D models, animations, textures
-6. **Testing** - Unit tests, E2E tests, property tests
-7. **Integration** - Wire systems together, game loop
-8. **Polish** - Performance optimization, visual polish
+2. **Systems** - Game logic systems (Combat, AI, etc.)
+3. **Components** - Angular UI components
+4. **Engine** - Babylon.js scene services
+5. **Testing** - Unit tests, E2E tests
+6. **Integration** - Wire systems together
 
-### System-Specific Sections
+### File Organization (Current Architecture)
 
-For combat system spec:
-1. **Combat Logic** - Damage calculations, formulas
-2. **Combat System** - ECS system implementation
-3. **Combat Components** - React components for combat
-4. **Combat UI** - Damage numbers, health bars
-5. **Combat Assets** - Hit effects, animations
-6. **Combat Testing** - Unit tests, integration tests
-
-### Asset-Specific Sections
-
-For character asset spec:
-1. **Character Models** - 3D model integration
-2. **Character Animations** - Animation system
-3. **Character Materials** - Cel-shaded materials
-4. **Character Manifests** - Metadata files
-5. **Character Testing** - Asset loading tests
+- Engine: `src/app/engine/{Service}.ts`
+- Systems: `src/app/systems/{system}.ts`
+- State: `src/app/state/{service}.service.ts`
+- UI: `src/app/ui/{component}/{component}.component.ts`
+- Tests: `src/app/systems/{system}.spec.ts`
+- E2E: `e2e/tests/{scenario}.spec.ts`
 
 ## Autonomous Execution with Large Specs
 
@@ -213,9 +175,9 @@ When executing large specs autonomously:
 1. **Read TOC first** - Understand overall structure
 2. **Execute section by section** - Complete one section before moving to next
 3. **Update TOC status** - Mark sections complete as you go
-4. **Commit per section** - Push after each section completes
-5. **Trigger CodeRabbit** - Request review after each section
-6. **Continue immediately** - Don't wait for review, keep executing
+4. **Commit per section** - Push to main after each section completes
+5. **Update memory-bank** - Record progress after each section
+6. **Continue immediately** - Don't wait, keep executing
 
 ### Section Completion Checklist
 
@@ -224,9 +186,8 @@ After each section:
 - [ ] All tests pass
 - [ ] Linting passes
 - [ ] TOC status updated
-- [ ] Committed and pushed
-- [ ] CodeRabbit review triggered
-- [ ] GitHub issue updated
+- [ ] Committed and pushed to main
+- [ ] Memory-bank updated
 
 Then immediately start next section.
 
@@ -235,27 +196,6 @@ Then immediately start next section.
 For large specs with many tasks:
 
 - **Batch commits**: Group related tasks into single commit
-- **Incremental testing**: Test after each subsection, not just at end
-- **Parallel work**: Some subsections can be done in parallel
-- **Early integration**: Integrate early and often to catch issues
-- **Continuous deployment**: Push frequently to keep PR manageable
-
-## Example: Babylon.js Migration Spec
-
-```
-.kiro/specs/babylon-migration/
-├── requirements.md
-├── design.md
-├── tasks.md
-└── tasks/
-    ├── 01-setup.md           # Babylon.js setup, Reactylon
-    ├── 02-scene-migration.md # Convert Three.js scenes
-    ├── 03-materials.md       # Cel-shaded materials
-    ├── 04-physics.md         # Physics integration
-    ├── 05-animations.md      # Animation system
-    ├── 06-lighting.md        # Lighting setup
-    ├── 07-testing.md         # Migration testing
-    └── 08-cleanup.md         # Remove Three.js dependencies
-```
-
-Each file contains 5-15 tasks, totaling ~80 tasks for the entire migration.
+- **Incremental testing**: Test after each subsection
+- **Early integration**: Integrate early to catch issues
+- **Continuous deployment**: Push frequently to keep main updated

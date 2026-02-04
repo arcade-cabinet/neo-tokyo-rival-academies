@@ -1,7 +1,7 @@
 # AI Agent Documentation & Governance
 
-**⚠️ CRITICAL UPDATE (Jan 2026): The Golden Record is Active**
-All agents MUST follow the documentation hierarchy below. The project is migrating from Three.js/R3F to Babylon.js/Reactylon - follow the current stack in this document.
+**⚠️ CRITICAL UPDATE (Feb 2026): Ionic Angular + Babylon.js Stack**
+All agents MUST follow the documentation hierarchy below. The project uses **Ionic Angular + Babylon.js + Capacitor** - NOT React, NOT Reactylon, NOT Three.js.
 
 ## 📚 Documentation Hierarchy (Golden Record)
 
@@ -12,24 +12,41 @@ All agents MUST follow the documentation hierarchy below. The project is migrati
 
 ## 🚨 Governance & Workflow
 
-1.  **Memory Bank Tracking**: All tasks MUST be tracked in the `memory-bank` directory.
-2.  **Issues/Projects**: Do not use GitHub Issues/Projects unless the owner explicitly re-enables them.
-3.  **Governance Doc**: See [`docs/process/AGENT_GOVERNANCE.md`](docs/process/AGENT_GOVERNANCE.md) for detailed workflow.
+1.  **Memory Bank Tracking**: ALL planning and task tracking MUST use `memory-bank/` directory.
+2.  **NO GitHub Issues/Projects**: Do NOT use GitHub Issues or Projects for planning. Memory-bank is the sole source of truth.
+3.  **Main Branch Workflow**: Work directly on `main` unless owner requests a PR.
+4.  **Governance Doc**: See [`docs/process/AGENT_GOVERNANCE.md`](docs/process/AGENT_GOVERNANCE.md) for detailed workflow.
+
+## ⚠️ CRITICAL: Architecture Verification
+
+**BEFORE writing any code**, verify you understand the current architecture:
+1. Read `memory-bank/activeContext.md` for current state
+2. Read `memory-bank/progress.md` for completed work
+3. Confirm the stack: **Ionic Angular + Babylon.js** (imperative, NOT React)
+4. Code lives in `src/` (NOT `packages/game/` which is deleted)
 
 ## 🎯 Project Overview
 
-**Neo-Tokyo: Rival Academies** is a **3D Action JRPG** built with modern web technologies. The game features immersive 3D cel-shaded graphics powered by Babylon.js and Reactylon, delivered through a performant Vite-based SPA architecture.
+**Neo-Tokyo: Rival Academies** is a **3D Action JRPG** built with Ionic Angular and Babylon.js. The game features immersive 3D cel-shaded graphics delivered through a performant mobile-first architecture.
 
-### Core Technologies
+### Core Technologies (Current Truth)
 
-- **Vite 6.x**: Fast build tooling with HMR
-- **React 19**: For interactive 3D components
-- **Babylon.js / Reactylon**: Core 3D engine (Replacing Three.js/R3F)
+- **Ionic + Angular (zoneless)**: UI framework and routing
+- **Babylon.js**: 3D engine (imperative, NOT React-based)
 - **Miniplex**: Entity Component System (ECS) for game logic
+- **Zustand**: UI state management
+- **Capacitor 8**: Native mobile wrapper (Android/iOS)
 - **PNPM 10**: Package manager (Strictly use `pnpm`)
 - **Biome 2.3**: Linter and formatter (Strictly use `pnpm check`)
-- **Vitest**: Unit testing framework
-- **Capacitor 8**: Native mobile wrapper
+- **Karma/Jasmine**: Unit testing framework
+- **Playwright**: E2E testing
+
+### DEPRECATED Technologies (Do NOT Use)
+- ❌ React / React Three Fiber
+- ❌ Reactylon
+- ❌ Three.js
+- ❌ Vite (for game package)
+- ❌ `packages/game/` directory (deleted)
 
 ## 🚨 CRITICAL RULES FOR AGENTS
 
@@ -43,28 +60,54 @@ All agents MUST follow the documentation hierarchy below. The project is migrati
 ## 🏗️ Architecture Principles
 
 ### 1. ECS Architecture (Miniplex)
-- Game logic lives in `src/systems/`.
-- State lives in `src/state/ecs.ts`.
-- React components in `src/components/react/game/` should primarily render based on ECS state.
+- Game logic lives in `src/lib/core/src/systems/` and `src/app/systems/`.
+- State lives in `src/lib/core/src/state/` and `src/app/state/`.
+- Angular components in `src/app/ui/` render based on ECS state.
 
-### 2. Directory Structure
+### 2. Directory Structure (Current)
 ```text
 src/
-├── components/react/   # React components (Reactylon)
-│   ├── objects/       # 3D Objects (Character, Enemy)
-│   ├── ui/            # HUD, Menus
-│   └── game/          # Game World & Managers
-├── systems/           # ECS Systems (Logic: Physics, Combat, AI)
-├── state/             # Global State (ECS, Zustand)
-├── data/              # Static Data (JSON)
-└── utils/             # Helpers
+├── app/
+│   ├── engine/        # Babylon.js scene services
+│   ├── game-shell/    # Game container component
+│   ├── state/         # Angular state services
+│   ├── systems/       # Game logic systems
+│   ├── ui/            # Angular UI components
+│   └── utils/         # Helpers
+├── lib/
+│   ├── core/          # Shared ECS logic
+│   ├── diorama/       # Legacy diorama components (for reference)
+│   └── world-gen/     # World generation
+└── assets/            # Game assets
 ```
+
+### 3. DELETED Directories (Do NOT Reference)
+- `packages/game/` - Deleted, was React/Vite
+- `packages/e2e/` - Moved to `e2e/`
+- `apps/` - Archived to `_legacy/apps/`
 
 ## 🧪 Testing Strategy
 
-- Run unit tests: `pnpm test`
+- Run unit tests: `pnpm test --watch=false`
 - Lint code: `pnpm check`
 - E2E Verification: `pnpm test:e2e` (Playwright)
+- Build: `pnpm build`
+
+## 📋 Memory Bank Usage
+
+**ALL planning and tracking uses memory-bank, NOT GitHub Issues.**
+
+### Key Files
+- `memory-bank/activeContext.md` - Current focus and active work
+- `memory-bank/progress.md` - Completed work log
+- `memory-bank/parity-assessment.md` - Legacy porting status
+- `memory-bank/parity-matrix.md` - Component mapping
+
+### Workflow
+1. Read `activeContext.md` before starting work
+2. Update `progress.md` after completing work
+3. Update `activeContext.md` with next steps
+4. Commit changes to memory-bank with code changes
 
 ## 🎮 Game Context (JRPG)
 

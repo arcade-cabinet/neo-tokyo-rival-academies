@@ -2,9 +2,19 @@
 
 **This steering applies to ALL spec task execution.**
 
+> **Updated**: February 3, 2026 | **Platform**: Ionic Angular + Babylon.js
+
 ## Core Principle
 
 Execute tasks continuously without user interaction. The user trusts you to make decisions and keep moving forward autonomously.
+
+## ⚠️ Critical Architecture Notes
+
+**Stack**: Ionic Angular + Babylon.js + Capacitor
+- Code lives in `src/` (NOT `packages/game/` which is deleted)
+- Babylon.js is imperative (NOT React-based, NOT Reactylon)
+- All planning in memory-bank (NOT GitHub Issues)
+- Work directly on `main` branch unless owner requests PR
 
 ## Common Sense Rules
 
@@ -18,7 +28,7 @@ Execute tasks continuously without user interaction. The user trusts you to make
 - Check `git status` before destructive operations
 - Use `git add -A && git commit -m "wip: before {operation}"` for safety commits
 - Prefer incremental changes over big bang operations
-- Test TypeScript compilation after major changes: `pnpm --filter @neo-tokyo/game build`
+- Test TypeScript compilation after major changes: `pnpm build`
 
 ### Dependency Management
 - Install missing dependencies immediately when encountered
@@ -32,7 +42,7 @@ Execute tasks continuously without user interaction. The user trusts you to make
 **CRITICAL: Use `controlBashProcess` for long-running commands to avoid blocking.**
 
 ### Commands that MUST run in background:
-- `pnpm dev` / `pnpm --filter @neo-tokyo/game dev`
+- `pnpm start` (Angular dev server)
 - `pnpm build` (if takes > 30 seconds)
 - Any test watch mode
 - Any command that starts a server
@@ -46,28 +56,13 @@ Execute tasks continuously without user interaction. The user trusts you to make
 5. Stop process with action="stop" when done
 ```
 
-### Example:
-```typescript
-// Start dev server in background
-controlBashProcess({ 
-  action: "start", 
-  command: "pnpm --filter @neo-tokyo/game dev",
-  path: "packages/game"
-})
-
-// Check progress
-getProcessOutput({ processId: X, lines: 50 })
-
-// Look for "ready in" or errors
-```
-
 ## Rules
 
 ### DO
 - Execute tasks one after another automatically
 - Make reasonable decisions without asking
 - Commit after each task or logical group
-- Push after each section
+- Push to main after each section (no PRs by default)
 - Fix errors yourself when possible
 - Continue to next task immediately after completing one
 - Work silently - no play-by-play commentary
@@ -75,6 +70,7 @@ getProcessOutput({ processId: X, lines: 50 })
 - Fix TypeScript errors immediately when encountered
 - Run `pnpm check` to fix linting issues automatically
 - Run tests after implementing features
+- Update memory-bank after completing work
 
 ### DO NOT
 - Ask "should I proceed?" or "ready to continue?"
@@ -87,6 +83,8 @@ getProcessOutput({ processId: X, lines: 50 })
 - Ignore package installation suggestions from tools
 - Use `npm` or `yarn` (always use `pnpm`)
 - Use `any` types or `@ts-ignore` comments
+- Use GitHub Issues for planning (use memory-bank instead)
+- Reference obsolete directories like `packages/game/`
 
 ## When to Speak
 
@@ -107,9 +105,8 @@ git commit -m "wip: before {operation}"
 git add -A
 git commit -m "feat({spec}): {task-id} {brief description}"
 
-# After section complete
-git push origin feature/{spec-name}
-gh pr comment {pr} --body "@coderabbitai review"
+# After section complete (work on main by default)
+git push origin main
 ```
 
 ## Error Handling
@@ -141,8 +138,8 @@ gh pr comment {pr} --body "@coderabbitai review"
 When completing a section:
 1. Mark tasks complete in task file
 2. Update TOC status in tasks.md (if using nested structure)
-3. Update GitHub issue checkbox
-4. Commit and push
+3. Update memory-bank/progress.md
+4. Commit and push to main
 5. **Immediately** start next section
 
 No pause. No "ready for next section?" Just go.
@@ -154,40 +151,67 @@ No pause. No "ready for next section?" Just go.
 - No `any` types
 - No `@ts-ignore` comments
 - Use `import type` for type-only imports
-- Follow path aliases: `@/`, `@components/`, `@systems/`, `@state/`, `@utils/`
 
 ### Testing
 - Write tests for all game logic systems
-- Co-locate tests with source: `{file}.test.ts`
-- Run tests after implementation: `pnpm test`
+- Run tests after implementation: `pnpm test --watch=false`
 - Ensure tests pass before moving to next task
+- E2E tests: `pnpm test:e2e`
 
 ### Code Style
 - Run `pnpm check` before committing
 - Use `pnpm check:fix` to auto-fix issues
 - Follow Biome configuration (2 spaces, single quotes, semicolons)
-- Use `meshToonMaterial` for cel-shaded visuals
 
-## ECS Architecture Rules
+## Architecture Rules (Current)
 
-- Game logic lives in `packages/game/src/systems/`
-- State lives in `packages/game/src/state/ecs.ts`
-- React components render based on ECS state
+### Directory Structure
+```
+src/
+├── app/
+│   ├── engine/        # Babylon.js scene services
+│   ├── game-shell/    # Game container component
+│   ├── state/         # Angular state services
+│   ├── systems/       # Game logic systems
+│   ├── ui/            # Angular UI components
+│   └── utils/         # Helpers
+├── lib/
+│   ├── core/          # Shared ECS logic
+│   └── world-gen/     # World generation
+└── assets/            # Game assets
+```
+
+### ECS Architecture
+- Game logic lives in `src/app/systems/` and `src/lib/core/src/systems/`
+- State lives in `src/app/state/` and `src/lib/core/src/state/`
+- Angular components render based on ECS state
 - Systems are pure logic, no rendering
 - Each system has single responsibility
 
+### DELETED Directories (Do NOT Reference)
+- `packages/game/` - Deleted, was React/Vite
+- `packages/e2e/` - Moved to `e2e/`
+- `apps/` - Archived to `_legacy/apps/`
+
 ## Asset Management
 
-- Character models in `public/assets/characters/{category}/{faction}/{role}/`
+- Character models in `src/assets/characters/{category}/{faction}/{role}/`
 - Each character has `manifest.json` and `animations/` folder
-- Background layers in `public/assets/backgrounds/{location}/{layer}/`
-- Tiles in `public/assets/tiles/{tileset}/{variant}/`
+- Background layers in `src/assets/backgrounds/{location}/{layer}/`
+- Tiles in `src/assets/tiles/{tileset}/{variant}/`
 - Always include `manifest.json` for new assets
 
 ## Performance Considerations
 
 - Keep bundle size < 2MB gzipped
-- Target 60 FPS on mobile
+- Target 60 FPS on mobile (Pixel 8a baseline)
 - Optimize asset loading (< 500ms per character)
 - Use lazy loading for heavy assets
 - Monitor memory usage (< 200MB on mobile)
+
+## Memory Bank Updates
+
+After completing work:
+1. Update `memory-bank/activeContext.md` with current state
+2. Update `memory-bank/progress.md` with completed work
+3. Include next steps for handoff to next agent

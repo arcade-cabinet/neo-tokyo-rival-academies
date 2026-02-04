@@ -1,14 +1,46 @@
 # Project Structure & Organization
 
-## Monorepo Architecture
+> **Updated**: February 3, 2026 | **Platform**: Ionic Angular + Babylon.js
 
-Neo-Tokyo: Rival Academies uses a PNPM workspace monorepo with 3 specialized packages:
+## ⚠️ Critical Architecture Notes
+
+**Stack**: Ionic Angular + Babylon.js + Capacitor
+- Code lives in `src/` (NOT `packages/game/` which is deleted)
+- Babylon.js is imperative (NOT React-based, NOT Reactylon)
+- All planning in memory-bank (NOT GitHub Issues)
+
+## Current Directory Structure
 
 ```
-packages/
-├── game/              # Main game application (Vite + React)
-├── content-gen/       # GenAI content generation CLI
-└── e2e/              # Playwright end-to-end tests
+neo-tokyo/
+├── src/                       # Main application source
+│   ├── app/                   # Angular application
+│   │   ├── engine/           # Babylon.js scene services
+│   │   ├── game-shell/       # Game container component
+│   │   ├── state/            # Angular state services
+│   │   ├── systems/          # Game logic systems
+│   │   ├── ui/               # Angular UI components
+│   │   └── utils/            # Helpers
+│   ├── lib/                   # Shared libraries
+│   │   ├── core/             # Shared ECS logic
+│   │   ├── diorama/          # Legacy diorama (reference)
+│   │   └── world-gen/        # World generation
+│   ├── assets/               # Game assets
+│   └── environments/         # Angular environments
+├── e2e/                       # Playwright E2E tests
+├── docs/                      # Documentation
+│   ├── 00-golden/            # Canonical specs (source of truth)
+│   ├── design/               # Design documents
+│   ├── gameplay/             # Gameplay mechanics
+│   ├── legacy/               # Archived docs
+│   ├── procedural/           # Procedural generation
+│   ├── process/              # Process docs
+│   ├── story/                # Story content
+│   ├── tech/                 # Technical docs
+│   └── world/                # World building
+├── memory-bank/               # Planning & tracking (source of truth)
+├── _legacy/                   # Archived legacy code
+└── .kiro/                     # Kiro specs and steering
 ```
 
 ## Documentation Structure
@@ -16,162 +48,106 @@ packages/
 **Essential reading order**:
 
 1. **`AGENTS.md`** - AI agent guidelines and critical rules
-2. **`docs/JRPG_TRANSFORMATION.md`** - Core game design and mechanics
-3. **`docs/ARCHITECTURE.md`** - System architecture and data flow
-4. **`docs/TESTING_STRATEGY.md`** - Testing approach and standards
-5. **`docs/BABYLON_MIGRATION_PLAN.md`** - Ongoing migration from Three.js to Babylon.js
+2. **`docs/00-golden/GOLDEN_RECORD_MASTER.md`** - Canonical game spec
+3. **`docs/00-golden/MOBILE_WEB_GUIDE.md`** - Mobile-first constraints
+4. **`docs/00-golden/PHASE_ROADMAP.md`** - Timeline and milestones
+5. **`docs/00-golden/DEPRECATIONS.md`** - What to ignore
 
-**Additional docs**:
-- **Game Design**: `docs/COMBAT_PROGRESSION.md`, `docs/QUEST_SYSTEM.md`, `docs/NARRATIVE_DESIGN.md`
-- **Technical**: `docs/TECH_ARCHITECTURE.md`, `docs/GENAI_PIPELINE.md`, `docs/PERSISTENCE.md`
-- **UI/UX**: `docs/UI_DESIGN_SYSTEM.md`, `docs/MOBILE_WEB_GUIDE.md`
-- **Project Management**: `docs/PHASE_ROADMAP.md`, `docs/PROJECT_EVOLUTION.md`
+**Memory Bank (Planning)**:
+- **`memory-bank/activeContext.md`** - Current focus and active work
+- **`memory-bank/progress.md`** - Completed work history
+- **`memory-bank/parity-assessment.md`** - Legacy porting status
+- **`memory-bank/parity-matrix.md`** - Component mapping
 
-## Game Package Structure (`packages/game/`)
-
-```
-packages/game/src/
-├── components/react/          # React components
-│   ├── game/                 # Game world managers
-│   │   ├── GameWorld.tsx     # Main game loop and ECS orchestration
-│   │   ├── ParallaxBackground.tsx
-│   │   ├── MallBackground.tsx
-│   │   └── SpaceshipBackground.tsx
-│   ├── objects/              # 3D game objects
-│   │   ├── Character.tsx     # Player character renderer
-│   │   ├── Enemy.tsx         # Enemy renderer
-│   │   ├── Platform.tsx      # Platform/terrain
-│   │   ├── Obstacle.tsx      # Interactive obstacles
-│   │   └── DataShard.tsx     # Collectibles
-│   ├── scenes/               # Scene compositions
-│   │   ├── WelcomeScene.tsx  # Main menu
-│   │   ├── SideScrollScene.tsx
-│   │   ├── IsometricScene.tsx
-│   │   └── NeoTokyoGame.tsx  # Main game scene
-│   └── ui/                   # HUD and UI overlays
-│       ├── MainMenu.tsx      # Main menu UI
-│       ├── GameHUD.tsx       # In-game HUD
-│       ├── JRPGHUD.tsx       # JRPG-style HUD
-│       ├── NarrativeOverlay.tsx  # Dialogue system
-│       ├── CombatText.tsx    # Floating damage numbers
-│       └── SplashScreen.tsx  # Loading screen
-│
-├── systems/                   # ECS game logic systems
-│   ├── PhysicsSystem.tsx     # Movement, collision, gravity
-│   ├── CombatSystem.tsx      # Combat interactions
-│   ├── CombatLogic.ts        # Damage calculations
-│   ├── AISystem.ts           # Enemy AI (Yuka FSM)
-│   ├── InputSystem.tsx       # Player input handling
-│   ├── DialogueSystem.ts     # Narrative triggers
-│   ├── ProgressionSystem.ts  # XP, leveling, stats
-│   ├── SaveSystem.ts         # Save/load game state
-│   ├── StageSystem.ts        # Stage/level management
-│   └── __tests__/            # System unit tests
-│
-├── state/                     # Global state management
-│   ├── ecs.ts                # Miniplex ECS world and entities
-│   └── gameStore.ts          # Zustand UI state (menus, inventory)
-│
-├── content/                   # Game content data
-│   ├── stages.ts             # Stage definitions
-│   └── story/                # Story content
-│       └── manifest.json     # Story asset manifest
-│
-├── data/                      # Static game data (JSON)
-│   ├── story.json            # Hand-crafted story data
-│   └── story_gen.json        # AI-generated story content
-│
-├── types/                     # TypeScript type definitions
-│   └── game.ts               # Core game types (Entity, Stats, etc.)
-│
-├── utils/                     # Utility functions
-│   ├── gameConfig.ts         # Game configuration constants
-│   ├── hex-grid.ts           # Hex grid utilities
-│   └── hex-normalizer.ts     # Coordinate normalization
-│
-├── main.tsx                   # Application entry point
-├── index.css                  # Global styles
-└── env.d.ts                   # Environment type definitions
-
-public/                        # Static assets
-├── assets/
-│   ├── characters/           # Character 3D models and animations
-│   │   ├── main/            # Kai, Vera (protagonists)
-│   │   ├── b-story/         # Bikers, Yakuza (antagonists)
-│   │   └── c-story/         # Aliens, Mall Security
-│   ├── backgrounds/          # Background layers
-│   │   └── sector0/         # Rooftop scene backgrounds
-│   ├── tiles/               # Environment tiles
-│   │   └── rooftop/         # Rooftop tile assets
-│   └── story/               # Story cutscene images
-└── ui/                       # UI assets
-```
-
-## Content Generation Package (`packages/content-gen/`)
+## Application Structure (`src/app/`)
 
 ```
-packages/content-gen/src/
-├── api/
-│   └── meshy-client.ts       # Meshy API integration (3D generation)
+src/app/
+├── engine/                    # Babylon.js services
+│   ├── babylon-scene.service.ts    # Scene management
+│   ├── character-loader.service.ts # Character loading
+│   ├── animation-controller.ts     # Animation system
+│   ├── quest-marker-manager.ts     # Quest markers
+│   ├── data-shard-manager.ts       # Collectibles
+│   ├── player-controller.ts        # Player input
+│   └── compounds/                  # Building assemblies
+│       ├── building.compound.ts
+│       ├── bridge.compound.ts
+│       └── street.compound.ts
 │
-├── game/
-│   ├── generators/
-│   │   └── story.ts          # Story content generator
-│   └── prompts/
-│       └── index.ts          # Game-specific prompts
+├── game-shell/                # Main game container
+│   └── game-shell.component.ts
 │
-├── ui/
-│   ├── generators/
-│   │   └── assets.ts         # UI asset generator
-│   └── prompts/
-│       └── index.ts          # UI-specific prompts
+├── state/                     # Angular state services
+│   ├── game-state.service.ts      # Game state
+│   ├── player-store.service.ts    # Player data
+│   ├── dialogue.service.ts        # Dialogue system
+│   ├── quest.service.ts           # Quest tracking
+│   └── settings.service.ts        # User settings
 │
-├── pipelines/                 # Multi-step generation pipelines
-│   ├── definitions/
-│   │   ├── character.pipeline.json
-│   │   └── prop.pipeline.json
-│   ├── pipeline-executor.ts
-│   └── pipeline.schema.json
+├── systems/                   # Game logic systems
+│   ├── combat-system.ts           # Combat logic
+│   ├── progression-system.ts      # XP/leveling
+│   ├── ai-system.ts               # Enemy AI
+│   └── physics-system.ts          # Movement/collision
 │
-├── tasks/                     # Individual generation tasks
-│   ├── definitions/          # Task configuration files
-│   │   ├── text-to-3d-preview.json
-│   │   ├── text-to-3d-refine.json
-│   │   ├── text-to-image.json
-│   │   ├── rigging.json
-│   │   └── animation.json
-│   ├── executor.ts           # Task execution engine
-│   ├── registry.ts           # Task registry
-│   └── types.ts              # Task type definitions
+├── ui/                        # Angular UI components
+│   ├── main-menu/                 # Main menu
+│   ├── game-hud/                  # In-game HUD
+│   ├── jrpg-hud/                  # JRPG-style HUD
+│   ├── narrative-overlay/         # Dialogue system
+│   ├── quest-log/                 # Quest tracking
+│   ├── inventory-screen/          # Inventory
+│   ├── settings-overlay/          # Settings
+│   └── combat-text/               # Floating damage
 │
-├── types/
-│   └── manifest.ts           # Asset manifest types
-│
-├── utils/
-│   └── migration.ts          # Asset migration utilities
-│
-├── AssetGen.ts               # Main asset generation class
-├── MusicSynth.ts             # Music generation
-├── cli.ts                    # CLI entry point
-└── index.ts                  # Package exports
+└── utils/                     # Utility functions
+    ├── game-config.ts             # Configuration
+    ├── hex-grid.ts                # Hex utilities
+    └── seed-phrase.ts             # Seed generation
 ```
 
-## E2E Testing Package (`packages/e2e/`)
+## Shared Libraries (`src/lib/`)
 
 ```
-packages/e2e/
+src/lib/
+├── core/                      # Shared ECS logic
+│   └── src/
+│       ├── state/            # ECS world and entities
+│       │   └── ecs.ts
+│       ├── systems/          # Core game systems
+│       └── types/            # TypeScript types
+│
+├── diorama/                   # Legacy diorama (reference only)
+│   └── src/
+│       └── components/       # Legacy React components
+│
+└── world-gen/                 # World generation
+    └── src/
+        ├── flooded-world-builder.ts
+        └── kits/             # Prop generation kits
+            ├── maritime-kit.ts
+            ├── vegetation-kit.ts
+            ├── furniture-kit.ts
+            └── signage-kit.ts
+```
+
+## E2E Testing (`e2e/`)
+
+```
+e2e/
 ├── tests/
-│   └── gameplay.spec.ts      # Gameplay E2E tests
-├── playwright.config.ts      # Playwright configuration
-└── test-results/             # Test output and screenshots
+│   ├── canal.spec.ts         # Canal scene tests
+│   └── gameplay.spec.ts      # Gameplay tests
+├── playwright.config.ts      # Playwright config
+└── test-results/             # Test output
 ```
 
 ## Asset Organization
 
 ### Character Assets
-Each character follows this structure:
 ```
-characters/{category}/{faction}/{role}/
+src/assets/characters/{category}/{faction}/{role}/
 ├── animations/               # GLB animation files
 │   ├── combat_stance.glb
 │   ├── runfast.glb
@@ -187,93 +163,85 @@ characters/{category}/{faction}/{role}/
 
 ### Background Assets
 ```
-backgrounds/{location}/{layer}/
+src/assets/backgrounds/{location}/{layer}/
 ├── concept.png              # Concept art
 └── manifest.json           # Layer metadata
 ```
 
 ### Tile Assets
 ```
-tiles/{tileset}/{variant}/
+src/assets/tiles/{tileset}/{variant}/
 ├── concept.png             # Concept art
-├── model.glb              # 3D model (if applicable)
+├── model.glb              # 3D model
 └── manifest.json          # Tile metadata
 ```
 
 ## Configuration Files
 
 ### Root Level
-- **`package.json`** - Root workspace configuration
-- **`pnpm-workspace.yaml`** - PNPM workspace definition
+- **`package.json`** - Root configuration
+- **`angular.json`** - Angular CLI configuration
 - **`biome.json`** - Linter/formatter configuration
-- **`vitest.config.ts`** - Root test configuration
+- **`capacitor.config.ts`** - Capacitor mobile configuration
+- **`karma.conf.js`** - Karma test configuration
 - **`.nvmrc`** - Node version specification (22.22.0)
 - **`.npmrc`** - NPM configuration
 
-### Game Package
-- **`vite.config.ts`** - Vite build configuration with path aliases
-- **`tsconfig.json`** - TypeScript configuration (strict mode)
-- **`capacitor.config.ts`** - Capacitor mobile configuration
-
-### Content Gen Package
-- **`tsconfig.json`** - TypeScript configuration
-- **`package.json`** - CLI scripts and dependencies
+### TypeScript
+- **`tsconfig.json`** - Base TypeScript configuration
+- **`tsconfig.app.json`** - App-specific config
+- **`tsconfig.spec.json`** - Test-specific config
 
 ## Key Conventions
 
 ### File Naming
-- **Components**: PascalCase with `.tsx` extension (`GameWorld.tsx`)
-- **Systems**: PascalCase with `.ts` or `.tsx` (`CombatSystem.tsx`)
-- **Utilities**: camelCase with `.ts` extension (`gameConfig.ts`)
-- **Types**: camelCase with `.ts` extension (`game.ts`)
-- **Tests**: Same name as source with `.test.ts` suffix (`CombatSystem.test.ts`)
+- **Components**: kebab-case with `.component.ts` (`game-hud.component.ts`)
+- **Services**: kebab-case with `.service.ts` (`game-state.service.ts`)
+- **Systems**: kebab-case with `.ts` (`combat-system.ts`)
+- **Tests**: Same name with `.spec.ts` suffix (`combat-system.spec.ts`)
 
 ### Import Patterns
-- **Path aliases**: Use `@/`, `@components/`, `@systems/`, `@state/`, `@utils/`
 - **Type imports**: Use `import type` for type-only imports
-- **Workspace packages**: Use `@neo-tokyo/package-name`
+- **Relative imports**: Use relative paths within modules
+- **Barrel exports**: Use `index.ts` for public APIs
 
 ### Component Organization
-- **3D Objects**: `components/react/objects/` - render individual game entities
-- **Scenes**: `components/react/scenes/` - compose objects into playable scenes
-- **Game Managers**: `components/react/game/` - orchestrate game loop and systems
-- **UI**: `components/react/ui/` - HUD, menus, overlays
-
-### System Organization
-- **Logic only**: Systems contain pure game logic, no rendering
-- **ECS-driven**: Systems read/write to Miniplex ECS world
-- **Testable**: All systems have corresponding test files
-- **Single responsibility**: Each system handles one aspect of gameplay
+- **Engine**: Babylon.js scene services and managers
+- **State**: Angular services for state management
+- **Systems**: Pure game logic, no rendering
+- **UI**: Angular components for HUD and overlays
 
 ## Development Workflow
 
-1. **Check documentation**: Read relevant docs in `docs/` before starting
-2. **Understand ECS state**: Review `src/state/ecs.ts` for entity structure
+1. **Read memory-bank**: Check `activeContext.md` before starting
+2. **Check Golden Record**: Review `docs/00-golden/` for requirements
 3. **Follow architecture**: Game logic in systems, rendering in components
-4. **Write tests first**: Create test file before implementing system logic
-5. **Use path aliases**: Import with `@/` instead of relative paths
-6. **Run quality checks**: `pnpm check` before committing
-7. **Verify tests**: `pnpm test` to ensure nothing breaks
+4. **Write tests**: Create test file for new functionality
+5. **Run quality checks**: `pnpm check` before committing
+6. **Verify tests**: `pnpm test --watch=false` to ensure nothing breaks
+7. **Update memory-bank**: Record progress in `progress.md`
 
-## Current Development Focus
+## DELETED Directories (Do NOT Reference)
 
-**Active Migration**: Three.js → Babylon.js (see `docs/BABYLON_MIGRATION_PLAN.md`)
-- Reactylon integration for React + Babylon.js
-- Maintaining cel-shaded visual style
-- Preserving ECS architecture
+These directories no longer exist and should not be referenced:
 
-**Priority Systems**:
-1. Combat system refinement (damage calculations, break system)
-2. Progression system (XP, leveling, stat allocation)
-3. Dialogue system (visual novel overlays)
-4. Save/load system (persistent game state)
+- ❌ `packages/game/` - Deleted (was React/Vite)
+- ❌ `packages/e2e/` - Moved to `e2e/`
+- ❌ `apps/` - Archived to `_legacy/apps/`
+
+## DEPRECATED Technologies (Do NOT Use)
+
+- ❌ React / React Three Fiber
+- ❌ Reactylon
+- ❌ Three.js
+- ❌ Vite (for main app)
 
 ## Performance Targets
 
 | Metric | Target |
 |--------|--------|
 | Bundle Size | <2MB gzipped |
-| Initial Load | <3s on 3G |
-| Frame Rate | 60 FPS (mobile) |
+| Initial Load | <3.5s to interactive |
+| Frame Rate | 60 FPS (Pixel 8a) |
 | Memory Usage | <200MB (mobile) |
 | Asset Load Time | <500ms per character |
